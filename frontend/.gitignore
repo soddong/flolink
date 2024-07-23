@@ -1,4 +1,5 @@
 # Logs
+UsersSSAFYAppDataRoamingnpm-cache/
 logs
 *.log
 npm-debug.log*
