@@ -1,9 +1,10 @@
-import '../css/channelselect.css'
+import styles from '../css/channelselect.module.css'
 
 function CardforChannelSelect(props) {
     return (
-        <div className="card">
-            <h4>{props.a}</h4>
+        <div className={styles.cardforselect}>
+            <h3>{props.a.title}</h3>
+            <h4>{props.a.familySize}</h4>
         </div>
     )
 }
