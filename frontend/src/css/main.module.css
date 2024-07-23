@@ -1,7 +1,9 @@
 .apps {
   padding: 30px;
+  width: 100%;
+  height: 100dvh;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background: linear-gradient(#95beffc9, #D2E3FF, #ffffff);
 }
 
 /* flex */
@@ -55,6 +57,9 @@
 .padding5_20 {
   padding: 5px 20px;
 }
+.padding30 {
+  padding: 30px;
+}
 
 /* font */
 .fontBolder {
@@ -105,7 +110,7 @@
 }
 
 /* icons */
-.materialSymbolsOutlined {
+.material-symbols-outlined {
   font-variation-settings:
   'FILL' 1,
   'wght' 400,
