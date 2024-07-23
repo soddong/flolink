@@ -1,5 +1,6 @@
 import '../css/main.css'
 import Notification from '../components/Notification';
+import UserStatusList from '../components/UserStatusList';
 
 function MainPage() {
   return (
@@ -13,6 +14,7 @@ function MainPage() {
       </div>
     </header>
     <Notification message='️오늘 저녁에 외식 예정. 7시까지 오세요!' />
+    <UserStatusList />
   </div>
   )
 }
