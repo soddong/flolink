@@ -16,11 +16,17 @@
 .justifyBetween {
   justify-content: space-between;
 }
+.justifyAround {
+  justify-content: space-around;
+}
 .justifyCenter {
   justify-content: center;
 }
 .alignCenter {
   align-items: center;
+}
+.alignContentCenter {
+  align-content: center;
 }
 
 /* size */
@@ -39,6 +45,18 @@
 .height80 {
   height: 80px;
 }
+.width40 {
+  width: 40px;
+}
+.height40 {
+  height: 40px;
+}
+.widthFull {
+  width: 100%;
+}
+.height95 {
+  height: 95px;
+}
 
 /* margin */
 .margin0 {
@@ -49,6 +67,9 @@
 }
 .margin3_0 {
   margin: 3px 0px;
+}
+.margin5_0 {
+  margin: 5px 0px;
 }
 /* padding */
 .padding10_20 {
@@ -73,6 +94,12 @@
 }
 .fontSize15 {
   font-size: 15px;
+}
+.fontSize10 {
+  font-size: 10px;
+}
+.textCenter {
+  text-align: center;
 }
 
 /* color */
@@ -101,6 +128,9 @@
 }
 .borderRadius10 {
   border-radius: 10px;
+}
+.borderRadiusFull {
+  border-radius: 100%;
 }
 
 /* shadow */
