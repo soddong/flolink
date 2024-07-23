@@ -2,8 +2,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import TemporaryStartPage from './pages/TemporaryStartPage';
 import ChannelSelectPage from './pages/channelselectpage';
 import './index.css';
+import LoginPage from './pages/Loginpage';
 
-const router = createBrowserRouter([
+const router = createBrowserRouter([  
   {
     path : "/",
     element : <TemporaryStartPage/>
@@ -11,14 +12,18 @@ const router = createBrowserRouter([
   {
     path : "/test",
     element : <ChannelSelectPage/>
+  },
+  {
+    path : "/login",
+    element : <LoginPage/>
   }
 ])
 
 function App() {
     return (
-        <div className="root">
-            <RouterProvider router={router} />
-        </div>
+      <div className="root APP">
+        <RouterProvider router={router} />
+      </div>
     );
 }
 
