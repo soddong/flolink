@@ -8,7 +8,7 @@ import LoginPageStyle from '../css/Loginpage.module.css';
 function LoginPage() {
   return (
     <div className={LoginPageStyle.root}>
-      <img src={logo} alt="FLORINK" className="logo" />
+      <img src={logo} alt="FLORINK" className={LoginPageStyle.logo} />
       <TextField
         className={LoginPageStyle.input}
         label="전화번호 또는 아이디"
