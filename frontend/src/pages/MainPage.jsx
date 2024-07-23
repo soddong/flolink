@@ -1,4 +1,4 @@
-import '../css/main.css'
+import style from '../css/main.module.css'
 import Notification from '../components/Notification';
 import UserStatusList from '../components/UserStatusList';
 

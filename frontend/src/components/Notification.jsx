@@ -1,4 +1,4 @@
-import '../css/main.css'
+import '../css/main.module.css'
 
 function Notification (props) {
   return (
