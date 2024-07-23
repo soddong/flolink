@@ -1,10 +1,10 @@
-import '../css/main.module.css'
+import style from '../css/main.module.css'
 import ProfilePhoto from './ProfilePhoto';
 
 function UserStatusList () {
   return (
-    <div className='border-box margin-top-15 height-80 padding-5-20 background-color-white-70 border-radius-10 display-flex flex-column align-center'>
-      <p className='font-size-15 margin-0 font-bolder color-767676'>오늘 우리의 기분은?</p>
+    <div className={`${style.borderBox} ${style.marginTop15} ${style.height80} ${style.padding5_20} ${style.backgroundColorWhite70} ${style.borderRadius10} ${style.displayFlex} ${style.flexColumn} ${style.alignCenter}`}>
+      <p className={`${style.fontSize15} ${style.margin0} ${style.fontBolder} ${style.color767676}`}>오늘 우리의 기분은?</p>
       <ProfilePhoto />
     </div>
   )
