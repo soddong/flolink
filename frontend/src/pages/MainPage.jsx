@@ -1,4 +1,5 @@
-import '../css/mainpage.css'
+import '../css/main.css'
+import Notification from '../components/Notification';
 
 function MainPage() {
   return (
@@ -11,6 +12,7 @@ function MainPage() {
         </span>
       </div>
     </header>
+    <Notification message='️오늘 저녁에 외식 예정. 7시까지 오세요!' />
   </div>
   )
 }
