@@ -4,6 +4,8 @@ import ChannelSelectPage from './pages/channelselectpage';
 import MainPage from './pages/MainPage';
 import './index.css';
 import LoginPage from './pages/Loginpage';
+import FindAccount from './pages/FIndAccount';
+import LoadingPage from './pages/Loadingpage';
 
 const router = createBrowserRouter([  
   {
@@ -21,6 +23,14 @@ const router = createBrowserRouter([
   {
     path: "/main",
     element : <MainPage />
+  },
+  {
+    path : "/FindAccount",
+    element : <FindAccount />
+  },
+  {
+    path : "/Loading",
+    element : <LoadingPage />
   }
 ])
 
