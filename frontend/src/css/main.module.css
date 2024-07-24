@@ -29,6 +29,17 @@
   align-content: center;
 }
 
+/* position */
+.positionAbsolute {
+  position: absolute;
+}
+.positionRelative {
+  position: relative;
+}
+.positionRight {
+  right: 0;
+}
+
 /* size */
 .borderBox {
   box-sizing: border-box;
@@ -56,6 +67,12 @@
 }
 .height95 {
   height: 95px;
+}
+.width150 {
+  width: 150px;
+}
+.heightFull {
+  height: 100%;
 }
 
 /* margin */
@@ -95,6 +112,9 @@
 .fontSize15 {
   font-size: 15px;
 }
+.fontSize12 {
+  font-size: 12px;
+}
 .fontSize10 {
   font-size: 10px;
 }
@@ -131,6 +151,9 @@
 }
 .borderRadiusFull {
   border-radius: 100%;
+}
+.borderWhite2px {
+  border: 2px solid #ffffff;
 }
 
 /* shadow */
