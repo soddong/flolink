@@ -6,7 +6,7 @@ import NavBar from '../components/NavBar';
 
 function MainPage() {
   return (
-  <div className={style.apps}>
+  <div className={`${style.apps} ${style.positionRelative}`}>
     <div className={`${style.padding30} ${style.widthFull} ${style.borderBox}`}>
       <header className={`${style.displayFlex} ${style.justifyBetween}`}>
         <h1 className={`${style.margin0} ${style.fontBolder} ${style.colorE37C91} ${style.fontSize24}`}>우리는 꿀벌 가족🍯</h1>
