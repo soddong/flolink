@@ -6,6 +6,7 @@ import './index.css';
 import LoginPage from './pages/Loginpage';
 import FindAccount from './pages/FIndAccount';
 import LoadingPage from './pages/Loadingpage';
+import PwResetPage from './pages/PwResetPage';
 
 const router = createBrowserRouter([  
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path : "/Loading",
     element : <LoadingPage />
+  },
+  {
+    path : "/PwReset",
+    element : <PwResetPage />
   }
 ])
 
