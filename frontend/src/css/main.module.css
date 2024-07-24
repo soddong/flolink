@@ -41,6 +41,9 @@
 .positionBottom {
   bottom: 0;
 }
+.positionBottom70 {
+  bottom: 70px;
+}
 
 /* size */
 .borderBox {
@@ -91,7 +94,12 @@
 .height70 {
   height: 70px;
 }
-
+.height250 {
+  height: 250px;
+}
+.height300 {
+  height: 300px;
+}
 /* margin */
 .margin0 {
   margin: 0;
@@ -104,6 +112,9 @@
 }
 .margin5_0 {
   margin: 5px 0px;
+}
+.margin10_0 {
+  margin: 10px 0px;
 }
 /* padding */
 .padding10_20 {
@@ -170,6 +181,9 @@
 .backgroundColorWhite70 {
   background-color: #ffffffa3;
 }
+.backgroundColorGradient {
+  background: linear-gradient(#ffffffc4, #9999994c);
+}
 
 /* border */
 .borderRadius5 {
@@ -195,6 +209,14 @@
 .shadow0_0_10_0 {
   box-shadow: 0px 0px 10px 0px #00000034;
   
+}
+
+/* index */
+.index1 {
+  z-index: 1;
+}
+.index2 {
+  z-index: 2;
 }
 
 /* icons */
