@@ -4,6 +4,39 @@
   box-sizing: border-box;
   background: linear-gradient(#a4c4f9, #bad2f9, #ffffff);
 }
+.sideBarButton {
+  position: relative;
+  left: 150px;
+  top: 50%;
+  margin-top: -50px;
+  border-radius: 0px 10px 10px 0px;
+  /* transition: 0.8s ease; */
+  overflow: hidden;
+}
+.sidebar {
+  background-color: #ffffff;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  transition: 0.4s ease;
+  color: #202020;
+  height: 100%;
+  z-index: 99;
+}
+.openBtn {
+  width: 100%;
+  height: 100%;
+}
+.sidebarContent {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+}
 
 /* flex */
 .displayFlex {
@@ -44,7 +77,6 @@
 .positionBottom70 {
   bottom: 70px;
 }
-
 /* size */
 .borderBox {
   box-sizing: border-box;
@@ -181,8 +213,11 @@
 .backgroundColorWhite70 {
   background-color: #ffffffa3;
 }
+.backgroundColorWhite {
+  background-color: #ffffff;
+}
 .backgroundColorGradient {
-  background: linear-gradient(#ffffffc4, #9999994c);
+  background: linear-gradient(#ffffff74, #9999994c);
 }
 
 /* border */
