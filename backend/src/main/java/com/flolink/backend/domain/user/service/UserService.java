@@ -1,8 +1,11 @@
 package com.flolink.backend.domain.user.service;
 
-import com.flolink.backend.domain.user.dto.req.JoinUserReq;
+import com.flolink.backend.domain.user.dto.request.JoinUserReq;
+import com.flolink.backend.domain.user.dto.request.LoginIdReq;
 
 public interface UserService {
 
-    public void joinProcess(JoinUserReq joinUserReq);
+	void joinProcess(JoinUserReq joinUserReq);
+
+	boolean isExistId(LoginIdReq loginIdReq);
 }
