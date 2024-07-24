@@ -9,7 +9,7 @@ function UserStatusList () {
       <div className={`${style.displayFlex} ${style.widthFull} ${style.justifyAround} ${style.margin5_0}`}>
         {imageList.map((image, index) => {
           return (
-            <ProfilePhoto name={image} />
+            <ProfilePhoto name={image} key={index} />
           );
         })}
       </div>

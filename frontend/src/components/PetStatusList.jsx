@@ -11,7 +11,7 @@ function PetStatusList () {
         <p className={`${style.margin3_0} ${style.fontSize12} ${style.fontBolder} ${style.colorWhite}`}>STATS</p>
         {statList.map((stat, index) => {
           return (
-            <PetStatusListItem name={stat} value={statusList[index]} color={statusColor[index]}/>
+            <PetStatusListItem name={stat} value={statusList[index]} color={statusColor[index]} key={index}/>
           )
         })}
       </div>
