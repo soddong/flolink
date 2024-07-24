@@ -11,7 +11,7 @@ function MainPage() {
   const Message = '오늘은 어떤 일이 있었나요?'
   return (
   <div className={`${style.apps} ${style.positionRelative}`}>
-    <div className={`${style.padding30} ${style.widthFull} ${style.borderBox} ${style.index2}`}>
+    <div className={`${style.padding30} ${style.widthFull} ${style.borderBox}`}>
       <header className={`${style.displayFlex} ${style.justifyBetween}`}>
         <h1 className={`${style.margin0} ${style.fontBolder} ${style.colorE37C91} ${style.fontSize24}`}>우리는 꿀벌 가족🍯</h1>
         <div className={`${style.width30} ${style.height30} ${style.colorWhite} ${style.backgroundColorE37C91} ${style.borderRadius5} ${style.displayFlex} ${style.justifyCenter} ${style.alignCenter}`}>
@@ -24,8 +24,8 @@ function MainPage() {
       <UserStatusList />
       <PetStatusList />
       <div className={`${style.widthFull} ${style.height300} ${style.displayFlex} ${style.justifyCenter} ${style.alignCenter} ${style.positionRelative} ${style.margin10_0}`}>
-        <img src={Max} alt='dummy_pet_photo' className={`${style.height250}`}/>
-        <button className={`${style.positionAbsolute} ${style.positionBottom} ${style.positionRight} ${style.borderRadius10} ${style.backgroundColorE37C91} ${style.colorWhite} ${style.fontSize12} ${style.fontBolder} ${style.width100} ${style.height30}`}>
+        <img src={Max} alt='dummy_pet_photo' className={`${style.height250} ${style.index2}`}/>
+        <button className={`${style.positionAbsolute} ${style.positionBottom} ${style.positionRight} ${style.borderRadius10} ${style.backgroundColorE37C91} ${style.colorWhite} ${style.fontSize12} ${style.fontBolder} ${style.width100} ${style.height30} ${style.index2}`}>
           함께 산책하기
         </button>
       </div>
