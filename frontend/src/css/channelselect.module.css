@@ -36,9 +36,52 @@
     flex-flow : wrap;
 }
 
-.cardforselect {
-    width : 170px;
-    height : 170px;
+.card {
+    width: 170px;
+    height: 170px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 5px 5px 15px #bebebe,
+               -5px -5px 15px #ffffff;
+    transition: 0.2s ease-in-out;
     margin : 12.1px;
-    background-color: green;
-}
+  }
+  
+  .img {
+    width: 100%;
+    height: 50%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background: linear-gradient(#e66465, #9198e5);
+    display: flex;
+    align-items: top;
+    justify-content: right;
+  }
+  
+  .text {
+    width: 100%;
+    height: 50%;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+
+  }
+  
+  .text .h3 {
+    font-family: 'Lucida Sans' sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: black;
+    padding-bottom: 5px;
+  }
+  
+  .text .p {
+    font-family: 'Lucida Sans' sans-serif;
+    color: #999999;
+    font-size: 13px;
+  }
+  
+  .card:hover {
+    cursor: pointer;
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+  }
