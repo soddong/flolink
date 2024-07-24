@@ -6,11 +6,17 @@ import NavBar from '../components/NavBar';
 import Question from '../components/Question';
 import Max from '../assets/max.png'
 import BackgroundPhoto from '../assets/background_photo.png'
+import React, {useEffect, useRef, useState } from "react";
+import Sidebar from '../components/SideBar';
 
 function MainPage() {
   const Message = '오늘은 어떤 일이 있었나요?'
+  const click = function (event) {
+    alert('Hello, world!')
+  }
   return (
   <div className={`${style.apps} ${style.positionRelative}`}>
+    <Sidebar />
     <div className={`${style.padding30} ${style.widthFull} ${style.borderBox}`}>
       <header className={`${style.displayFlex} ${style.justifyBetween}`}>
         <h1 className={`${style.margin0} ${style.fontBolder} ${style.colorE37C91} ${style.fontSize24}`}>우리는 꿀벌 가족🍯</h1>
@@ -30,11 +36,6 @@ function MainPage() {
         </button>
       </div>
       <Question message={Message}/>
-    </div>
-    <div className={`${style.positionAbsolute} ${style.sideBar} ${style.backgroundColorWhite} ${style.width30} ${style.height95} ${style.displayFlex} ${style.alignCenter}`}>
-      <span class="material-symbols-outlined">
-        keyboard_double_arrow_left
-      </span>
     </div>
     <img src={BackgroundPhoto} alt="background_photo" className={`${style.widthFull} ${style.positionAbsolute} ${style.positionBottom70} ${style.index1}`} />
     <NavBar />
