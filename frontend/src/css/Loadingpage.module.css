@@ -1,4 +1,3 @@
-/* src/css/LoadingPage.module.css */
 .root {
   display: flex;
   flex-direction: column;
@@ -36,5 +35,5 @@
   bottom: 0;
   width: 100%;
   max-width: 390px;
-  height: auto%;
+  height: auto;
 }
