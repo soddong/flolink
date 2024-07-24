@@ -1,7 +1,7 @@
 .apps {
   padding: 30px;
   width: 100%;
-  height: 100dvh;
+  height: 800px;
   box-sizing: border-box;
   background: linear-gradient(#a4c4f9, #bad2f9, #ffffff);
 }
@@ -38,6 +38,9 @@
 }
 .positionRight {
   right: 0;
+}
+.positionBottom {
+  bottom: 0;
 }
 
 /* size */

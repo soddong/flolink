@@ -2,6 +2,7 @@ import style from '../css/main.module.css'
 import Notification from '../components/Notification';
 import UserStatusList from '../components/UserStatusList';
 import PetStatusList from '../components/PetStatusList';
+import NavBar from '../components/NavBar';
 
 function MainPage() {
   return (
@@ -17,6 +18,7 @@ function MainPage() {
     <Notification message='️오늘 저녁에 외식 예정. 7시까지 오세요!' />
     <UserStatusList />
     <PetStatusList />
+    <NavBar />
   </div>
   )
 }
