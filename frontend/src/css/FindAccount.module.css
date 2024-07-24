@@ -1,0 +1,65 @@
+.container {
+  max-width: 390px;
+  margin: 0 auto;
+  height: 100dvh;
+  background-color: #fff;
+  padding: 20px;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 20px;
+  width: 100px;
+  height: auto;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom-color 0.3s;
+}
+
+.activeTab {
+  border-bottom-color: #ff758c;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input {
+  margin-bottom: 10px;
+}
+
+.button {
+  align-self: flex-end;
+  color: #ff758c;
+  border-color: #ff758c;
+}
+
+.submitButton {
+  background: linear-gradient(to right, #ff758c, #ff7eb3);
+  color: #fff;
+}
