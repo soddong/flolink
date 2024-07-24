@@ -7,6 +7,7 @@ import LoginPage from './pages/Loginpage';
 import FindAccount from './pages/FIndAccount';
 import LoadingPage from './pages/Loadingpage';
 import PwResetPage from './pages/PwResetPage';
+import SettingPage from './pages/settingpage';
 
 const router = createBrowserRouter([  
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path : "/PwReset",
     element : <PwResetPage />
+  },
+  {
+    path : "/setting",
+    element : <SettingPage />
   }
 ])
 
