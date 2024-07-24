@@ -31,6 +31,11 @@ function MainPage() {
       </div>
       <Question message={Message}/>
     </div>
+    <div className={`${style.positionAbsolute} ${style.sideBar} ${style.backgroundColorWhite} ${style.width30} ${style.height95} ${style.displayFlex} ${style.alignCenter}`}>
+      <span class="material-symbols-outlined">
+        keyboard_double_arrow_left
+      </span>
+    </div>
     <img src={BackgroundPhoto} alt="background_photo" className={`${style.widthFull} ${style.positionAbsolute} ${style.positionBottom70} ${style.index1}`} />
     <NavBar />
   </div>

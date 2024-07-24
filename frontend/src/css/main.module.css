@@ -4,6 +4,11 @@
   box-sizing: border-box;
   background: linear-gradient(#a4c4f9, #bad2f9, #ffffff);
 }
+.sideBar {
+  top: 50%;
+  margin-top: -50px;
+  border-radius: 0px 10px 10px 0px;
+}
 
 /* flex */
 .displayFlex {
@@ -44,7 +49,6 @@
 .positionBottom70 {
   bottom: 70px;
 }
-
 /* size */
 .borderBox {
   box-sizing: border-box;
@@ -180,6 +184,9 @@
 }
 .backgroundColorWhite70 {
   background-color: #ffffffa3;
+}
+.backgroundColorWhite {
+  background-color: #ffffff;
 }
 .backgroundColorGradient {
   background: linear-gradient(#ffffff74, #9999994c);
