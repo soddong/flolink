@@ -3,7 +3,7 @@
   width: 100%;
   height: 100dvh;
   box-sizing: border-box;
-  background: linear-gradient(#95beffc9, #D2E3FF, #ffffff);
+  background: linear-gradient(#a4c4f9, #bad2f9, #ffffff);
 }
 
 /* flex */
@@ -71,8 +71,20 @@
 .width150 {
   width: 150px;
 }
+.width110 {
+  width: 110px;
+}
 .heightFull {
   height: 100%;
+}
+.height12 {
+  height: 12px;
+}
+.width100 {
+  width: 100px;
+}
+.height20 {
+  height: 20px;
 }
 
 /* margin */
@@ -98,6 +110,9 @@
 .padding30 {
   padding: 30px;
 }
+.padding0_5 {
+  padding: 0px 5px;
+}
 
 /* font */
 .fontBolder {
@@ -118,6 +133,9 @@
 .fontSize10 {
   font-size: 10px;
 }
+.fontSize8 {
+  font-size: 8px;
+}
 .textCenter {
   text-align: center;
 }
@@ -134,6 +152,12 @@
 }
 .backgroundColorE37C91 {
   background-color: #E37C91;
+}
+.backgroundColor6CCD57{
+  background-color: #6CCD57;
+}
+.backgroundColor85ABEA{
+  background-color: #85ABEA;
 }
 .backgroundColorWhite30 {
   background-color: #ffffff70;
@@ -154,6 +178,12 @@
 }
 .borderWhite2px {
   border: 2px solid #ffffff;
+}
+.borderFFE8F4_3px {
+  border: 3px solid #FFE8F4;
+}
+.borderF5F5F5_3px {
+  border: 3px solid #F5F5F5;
 }
 
 /* shadow */
