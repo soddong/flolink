@@ -4,9 +4,9 @@
   box-sizing: border-box;
   background: linear-gradient(#a4c4f9, #bad2f9, #ffffff);
 }
-.sideBar {
+.sideBarButton {
   position: relative;
-  left: 200px;
+  left: 150px;
   top: 50%;
   margin-top: -50px;
   border-radius: 0px 10px 10px 0px;
@@ -14,8 +14,7 @@
   overflow: hidden;
 }
 .sidebar {
-  background-color: #E3ECF1;
-  border-right: 4px solid #202020;
+  background-color: #ffffff;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -25,30 +24,18 @@
   height: 100%;
   z-index: 99;
 }
-.button {
-  position: relative;
-  left: 330px; 
-  top: 10px;
-  width: 40px;
-  height: 40px;
-  z-index: 99;
-  transition: 0.8s ease;
-  border: 2px solid #202020;
-  border-radius: 40px;
-  overflow: hidden;
-}
 .openBtn {
   width: 100%;
   height: 100%;
 }
-.content {
-  padding: 40px 40px 0 20px;
+.sidebarContent {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
   position: relative;
   width: 100%;
-}
-.icon {
-  margin: 0;
-  color: #202020;
 }
 
 /* flex */
