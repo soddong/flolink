@@ -1,4 +1,3 @@
-import style from '../css/main.module.css'
 import PetStatusListItem from './PetStatusListItem'
 
 function PetStatusList () {
@@ -6,9 +5,9 @@ function PetStatusList () {
   const statusList = [60, 40, 80]
   const statusColor = ['#E37C91', '#6CCD57', '#85ABEA']
   return (
-    <div className={`${style.marginTop15} ${style.height80} ${style.positionRelative}`}>
-      <div className={`${style.borderWhite2px} ${style.heightFull} ${style.width150} ${style.positionAbsolute} ${style.positionRight} ${style.displayFlex} ${style.flexColumn} ${style.alignCenter}`}>
-        <p className={`${style.margin3_0} ${style.fontSize12} ${style.fontBolder} ${style.colorWhite}`}>STATS</p>
+    <div className="mt-3.5 h-20 relative">
+      <div className="h-full border-2 border-solid border-white w-40 absolute right-0 flex flex-col items-center">
+        <p className="mt-1 text-xs font-bold text-white">STATS</p>
         {statList.map((stat, index) => {
           return (
             <PetStatusListItem name={stat} value={statusList[index]} color={statusColor[index]} key={index}/>
