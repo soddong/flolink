@@ -10,17 +10,13 @@ import Sidebar from '../components/SideBar';
 
 function MainPage() {
   const Message = '오늘은 어떤 일이 있었나요?'
-  const click = function (event) {
-    alert('Hello, world!')
-  }
   return (
-  // <div className={`${style.apps} ${style.positionRelative}`}>
   <div className="w-full h-full box-border bg-gradient-to-b from-cyan-400 to-sky-50 relative">
     <Sidebar />
     <div className="p-7 w-full box-border">
       <header className="flex justify-between">
-        <h1 className="m-0 font-bold text-2xl text-rose-400">우리는 꿀벌 가족🍯</h1>
-        <div className="w-8 h-8 text-white bg-rose-400 rounded flex justify-center items-center">
+        <h1 className="m-0 font-bold text-2xl text-rose-500">우리는 꿀벌 가족🍯</h1>
+        <div className="w-8 h-8 text-white bg-rose-500 rounded flex justify-center items-center">
           <span className="material-symbols-outlined" style={{'fontVariationSettings': '"FILL" 1'}}>
             notifications
           </span>
