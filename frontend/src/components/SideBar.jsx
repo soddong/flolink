@@ -3,6 +3,7 @@ import style from '../css/main.module.css';
 import logo from '../assets/logo.png';
 import SideBarItem from "./SideBarItem";
 
+
 function Sidebar ({ width = 150, children }){
   const [isOpen, setOpen] = useState(false);
   const [xPosition, setX] = useState(width);
@@ -49,7 +50,7 @@ function Sidebar ({ width = 150, children }){
         <div className={style.sidebarContent}>
           <img src={logo} alt="Flolink" className={style.height70} />
           <p className={`${style.textCenter} ${style.fontSize15} ${style.fontBolder}`}>User1님, <br /> 환영합니다!</p>
-          <p>가족 이름</p>
+          <p className="underline">가족 이름</p>
           <hr className={style.width100}/>
           {FamilyMembers.map((member, index) => {
             return (
