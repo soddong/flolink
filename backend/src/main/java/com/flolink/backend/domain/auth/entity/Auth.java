@@ -1,5 +1,7 @@
 package com.flolink.backend.domain.auth.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,5 +34,8 @@ public class Auth {
 
 	@Column(name = "auth_num", nullable = false, length = 6)
 	private String authNum;
+
+	@Column(name = "expired_at", nullable = false)
+	private LocalDateTime expiredAt;
 
 }

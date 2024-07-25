@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
 
-public class JoinUserResp {
+public class JoinUserResponse {
 	@Getter
 	@Setter
 	public class JoinUserReq {

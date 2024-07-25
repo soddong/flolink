@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class JoinUserReq {
+public class JoinUserRequest {
 	private String loginId;
 	private String password;
 	private String userName;

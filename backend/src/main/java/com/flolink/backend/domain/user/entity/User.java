@@ -1,6 +1,7 @@
 package com.flolink.backend.domain.user.entity;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,12 +46,12 @@ public class User {
 	private String tel;
 
 	@Column(name = "point", nullable = false, length = 21)
-	private Integer point;
+	private BigDecimal point;
 
 	@Column(name = "create_at", nullable = false, updatable = false)
-	private Timestamp createdAt;
+	private LocalDateTime createdAt;
 
 	@Column(name = "use_yn", nullable = false)
-	private Integer useYn;
+	private boolean useYn;
 
 }

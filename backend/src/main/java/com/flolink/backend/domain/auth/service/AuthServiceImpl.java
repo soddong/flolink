@@ -1,5 +1,7 @@
 package com.flolink.backend.domain.auth.service;
 
+import java.time.LocalDateTime;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,8 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public void checkAuthenticationNumber(CheckAuthRequest checkAuthRequest) {
 		String authNum = authRepository.findBytel(checkAuthRequest.getTel()).getAuthNum();
+
+		LocalDateTime now = LocalDateTime.now();
 		if (!authNum.equals(checkAuthRequest.getAuthNum())) {
 			// 여기에는 휴대폰 인증 성공 토큰(JWT)를 세션에 넘겨주는 로직이 작성되어야한다.
 			// 아직 모르니깐 JWT 공부하고 다시 오자.
