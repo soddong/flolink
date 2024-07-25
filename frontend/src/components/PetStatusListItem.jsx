@@ -1,5 +1,3 @@
-import style from '../css/main.module.css'
-
 function PetStatusListItem (props) {
   return (
     <div className="flex h-5">

@@ -1,5 +1,3 @@
-import style from '../css/main.module.css'
-
 function NavBarItem (props) {
   return (
     <div>

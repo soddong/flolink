@@ -1,4 +1,3 @@
-import '../css/main.module.css'
 import Photo from '../assets/profile_dummy.jpg'
 
 function ProfilePhoto (props) {

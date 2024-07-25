@@ -1,8 +1,8 @@
-import style from '../css/main.module.css';
+
 
 function SideBarItem (props) {
   return (
-    <p>{props.name}</p>
+    <p className="my-2">{props.name}</p>
   )
 }
 
