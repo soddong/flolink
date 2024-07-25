@@ -81,7 +81,9 @@ public class RoomController {
 		Integer userId = 1;
 		RoomSummarizeResponse roomSummarizeResponse = roomService.updateRoomDetail(userId, roomUpdateRequest);
 		log.info("===가족 방 상세 정보 수정하기 END===");
-		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+		return roomSummarizeResponse == null ?
+			ResponseEntity.ok(CommonResponse.of(ResponseCode.NOT_FOUND_ERROR))
+			: ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomSummarizeResponse));
 	}
 
 	//TODO 오늘의 기분 클릭 시, 상태메시지 list-up 해주는 api 구현
