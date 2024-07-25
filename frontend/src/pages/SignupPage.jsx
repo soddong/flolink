@@ -1,33 +1,44 @@
 import React, { useState } from 'react';
-import { TextField, Button } from '@mui/material';
-import FindAccountStyle from '../css/FindAccount.module.css';
 import logo from '../assets/logo.png';
+import Button from '../components/Button';
+import TextField from '../components/TextField';
 
-function SignUp() {
+function SignupPage() {
+  const [selectedTelecom, setSelectedTelecom] = useState('SKT');
+
   return (
-    <div className={FindAccountStyle.container}>
-      <button className={FindAccountStyle.closeButton}>&times;</button>
-      <img src={logo} alt="FLORINK" className={FindAccountStyle.logo} />
-      <div className={FindAccountStyle.tabs}>
-        <div className={`${FindAccountStyle.tab} ${FindAccountStyle.activeTab}`}>
-            회원가입
+    <div className="max-w-md mx-auto h-screen bg-white p-5 relative">
+      <button className="absolute top-2 right-2 text-2xl">&times;</button>
+      <img src={logo} alt="FLORINK" className="block mx-auto mb-5 w-24 h-auto" />
+      <h2 className="text-center text-lg font-bold mb-5">회원가입</h2>
+      <form className="flex flex-col gap-3">
+        <div className="flex items-bottom gap-3">
+          <TextField placeholder="아이디를 입력해주세요" label="아이디"  />
+          <Button text="중복확인" variant="outline" />
         </div>
-      </div>
-
-      <div className={FindAccountStyle.form}>
-            <TextField label="5~20자 이내로" variant="outlined" fullWidth className={FindAccountStyle.input} />
-            <TextField label="비밀번호를 입력해주세요" variant="outlined" fullWidth className={FindAccountStyle.input} type="password" />
-            <TextField label="비밀번호를 한번 더 입력해주세요" variant="outlined" fullWidth className={FindAccountStyle.input} type="password" />
-            <TextField label="닉네임을 입력해주세요" variant="outlined" fullWidth className={FindAccountStyle.input} />
-            <TextField label="이름을 입력해주세요" variant="outlined" fullWidth className={FindAccountStyle.input} />
-                <TextField label="통신사" variant="outlined" fullWidth className={FindAccountStyle.input} />
-            <TextField label="휴대 전화번호 입력 ('-' 제외)" variant="outlined" fullWidth className={FindAccountStyle.input} />
-            <Button variant="contained" className={FindAccountStyle.submitButton}>전송</Button>
+        <TextField label="비밀번호" placeholder="비밀번호를 입력해주세요" type="password" />
+        <TextField label="비밀번호 확인" placeholder="비밀번호를 한 번 더 입력해주세요" type="password" />
+        <TextField label="닉네임" placeholder="닉네임을 입력해주세요"/>
+        <TextField label="이름" placeholder="예) 이싸피" />
+        <div className="flex items-center gap-3 mb-0">
+          <div className="flex items-center">
+            <label className="block text-gray-700 mb">통신사</label>
+            <select
+              value={selectedTelecom}
+              onChange={(e) => setSelectedTelecom(e.target.value)}
+              className="ml-2 p-2 border rounded focus:outline-none focus:border-pink-500"
+            >
+              <option value="KT">KT</option>
+              <option value="SKT">SKT</option>
+              <option value="LGU+">LGU+</option>
+            </select>
+          </div>
+          <TextField label="휴대전화번호" placeholder="010-1234-5678" />
         </div>
+        <Button text="전송" variant="solid" />
+      </form>
     </div>
   );
 }
 
-export default FindAccount;
-
-
+export default SignupPage;
