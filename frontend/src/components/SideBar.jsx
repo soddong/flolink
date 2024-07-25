@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import style from '../css/main.module.css';
+import style from '../css/side_bar.module.css';
 import logo from '../assets/logo.png';
 import SideBarItem from "./SideBarItem";
 
@@ -30,7 +30,7 @@ function Sidebar ({ width = 150, children }){
   // };
 
   return (
-    <div className={style.backgroundColorWhite}>
+    <div className="bg-white">
       <div
         ref={side}
         className={style.sidebar}
@@ -42,19 +42,19 @@ function Sidebar ({ width = 150, children }){
               keyboard_double_arrow_left
             </span>
           ) : (
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               keyboard_double_arrow_right
             </span>
           )}
         </div>
         <div className={style.sidebarContent}>
-          <img src={logo} alt="Flolink" className={style.height70} />
-          <p className={`${style.textCenter} ${style.fontSize15} ${style.fontBolder}`}>User1님, <br /> 환영합니다!</p>
-          <p className="underline">가족 이름</p>
-          <hr className={style.width100}/>
+          <img src={logo} alt="Flolink" className="h-16" />
+          <p className="text-center text-base font-bold my-5">User1님, <br /> 환영합니다!</p>
+          <p className="my-1">가족 이름</p>
+          <hr className="w-24 border-zinc-500 mb-2"/>
           {FamilyMembers.map((member, index) => {
             return (
-              <SideBarItem name={member}/>
+              <SideBarItem name={member} key={index}/>
             )
           })}
         </div>

@@ -1,15 +1,12 @@
-import style from '../css/main.module.css'
-
 function PetStatusListItem (props) {
   return (
-    <div className={`${style.displayFlex} ${style.height20}`}>
-      <div className={`${style.width30} ${style.height12} ${style.borderRadius5} ${style.displayFlex} ${style.justifyCenter} ${style.alignCenter}`}
-      style={{'backgroundColor': props.color}}>
-        <p className={`${style.margin0} ${style.fontSize8} ${style.colorWhite} ${style.fontBolder}`}>{props.name}</p>
+    <div className="flex h-5">
+      <div className="w-8 h-3 rounded-md flex justify-center items-center" style={{'backgroundColor': props.color}}>
+        <p className="m-0 text-white font-bold" style={{'fontSize': '8px'}}>{props.name}</p>
       </div>
-      <div className={`${style.displayFlex} ${style.alignCenter} ${style.height12} ${style.width110} ${style.padding0_5} ${style.borderBox}`}>
-        <hr className={`${style.width100} ${style.borderF5F5F5_3px} ${style.borderRadius5} ${style.positionAbsolute}`}/>
-        <hr className={`${style.borderRadius5} ${style.positionAbsolute}`} style={{'width': props.value + 'px', 'border': '3px solid '+props.color}}/>
+      <div className="flex items-center h-3 w-28 px-1 border-box">
+        <hr className="w-24 border-4 border-solid border-slate-50 rounded absolute"/>
+        <hr className="rounded absolute" style={{'width': props.value + 'px', 'border': '4px solid '+props.color}}/>
       </div>
     </div>
   )

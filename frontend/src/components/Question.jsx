@@ -1,9 +1,7 @@
-import style from '../css/main.module.css'
-
 function Question (props) {
   return (
-    <div className={`${style.widthFull} ${style.positionRelative} ${style.height70} ${style.borderRadius10} ${style.shadow0_0_10_0} ${style.displayFlex} ${style.alignCenter} ${style.justifyCenter} ${style.backgroundColorGradient} ${style.index2}`}>
-      <p className={`${style.fontSize15}`}>{props.message}</p>
+    <div className="w-full relative h-20 rounded-lg flex items-center justify-center z-10 bg-gradient-to-b from-white/40 to-zinc-400/40 backdrop-blur-sm" style={{'boxShadow': '0px 0px 10px 0px #00000034'}}>
+      <p className="text-zinc-800">{props.message}</p>
     </div>
   )
 }
