@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flolink.backend.domain.user.dto.request.LoginIdReq;
+import com.flolink.backend.domain.user.dto.request.LoginIdRequset;
 import com.flolink.backend.domain.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,8 +26,8 @@ public class UserController {
 
 	@Operation(summary = "아이디 중복 확인")
 	@PostMapping("")
-	public ResponseEntity<?> checkLoginId(@RequestBody LoginIdReq loginIdReq) {
-		boolean result = userService.isExistId(loginIdReq);
+	public ResponseEntity<?> checkLoginId(@RequestBody LoginIdRequset loginIdRequset) {
+		boolean result = userService.isExistId(loginIdRequset);
 		return new ResponseEntity<>(result, result ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
 }
