@@ -3,7 +3,6 @@ import TemporaryStartPage from './pages/TemporaryStartPage';
 import ChannelSelectPage from './pages/channelselectpage';
 import MainPage from './pages/MainPage';
 import './index.css';
-import './input.css';
 import LoginPage from './pages/Loginpage';
 import FindAccount from './pages/FIndAccount';
 import LoadingPage from './pages/Loadingpage';
