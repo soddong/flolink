@@ -8,6 +8,7 @@ import FindAccount from './pages/FIndAccount';
 import LoadingPage from './pages/Loadingpage';
 import PwResetPage from './pages/PwResetPage';
 import SettingPage from './pages/settingpage';
+import SignupPage from './pages/SignupPage';
 
 const router = createBrowserRouter([  
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path : "/setting",
     element : <SettingPage />
+  },
+  {
+    path : "/signup",
+    element : <SignupPage />
   }
 ])
 
