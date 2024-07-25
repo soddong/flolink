@@ -5,13 +5,13 @@
 
 .header {
     width : 100%;
-    height : 10%;
+    height : 5%;
     background-color: white;
 }
 
 .mycardcontainer {
     width : 100%;
-    height : 40%;
+    height : 30%;
     background-color: pink;
     display : flex;
     justify-content: center;
@@ -50,6 +50,8 @@
     display : flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
+    padding-bottom : 10px;
 }
 
 .mypoint {
@@ -60,4 +62,58 @@
     box-sizing: border-box;
     display : flex;
     align-items: center;
+}
+
+.settinglist {
+    width: 100%;
+    height: 65%;
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    border-bottom: 2px solid #007bff;
+    color: #007bff;
+}
+
+.tabContent {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.list li {
+    padding: 15px 10px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+}
+
+.list li:last-child {
+    border-bottom: none;
+}
+
+.list li:hover {
+    background-color: #f8f8f8;
 }
