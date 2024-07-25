@@ -53,8 +53,7 @@ public class RoomServiceImpl implements RoomService {
 	@Transactional
 	public RoomSummarizeResponse registerRoom(final Integer userId, final Integer roomId) {
 		User user = findUserById(userId);
-		Room room = roomRepository.findById(roomId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.ROOM_NOT_FOUND));
+		Room room = findRoomById(roomId);
 		for (UserRoom userRoom : user.getUserRoomList()) {
 			if (Objects.equals(userRoom.getRoom(), room)) { //이미 가입 된 경우 200 주되 data는 비움
 				return null;
@@ -70,6 +69,7 @@ public class RoomServiceImpl implements RoomService {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomId);
 		UserRoom userRoom = userRoomRepository.findByUserAndRoom(user, room);
+
 		List<Nickname> nicknames = userRoom.getNickNameList();
 		List<RoomMemberInfoResponse> roomMemberInfoResponses = room.getUserRoomList()
 			.stream()
@@ -92,9 +92,12 @@ public class RoomServiceImpl implements RoomService {
 	public RoomSummarizeResponse updateRoomDetail(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomUpdateRequest.getRoomId());
-		room.setRoomName(roomUpdateRequest.getRoomName());
-		roomRepository.save(room);
-		return RoomSummarizeResponse.fromEntity(room);
+		if (userRoomRepository.findByUserAndRoom(user, room) != null) {
+			room.updateRoomInfo(roomUpdateRequest);
+			roomRepository.save(room);
+			return RoomSummarizeResponse.fromEntity(room);
+		}
+		return null;
 	}
 
 	private User findUserById(final Integer userId) {

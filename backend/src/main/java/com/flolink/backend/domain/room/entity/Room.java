@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
 
+import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -53,5 +55,9 @@ public class Room {
 			return roomId.equals(target.getRoomId());
 		}
 		return super.equals(obj);
+	}
+
+	public void updateRoomInfo(final RoomUpdateRequest roomUpdateRequest) {
+		this.roomName = roomUpdateRequest.getRoomName();
 	}
 }
