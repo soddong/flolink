@@ -15,7 +15,8 @@ function MainPage() {
     alert('Hello, world!')
   }
   return (
-  <div className={`${style.apps} ${style.positionRelative}`}>
+  // <div className={`${style.apps} ${style.positionRelative}`}>
+  <div className="w-full h-full box-border bg-gradient-to-r from-indigo-500 to-blue-500 relative">
     <Sidebar />
     <div className={`${style.padding30} ${style.widthFull} ${style.borderBox}`}>
       <header className={`${style.displayFlex} ${style.justifyBetween}`}>
