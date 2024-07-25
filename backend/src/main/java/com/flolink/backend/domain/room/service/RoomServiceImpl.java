@@ -17,7 +17,6 @@ import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.common.ResponseCode;
-import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -43,13 +42,9 @@ public class RoomServiceImpl implements RoomService {
 	@Transactional
 	public RoomSummarizeResponse createRoom(final Integer userId, final RoomCreateRequest roomCreateRequest) {
 		User user = findUserById(userId);
-		if (roomCreateRequest.getRoomName().equalsIgnoreCase("")) {
-			throw new BadRequestException(ResponseCode.BLANK_ROOM_NAME);
-		}
 		Room room = roomCreateRequest.toEntity();
 		room = roomRepository.save(room);
 		userRoomRepository.save(UserRoom.of(user, room));
-
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 
