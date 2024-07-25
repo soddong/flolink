@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
+import com.flolink.backend.domain.room.dto.response.RoomMemberInfoResponse;
 import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
-import com.flolink.backend.domain.room.dto.response.RoomUserNickNameResponse;
 
 public interface RoomService {
 
@@ -15,7 +15,7 @@ public interface RoomService {
 
 	RoomSummarizeResponse registerRoom(final Integer userId, final Integer roomId);
 
-	List<RoomUserNickNameResponse> getRoomUserNickNames(final Integer userId, final Integer roomId);
+	List<RoomMemberInfoResponse> getRoomMemberInfos(final Integer userId, final Integer roomId);
 
 	RoomSummarizeResponse updateRoomDetail(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
 

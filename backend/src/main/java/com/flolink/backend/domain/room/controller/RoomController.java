@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
+import com.flolink.backend.domain.room.dto.response.RoomMemberInfoResponse;
 import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
-import com.flolink.backend.domain.room.dto.response.RoomUserNickNameResponse;
 import com.flolink.backend.domain.room.service.RoomService;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
@@ -64,14 +64,14 @@ public class RoomController {
 			: ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomSummarizeResponse));
 	}
 
-	@GetMapping("/{roomId}/nicknames")
-	@Operation(summary = "가족 방 닉네임 불러오기", description = "가족방의 구성원들을 반환.")
-	public ResponseEntity<?> getRoomUserNickNames(@PathVariable final Integer roomId) {
-		log.info("===가족 방 닉네임 불러오기 START===");
+	@GetMapping("/{roomId}")
+	@Operation(summary = "가족 방 구성원 정보 불러오기", description = "가족방의 구성원들의 정보를 반환.")
+	public ResponseEntity<?> getRoomMemberInfos(@PathVariable final Integer roomId) {
+		log.info("===가족 방 구성원 정보 불러오기 START===");
 		Integer userId = 1;
-		List<RoomUserNickNameResponse> roomUserNickNameResponses = roomService.getRoomUserNickNames(userId, roomId);
-		log.info("===가족 방 닉네임 불러오기 END===");
-		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomUserNickNameResponses));
+		List<RoomMemberInfoResponse> roomMemberInfoResponses = roomService.getRoomMemberInfos(userId, roomId);
+		log.info("===가족 방 구성원 정보 불러오기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomMemberInfoResponses));
 	}
 
 	@PatchMapping("/{roomId}")
