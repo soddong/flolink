@@ -1,10 +1,8 @@
-import style from '../css/main.module.css'
-
 function Notification (props) {
   return (
-    <div className={`${style.borderBox} ${style.marginTop15} ${style.height80} ${style.padding10_20} ${style.backgroundColorWhite30} ${style.borderRadius10} ${style.shadow0_0_10_0}`}>
-      <p className={`${style.fontSize20} ${style.margin3_0} ${style.fontBolder}`}>📌 공지!</p>
-      <p className={`${style.fontSize15} ${style.margin0} ${style.color767676}`}>{props.message}</p>
+    <div className="border-box mt-4 h-20 py-2.5 px-5 bg-white bg-opacity-30 rounded-xl" style={{'box-shadow': '0px 0px 10px 0px #00000034'}}>
+      <p className="text-xl mt-0.5 font-bold">📌 공지!</p>
+      <p className="text-sm m-0 text-zinc-500">{props.message}</p>
     </div>
   )
 }
