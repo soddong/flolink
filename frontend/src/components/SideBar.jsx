@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import style from '../css/side_bar.module.css';
 import logo from '../assets/logo.png';
 import SideBarItem from "./SideBarItem";
+import Modal from "./modalTest";
 
 
 function Sidebar ({ width = 150, children }){
@@ -9,7 +10,15 @@ function Sidebar ({ width = 150, children }){
   const [xPosition, setX] = useState(width);
   const side = useRef();
   const FamilyMembers = ['엄마', '아빠', '첫째', '둘째']
+  const [modal, setModal] = useState(false);
 
+  function handleClick() {
+    if (modal) {
+      setModal(false);
+    } else {
+      setModal(true);
+    }
+  };
   // button 클릭 시 토글
   function toggleMenu () {
     if (xPosition > 0) {
@@ -36,7 +45,7 @@ function Sidebar ({ width = 150, children }){
         className={style.sidebar}
         style={{ width: `${width}px`, height: '100%', transform: `translateX(${-xPosition}px)` }}
       >
-        <div onClick={toggleMenu} className={`${style.positionAbsolute} ${style.sideBarButton} ${style.backgroundColorWhite} ${style.width30} ${style.height95} ${style.displayFlex} ${style.alignCenter}`}>
+        <div onClick={toggleMenu} className={`${style.sideBarButton}`}>
           {isOpen ? (
             <span className="material-symbols-outlined">
               keyboard_double_arrow_left
@@ -54,11 +63,16 @@ function Sidebar ({ width = 150, children }){
           <hr className="w-24 border-zinc-500 mb-2"/>
           {FamilyMembers.map((member, index) => {
             return (
-              <SideBarItem name={member} key={index}/>
+              <div onClick={handleClick}>
+                <SideBarItem name={member} key={index}/>
+              </div>
             )
           })}
         </div>
       </div>
+      {
+        modal === true ? <Modal /> : null
+      }
     </div>
   );
 };

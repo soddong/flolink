@@ -1,8 +1,10 @@
-
+import { useState } from "react";
 
 function SideBarItem (props) {
   return (
-    <p className="my-2">{props.name}</p>
+    <div className="h-10">
+      <p className="my-2">{props.name}</p>
+    </div>
   )
 }
 
