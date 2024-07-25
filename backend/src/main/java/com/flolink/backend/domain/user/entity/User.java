@@ -56,6 +56,9 @@ public class User {
 	@Column(name = "use_yn", nullable = false)
 	private Integer useYn;
 
+	@Column(name = "profile", nullable = false)
+	private String profile;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	List<UserRoom> userRoomList;
 
