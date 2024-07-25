@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.room.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.flolink.backend.domain.user.entity.User;
@@ -46,10 +47,18 @@ public class UserRoom {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
 	private List<Nickname> nickNameList;
 
+	@Column(name = "create_at", nullable = false)
+	private LocalDateTime createAt;
+
+	@Column(name = "use_yn", nullable = false)
+	private Boolean useYn;
+
 	public static UserRoom of(User user, Room room) {
 		return UserRoom.builder()
 			.user(user)
 			.room(room)
+			.createAt(LocalDateTime.now())
+			.useYn(true)
 			.build();
 	}
 

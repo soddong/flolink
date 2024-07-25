@@ -18,7 +18,7 @@ public class RoomSummarizeResponse {
 		return RoomSummarizeResponse.builder()
 			.roomId(room.getRoomId())
 			.roomName(room.getRoomName())
-			.userCount(room.getUserRoomList().size())
+			.userCount(room.getUserRoomList() == null ? 1 : room.getUserRoomList().size())
 			.build();
 	}
 }

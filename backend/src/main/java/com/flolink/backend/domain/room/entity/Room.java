@@ -47,4 +47,11 @@ public class Room {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
 	List<UserRoom> userRoomList;
 
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof Room target) {
+			return roomId.equals(target.getRoomId());
+		}
+		return super.equals(obj);
+	}
 }

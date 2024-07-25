@@ -8,8 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
+import com.flolink.backend.domain.room.dto.response.RoomMemberInfoResponse;
 import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
-import com.flolink.backend.domain.room.dto.response.RoomUserNickNameResponse;
+import com.flolink.backend.domain.room.entity.Nickname;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.repository.RoomRepository;
@@ -65,18 +66,25 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public List<RoomUserNickNameResponse> getRoomUserNickNames(final Integer userId, final Integer roomId) {
+	public List<RoomMemberInfoResponse> getRoomMemberInfos(final Integer userId, final Integer roomId) {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomId);
-		List<RoomUserNickNameResponse> roomUserNickNameResponses = null;
-		for (UserRoom userRoom : user.getUserRoomList()) {
-			if (Objects.equals(userRoom.getRoom(), room)) {
-				roomUserNickNameResponses = userRoom.getNickNameList()
-					.stream()
-					.map(RoomUserNickNameResponse::fromEntity).toList();
+		UserRoom userRoom = userRoomRepository.findByUserAndRoom(user, room);
+		List<Nickname> nicknames = userRoom.getNickNameList();
+		List<RoomMemberInfoResponse> roomMemberInfoResponses = room.getUserRoomList()
+			.stream()
+			.map(RoomMemberInfoResponse::fromUserRoomEntity)
+			.toList();
+
+		for (RoomMemberInfoResponse response : roomMemberInfoResponses) {
+			for (Nickname nickname : nicknames) {
+				if (response.getTargetUserRoomId().equals(nickname.getTargetUserRoomId())) {
+					response.setTargetNickname(nickname.getTargetNickname());
+					break;
+				}
 			}
 		}
-		return roomUserNickNameResponses;
+		return roomMemberInfoResponses;
 	}
 
 	@Override
@@ -90,12 +98,10 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	private User findUserById(final Integer userId) {
-		return userRepository.findById(userId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
+		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 	}
 
 	private Room findRoomById(final Integer roomId) {
-		return roomRepository.findById(roomId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.ROOM_NOT_FOUND));
+		return roomRepository.findById(roomId).orElseThrow(() -> new NotFoundException(ResponseCode.ROOM_NOT_FOUND));
 	}
 }
