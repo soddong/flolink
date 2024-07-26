@@ -97,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
 			throw new BadRequestException(ResponseCode.INSUFFICIENT_FUNDS);
 		}
 
-		processUserPurchase(user, item); // 사용자 포인트 업데이트
+		processUserPurchase(user, item);                            // 사용자 포인트 업데이트
 		ItemPurchase itemPurchase = savePurchaseLog(user, item);     // 구매 내역 저장
 		// TODO: 인벤토리에 저장
 
@@ -111,7 +111,7 @@ public class ItemServiceImpl implements ItemService {
 	 */
 	@Override
 	public List<ItemPurchaseResponse> getPurchaseLogs(final Integer userId) {
-		return itemPurchaseRepository.findAll()
+		return itemPurchaseRepository.findByUserIdOrderByPurchaseAtDesc(userId)
 			.stream()
 			.map(ItemPurchaseResponse::fromEntity)
 			.toList();
