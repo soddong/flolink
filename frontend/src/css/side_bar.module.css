@@ -21,6 +21,7 @@
   color: #202020;
   height: 100%;
   z-index: 11;
+  border: 1px solid #000000;
 }
 .openBtn {
   width: 100%;
@@ -45,9 +46,10 @@
   width: 100px;
   height: 100px;
   margin: 0px auto;
-  position: fixed;
+  position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(60px, -60px);
   z-index: 20;
+  transition: 0.7s ease-out;
 }
