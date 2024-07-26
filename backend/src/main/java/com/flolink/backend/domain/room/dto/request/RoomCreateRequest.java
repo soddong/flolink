@@ -18,11 +18,13 @@ import lombok.Setter;
 public class RoomCreateRequest {
 
 	private String roomName;
+	private String roomParticipatePassword;
 
 	public Room toEntity() {
 		return Room.builder()
 			.roomName(roomName)
 			.createAt(LocalDateTime.now())
+			.roomParticipatePassword(roomParticipatePassword == null ? "000000" : roomParticipatePassword)
 			.useYn(true)
 			.build();
 	}
