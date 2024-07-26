@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.room.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
+import com.flolink.backend.domain.room.dto.request.RoomParticipateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
 import com.flolink.backend.domain.room.dto.response.RoomMemberInfoResponse;
 import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
@@ -19,6 +21,7 @@ import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
+import com.flolink.backend.global.common.exception.UnAuthorizedException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,24 +54,36 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	@Transactional
-	public RoomSummarizeResponse registerRoom(final Integer userId, final Integer roomId) {
+	public RoomSummarizeResponse registerRoom(final Integer userId,
+		final RoomParticipateRequest roomParticipateRequest) {
 		User user = findUserById(userId);
-		Room room = findRoomById(roomId);
+		Room room = findRoomById(roomParticipateRequest.getRoomId());
+
 		for (UserRoom userRoom : user.getUserRoomList()) {
 			if (Objects.equals(userRoom.getRoom(), room)) { //이미 가입 된 경우 200 주되 data는 비움
 				return null;
 			}
 		}
+		if (!room.getRoomParticipatePassword().equals(roomParticipateRequest.getRoomParticipatePassword())) {
+			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
+		}
 		userRoomRepository.save(UserRoom.of(user, room));
 		return RoomSummarizeResponse.fromEntity(room);
+	}
 
+	@Override
+	public String getMyRole(final Integer userId, final Integer roomId) {
+		User user = findUserById(userId);
+		Room room = findRoomById(roomId);
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+		return userRoom.getRole();
 	}
 
 	@Override
 	public List<RoomMemberInfoResponse> getRoomMemberInfos(final Integer userId, final Integer roomId) {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomId);
-		UserRoom userRoom = userRoomRepository.findByUserAndRoom(user, room);
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
 
 		List<Nickname> nicknames = userRoom.getNickNameList();
 		List<RoomMemberInfoResponse> roomMemberInfoResponses = room.getUserRoomList()
@@ -92,12 +107,43 @@ public class RoomServiceImpl implements RoomService {
 	public RoomSummarizeResponse updateRoomDetail(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomUpdateRequest.getRoomId());
-		if (userRoomRepository.findByUserAndRoom(user, room) != null) {
-			room.updateRoomInfo(roomUpdateRequest);
-			roomRepository.save(room);
-			return RoomSummarizeResponse.fromEntity(room);
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+		if (userRoom.getRole().equalsIgnoreCase("member")) {
+			if (!roomUpdateRequest.getRoomParticipatePassword().equalsIgnoreCase(room.getRoomName())) {
+				throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
+			}
 		}
-		return null;
+		room.updateRoomInfo(roomUpdateRequest);
+		room = roomRepository.save(room);
+		return RoomSummarizeResponse.fromEntity(room);
+	}
+
+	@Override
+	@Transactional
+	public String exitRoom(final Integer userId, final Integer roomId) {
+		User user = findUserById(userId);
+		Room room = findRoomById(roomId);
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+		if (userRoom.getRole().equalsIgnoreCase("admin")) {
+			room.getUserRoomList().sort(Comparator.comparing(UserRoom::getCreateAt));
+			room.getUserRoomList().getFirst().setRole("admin"); //TODO: 본인 제외로 해야함
+
+		}
+		userRoomRepository.delete(userRoom);
+
+		return "success";
+	}
+
+	@Override
+	@Transactional
+	public String kickRoomMember(final Integer userId, final Integer roomId, final Integer userRoomId) {
+		String myRole = getMyRole(userId, roomId);
+		if (myRole.equalsIgnoreCase("member")) {
+			return "failed";
+		}
+		UserRoom userRoom = userRoomRepository.findUserRoomByUserRoomId(userRoomId);
+		userRoomRepository.delete(userRoom);
+		return "success";
 	}
 
 	private User findUserById(final Integer userId) {
@@ -106,5 +152,10 @@ public class RoomServiceImpl implements RoomService {
 
 	private Room findRoomById(final Integer roomId) {
 		return roomRepository.findById(roomId).orElseThrow(() -> new NotFoundException(ResponseCode.ROOM_NOT_FOUND));
+	}
+
+	private UserRoom findUserRoomByUserAndRoom(final User user, final Room room) {
+		return userRoomRepository.findByUserAndRoom(user, room)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND));
 	}
 }
