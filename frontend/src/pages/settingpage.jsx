@@ -38,6 +38,12 @@ function SettingPage() {
                     >
                         포인트
                     </button>
+                    <button 
+                        className={`${styles.tab} ${activeTab === 'purchaseHistories' ? styles.active : ''}`}
+                        onClick={() => setActiveTab('purchaseHistories')}
+                    >
+                        구매내역
+                    </button>
                 </div>
                 <div className={styles.tabContent}>
                     {activeTab === 'items' && (
@@ -52,6 +58,13 @@ function SettingPage() {
                             <li>포인트 내역 1</li>
                             <li>포인트 내역 2</li>
                             <li>포인트 내역 3</li>
+                        </ul>
+                    )}
+                    {activeTab === 'purchaseHistories' && (
+                        <ul className={styles.list}>
+                            <li>구매 내역 1</li>
+                            <li>구매 내역 2</li>
+                            <li>구매 내역 3</li>
                         </ul>
                     )}
                 </div>
