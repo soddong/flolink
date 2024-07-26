@@ -5,12 +5,12 @@ import org.springframework.stereotype.Service;
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
 import com.flolink.backend.domain.user.dto.request.LoginIdRequset;
 import com.flolink.backend.domain.user.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
