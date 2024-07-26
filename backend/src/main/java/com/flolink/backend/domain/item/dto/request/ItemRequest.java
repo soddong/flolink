@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.item.dto.request;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.flolink.backend.domain.item.entity.Item;
@@ -15,20 +16,9 @@ public class ItemRequest {
 
 	private String itemName;
 	private String type;
-	private float price;
+	private BigDecimal price;
 	private String description;
 	private String imageUrl;
-
-	// 엔티티 -> DTO
-	public static ItemRequest fromEntity(Item item) {
-		return ItemRequest.builder()
-			.itemName(item.getItemName())
-			.type(item.getType())
-			.price(item.getPrice())
-			.description(item.getDescription())
-			.imageUrl(item.getImageUrl())
-			.build();
-	}
 
 	// DTO -> 엔티티
 	public Item toEntity() {

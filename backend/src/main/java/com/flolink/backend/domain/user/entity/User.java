@@ -1,6 +1,7 @@
 package com.flolink.backend.domain.user.entity;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.flolink.backend.domain.room.entity.UserRoom;
@@ -48,13 +49,13 @@ public class User {
 	private String tel;
 
 	@Column(name = "point", nullable = false, length = 21)
-	private Integer point;
+	private BigDecimal point;
 
 	@Column(name = "create_at", nullable = false, updatable = false)
-	private Timestamp createdAt;
+	private LocalDateTime createdAt;
 
 	@Column(name = "use_yn", nullable = false)
-	private Integer useYn;
+	private boolean useYn;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	List<UserRoom> userRoomList;
