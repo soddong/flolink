@@ -1,6 +1,6 @@
 package com.flolink.backend.domain.item.dto.response;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 import com.flolink.backend.domain.item.entity.Item;
 
@@ -13,10 +13,10 @@ import lombok.Setter;
 @Builder
 public class ItemResponse {
 
-	private int itemId;
+	private Integer itemId;
 	private String itemName;
 	private String type;
-	private float price;
+	private BigDecimal price;
 	private String description;
 	private String imageUrl;
 
@@ -32,16 +32,4 @@ public class ItemResponse {
 			.build();
 	}
 
-	// DTO -> 엔티티
-	public Item toEntity() {
-		return Item.builder()
-			.itemName(this.itemName)
-			.type(this.type)
-			.price(this.price)
-			.description(this.description)
-			.imageUrl(this.imageUrl)
-			.createAt(LocalDateTime.now())
-			.useYn(true)
-			.build();
-	}
 }

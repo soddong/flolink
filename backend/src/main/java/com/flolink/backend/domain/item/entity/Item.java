@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.item.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -27,7 +28,7 @@ public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "item_id")
-	private int itemId;
+	private Integer itemId;
 
 	@Column(name = "name", nullable = false, length = 100)
 	private String itemName;
@@ -36,7 +37,7 @@ public class Item {
 	private String type;
 
 	@Column(name = "price", nullable = false)
-	private float price;
+	private BigDecimal price;
 
 	@Column(name = "description", length = 255)
 	private String description;
@@ -48,5 +49,5 @@ public class Item {
 	private LocalDateTime createAt;
 
 	@Column(name = "use_yn", nullable = false)
-	private boolean useYn;
+	private Boolean useYn;
 }
