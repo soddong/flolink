@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import style from '../css/side_bar.module.css';
-import logo from '../assets/logo.png';
 import SideBarItem from "./SideBarItem";
+import Photo from '../assets/profile_dummy.jpg'
 
 
 
@@ -33,25 +33,25 @@ function Sidebar ({ width = 150, children }){
     <div className="bg-white">
       <div
         ref={side}
-        className={style.sidebar}
+        className= {`${style.sidebar}` + " bg-zinc-800/80 backdrop-blur-md"}
         style={{ width: `${width}px`, height: '100%', transform: `translateX(${-xPosition}px)` }}
       >
-        <div onClick={toggleMenu} className={`${style.sideBarButton}`}>
+        <div onClick={toggleMenu} className={`${style.sideBarButton}` + " bg-zinc-800/80"}>
           {isOpen ? (
-            <span className="material-symbols-outlined">
+            <span className="material-symbols-outlined text-white">
               keyboard_double_arrow_left
             </span>
           ) : (
-            <span className="material-symbols-outlined">
+            <span className="material-symbols-outlined text-white">
               keyboard_double_arrow_right
             </span>
           )}
         </div>
         <div className={style.sidebarContent}>
-          <img src={logo} alt="Flolink" className="h-16" />
-          <p className="text-center text-base font-bold my-5">User1님, <br /> 환영합니다!</p>
-          <p className="my-1">가족 이름</p>
-          <hr className="w-24 border-zinc-500 mb-2"/>
+          <img src={Photo} alt="Flolink" className="h-16 rounded-full" />
+          <p className="text-center text-base font-bold mb-5 text-white">User1님</p>
+          <p className="my-1 text-white text-xl font-bold">가족 이름</p>
+          <hr className="w-28 border-white mb-2"/>
           {FamilyMembers.map((member, index) => {
             return (
               <div>

@@ -12,7 +12,6 @@
   align-items: center;
 }
 .sidebar {
-  background-color: #ffffff;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -21,7 +20,6 @@
   color: #202020;
   height: 100%;
   z-index: 11;
-  border: 1px solid #000000;
 }
 .openBtn {
   width: 100%;
@@ -37,19 +35,30 @@
   width: 100%;
 }
 .userDetailModal {
-  background-color: white;
+  background-color: #ffffffDF;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 5px;
-  border: 2px solid #000000;
-  width: 100px;
-  height: 100px;
+  border-radius: 10px;
+  width: 240px;
+  height: 150px;
   margin: 0px auto;
-  position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(60px, -60px);
   z-index: 20;
-  transition: 0.7s ease-out;
+  box-shadow: 4px 4px 4px 0px #00000034;
+}
+
+.modalAppear {
+  animation: fade-in 0.25s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
