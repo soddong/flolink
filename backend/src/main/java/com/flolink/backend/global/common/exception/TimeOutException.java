@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 public class TimeOutException extends RuntimeException {
-	private ResponseCode responseCode;
+	private ResponseCode errorCode;
 
-	public TimeOutException(ResponseCode responseCode) {
-		super(responseCode.getMessage());
-		this.responseCode = responseCode;
+	public TimeOutException(final ResponseCode errorCode) {
+		super(errorCode.getMessage());
+		this.errorCode = errorCode;
 	}
 }

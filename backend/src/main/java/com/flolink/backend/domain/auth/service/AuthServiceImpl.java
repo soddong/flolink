@@ -14,6 +14,9 @@ import com.flolink.backend.domain.auth.dto.request.CheckAuthRequest;
 import com.flolink.backend.domain.auth.dto.request.PhoneAuthRequest;
 import com.flolink.backend.domain.auth.entity.Auth;
 import com.flolink.backend.domain.auth.repository.AuthRepository;
+import com.flolink.backend.global.common.ResponseCode;
+import com.flolink.backend.global.common.exception.NotFoundException;
+import com.flolink.backend.global.common.exception.TimeOutException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,18 +71,20 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public void checkAuthenticationNumber(CheckAuthRequest checkAuthRequest) {
 		Auth auth = authRepository.findByTel(checkAuthRequest.getTel())
-			.orElseThrow(() -> new NotFoundException());
-		String authNum = authRepository.findByTel(checkAuthRequest.getTel()).getAuthNum();
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
-		LocalDateTime now = LocalDateTime.now();
-		if (now.isAfter(checkAuthRequest.getExpiredAt())) {
-
-			//TODO 시간초과 exception 만들어야할꺼같다.
-		} else if (!authNum.equals(checkAuthRequest.getAuthNum())) {
-			//TODO 불일치 exception 만들어야 할 것 같다.
+		try {
+			// 현재시간(now) 이 유효기간을 지났다면 TimeOutException, 인증번호 불일치라면 NotFoundException
+			LocalDateTime now = LocalDateTime.now();
+			if (now.isAfter(checkAuthRequest.getExpiredAt())) {
+				throw new TimeOutException(ResponseCode.TIME_OUT_EXCEPTION);
+			} else if (!auth.getAuthNum().equals(checkAuthRequest.getAuthNum())) {
+				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+			}
+		} finally {
+			authRepository.deleteByTel(checkAuthRequest.getTel());
 		}
 
-		authRepository.deleteByTel(checkAuthRequest.getTel());
 	}
 
 }
