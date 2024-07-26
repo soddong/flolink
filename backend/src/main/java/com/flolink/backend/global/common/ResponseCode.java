@@ -17,7 +17,13 @@ public enum ResponseCode {
 	USER_ROLE_NOT_FOUND(404, "User role not found", "NOT_FOUND_ERROR"),
 	NOT_AUTHORIZED(401, "Not authorized", "NOT_AUTHORIZED"),
 	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
-	INSUFFICIENT_FUNDS(402, "Insufficient funds", "INSUFFICIENT_FUNDS");
+	INSUFFICIENT_FUNDS(402, "Insufficient funds", "INSUFFICIENT_FUNDS"),
+	
+	
+	//Auth
+	TIME_OUT_EXCEPTION(401, "Auth Time Out", "TIME_OUT_ERROR"),
+	
+	;
 
 	private final int status;
 	private final String message;
