@@ -8,10 +8,8 @@ function CardforChannelSelect(props) {
                 
             </div>
                 <div className={styles.text}>
-                    
                     <div className={styles.h3}>{props.a.title}</div>
                     <div className={styles.p}>{props.a.familySize}명</div>
-                    
                 </div>
         </div>
     )

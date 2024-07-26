@@ -75,58 +75,105 @@
 }
 
 .cardContainerforselect {
-    width : 100%;
-    height : 53%;
-    display : flex;
-    flex-flow : wrap;
+  width: 100%;
+  height: 53%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.cardWrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; 
 }
 
 .card {
-    width: 170px;
-    height: 170px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 5px 5px 15px #bebebe,
-               -5px -5px 15px #ffffff;
-    transition: 0.2s ease-in-out;
-    margin : 12.1px;
-  }
-  
-  .img {
-    width: 100%;
-    height: 50%;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    background: linear-gradient(#e66465, #9198e5);
-    display: flex;
-    align-items: top;
-    justify-content: right;
-  }
-  
-  .text {
-    width: 100%;
-    height: 50%;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px #bebebe,
+             -5px -5px 15px #ffffff;
+  transition: 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
 
-  }
-  
-  .text .h3 {
-    font-family: 'Lucida Sans' sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: black;
-    padding-bottom: 5px;
-  }
-  
-  .text .p {
-    font-family: 'Lucida Sans' sans-serif;
-    color: #999999;
-    font-size: 13px;
-  }
-  
-  .card:hover {
-    cursor: pointer;
-    box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
-  }
+.img {
+  width: 100%;
+  height: 50%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background: linear-gradient(#e66465, #9198e5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.text {
+  width: 100%;
+  height: 50%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.text .h3 {
+  font-family: 'Lucida Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 5px;
+}
+
+.text .p {
+  font-family: 'Lucida Sans', sans-serif;
+  color: #999999;
+  font-size: 13px;
+}
+
+.card:hover {
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+}
+
+.addCard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  transition: background-color 0.3s;
+  border-radius: 15px;
+}
+
+.addCard:hover {
+  background-color: #e0e0e0;
+}
+
+.addIconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.addIcon {
+  font-size: 60px;
+  color: #666;
+}
