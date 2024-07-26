@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 public class BadRequestException extends RuntimeException {
-	private final ResponseCode responseCode;
+	private ResponseCode errorCode;
 
-	public BadRequestException(final ResponseCode responseCode) {
-		super(responseCode.getMessage());
-		this.responseCode = responseCode;
+	public BadRequestException(final ResponseCode errorCode) {
+		super(errorCode.getMessage());
+		this.errorCode = errorCode;
 	}
 }

@@ -16,7 +16,8 @@ public enum ResponseCode {
 	BLANK_ROOM_NAME(400, "Blank room name", "BAD_REQUEST_ERROR"),
 	USER_ROLE_NOT_FOUND(404, "User role not found", "NOT_FOUND_ERROR"),
 	NOT_AUTHORIZED(401, "Not authorized", "NOT_AUTHORIZED"),
-	;
+	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
+	INSUFFICIENT_FUNDS(402, "Insufficient funds", "INSUFFICIENT_FUNDS");
 
 	private final int status;
 	private final String message;
