@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import { VitePWA } from "vite-plugin-pwa"
 
 const manifestForPlugIn = {
-  registerType:'prompt',
+  registerType:'autoUpdate',
   includeAssests:['favicon.ico', "apple-touc-icon.png", "masked-icon.svg"],
   manifest:{
     name:"Flolink",
@@ -39,7 +39,10 @@ const manifestForPlugIn = {
   display:"standalone",
   scope:'/',
   start_url:"/",
-  orientation:'portrait'
+  orientation:'portrait',
+  devOptions: {
+    enabled : true
+  }
   }
 }
 
