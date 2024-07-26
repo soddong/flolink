@@ -12,8 +12,10 @@ public enum ResponseCode {
 	NOT_FOUND_ERROR(404, "Resource not found", "NOT_FOUND_ERROR"),
 	USER_NOT_FOUND(404, "User not found", "NOT_FOUND_ERROR"),
 	ROOM_NOT_FOUND(404, "Room not found", "NOT_FOUND_ERROR"),
+	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
+
 	BLANK_ROOM_NAME(400, "Blank room name", "BAD_REQUEST_ERROR"),
-	;
+	INSUFFICIENT_FUNDS(402, "Insufficient funds", "INSUFFICIENT_FUNDS");
 
 	private final int status;
 	private final String message;
