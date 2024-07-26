@@ -8,5 +8,5 @@ import lombok.Getter;
 public class CheckAuthRequest {
 	private String tel;
 	private String authNum;
-	private final LocalDateTime expiredAt = LocalDateTime.now();
+	private LocalDateTime expiredAt;
 }

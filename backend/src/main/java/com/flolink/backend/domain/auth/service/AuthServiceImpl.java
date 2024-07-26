@@ -12,6 +12,7 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 
 import com.flolink.backend.domain.auth.dto.request.CheckAuthRequest;
 import com.flolink.backend.domain.auth.dto.request.PhoneAuthRequest;
+import com.flolink.backend.domain.auth.entity.Auth;
 import com.flolink.backend.domain.auth.repository.AuthRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
 
 		// 만약에 이미 db에 발송이 되어있다면 넘어가기!(따닥 방지)
 		if (authRepository.existsByTel(phoneAuthRequest.getTel())) {
+			//TODO return 이 아니라 오류를 만들어야 하지 않을까? NOT FOUND exception??
 			return;
 		}
 
@@ -65,13 +67,18 @@ public class AuthServiceImpl implements AuthService {
 	 */
 	@Override
 	public void checkAuthenticationNumber(CheckAuthRequest checkAuthRequest) {
-		String authNum = authRepository.findBytel(checkAuthRequest.getTel()).getAuthNum();
+		Auth auth = authRepository.findByTel(checkAuthRequest.getTel())
+			.orElseThrow(() -> new NotFoundException());
+		String authNum = authRepository.findByTel(checkAuthRequest.getTel()).getAuthNum();
 
 		LocalDateTime now = LocalDateTime.now();
-		if (!authNum.equals(checkAuthRequest.getAuthNum())) {
-			// 여기에는 휴대폰 인증 성공 토큰(JWT)를 세션에 넘겨주는 로직이 작성되어야한다.
-			// 아직 모르니깐 JWT 공부하고 다시 오자.
+		if (now.isAfter(checkAuthRequest.getExpiredAt())) {
+
+			//TODO 시간초과 exception 만들어야할꺼같다.
+		} else if (!authNum.equals(checkAuthRequest.getAuthNum())) {
+			//TODO 불일치 exception 만들어야 할 것 같다.
 		}
+
 		authRepository.deleteByTel(checkAuthRequest.getTel());
 	}
 
