@@ -19,7 +19,8 @@ function Notification (props) {
       </div>
       {modal === true ? 
       <>
-        <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"></div>
+        <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
+        onClick={showNotificationModal}></div>
         <Modal />
       </>
        : null}
