@@ -1,8 +1,10 @@
 import CardforChannelSelect from '../components/CardforChannelSelect';
+import AddNewChannelCard from '../components/AddNewChannelCard';
 import styles from '../css/channelselect.module.css';
 import { useState, useRef, useEffect } from 'react';
 import Logo from '../assets/flolink_logo.png'
 import UserAvatar from '../assets/profile_dummy.jpg'
+import ModalforChannelSelect from '../components/ModalforChannelSelect';
 
 function ChannelSelectPage() {
 
@@ -13,6 +15,7 @@ function ChannelSelectPage() {
     ]);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const toggleDropdown = () => {
@@ -26,6 +29,25 @@ function ChannelSelectPage() {
             dropdownRef.current.style.maxHeight = '0px';
         }
     }, [isDropdownOpen]);
+
+
+    const handleAddNewChannel = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCreateFamily = () => {
+        console.log("가족 생성");
+        setIsModalOpen(false);
+    };
+
+    const handleJoinFamily = () => {
+        console.log("가족 추가");
+        setIsModalOpen(false);
+    };
 
     return (
         <div className={styles.startforselect}>
@@ -55,10 +77,22 @@ function ChannelSelectPage() {
                 <img src={Logo}/>
             </div>
             <div className={styles.cardContainerforselect}>
-            {
-                family.map((a, i) => <CardforChannelSelect key={i} a={a} />)
-            }
+                {[...Array(4)].map((_, index) => (
+                    <div key={index} className={styles.cardWrapper}>
+                        {family[index] ? (
+                            <CardforChannelSelect a={family[index]} />
+                        ) : index === family.length && family.length < 4 ? (
+                            <AddNewChannelCard onClick={handleAddNewChannel} />
+                        ) : null}
+                    </div>
+                ))}
             </div>
+            <ModalforChannelSelect 
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                onCreateFamily={handleCreateFamily}
+                onJoinFamily={handleJoinFamily}
+            />
         </div>
     );
 }
