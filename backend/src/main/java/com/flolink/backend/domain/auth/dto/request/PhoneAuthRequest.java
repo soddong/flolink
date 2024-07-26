@@ -11,13 +11,14 @@ import lombok.Getter;
 @Getter
 public class PhoneAuthRequest {
 	private String tel;
-	private final LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(5);
+	private String authNum;
+	private LocalDateTime expiredAt;
 
 	public Auth toEntity(String authNum) {
 		return Auth.builder()
 			.authNum(authNum)
 			.tel(tel)
-			.expiredAt(expiredAt)
+			.expiredAt(LocalDateTime.now().plusMinutes(5))
 			.build();
 	}
 }
