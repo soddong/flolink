@@ -22,7 +22,7 @@ function MainPage() {
           </span>
         </div>
       </header>
-      <Notification message='️오늘 저녁에 외식 예정. 7시까지 오세요!' />
+      <Notification />
       <UserStatusList />
       <PetStatusList />
       <div className="w-full h-56 flex justify-center items-center relative">
