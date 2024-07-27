@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
 
@@ -30,6 +31,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE room SET use_yn = false WHERE room_id = ?")
+@SQLRestriction("use_yn = true")
 public class Room {
 
 	@Id
@@ -46,6 +48,9 @@ public class Room {
 	@Column(name = "use_yn", nullable = false)
 	private Boolean useYn;
 
+	@Column(name = "room_participate_password", nullable = false)
+	private String roomParticipatePassword;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
 	List<UserRoom> userRoomList;
 
@@ -59,5 +64,6 @@ public class Room {
 
 	public void updateRoomInfo(final RoomUpdateRequest roomUpdateRequest) {
 		this.roomName = roomUpdateRequest.getRoomName();
+		this.roomParticipatePassword = roomUpdateRequest.getRoomParticipatePassword();
 	}
 }
