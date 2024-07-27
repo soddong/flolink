@@ -22,7 +22,7 @@ public enum ResponseCode {
 	
 	//Auth
 	TIME_OUT_EXCEPTION(401, "Auth Time Out", "TIME_OUT_ERROR"),
-	
+	DUPLICATE_LOGIN_ID(401, "Duplicate login id", "DUPLICATE_LOGIN_ID"),
 	;
 
 	private final int status;

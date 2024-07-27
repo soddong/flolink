@@ -8,5 +8,4 @@ import lombok.Getter;
 public class CheckAuthRequest {
 	private String tel;
 	private String authNum;
-	private LocalDateTime expiredAt;
 }

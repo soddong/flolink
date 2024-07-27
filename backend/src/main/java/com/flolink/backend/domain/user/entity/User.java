@@ -35,6 +35,9 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userId;
 
+	@Column(name = "my_room_id", nullable = false, length = 36)
+	private Integer myRoomId;
+
 	@Column(name = "login_id", nullable = false, length = 20)
 	private String loginId;
 
@@ -60,7 +63,10 @@ public class User {
 	private boolean useYn;
 
 	@Column(name = "profile", nullable = false)
-	private String profile;
+	private int profile;
+
+	@Column(name = "role", nullable = true)
+	private String role;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	List<UserRoom> userRoomList;
