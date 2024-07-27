@@ -1,13 +1,13 @@
 package com.flolink.backend.domain.user.controller;
 
+import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
+import com.flolink.backend.domain.user.entity.User;
+import com.flolink.backend.global.common.CommonResponse;
+import com.flolink.backend.global.common.ResponseCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.flolink.backend.domain.user.dto.request.LoginIdRequset;
 import com.flolink.backend.domain.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,9 +25,22 @@ public class UserController {
 	private final UserService userService;
 
 	@Operation(summary = "아이디 중복 확인")
-	@PostMapping("")
-	public ResponseEntity<?> checkLoginId(@RequestBody LoginIdRequset loginIdRequset) {
-		boolean result = userService.isExistId(loginIdRequset);
-		return new ResponseEntity<>(result, result ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+	@GetMapping("/duplicate/{loginId}")
+	public ResponseEntity<?> checkLoginId(@PathVariable String loginId) {
+		log.info("===아이디 중복 확인 START===");
+		boolean result = userService.isExistId(loginId);
+		log.info("===아이디 중복 확인 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, result));
 	}
+
+	@Operation(summary = "회원가입")
+	@PostMapping("/join")
+	public ResponseEntity<?> join(@RequestBody JoinUserRequest joinUserRequest) {
+		log.info("===회원가입 START===");
+		userService.joinProcess(joinUserRequest);
+		log.info("===회원가입 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
+
+
 }

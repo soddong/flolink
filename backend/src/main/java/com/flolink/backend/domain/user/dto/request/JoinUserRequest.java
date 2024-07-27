@@ -13,6 +13,7 @@ public class JoinUserRequest {
 	private String userName;
 	private String nickName;
 	private String tel;
+	private String token;
 
 	public User toEntity() {
 		return User.builder()
