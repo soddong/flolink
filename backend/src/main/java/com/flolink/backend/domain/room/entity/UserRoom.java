@@ -3,6 +3,9 @@ package com.flolink.backend.domain.room.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import com.flolink.backend.domain.user.entity.User;
 
 import jakarta.persistence.Column;
@@ -29,6 +32,8 @@ import lombok.Setter;
 @Table(name = "user_room")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE user_room SET use_yn = false WHERE user_room_id = ?")
+@SQLRestriction("use_yn = true")
 public class UserRoom {
 
 	@Id
@@ -53,12 +58,16 @@ public class UserRoom {
 	@Column(name = "use_yn", nullable = false)
 	private Boolean useYn;
 
+	@Column(name = "role", nullable = false, length = 45)
+	private String role;
+
 	public static UserRoom of(User user, Room room) {
 		return UserRoom.builder()
 			.user(user)
 			.room(room)
 			.createAt(LocalDateTime.now())
 			.useYn(true)
+			.role("member")
 			.build();
 	}
 
