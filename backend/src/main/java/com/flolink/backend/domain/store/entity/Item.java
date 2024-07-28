@@ -1,4 +1,4 @@
-package com.flolink.backend.domain.item.entity;
+package com.flolink.backend.domain.store.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -50,4 +50,5 @@ public class Item {
 
 	@Column(name = "use_yn", nullable = false)
 	private Boolean useYn;
+
 }

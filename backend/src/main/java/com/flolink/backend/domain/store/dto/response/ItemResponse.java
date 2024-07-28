@@ -1,8 +1,8 @@
-package com.flolink.backend.domain.item.dto.response;
+package com.flolink.backend.domain.store.dto.response;
 
 import java.math.BigDecimal;
 
-import com.flolink.backend.domain.item.entity.Item;
+import com.flolink.backend.domain.store.entity.Item;
 
 import lombok.Builder;
 import lombok.Getter;

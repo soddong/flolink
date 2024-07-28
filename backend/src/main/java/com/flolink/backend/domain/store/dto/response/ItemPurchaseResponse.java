@@ -1,9 +1,9 @@
-package com.flolink.backend.domain.item.dto.response;
+package com.flolink.backend.domain.store.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.flolink.backend.domain.item.entity.ItemPurchase;
+import com.flolink.backend.domain.store.entity.ItemPurchase;
 
 import lombok.Builder;
 import lombok.Getter;

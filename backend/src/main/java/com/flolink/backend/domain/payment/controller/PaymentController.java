@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.domain.payment.dto.PortOnePayment;
 import com.flolink.backend.domain.payment.dto.request.PaymentRequest;
-import com.flolink.backend.domain.payment.dto.response.PaymentCreateResponse;
-import com.flolink.backend.domain.payment.dto.response.PaymentResponse;
+import com.flolink.backend.domain.payment.dto.response.PaymentHistoryResponse;
+import com.flolink.backend.domain.payment.dto.response.PaymentPrepareResponse;
 import com.flolink.backend.domain.payment.service.PaymentService;
 import com.flolink.backend.global.common.CommonResponse;
 
@@ -36,7 +36,7 @@ public class PaymentController {
 	@Operation(summary = "결제 시작")
 	public ResponseEntity<CommonResponse> createPayment(@RequestBody final PaymentRequest request) {
 		Integer userId = 1;
-		PaymentCreateResponse response = paymentService.preparePayment(userId, request);
+		PaymentPrepareResponse response = paymentService.preparePayment(userId, request);
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, response));
 	}
 
@@ -50,7 +50,7 @@ public class PaymentController {
 	@GetMapping("/history")
 	@Operation(summary = "결제내역 조회")
 	public ResponseEntity<CommonResponse> getPaymentHistory() {
-		List<PaymentResponse> responses = paymentService.getPaymentHistory();
+		List<PaymentHistoryResponse> responses = paymentService.getPaymentHistory();
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, responses));
 	}
 }
