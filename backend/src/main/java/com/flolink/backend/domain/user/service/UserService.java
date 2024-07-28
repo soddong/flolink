@@ -7,4 +7,6 @@ public interface UserService {
 	void joinProcess(JoinUserRequest joinUserRequest);
 
 	boolean isExistId(String loginId);
+
+	
 }
