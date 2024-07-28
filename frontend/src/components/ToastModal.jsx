@@ -33,7 +33,6 @@
 // }
 
 // export default ToastModal;
-
 import React, { useState, useEffect } from 'react';
 
 function ToastModal({ message, onClose }) {

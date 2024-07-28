@@ -59,7 +59,6 @@
 // }
 
 // export default SignupPage;
-
 import React, { useState } from 'react';
 import logo from '../assets/logo.png';
 import Button from '../components/Button';
@@ -69,7 +68,7 @@ import ToastModal from '../components/ToastModal';
 function SignupPage() {
   const [selectedTelecom, setSelectedTelecom] = useState('SKT');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const handleSendCode = (e) => {
     e.preventDefault(); // Prevent form submission and page reload
     setIsModalOpen(true);
@@ -84,7 +83,7 @@ function SignupPage() {
       <button className="absolute top-2 right-2 text-2xl">&times;</button>
       <img src={logo} alt="FLORINK" className="block mx-auto mb-5 w-24 h-auto" />
       <h2 className="text-center text-lg font-bold mb-5">회원가입</h2>
-      <form className="flex flex-col gap-3" onSubmit={handleSendCode}>
+      <form className="flex flex-col gap-3">
         <div className="flex items-end gap-3 mb-0">
           <div className="flex-1">
             <TextField placeholder="아이디를 입력해주세요" label="아이디" />
@@ -111,10 +110,13 @@ function SignupPage() {
           </div>
           <TextField label="휴대전화번호" placeholder="010-1234-5678" />
         </div>
-        <Button text="전송" variant="solid"/>
+        <Button text="전송" variant="solid" onClick={handleSendCode}/>
       </form>
       {isModalOpen && (
-        <ToastModal onClose={handleCloseModal} />
+        <ToastModal 
+          message="문자로 전달받은\n인증번호 6자리를 입력해주세요." 
+          onClose={handleCloseModal} 
+        />
       )}
     </div>
   );
