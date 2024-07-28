@@ -9,6 +9,7 @@ import LoadingPage from './pages/Loadingpage';
 import PwResetPage from './pages/PwResetPage';
 import SettingPage from './pages/settingpage';
 import SignupPage from './pages/SignupPage';
+import FeedListPage from './pages/FeedListPage';
 
 const router = createBrowserRouter([  
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path : "/signup",
     element : <SignupPage />
+  },
+  {
+    path : "/feedlist",
+    element : <FeedListPage />
   }
 ])
 
