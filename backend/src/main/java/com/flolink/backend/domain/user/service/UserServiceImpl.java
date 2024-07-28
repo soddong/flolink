@@ -3,12 +3,14 @@ package com.flolink.backend.domain.user.service;
 import com.flolink.backend.domain.auth.entity.SuccessToken;
 import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
+import com.flolink.backend.domain.user.dto.request.LoginUserRequest;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.DuplicateException;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.TimeOutException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
+import com.flolink.backend.global.util.JwtUtil;
 import jakarta.persistence.EntityManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
 	private final SuccessTokenRepository successTokenRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final EntityManager em;
+	private final JwtUtil jwtUtil;
 
 	// 계정 생성
 	public void joinProcess(JoinUserRequest joinUserRequest) {
@@ -91,6 +94,14 @@ public class UserServiceImpl implements UserService {
 			throw new DuplicateException(ResponseCode.DUPLICATE_LOGIN_ID);
 		}
 		return true;
+	}
+
+	// 로그인
+	public String login(LoginUserRequest loginUserRequest) {
+		User user = userRepository.findByLoginId(loginUserRequest.getLoginId())
+				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+
+		String jwtToken = jwtUtil.createJwt()
 	}
 
 }
