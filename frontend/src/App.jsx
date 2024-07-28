@@ -10,6 +10,7 @@ import PwResetPage from './pages/PwResetPage';
 import SettingPage from './pages/settingpage';
 import SignupPage from './pages/SignupPage';
 import FeedListPage from './pages/FeedListPage';
+import FeedCreatePage from './pages/FeedCreatePage';
 
 const router = createBrowserRouter([  
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
   {
     path : "/feedlist",
     element : <FeedListPage />
+  },
+  {
+    path : "/feedcreate",
+    element : <FeedCreatePage />
   }
 ])
 
