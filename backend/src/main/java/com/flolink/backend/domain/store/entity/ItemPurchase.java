@@ -1,4 +1,4 @@
-package com.flolink.backend.domain.item.entity;
+package com.flolink.backend.domain.store.entity;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Table(name = "item_purchase_log")
+@Table(name = "item_purchase_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemPurchase {
@@ -50,5 +50,4 @@ public class ItemPurchase {
 			.purchaseAt(LocalDateTime.now())
 			.build();
 	}
-
 }

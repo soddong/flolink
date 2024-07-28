@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.payment.dto.PortOnePayment;
 import com.flolink.backend.domain.payment.dto.request.PaymentRequest;
-import com.flolink.backend.domain.payment.dto.response.PaymentCreateResponse;
-import com.flolink.backend.domain.payment.dto.response.PaymentResponse;
+import com.flolink.backend.domain.payment.dto.response.PaymentHistoryResponse;
+import com.flolink.backend.domain.payment.dto.response.PaymentPrepareResponse;
 import com.flolink.backend.domain.payment.entity.Payment;
 import com.flolink.backend.domain.payment.entity.PaymentState;
 import com.flolink.backend.domain.payment.repository.PaymentRepository;
@@ -32,7 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Override
 	@Transactional
-	public PaymentCreateResponse preparePayment(final Integer userId, final PaymentRequest request) {
+	public PaymentPrepareResponse preparePayment(final Integer userId, final PaymentRequest request) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
@@ -40,7 +40,7 @@ public class PaymentServiceImpl implements PaymentService {
 			Payment.createPayment(user, request)
 		);
 
-		return PaymentCreateResponse.fromEntity(savedPayment);
+		return PaymentPrepareResponse.fromEntity(savedPayment);
 	}
 
 	@Override
@@ -69,10 +69,10 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Override
 	@Transactional
-	public List<PaymentResponse> getPaymentHistory() {
+	public List<PaymentHistoryResponse> getPaymentHistory() {
 		List<Payment> payments = paymentRepository.findByState(PaymentState.PAID);
 		return payments.stream()
-			.map(PaymentResponse::fromEntity)
+			.map(PaymentHistoryResponse::fromEntity)
 			.toList();
 	}
 

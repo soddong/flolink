@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.flolink.backend.domain.payment.dto.PortOnePayment;
 import com.flolink.backend.domain.payment.dto.request.PaymentRequest;
-import com.flolink.backend.domain.payment.dto.response.PaymentCreateResponse;
-import com.flolink.backend.domain.payment.dto.response.PaymentResponse;
+import com.flolink.backend.domain.payment.dto.response.PaymentHistoryResponse;
+import com.flolink.backend.domain.payment.dto.response.PaymentPrepareResponse;
 
 public interface PaymentService {
 
-	PaymentCreateResponse preparePayment(Integer userId, PaymentRequest request);
+	PaymentPrepareResponse preparePayment(Integer userId, PaymentRequest request);
 
 	void completePayment(PortOnePayment portOne);
 
-	List<PaymentResponse> getPaymentHistory();
+	List<PaymentHistoryResponse> getPaymentHistory();
 }
