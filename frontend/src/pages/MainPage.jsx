@@ -22,14 +22,11 @@ function MainPage() {
           </span>
         </div>
       </header>
-      <Notification message='️오늘 저녁에 외식 예정. 7시까지 오세요!' />
+      <Notification />
       <UserStatusList />
       <PetStatusList />
       <div className="w-full h-56 flex justify-center items-center relative">
         <img src={Max} alt='dummy_pet_photo' className="h-52 z-10"/>
-        <button className="absolute bottom-2.5 right-0 rounded-lg bg-rose-400 text-white text-xs font-bold w-24 h-8 z-10">
-          함께 산책하기
-        </button>
       </div>
       <Question message={Message}/>
     </div>
