@@ -42,5 +42,13 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 
+	@Operation(summary = "로그인")
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody LoginUserRequest loginUserRequest){
+		log.info("===로그인 START===");
+
+		log.info("===로그인 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
 
 }

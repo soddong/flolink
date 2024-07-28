@@ -4,9 +4,11 @@ import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final long accessTokenValidityInSeconds = 60*60*10L; //10분
+    private final long RefreshTokenValidityInSeconds = 60*60*60*24L; //24시간
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -48,9 +52,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
 
 
-        String token = jwtUtil.createJwt(loginId, myRoomId, 60*60*10L);
+        String access = jwtUtil.createJwt("access", loginId, myRoomId, accessTokenValidityInSeconds);
+        String refresh = jwtUtil.createJwt("refresh", loginId, myRoomId, RefreshTokenValidityInSeconds);
 
-        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader("access", access);
+        response.addCookie(createCookies("refresh", refresh));
+        response.setStatus(HttpStatus.OK.value());
+    }
+
+    private Cookie createCookies(String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24*60*60);
+//        cookie.setSecure(true);
+//        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 
     @Override
