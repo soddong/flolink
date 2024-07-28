@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.flolink.backend.domain.store.entity.Item;
+import com.flolink.backend.domain.store.entity.ItemType;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import lombok.Setter;
 public class ItemRequest {
 
 	private String itemName;
-	private String type;
+	private ItemType type;
 	private BigDecimal price;
 	private String description;
 	private String imageUrl;
