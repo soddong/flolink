@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flolink.backend.domain.store.entity.Item;
+import com.flolink.backend.global.common.ResponseCode;
+import com.flolink.backend.global.common.exception.BadRequestException;
+import com.flolink.backend.global.common.exception.NotFoundException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -82,7 +85,7 @@ public class MyRoom {
 				this.itemPhotoFrame = hasItem.getHasItemId();
 				break;
 			default:
-				throw new IllegalArgumentException("Invalid item type");
+				throw new BadRequestException(ResponseCode.INVALID_ITEM_TYPE);
 		}
 		hasItem.equip();
 	}
@@ -103,7 +106,7 @@ public class MyRoom {
 				this.itemPhotoFrame = null;
 				break;
 			default:
-				throw new IllegalArgumentException("Invalid item type");
+				throw new BadRequestException(ResponseCode.INVALID_ITEM_TYPE);
 		}
 		hasItem.unequip();
 	}
@@ -112,6 +115,6 @@ public class MyRoom {
 		return this.items.stream()
 			.filter(item -> item.getHasItemId().equals(hasItemId))
 			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("Item not found"));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.INVENTORY_NOT_FOUND));
 	}
 }
