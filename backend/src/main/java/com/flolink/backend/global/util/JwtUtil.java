@@ -28,12 +28,17 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("myRoomId", Integer.class);
     }
 
+    public String getCategory(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
     public Boolean isExpired(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createJwt(String loginId, int myRoomId, Long expiredTime) {
+    public String createJwt(String category, String loginId, int myRoomId, Long expiredTime) {
         return Jwts.builder()
+                .claim("category", category)
                 .claim("loginId", loginId)
                 .claim("myRoomId", myRoomId)
                 .issuedAt(new Date(System.currentTimeMillis()))

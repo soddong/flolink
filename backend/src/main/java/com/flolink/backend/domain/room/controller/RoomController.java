@@ -109,13 +109,13 @@ public class RoomController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, done));
 	}
 
-	@DeleteMapping("/{roomId}/kick/{userRoomId}")
+	@DeleteMapping("/{roomId}/kick/{targetUserRoomId}")
 	@Operation(summary = "가족 방 구성원 추방하기")
 	public ResponseEntity<?> kickRoomMember(@PathVariable final Integer roomId,
-		@PathVariable final Integer userRoomId) {
+		@PathVariable final Integer targetUserRoomId) {
 		log.info("===가족 방 추방하기 START===");
 		Integer userId = 1;
-		String done = roomService.kickRoomMember(userId, roomId, userRoomId);
+		String done = roomService.kickRoomMember(userId, roomId, targetUserRoomId);
 		log.info("===가족 방 추방하기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, done));
 	}

@@ -2,6 +2,7 @@ package com.flolink.backend.domain.user.service;
 
 import com.flolink.backend.domain.auth.entity.SuccessToken;
 import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
+import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.DuplicateException;
