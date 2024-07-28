@@ -12,14 +12,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class PaymentCreateResponse {
+public class PaymentPrepareResponse {
 	private String orderId;
 	private String orderName;
 	private BigDecimal amount;
 	private PaymentState state;
 
-	public static PaymentCreateResponse fromEntity(Payment payment) {
-		return PaymentCreateResponse.builder()
+	public static PaymentPrepareResponse fromEntity(Payment payment) {
+		return PaymentPrepareResponse.builder()
 			.orderId(payment.getOrderId())
 			.orderName(payment.getOrderName())
 			.amount(payment.getAmount())

@@ -1,16 +1,18 @@
-package com.flolink.backend.domain.item.service;
+package com.flolink.backend.domain.store.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flolink.backend.domain.item.dto.response.ItemPurchaseResponse;
-import com.flolink.backend.domain.item.dto.response.ItemResponse;
-import com.flolink.backend.domain.item.entity.Item;
-import com.flolink.backend.domain.item.entity.ItemPurchase;
-import com.flolink.backend.domain.item.repository.ItemPurchaseRepository;
-import com.flolink.backend.domain.item.repository.ItemRepository;
+import com.flolink.backend.domain.myroom.entity.HasItem;
+import com.flolink.backend.domain.myroom.service.HasItemService;
+import com.flolink.backend.domain.store.dto.response.ItemPurchaseResponse;
+import com.flolink.backend.domain.store.dto.response.ItemResponse;
+import com.flolink.backend.domain.store.entity.Item;
+import com.flolink.backend.domain.store.entity.ItemPurchase;
+import com.flolink.backend.domain.store.repository.ItemPurchaseRepository;
+import com.flolink.backend.domain.store.repository.ItemRepository;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.common.ResponseCode;
@@ -28,6 +30,7 @@ public class ItemServiceImpl implements ItemService {
 	private final ItemRepository itemRepository;
 	private final ItemPurchaseRepository itemPurchaseRepository;
 	private final UserRepository userRepository;
+	private final HasItemService hasItemService;
 
 	/**
 	 * 아이템 저장
@@ -97,9 +100,9 @@ public class ItemServiceImpl implements ItemService {
 			throw new BadRequestException(ResponseCode.INSUFFICIENT_FUNDS);
 		}
 
-		processUserPurchase(user, item);                            // 사용자 포인트 업데이트
-		ItemPurchase itemPurchase = savePurchaseLog(user, item);     // 구매 내역 저장
-		// TODO: 인벤토리에 저장
+		processUserPurchase(user, item);                                // 사용자 포인트 업데이트
+		ItemPurchase itemPurchase = savePurchaseHistory(user, item);    // 구매 내역 저장
+		HasItem hasItem = hasItemService.saveHasItem(user, item);       // 인벤토리 저장
 
 		return ItemPurchaseResponse.fromEntity(itemPurchase);
 	}
@@ -110,7 +113,8 @@ public class ItemServiceImpl implements ItemService {
 	 * @return 유저가 주문한 아이템 리스트
 	 */
 	@Override
-	public List<ItemPurchaseResponse> getPurchaseLogs(final Integer userId) {
+	@Transactional(readOnly = true)
+	public List<ItemPurchaseResponse> getPurchaseHistory(final Integer userId) {
 		return itemPurchaseRepository.findByUserIdOrderByPurchaseAtDesc(userId)
 			.stream()
 			.map(ItemPurchaseResponse::fromEntity)
@@ -124,7 +128,7 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public ItemPurchase savePurchaseLog(User user, Item item) {
+	public ItemPurchase savePurchaseHistory(User user, Item item) {
 		return itemPurchaseRepository.save(ItemPurchase.of(user, item));
 	}
 

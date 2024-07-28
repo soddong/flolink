@@ -1,22 +1,19 @@
-package com.flolink.backend.domain.item.controller;
+package com.flolink.backend.domain.store.controller;
 
 import static com.flolink.backend.global.common.ResponseCode.*;
 
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flolink.backend.domain.item.dto.request.ItemRequest;
-import com.flolink.backend.domain.item.dto.response.ItemPurchaseResponse;
-import com.flolink.backend.domain.item.dto.response.ItemResponse;
-import com.flolink.backend.domain.item.service.ItemService;
+import com.flolink.backend.domain.store.dto.response.ItemPurchaseResponse;
+import com.flolink.backend.domain.store.dto.response.ItemResponse;
+import com.flolink.backend.domain.store.service.ItemService;
 import com.flolink.backend.global.common.CommonResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,15 +23,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/items")
+@RequestMapping("/store")
 @RequiredArgsConstructor
-@Tag(name = "Item API", description = "아이템과 관련된 API")
-public class ItemController {
+@Tag(name = "Store API", description = "상점과 관련된 API")
+public class StoreController {
 
 	private final ItemService itemService;
 
 	@GetMapping
-	@Operation(summary = "아이템 전체 조회하기")
+	@Operation(summary = "상점내 아이템 전체 조회하기")
 	public ResponseEntity<CommonResponse> getAllItems() {
 		log.info("===아이템 전체 조회 START===");
 		List<ItemResponse> items = itemService.getAllItems();
@@ -43,30 +40,12 @@ public class ItemController {
 	}
 
 	@GetMapping("/{itemId}")
-	@Operation(summary = "아이템 상세 조회하기")
+	@Operation(summary = "상점내 아이템 상세 조회하기")
 	public ResponseEntity<CommonResponse> getItemById(@PathVariable final Integer itemId) {
 		log.info("===아이템 상세 조회 START===");
 		ItemResponse item = itemService.getItemById(itemId);
 		log.info("===아이템 상세 조회 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, item));
-	}
-
-	@PostMapping
-	@Operation(summary = "아이템 생성하기")
-	public ResponseEntity<CommonResponse> saveItem(@RequestBody final ItemRequest itemRequest) {
-		log.info("===아이템 생성 START===");
-		ItemResponse savedItem = itemService.saveItem(itemRequest.toEntity());
-		log.info("===아이템 생성 END===");
-		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, savedItem));
-	}
-
-	@DeleteMapping("/{itemId}")
-	@Operation(summary = "아이템 삭제하기")
-	public ResponseEntity<CommonResponse> deleteItem(@PathVariable final Integer itemId) {
-		log.info("===아이템 삭제 START===");
-		itemService.deleteItem(itemId);
-		log.info("===아이템 삭제 END===");
-		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, null));
 	}
 
 	@PostMapping("/{itemId}/purchase")
@@ -81,12 +60,11 @@ public class ItemController {
 
 	@GetMapping("/purchase/history")
 	@Operation(summary = "아이템 구매내역 조회")
-	public ResponseEntity<CommonResponse> getPurchaseLogs() {
+	public ResponseEntity<CommonResponse> getPurchaseHistory() {
 		log.info("===아이템 구매내역 조회 START===");
 		Integer userId = 1;
-		List<ItemPurchaseResponse> purchaseResponses = itemService.getPurchaseLogs(userId);
+		List<ItemPurchaseResponse> purchaseResponses = itemService.getPurchaseHistory(userId);
 		log.info("===아이템 구매내역 조회 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, purchaseResponses));
 	}
-
 }

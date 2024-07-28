@@ -32,7 +32,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "payment_log")
+@Table(name = "payment_history")
 public class Payment {
 
 	@Id
@@ -85,7 +85,6 @@ public class Payment {
 
 	public void completePayment(PortOnePayment portOne) {
 		this.paymentKey = portOne.getPaymentKey();
-		this.orderName = portOne.getOrderName();
 		this.currency = portOne.getCurrency();
 		this.method = portOne.getMethod();
 		this.receiptUrl = portOne.getReceipt().getUrl();
