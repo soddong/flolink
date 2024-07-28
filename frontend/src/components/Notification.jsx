@@ -18,13 +18,13 @@ function Notification (props) {
         <p className="text-xl mt-0.5 font-bold">📌 공지!</p>
         <p className="text-sm m-0 text-zinc-500">{noti}</p>
       </div>
-      {modal === true ? 
-      <>
-        <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
-        onClick={showNotificationModal}></div>
-        <Modal content = {noti} handleNoti={handleNoti} setModal={showNotificationModal} />
-      </>
-       : null}
+      {modal && (
+        <>
+          <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
+          onClick={showNotificationModal}></div>
+          <Modal content = {noti} handleNoti={handleNoti} setModal={showNotificationModal} />
+        </>
+      )}
     </div>
   )
 }

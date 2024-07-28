@@ -5,11 +5,7 @@ function SideBarItem (props) {
   const [modal, setModal] = useState(false);
 
   function showMemberModal() {
-    if (modal) {
-      setModal(false);
-    } else {
-      setModal(true);
-    }
+    setModal(!modal)
   };
   return (
     <div className={`h-8 my-2 w-28 relative flex justify-center items-center rounded ${modal === true ? "bg-rose-400/50" : null}`} onClick={showMemberModal}>
