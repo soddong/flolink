@@ -81,6 +81,7 @@ public class SecurityConfig {
                 // (/, /login, /join) 의 경로에 대해서만 혀가
 //                .authorizeHttpRequests((auth) -> auth
 //                        .requestMatchers("/login", "/", "/join").permitAll()
+//                        .requestMatchers("/reissue").permitAll()
 //                        .anyRequest().authenticated());
 
         //jwt 검증 필터
