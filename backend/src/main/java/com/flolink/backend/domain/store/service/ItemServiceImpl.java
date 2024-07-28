@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
 	@Transactional
 	public void deleteItem(final Integer itemId) {
 		Item item = itemRepository.findById(itemId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.ITEM_NOT_FOUND));
 		item.setUseYn(false);
 	}
 
@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
 	@Transactional(readOnly = true)
 	public ItemResponse getItemById(final Integer itemId) {
 		Item item = itemRepository.findById(itemId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.ITEM_NOT_FOUND));
 		return ItemResponse.fromEntity(item);
 	}
 
