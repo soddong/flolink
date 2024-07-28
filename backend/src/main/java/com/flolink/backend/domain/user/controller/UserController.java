@@ -1,6 +1,7 @@
 package com.flolink.backend.domain.user.controller;
 
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
+import com.flolink.backend.domain.user.dto.request.LoginUserRequest;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
