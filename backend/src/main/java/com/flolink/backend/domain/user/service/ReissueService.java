@@ -5,5 +5,5 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface ReissueService {
 
-    void reissue(HttpServletRequest request, HttpServletResponse response);
+	void reissue(HttpServletRequest request, HttpServletResponse response);
 }
