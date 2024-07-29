@@ -1,4 +1,5 @@
 import YearSelect from "../../components/schedule/yearSelect";
+import CalendarList from "../../components/schedule/CalendarList";
 
 function SchedulePage () {
   return (
@@ -12,6 +13,7 @@ function SchedulePage () {
         </span>
       </div>
       <YearSelect />
+      <CalendarList />
     </div>
   )
 }
