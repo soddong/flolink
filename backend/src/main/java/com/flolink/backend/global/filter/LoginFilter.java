@@ -38,10 +38,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
 		AuthenticationException {
 
-		String loginId = obtainUsername(request);
+		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginId, password,
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password,
 			null);
 
 		return authenticationManager.authenticate(authToken);

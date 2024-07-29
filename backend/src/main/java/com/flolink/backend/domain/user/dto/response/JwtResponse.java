@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class JwtResponse {
-    private String loginId;
-    private int myRoomId;
+	private String username;
+	private int myRoomId;
 }
