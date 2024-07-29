@@ -1,7 +1,9 @@
 package com.flolink.backend.domain.feed.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Service
+import com.flolink.backend.domain.feed.dto.response.FeedResponse;
+
 public interface FeedService {
+	List<FeedResponse> getFeeds(final Integer userId, final Integer roomId, final Integer lastId, final Integer size);
 }
