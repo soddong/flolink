@@ -11,6 +11,8 @@ import SettingPage from './pages/item_store/settingpage';
 import SignupPage from './pages/login/SignupPage';
 import FeedListPage from './pages/feed/FeedListPage';
 import FeedCreatePage from './pages/feed/FeedCreatePage';
+import SchedulePage from './pages/schedule/SchedulePage';
+import FamilyGardenPage from './pages/garden/FamilyGardenPage';
 
 const router = createBrowserRouter([  
   {
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
   {
     path : "/feedcreate",
     element : <FeedCreatePage />
+  },
+  {
+    path: "/schedule",
+    element : <SchedulePage />
+  },
+  {
+    path: "/garden",
+    element: <FamilyGardenPage />
   }
 ])
 
