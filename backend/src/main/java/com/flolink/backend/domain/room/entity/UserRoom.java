@@ -53,7 +53,7 @@ public class UserRoom {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
 	private List<Nickname> nickNameList;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feedId")
 	private List<Feed> feedList;
 
 	@Column(name = "create_at", nullable = false)

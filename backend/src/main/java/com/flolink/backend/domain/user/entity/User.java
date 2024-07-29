@@ -31,21 +31,21 @@ import lombok.Setter;
 public class User {
 
 	@Id
-	@Column(name = "user_id", nullable = false, length = 36)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id", length = 36)
 	private Integer userId;
 
 	@Column(name = "my_room_id", nullable = false, length = 36)
 	private Integer myRoomId;
 
-	@Column(name = "login_id", nullable = false, length = 20)
-	private String loginId;
+	@Column(name = "user_name", nullable = false, length = 100)
+	private String userName;
 
 	@Column(name = "password", nullable = false, length = 64)
 	private String password;
 
-	@Column(name = "user_name", nullable = false, length = 100)
-	private String userName;
+	@Column(name = "real_name", nullable = false, length = 15)
+	private String realName;
 
 	@Column(name = "nickname", nullable = false, length = 100)
 	private String nickname;
@@ -63,10 +63,7 @@ public class User {
 	private boolean useYn;
 
 	@Column(name = "profile", nullable = false)
-	private int profile;
-
-	@Column(name = "role", nullable = true)
-	private String role;
+	private String profile;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	List<UserRoom> userRoomList;

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.auth.entity.SuccessToken;
 import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
@@ -17,7 +18,6 @@ import com.flolink.backend.global.common.exception.DuplicateException;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.TimeOutException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
-import com.flolink.backend.global.util.JwtUtil;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -32,18 +32,19 @@ public class UserServiceImpl implements UserService {
 	private final SuccessTokenRepository successTokenRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final EntityManager em;
-	private final JwtUtil jwtUtil;
 
 	// 계정 생성
+	@Transactional
 	public void joinProcess(JoinUserRequest joinUserRequest) {
-		String loginId = joinUserRequest.getLoginId();
+		String username = joinUserRequest.getUserName();
 		String password = joinUserRequest.getPassword();
 
 		//ID 중복확인
-		boolean isExist = userRepository.existsByLoginId(loginId);
+		boolean isExist = userRepository.existsByUserName(username);
 		if (isExist) {
 			throw new DuplicateException(ResponseCode.DUPLICATE_LOGIN_ID);
 		}
+
 		SuccessToken successToken = successTokenRepository.findByToken(joinUserRequest.getToken())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
@@ -71,16 +72,15 @@ public class UserServiceImpl implements UserService {
 		em.flush();
 
 		User user = User.builder()
-			.loginId(loginId)
+			.userName(username)
 			.myRoomId(myRoom.getMyRoomId())
 			.password(bCryptPasswordEncoder.encode(password))
-			.userName(joinUserRequest.getUserName())
 			.nickname(joinUserRequest.getNickName())
 			.tel(joinUserRequest.getTel())
 			.point(BigDecimal.ZERO)
 			.createdAt(LocalDateTime.now())
 			.useYn(true)
-			.profile(1)
+			.profile("profile_dummy")
 			.build();
 
 		userRepository.save(user);
@@ -88,20 +88,12 @@ public class UserServiceImpl implements UserService {
 
 	// 아이디 중복 확인
 	@Override
-	public boolean isExistId(String loginId) {
-		boolean isExistId = userRepository.existsByLoginId(loginId);
+	public boolean isExistUserName(String username) {
+		boolean isExistId = userRepository.existsByUserName(username);
 		if (!isExistId) {
 			throw new DuplicateException(ResponseCode.DUPLICATE_LOGIN_ID);
 		}
 		return true;
 	}
-
-	// 로그인
-	// public String login(LoginUserRequest loginUserRequest) {
-	// 	User user = userRepository.findByLoginId(loginUserRequest.getLoginId())
-	// 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
-	//
-	// 	String jwtToken = jwtUtil.createJwt()
-	// }
 
 }
