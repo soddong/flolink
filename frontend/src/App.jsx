@@ -1,16 +1,16 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import TemporaryStartPage from './pages/TemporaryStartPage';
-import ChannelSelectPage from './pages/channelselectpage';
-import MainPage from './pages/MainPage';
+import ChannelSelectPage from './pages/channel_select/channelselectpage';
+import MainPage from './pages/main/MainPage';
 import './index.css';
-import LoginPage from './pages/Loginpage';
-import FindAccount from './pages/FIndAccount';
-import LoadingPage from './pages/Loadingpage';
-import PwResetPage from './pages/PwResetPage';
-import SettingPage from './pages/settingpage';
-import SignupPage from './pages/SignupPage';
-import FeedListPage from './pages/FeedListPage';
-import FeedCreatePage from './pages/FeedCreatePage';
+import LoginPage from './pages/login/Loginpage';
+import FindAccount from './pages/login/FIndAccount';
+import LoadingPage from './pages/loading/Loadingpage';
+import PwResetPage from './pages/login/PwResetPage';
+import SettingPage from './pages/item_store/settingpage';
+import SignupPage from './pages/login/SignupPage';
+import FeedListPage from './pages/feed/FeedListPage';
+import FeedCreatePage from './pages/feed/FeedCreatePage';
 
 const router = createBrowserRouter([  
   {
