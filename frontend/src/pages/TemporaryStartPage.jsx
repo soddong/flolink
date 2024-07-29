@@ -16,6 +16,7 @@ function TemporaryStartPage() {
             <Link to="/signup"><button>Sign Up Page</button></Link>
             <Link to="/schedule"><button>Schedule Page</button></Link>
             <Link to="/garden"><button>Family Garden</button></Link>
+            <Link to="/myroom"><button>MyRoom Page</button></Link>
             <PushNotificationSubscriber />
         </div>
     )

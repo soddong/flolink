@@ -13,6 +13,7 @@ import FeedListPage from './pages/feed/FeedListPage';
 import FeedCreatePage from './pages/feed/FeedCreatePage';
 import SchedulePage from './pages/schedule/SchedulePage';
 import FamilyGardenPage from './pages/garden/FamilyGardenPage';
+import MyRoomPage from './pages/my_room/myRoomPage';
 
 const router = createBrowserRouter([  
   {
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
   {
     path: "/garden",
     element: <FamilyGardenPage />
+  },
+  {
+    path: "/myroom",
+    element: <MyRoomPage />
   }
 ])
 
