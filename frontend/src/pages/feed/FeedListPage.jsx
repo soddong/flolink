@@ -36,17 +36,17 @@ const FeedListPage = () => {
     (
       <div className="min-h-screen bg-custom-gradient">
           <img src={logo} alt="Logo" className="mx-auto h-20" />
-          <div className="p-4">
+          <div className="p-4 overflow-auto">
             <FeedList feeds={feeds} />
           </div>
       </div>
     );
   }else{
     return (
-        <div className="min-h-screen bg-custom-gradient relative">
+        <div className="w-full h-full min-h-screen bg-custom-gradient relative">
           <img src={logo} alt="Logo" className="mx-auto h-20" />
           
-          <div className="p-4">
+          <div className="p-4 flex flex-col h-3/4">
             <div className="mb-4">
               <input 
                 type="text" 
@@ -54,12 +54,14 @@ const FeedListPage = () => {
                 className="w-full p-2 border border-gray-300 rounded-md bg-transparent"
               />
             </div>
-            <FeedList feeds={feeds} />
+            <div className="flex-1 overflow-auto">
+              <FeedList feeds={feeds} />
+            </div>
           </div>
           <button
             className="border border-gray-400 text-gray rounded-full w-12 h-12 flex items-center justify-center text-2xl fixed"
             onClick={() => navigate('/feedcreate')}
-            style={{ bottom: '2rem', right: '7rem' }}
+            style={{ bottom: '2rem', right: '2rem' }}
           >
             +
           </button>
