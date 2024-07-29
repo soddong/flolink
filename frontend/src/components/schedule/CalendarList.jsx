@@ -1,6 +1,7 @@
 import Calendar from 'react-calendar';
 import { useState } from 'react';
-import "react-calendar/dist/Calendar.css";
+import "../../css/calendar/Calendar.css";
+import moment from "moment"
 
 const ValuePiece = Date | null;
 
@@ -8,10 +9,25 @@ const Value = ValuePiece | [ValuePiece, ValuePiece];
 
 
 function CalendarList () {
-  const [value, onChange] = useState(new Date())
+  const [dateValue, onDateValue] = useState(new Date())
+  const tileClassName=({ date })=>{
+    if (date.getDay() === 0) {
+      return 'sunday'; //
+    }
+    if (date.getDay() === 6) {
+      return 'saturday';
+    }
+    return '';
+  }
   return (
     <div  className="w-full h-72 px-5 flex flex-col items-center text-xl font-bold">
-      <Calendar onChange={onChange} value={value}/>
+      <Calendar onChange={onDateValue} value={dateValue}
+      formatDay={(locale, date) => moment(date).format('D')}
+      formatYear={(locale, date) => moment(date).format("YYYY")}
+      showNeighboringMonth={false}
+      calendarType="gregory"
+      minDetail="year"
+      tileClassName={tileClassName}/>
     </div>
   )
 }
