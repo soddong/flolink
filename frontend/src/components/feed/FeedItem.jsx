@@ -15,7 +15,7 @@ const FeedItem = ({ feed }) => {
   };
 
   return (
-    <div className="border border-black p-4 rounded-lg shadow-md mb-4">
+    <div className="border border-gray-300 p-4 rounded-lg shadow-md mb-4">
       <img src={feed.image} alt="Feed" className="w-full h-auto rounded-md" />
       <div className="mt-4">
     

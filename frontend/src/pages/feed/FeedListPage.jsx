@@ -32,16 +32,15 @@ const FeedListPage = () => {
     },
   ]);
   if(feeds.length==0){
-    return 
+    return
     (
-        <div className="min-h-screen bg-custom-gradient">
-            <img src={logo} alt="Logo" className="mx-auto h-20" />
-          
-            <div className="p-4">
-                <FeedList feeds={feeds} />
-            </div>
-        </div>
-      );
+      <div className="min-h-screen bg-custom-gradient">
+          <img src={logo} alt="Logo" className="mx-auto h-20" />
+          <div className="p-4">
+            <FeedList feeds={feeds} />
+          </div>
+      </div>
+    );
   }else{
     return (
         <div className="min-h-screen bg-custom-gradient relative">
