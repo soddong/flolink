@@ -14,6 +14,8 @@ function TemporaryStartPage() {
             <Link to="/PwReset"><button>Password Reset Page</button></Link>
             <Link to="/setting"><button>Setting Page</button></Link>
             <Link to="/signup"><button>Sign Up Page</button></Link>
+            <Link to="/feedlist"><button>Feed List Page</button></Link>
+            <Link to="/feedcreate"><button>Feed Create Page</button></Link>
             <Link to="/schedule"><button>Schedule Page</button></Link>
             <Link to="/garden"><button>Family Garden</button></Link>
             <PushNotificationSubscriber />
