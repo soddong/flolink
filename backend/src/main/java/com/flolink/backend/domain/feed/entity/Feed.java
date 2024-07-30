@@ -52,9 +52,6 @@ public class Feed {
 	@Column(name = "create_at")
 	private LocalDateTime createAt;
 
-	@Column(name = "like_cnt")
-	private Integer likeCnt;
-
 	@Column(name = "use_yn")
 	private Boolean useYn;
 
