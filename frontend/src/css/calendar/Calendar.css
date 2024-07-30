@@ -34,6 +34,7 @@
   margin: 0;
   /* border: 0; */
   outline: none;
+  flex-direction: column;
 }
 
 .react-calendar button:enabled:hover {
@@ -44,8 +45,9 @@
   display: flex;
   height: 5vh;
   span {
-    font-size: 20px;
+    font-size: 18px;
     color: white;
+    font-weight: bold;
   }
 }
 
@@ -108,14 +110,10 @@
 
 .react-calendar__tile {
   max-width: 100%;
-  /* padding: 10px 6.6667px; */
   background: none;
-  /* text-align: center; */
   line-height: 16px;
   font: inherit;
-  font-size: 0.833em;
-}
-.react-calendar__tile {
+  font-size: 14px;
   display: flex;
   padding: 5px;
   border-radius: 5px;
@@ -179,4 +177,15 @@
 }
 .react-calendar__tile.saturday, .react-calendar__month-view__weekdays__weekday--weekend abbr[title="토요일"] {
   color: #2636C0;
+}
+.react-calendar__schedule {
+  font-size: 8px;
+  background: #E37C91;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5vh;
+  width: 100%;
+  color: white;
+  border-radius: 3px;
 }

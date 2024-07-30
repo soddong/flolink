@@ -1,6 +1,5 @@
 import CalendarList from "../../components/schedule/CalendarList";
 import NavBar from "../../components/common/nav_bar/NavBar";
-import ScheduleList from "../../components/schedule/ScheduleList";
 
 function SchedulePage () {
   return (
@@ -15,9 +14,8 @@ function SchedulePage () {
           </span>
         </div>
       </div>
-      {/* <YearSelect /> */}
       <CalendarList />
-      <ScheduleList />
+
       <NavBar />
     </div>
   )

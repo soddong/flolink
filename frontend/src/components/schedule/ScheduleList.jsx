@@ -1,9 +1,25 @@
-function ScheduleList () {
+function ScheduleList ({ schedules }) {
+  if (!schedules) {
+    return (
+      <div>일정이 없습니다.</div>
+    )
+  }
   return (
-    <div className="w-full absolute bottom-0 bg-white rounded-t-2xl p-4" style={{'height': '40vh'}}>hello
-      <hr className="w-10 absolute top-2 left-1/2 translate-x-3/4 border-slate-600 border-2 rounded"
-      style={{'transform': 'translateX(-50%)'}}/>
-    </div>
+    <ul>
+      {schedules.map(schedule => (
+        <>
+          <li className="flex items-center my-2" key={schedule.id}>
+            <span className="material-symbols-outlined mx-2" style={{'fontVariationSettings': '"FILL" 1', 'color': schedule.color}}>
+              {schedule.icon}
+            </span>
+            <span className="font-bold text-lg">{schedule.title}</span>
+            <span className="text-sm mx-4 text-gray-500">{schedule.date}</span>
+            <button className="absolute right-8 w-9 h-6 text-xs rounded text-white" style={{'background': schedule.color}}>수정</button>
+          </li>
+          <hr />
+        </>
+      ))}
+    </ul>
   )
 }
 
