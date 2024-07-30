@@ -11,7 +11,7 @@ const FeedCreatePage = () => {
       <header className="mb-4 flex justify-center items-center relative">
         <button 
           className="absolute left-4 text-xl text-black"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/feedlist')}
         >
           &lt;
         </button>
