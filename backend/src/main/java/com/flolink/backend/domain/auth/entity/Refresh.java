@@ -29,9 +29,6 @@ public class Refresh {
 	@Column(name = "refresh_id", nullable = false, length = 36)
 	private Integer refreshId;
 
-	@Column(name = "user_id")
-	private Integer userId;
-
 	@Column(name = "refresh_token", nullable = false, length = 256)
 	private String refreshToken;
 

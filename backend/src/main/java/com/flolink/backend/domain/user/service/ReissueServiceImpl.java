@@ -1,7 +1,9 @@
 package com.flolink.backend.domain.user.service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
+import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.auth.entity.Refresh;
@@ -24,16 +26,24 @@ import lombok.extern.slf4j.Slf4j;
 public class ReissueServiceImpl implements ReissueService {
 
 	private final JwtUtil jwtUtil;
-	private final long accessTokenValidityInSeconds = 1000 * 60 * 10L;
-	private final long refreshTokenValidityInSeconds = 1000 * 60 * 60 * 24L;
 	private final RefreshRepository refreshRepository;
+	private final long accessTokenValidityInSeconds = 60 * 10L;
+	private final long refreshTokenValidityInSeconds = 60 * 60 * 24L;
 
 	@Override
 	public void reissue(HttpServletRequest request, HttpServletResponse response) {
 		String refresh = null;
+		LocalDateTime date = LocalDateTime.now();
+		Date now = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(date);
 
 		// cookie를 모두 꺼내서 refresh라는 이름이 있는지 확인. 있다면 refresh변수에 저장한다.
 		Cookie[] cookies = request.getCookies();
+
+		if (cookies == null) {
+			log.info("cookies is null");
+			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+		}
+
 		for (Cookie cookie : cookies) {
 			if (cookie.getName().equals("refresh")) {
 				refresh = cookie.getValue();
@@ -55,7 +65,6 @@ public class ReissueServiceImpl implements ReissueService {
 
 		// 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
 		String category = jwtUtil.getCategory(refresh);
-
 		if (!category.equals("refresh")) {
 			//refreshToken 이 아닙니다.
 			throw new UnAuthorizedException(ResponseCode.INVALID_REFRESHTOKEN);
@@ -63,7 +72,9 @@ public class ReissueServiceImpl implements ReissueService {
 
 		// DB에 저장되어 있는지 확인
 		Boolean isExist = refreshRepository.existsByRefreshToken(refresh);
-		if (isExist) {
+		System.out.println("isExist : " + isExist.toString());
+
+		if (!isExist) {
 			//response body
 			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
 		}
@@ -72,30 +83,19 @@ public class ReissueServiceImpl implements ReissueService {
 		int myRoomId = jwtUtil.getMyRoomId(refresh);
 
 		//make new JWT
-		String newAccess = jwtUtil.createJwt("access", userId, myRoomId, accessTokenValidityInSeconds);
-		String newRefresh = jwtUtil.createJwt("refresh", userId, myRoomId, refreshTokenValidityInSeconds);
+		String newAccess = jwtUtil.createJwt("access", userId, myRoomId, accessTokenValidityInSeconds, now);
+		String newRefresh = jwtUtil.createJwt("refresh", userId, myRoomId, refreshTokenValidityInSeconds, now);
 
 		//Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
 		Refresh refreshToken = Refresh.builder()
-			.userId(userId)
 			.refreshToken(newRefresh)
-			.expiredAt(LocalDateTime.now().plusDays(1))
+			.expiredAt(date.plusSeconds(refreshTokenValidityInSeconds))
 			.build();
 		refreshRepository.deleteByRefreshToken(refresh);
 		refreshRepository.save(refreshToken);
 
 		//response
 		response.setHeader("access", newAccess);
-		response.addCookie(createCookie("refresh", newRefresh));
-	}
-
-	private Cookie createCookie(String key, String value) {
-		Cookie cookie = new Cookie(key, value);
-		cookie.setMaxAge(60 * 60 * 24);
-		//        cookie.setSecure(true);
-		//        cookie.setPath("/");
-		cookie.setHttpOnly(true);
-
-		return cookie;
+		response.addCookie(jwtUtil.createCookies("refresh", newRefresh));
 	}
 }

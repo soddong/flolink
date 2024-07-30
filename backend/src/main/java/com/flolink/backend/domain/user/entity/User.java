@@ -38,14 +38,14 @@ public class User {
 	@Column(name = "my_room_id", nullable = false, length = 36)
 	private Integer myRoomId;
 
-	@Column(name = "user_name", nullable = false, length = 100)
-	private String userName;
+	@Column(name = "login_id", nullable = false, length = 100)
+	private String loginId;
 
 	@Column(name = "password", nullable = false, length = 64)
 	private String password;
 
-	@Column(name = "real_name", nullable = false, length = 15)
-	private String realName;
+	@Column(name = "user_name", nullable = false, length = 15)
+	private String userName;
 
 	@Column(name = "nickname", nullable = false, length = 100)
 	private String nickname;

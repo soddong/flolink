@@ -22,9 +22,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private final UserRepository userRepository;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
 
-		User user = userRepository.findByUserName(username)
+		User user = userRepository.findByLoginId(loginId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
 		return new CustomUserDetails(user);

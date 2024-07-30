@@ -95,7 +95,7 @@ public class SecurityConfig {
 		// 로그인 필터
 		http
 			.addFilterAt(
-				new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository),
+				new LoginFilter(jwtUtil, refreshRepository, authenticationManager(authenticationConfiguration)),
 				UsernamePasswordAuthenticationFilter.class);
 
 		http

@@ -30,6 +30,10 @@ public class CustomUserDetails implements UserDetails {
 		return user.getUserName();
 	}
 
+	public String getLonginId() {
+		return user.getLoginId();
+	}
+
 	public Integer getUserId() {
 		return user.getUserId();
 	}

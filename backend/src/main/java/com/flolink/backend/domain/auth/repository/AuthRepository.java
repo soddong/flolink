@@ -1,13 +1,10 @@
 package com.flolink.backend.domain.auth.repository;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.flolink.backend.domain.auth.entity.Auth;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface AuthRepository extends JpaRepository<Auth, Integer> {
 
@@ -16,5 +13,7 @@ public interface AuthRepository extends JpaRepository<Auth, Integer> {
 	void deleteByTel(String tel);
 
 	boolean existsByTel(String tel);
+
+	Optional<Auth> findByAuthNum(String AuthNum);
 
 }
