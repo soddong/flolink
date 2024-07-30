@@ -20,7 +20,7 @@ function CalendarList () {
     return '';
   }
   return (
-    <div  className="w-full h-72 px-5 flex flex-col items-center text-xl font-bold">
+    <div  className="w-full px-5 h-1/2 flex flex-col items-center text-xl font-bold">
       <Calendar onChange={onDateValue} value={dateValue}
       formatDay={(locale, date) => moment(date).format('D')}
       formatYear={(locale, date) => moment(date).format("YYYY")}
