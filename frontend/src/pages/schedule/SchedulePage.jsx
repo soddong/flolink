@@ -1,4 +1,3 @@
-import YearSelect from "../../components/schedule/yearSelect";
 import CalendarList from "../../components/schedule/CalendarList";
 import NavBar from "../../components/common/nav_bar/NavBar";
 import ScheduleList from "../../components/schedule/ScheduleList";
