@@ -26,7 +26,6 @@ public class FeedCreateRequest {
 			.userRoom(userRoom)
 			.content(content)
 			.createAt(LocalDateTime.now())
-			.likeCnt(0)
 			.useYn(true)
 			.build();
 	}
