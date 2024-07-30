@@ -3,6 +3,7 @@ package com.flolink.backend.domain.feed.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.flolink.backend.domain.feed.dto.request.FeedCommentRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.feed.dto.response.FeedResponse;
@@ -16,4 +17,11 @@ public interface FeedService {
 	FeedResponse updateFeed(final Integer userId, final Integer feedId, final FeedUpdateRequest feedUpdateRequest);
 
 	String deleteFeed(final Integer userId, final Integer feedId);
+
+	void createComment(final Integer userId, final Integer feedId, final FeedCommentRequest feedCommentRequest);
+
+	void updateComment(final Integer userId, final Integer feedId, final Integer commentId,
+		final FeedCommentRequest feedCommentRequest);
+
+	void deleteComment(final Integer userId, final Integer feedId, final Integer commentId);
 }

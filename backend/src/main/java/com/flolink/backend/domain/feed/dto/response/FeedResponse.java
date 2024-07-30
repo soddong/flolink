@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.flolink.backend.domain.feed.entity.Feed;
-import com.flolink.backend.domain.feed.entity.FeedComment;
 import com.flolink.backend.domain.feed.entity.FeedImage;
 import com.flolink.backend.domain.room.entity.Nickname;
 import com.flolink.backend.domain.room.entity.UserRoom;
@@ -21,8 +20,7 @@ public class FeedResponse {
 	private String content;
 	private LocalDateTime createdDate;
 	private String author;
-	private Integer feedLike;
-	private List<FeedComment> feedCommentList;
+	private List<FeedCommentResponse> feedCommentList;
 	private List<FeedImage> feedImages;
 
 	public static FeedResponse fromEntity(UserRoom userRoom, Feed feed) {
@@ -39,8 +37,8 @@ public class FeedResponse {
 			.content(feed.getContent())
 			.createdDate(feed.getCreateAt())
 			.author(nickName)
-			.feedLike(feed.getLikeCnt())
-			.feedCommentList(feed.getFeedCommentList())
+			.feedCommentList(
+				feed.getFeedCommentList().stream().map((FeedCommentResponse::fromEntity)).toList().reversed())
 			.feedImages(feed.getFeedImageList())
 			.build();
 	}
