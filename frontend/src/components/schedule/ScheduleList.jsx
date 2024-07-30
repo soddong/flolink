@@ -1,10 +1,11 @@
 function ScheduleList ({ schedules }) {
-  if (!schedules) {
+  if (schedules.length === 0) {
     return (
-      <div>일정이 없습니다.</div>
+      <div className="m-4 text-base text-gray-500">일정이 없습니다.</div>
     )
   }
-  return (
+  else {
+    return (
     <ul>
       {schedules.map(schedule => (
         <>
@@ -20,7 +21,7 @@ function ScheduleList ({ schedules }) {
         </>
       ))}
     </ul>
-  )
+  )};
 }
 
 export default ScheduleList;

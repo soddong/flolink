@@ -6,7 +6,8 @@ import ScheduleList from './ScheduleList';
 
 const schedules = [
   {id: 1, icon: 'cake', color:'#E37C91', title: '엄마 생신', date: '2024-07-08'},
-  {id: 2, icon: 'bed', color:'#85ABEA', title: '둘째 방학', date: '2024-07-17'}
+  {id: 2, icon: 'bed', color:'#85ABEA', title: '둘째 방학', date: '2024-07-17'},
+  {id: 3, icon: 'bed', color:'#85ABEA', title: '둘째 방학', date: '2024-06-17'}
 ];
 
 
