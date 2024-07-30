@@ -73,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
 
 	/**
 	 * @param checkAuthRequest (휴대전화번호, 인증번호)
-	 * 입력된 인증번호가 휴대전화번호와 일치하는지 확인한 후 해당 일치한다면 성공토큰을 세선에, 아니라면 넣지 않는다. (오류메세지???)
+	 * 입력된 인증번호가 휴대전화번호와 일치하는지 확인한 후 해당 일치한다면 성공토큰을 세선에, 아니라면 넣지 않는다
 	 */
 	@Override
 	@Transactional

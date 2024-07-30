@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flolink.backend.domain.auth.repository.RefreshRepository;
 import com.flolink.backend.domain.user.service.ReissueService;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
@@ -20,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ReissueController {
 
 	private final ReissueService reissueService;
-	private final RefreshRepository refreshRepository;
 
 	@PostMapping("/reissue")
 	public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
@@ -30,3 +28,5 @@ public class ReissueController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 }
+
+

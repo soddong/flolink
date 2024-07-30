@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
 import com.flolink.backend.domain.user.service.UserService;
 import com.flolink.backend.global.common.CommonResponse;
@@ -28,10 +29,10 @@ public class UserController {
 	private final UserService userService;
 
 	@Operation(summary = "아이디 중복 확인")
-	@GetMapping("/duplicate/{username}")
-	public ResponseEntity<?> checkUserName(@PathVariable String username) {
+	@GetMapping("/duplicate/{loginId}")
+	public ResponseEntity<?> checkUserName(@PathVariable String loginId) {
 		log.info("===아이디 중복 확인 START===");
-		boolean result = userService.isExistUserName(username);
+		boolean result = userService.isExistLoginId(loginId);
 		log.info("===아이디 중복 확인 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, result));
 	}
@@ -45,4 +46,12 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 
+	@Operation(summary = "아이디 찾기")
+	@PostMapping("/findId")
+	public ResponseEntity<?> findId(@RequestBody FindUserIdRequest findUserIdRequest) {
+		log.info("===아이디 찾기 Start===");
+		String myId = userService.findMyId(findUserIdRequest);
+		log.info("===아이디 찾기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, myId));
+	}
 }

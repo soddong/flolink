@@ -7,12 +7,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flolink.backend.domain.auth.entity.Auth;
 import com.flolink.backend.domain.auth.entity.SuccessToken;
+import com.flolink.backend.domain.auth.repository.AuthRepository;
 import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
+import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
+import com.flolink.backend.domain.user.dto.request.UpdateUserPasswordRequest;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
+import com.flolink.backend.domain.user.util.LoginIdEditor;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.DuplicateException;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -28,7 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+	private final LoginIdEditor loginIdEditor;
 	private final UserRepository userRepository;
+	private final AuthRepository authRepository;
 	private final SuccessTokenRepository successTokenRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final EntityManager em;
@@ -36,11 +43,11 @@ public class UserServiceImpl implements UserService {
 	// 계정 생성
 	@Transactional
 	public void joinProcess(JoinUserRequest joinUserRequest) {
-		String username = joinUserRequest.getUserName();
+		String loginId = joinUserRequest.getLoginId();
 		String password = joinUserRequest.getPassword();
 
 		//ID 중복확인
-		boolean isExist = userRepository.existsByUserName(username);
+		boolean isExist = userRepository.existsByLoginId(loginId);
 		if (isExist) {
 			throw new DuplicateException(ResponseCode.DUPLICATE_LOGIN_ID);
 		}
@@ -72,10 +79,11 @@ public class UserServiceImpl implements UserService {
 		em.flush();
 
 		User user = User.builder()
-			.userName(username)
+			.loginId(loginId)
 			.myRoomId(myRoom.getMyRoomId())
 			.password(bCryptPasswordEncoder.encode(password))
-			.nickname(joinUserRequest.getNickName())
+			.userName(joinUserRequest.getUserName())
+			.nickname(joinUserRequest.getNickname())
 			.tel(joinUserRequest.getTel())
 			.point(BigDecimal.ZERO)
 			.createdAt(LocalDateTime.now())
@@ -88,12 +96,80 @@ public class UserServiceImpl implements UserService {
 
 	// 아이디 중복 확인
 	@Override
-	public boolean isExistUserName(String username) {
-		boolean isExistId = userRepository.existsByUserName(username);
+	public boolean isExistLoginId(String loginId) {
+		boolean isExistId = userRepository.existsByLoginId(loginId);
 		if (!isExistId) {
 			throw new DuplicateException(ResponseCode.DUPLICATE_LOGIN_ID);
 		}
 		return true;
+	}
+
+	/**
+	 *
+	 * @param findUserIdRequest(userName,tel,authNum)
+	 * @return loginId
+	 */
+	// 아이디 찾기
+	@Override
+	@Transactional
+	public String findMyId(FindUserIdRequest findUserIdRequest) {
+		// 입력 들어온 토큰을 가지고 인증 객체 찾는다.
+		SuccessToken token = successTokenRepository.findByToken(findUserIdRequest.getToken())
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+
+		// 해당 객체의 유효기간이 지났다면 timeoutException, 객체의 전화번호 입력값과 다르다면 notfoundException
+		try {
+			LocalDateTime now = LocalDateTime.now();
+			if (now.isAfter(token.getExpiredAt())) {
+				throw new TimeOutException(ResponseCode.TIME_OUT_EXCEPTION);
+			} else if (!token.getTel().equals(findUserIdRequest.getTel())) {
+				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+			}
+		} finally {
+			successTokenRepository.deleteById(token.getSuccessTokenId());
+		}
+
+		// 입력 들어온 전화번호를 가지고 유저 객체를 찾는다.
+		User user = userRepository.findByTel(findUserIdRequest.getTel())
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+
+		// 유저 객체의 이름과, 입력들어온 이름이 다르다면 NotFoundException
+		if (!findUserIdRequest.getUserName().equals(user.getUserName())) {
+			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+		}
+
+		// 아이디 암호화 반환
+		return loginIdEditor.maskId(user.getLoginId());
+	}
+
+	@Override
+	@Transactional
+	public void updateMyPassword(UpdateUserPasswordRequest findUserIdRequest) {
+		// 입력 들어온 전화번호를 가지고 인증 객체 찾는다.
+		Auth auth = authRepository.findByTel(findUserIdRequest.getTel())
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+
+		// 해당 객체의 유효기간이 지났다면 timeoutException, 객체의 인증번호가 입력값과 다르다면 notfoundException
+		try {
+			LocalDateTime now = LocalDateTime.now();
+			if (now.isAfter(auth.getExpiredAt())) {
+				throw new TimeOutException(ResponseCode.TIME_OUT_EXCEPTION);
+			} else if (!auth.getAuthNum().equals(findUserIdRequest.getAuthNum())) {
+				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+			}
+		} finally {
+			authRepository.deleteByTel(findUserIdRequest.getTel());
+		}
+
+		// 입력 들어온 전화번호를 가지고 유저 객체를 찾는다.
+		User user = userRepository.findByTel(findUserIdRequest.getTel())
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+
+		// 유저 객체의 이름과, 입력들어온 이름이 다르다면 NotFoundException
+		if (!findUserIdRequest.getUserName().equals(user.getUserName())) {
+			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+		}
+
 	}
 
 }

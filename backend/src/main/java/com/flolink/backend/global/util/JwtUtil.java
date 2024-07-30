@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -62,19 +63,30 @@ public class JwtUtil {
 			.before(new Date());
 	}
 
-	public String createJwt(String category, int userId, int myRoomId, Long expiredTime) {
+	public String createJwt(String category, int userId, int myRoomId, Long expiredTime, Date now) {
 		return Jwts.builder()
 			.claim("category", category)
 			.claim("userId", userId)
 			.claim("myRoomId", myRoomId)
-			.issuedAt(new Date(System.currentTimeMillis()))
-			.expiration(new Date(System.currentTimeMillis() + expiredTime))
+			.issuedAt(now)
+			.expiration(new Date(now.getTime() + expiredTime))
 			.signWith(secretKey)
 			.compact();
 	}
 
-	public int tempReturnUserId() {
+	public Cookie createCookies(String key, String value) {
+		Cookie cookie = new Cookie(key, value);
+		cookie.setMaxAge(24 * 60 * 60);
+		cookie.setSecure(true);
+		// cookie.setPath("/login");
+		// cookie.setPath("/reissue");
+		// cookie.setPath("/logout");
+		cookie.setHttpOnly(true);
 
+		return cookie;
+	}
+
+	public int tempReturnUserId() {
 		return 1;
 	}
 

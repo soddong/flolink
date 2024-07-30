@@ -8,9 +8,11 @@ import com.flolink.backend.domain.user.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	boolean existsByUserName(String username);
+	boolean existsByLoginId(String loginId);
 
-	Optional<User> findByUserName(String username);
+	Optional<User> findByLoginId(String loginId);
+
+	Optional<User> findByTel(String tel);
 }
 
 
