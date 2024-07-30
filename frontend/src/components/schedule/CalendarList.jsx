@@ -5,9 +5,33 @@ import moment from "moment"
 import ScheduleList from './ScheduleList';
 
 const schedules = [
-  {id: 1, icon: 'cake', color:'#E37C91', title: '엄마 생신', date: '2024-07-08'},
-  {id: 2, icon: 'bed', color:'#85ABEA', title: '둘째 방학', date: '2024-07-17'},
-  {id: 3, icon: 'bed', color:'#85ABEA', title: '둘째 방학', date: '2024-06-17'}
+  {
+    id: 1, 
+    icon: 'cake', 
+    color:'#E37C91', 
+    title: '엄마 생신', 
+    date: '2024-07-08',
+    content: '엄마 생신이니까 저녁 먹으러 집에 와!',
+    tag: '생일'
+  },
+  {
+    id: 2, 
+    icon: 'bed', 
+    color:'#85ABEA', 
+    title: '둘째 방학', 
+    date: '2024-07-17',
+    content: '야호 종강이다!',
+    tag: '여가'
+  },
+  {
+    id: 3, 
+    icon: 'bed', 
+    color:'#85ABEA', 
+    title: '둘째 방학', 
+    date: '2024-06-17',
+    content: '이건 가짜 데이터',
+    tag: '여가'
+  }
 ];
 
 
