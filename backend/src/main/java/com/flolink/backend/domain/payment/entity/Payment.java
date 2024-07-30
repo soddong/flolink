@@ -1,6 +1,6 @@
 package com.flolink.backend.domain.payment.entity;
 
-import static com.flolink.backend.global.utils.RandomUtils.*;
+import static com.flolink.backend.global.util.RandomUtil.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
