@@ -62,9 +62,6 @@ public class Feed {
 	private List<FeedComment> feedCommentList;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
-	private List<FeedLike> feedLikeList;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
 	private List<FeedImage> feedImageList;
 
 	public void updateContent(final FeedUpdateRequest feedUpdateRequest) {
