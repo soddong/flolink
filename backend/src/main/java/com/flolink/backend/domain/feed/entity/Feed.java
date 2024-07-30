@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.room.entity.UserRoom;
 
 import jakarta.persistence.Column;
@@ -62,7 +63,11 @@ public class Feed {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
 	private List<FeedLike> feedLikeList;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
 	private List<FeedImage> feedImageList;
+
+	public void updateContent(final FeedUpdateRequest feedUpdateRequest) {
+		this.content = feedUpdateRequest.getContent();
+	}
 }
