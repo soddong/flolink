@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flolink.backend.domain.feed.dto.request.FeedCommentRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.feed.dto.response.FeedResponse;
@@ -84,4 +85,35 @@ public class FeedController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, done));
 	}
 
+	@PostMapping("/{feedId}/comments")
+	@Operation(summary = "피드 댓글 달기")
+	public ResponseEntity<?> createComment(@PathVariable final Integer feedId,
+		@RequestBody final FeedCommentRequest feedCommentRequest) {
+		log.info("===피드 댓글 달기 START===");
+		Integer userId = 1;
+		feedService.createComment(userId, feedId, feedCommentRequest);
+		log.info("===피드 댓글 달기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
+
+	@PatchMapping("/{feedId}/comments/{commentId}")
+	@Operation(summary = "피드 댓글 수정하기")
+	public ResponseEntity<?> updateComment(@PathVariable final Integer feedId, @PathVariable final Integer commentId,
+		@RequestBody final FeedCommentRequest feedCommentRequest) {
+		log.info("===피드 댓글 수정하기 START===");
+		Integer userId = 1;
+		feedService.updateComment(userId, feedId, commentId, feedCommentRequest);
+		log.info("===피드 댓글 수정하기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
+
+	@DeleteMapping("/{feedId}/comments/{commentId}")
+	@Operation(summary = "피드 댓글 삭제하기")
+	public ResponseEntity<?> deleteComment(@PathVariable final Integer feedId, @PathVariable final Integer commentId) {
+		log.info("===피드 댓글 삭제하기 START===");
+		Integer userId = 1;
+		feedService.deleteComment(userId, feedId, commentId);
+		log.info("===피드 댓글 삭제하기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
 }

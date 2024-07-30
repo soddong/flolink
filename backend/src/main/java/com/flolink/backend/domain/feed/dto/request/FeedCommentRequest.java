@@ -11,7 +11,9 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FeedUpdateRequest {
+public class FeedCommentRequest {
+
 	private Integer roomId;
 	private String content;
+
 }

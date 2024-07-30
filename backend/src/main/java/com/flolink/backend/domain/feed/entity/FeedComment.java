@@ -47,10 +47,22 @@ public class FeedComment {
 	@JoinColumn(name = "user_room_id")
 	private UserRoom userRoom;
 
+	@Column(name = "content")
+	private String content;
+
 	@Column(name = "create_at")
 	private LocalDateTime createAt;
 
 	@Column(name = "use_yn")
 	private Boolean useYn;
 
+	public static FeedComment of(Feed feed, UserRoom userRoom, String content) {
+		return FeedComment.builder()
+			.feed(feed)
+			.userRoom(userRoom)
+			.content(content)
+			.createAt(LocalDateTime.now())
+			.useYn(true)
+			.build();
+	}
 }
