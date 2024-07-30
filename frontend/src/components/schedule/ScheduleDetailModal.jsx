@@ -1,10 +1,12 @@
 import style from "../../css/main/main_modals.module.css"
 import { useState } from "react";
+import CreateCalendar from "./CreateCalendar";
 
 function ScheduleDetailModal ({ schedule }) {
   const [modalstate, setModalstate] = useState('read')
   const [inputTitleValue, setInputTitleValue] = useState(schedule.title);
   const [inputContentValue, setInputContentValue] = useState(schedule.content);
+  const [inputCalendar, setInputCalendar] = useState(false)
 
   function handleModalState () {
     if (modalstate === 'read') {
@@ -32,6 +34,10 @@ function ScheduleDetailModal ({ schedule }) {
     window.alert('일정이 수정되었습니다.')
     event.preventDefault()
     setModalstate('read')
+  }
+
+  function showInputCalendar () {
+    setInputCalendar(!inputCalendar)
   }
 
   if (modalstate === 'read') {
@@ -81,10 +87,19 @@ function ScheduleDetailModal ({ schedule }) {
             {schedule.tag}
           </p>
           <p className="flex items-center text-base my-2 text-gray-600">
-            <span className="material-symbols-outlined mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
+            <span className="material-symbols-outlined mr-2" 
+            style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}
+            onClick={showInputCalendar}>
               calendar_month
             </span>
             {schedule.date}
+            {inputCalendar && (
+              <>
+                <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
+                onClick={showInputCalendar}></div>
+                <CreateCalendar setModal={showInputCalendar} schedule={schedule} />
+              </>
+            )}
           </p>
           <textarea type="text" maxLength={100} onChange={handleInputContentChange}
           className="w-full h-20 rounded border-0 ring-1 ring-inset ring-gray-400 p-1"
