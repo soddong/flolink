@@ -23,7 +23,8 @@ function NotificationModal (props) {
     <div className={`w-72 h-56 backdrop-blur-sm ${style.mainModal}`}>
       <p className="text-base font-bold my-2">공지 작성하기</p>
       <form action="" onSubmit={submitSuccess}>
-        <textarea maxLength={100} onChange={handleInputChange} placeholder={props.content} value={inputValue} className="w-64 h-36 rounded p-2 text-sm border-0 ring-1 ring-inset ring-gray-300 flex align-content-top" />
+        <textarea maxLength={100} onChange={handleInputChange} placeholder={props.content} value={inputValue} 
+        className="w-64 h-36 rounded p-2 text-sm border-0 ring-1 ring-inset ring-gray-300 flex align-content-top" />
         <div className="mt-1 flex w-64 justify-between items-start">
           <p className="text-xs text-gray-500">{inputValue.length}/100</p>
           <input type="submit" value="공지 업데이트" className="w-24 h-6 bg-rose-300 text-xs font-bold text-white rounded" />
