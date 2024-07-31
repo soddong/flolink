@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomParticipateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
-import com.flolink.backend.domain.room.dto.response.RoomMemberInfoResponse;
+import com.flolink.backend.domain.room.dto.response.RoomDetailResponse;
 import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
 import com.flolink.backend.domain.room.service.RoomService;
 import com.flolink.backend.global.common.CommonResponse;
@@ -34,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RoomController {
 
 	private final RoomService roomService;
+	private final PlantService plantService;
 
 	@GetMapping("")
 	@Operation(summary = "모든 방 정보 불러오기")
@@ -79,13 +81,17 @@ public class RoomController {
 	}
 
 	@GetMapping("/{roomId}")
-	@Operation(summary = "가족 방 구성원 정보 불러오기", description = "가족방의 구성원들의 정보를 반환.")
+	@Operation(summary = "가족 방 정보 (구성원, 식물) 불러오기", description = "가족방의 구성원들의 정보와 식물 정보를 반환.")
 	public ResponseEntity<?> getRoomMemberInfos(@PathVariable final Integer roomId) {
-		log.info("===가족 방 구성원 정보 불러오기 START===");
+		log.info("===가족 방 정보 (구성원, 식물) 불러오기 START===");
 		Integer userId = 1;
-		List<RoomMemberInfoResponse> roomMemberInfoResponses = roomService.getRoomMemberInfos(userId, roomId);
-		log.info("===가족 방 구성원 정보 불러오기 END===");
-		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomMemberInfoResponses));
+		roomService.enterRoom(userId, roomId);
+		RoomDetailResponse roomDetailResponse = RoomDetailResponse.of(
+			roomService.getRoomMemberInfos(userId, roomId),
+			plantService.getPlantInfo(roomId)
+		);
+		log.info("===가족 방 정보 (구성원, 식물) 불러오기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomDetailResponse));
 	}
 
 	@PatchMapping("/{roomId}")
