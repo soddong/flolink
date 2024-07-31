@@ -4,7 +4,6 @@ import moment from "moment"
 
 function CreateCalendar (props) {
   const [dateValue, onDateValue] = useState(new Date())
-  const [newDate, setNewDate] = useState(props.date);
 
   const tileClassName=({ date })=>{
     if (date.getDay() === 0) {
@@ -16,14 +15,9 @@ function CreateCalendar (props) {
     return '';
   }
 
-  function printSchedule (date) {
-    const date2 = moment(date).format('YYYY-MM-DD')
-  };
-
   function submitSchedule (date) {
     const date2 = moment(date).format('YYYY-MM-DD')
     window.alert('날짜가 수정되었습니다.')
-    console.log(date2)
     props.handleDate(date2);
     props.setModal();
   }

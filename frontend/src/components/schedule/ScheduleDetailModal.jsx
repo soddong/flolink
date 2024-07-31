@@ -2,12 +2,13 @@ import style from "../../css/main/main_modals.module.css"
 import { useState } from "react";
 import CreateCalendar from "./CreateCalendar";
 
-function ScheduleDetailModal ({ schedule }) {
+function ScheduleDetailModal ({ setModal, schedule }) {
   const [modalstate, setModalstate] = useState('read')
   const [inputTitleValue, setInputTitleValue] = useState(schedule.title);
   const [inputContentValue, setInputContentValue] = useState(schedule.content);
   const [inputCalendar, setInputCalendar] = useState(false)
   const [date, setDate] = useState(schedule.date)
+  const [tag, setTag] = useState(schedule.tag)
 
   function handleModalState () {
     if (modalstate === 'read') {
@@ -31,6 +32,13 @@ function ScheduleDetailModal ({ schedule }) {
     }
   }
 
+  function handleInputTagChange (event) {
+    setTag(event.target.value)
+    if (event.target.value.length > 10) {
+      window.alert('10자까지 입력 가능합니다.')
+    }
+  }
+
   function submitSuccess (event) {
     window.alert('일정이 수정되었습니다.')
     event.preventDefault()
@@ -42,13 +50,16 @@ function ScheduleDetailModal ({ schedule }) {
   }
 
   function handleDate (data) {
-    console.log(data)
     setDate(data)
   }
 
   if (modalstate === 'read') {
     return (
       <div className={`w-72 h-80 backdrop-blur-sm ${style.mainModal}`}>
+        <span className="material-symbols-outlined absolute top-2 right-2"
+        onClick={setModal}>
+          cancel
+        </span>
         <h1 className="text-xl m-3 font-bold flex items-center">일정 상세
           <span className="material-symbols-outlined mx-1" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
             delete
@@ -61,7 +72,7 @@ function ScheduleDetailModal ({ schedule }) {
             <span className="material-symbols-outlined mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
               sell
             </span>
-            {schedule.tag}
+            {tag}
           </p>
           <p className="flex items-center text-base mt-4 text-gray-600">
             <span className="material-symbols-outlined mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
@@ -93,7 +104,9 @@ function ScheduleDetailModal ({ schedule }) {
             <span className="material-symbols-outlined mt-2 mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
               sell
             </span>
-            {schedule.tag}
+            <input type="text" maxLength={10} onChange={handleInputTagChange}
+            className="w-20 text-sm rounded border-0 ring-1 ring-inset ring-gray-400 p-1"
+            placeholder={schedule.tag} value={tag}/>
           </p>
           <div className="flex items-center text-base my-2 text-gray-600">
             <span className="material-symbols-outlined mr-2" 

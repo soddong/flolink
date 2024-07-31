@@ -1,4 +1,4 @@
-import CalendarList from "../../components/schedule/CalendarList";
+import Calendar from "../../components/schedule/Calendar";
 import NavBar from "../../components/common/nav_bar/NavBar";
 
 function SchedulePage () {
@@ -14,8 +14,7 @@ function SchedulePage () {
           </span>
         </div>
       </div>
-      <CalendarList />
-
+      <Calendar />
       <NavBar />
     </div>
   )

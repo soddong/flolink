@@ -4,7 +4,7 @@ import { useState } from "react";
 function ScheduleList ({ schedules }) {
   const [modal, setModal] = useState(false);
 
-  function showNotificationModal () {
+  function showScheduleDetailModal () {
     setModal(!modal)
   }
 
@@ -19,8 +19,7 @@ function ScheduleList ({ schedules }) {
       {schedules.map((schedule, index) => (
         <>
           <li className="flex items-center my-2" key={index}
-          onClick={showNotificationModal}>
-            {console.log(index)}
+          onClick={showScheduleDetailModal}>
             <span className="material-symbols-outlined mx-2" style={{'fontVariationSettings': '"FILL" 1', 'color': schedule.color}}>
               {schedule.icon}
             </span>
@@ -31,8 +30,8 @@ function ScheduleList ({ schedules }) {
           {modal && (
               <>
                 <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
-                onClick={showNotificationModal}></div>
-                <ScheduleDetailModal setModal={showNotificationModal} schedule={schedule} />
+                onClick={showScheduleDetailModal}></div>
+                <ScheduleDetailModal setModal={showScheduleDetailModal} schedule={schedule} />
               </>
           )}
           <hr />

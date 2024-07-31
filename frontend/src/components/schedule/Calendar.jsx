@@ -61,7 +61,6 @@ function CalendarList () {
       moment(schedule.date).isSame(date, 'day'),
     );
     const date2 = moment(date).format('YYYY-MM-DD')
-    console.log(date2)
     setTodaySchedule(schedule)
   };
 
