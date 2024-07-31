@@ -51,7 +51,7 @@ public class Plant {
 	@Column(name = "today_exp", nullable = false)
 	private Integer todayExp;
 
-	@Column(name = "today_exp", nullable = false)
+	@Column(name = "is_walking", nullable = false)
 	private Boolean isWalking;
 
 	@Column(name = "create_at", nullable = false)
@@ -79,6 +79,7 @@ public class Plant {
 		if (totalExp + exp >= GlobalConstant.TOTAL_EXP_MAX * n) {
 			this.plantStatus = PlantStatus.COMPLETED;
 			// throw new BadRequestException(ResponseCode.PLANT_ALREADY_COMPLETED);
+
 			return;
 		}
 
