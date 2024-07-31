@@ -3,7 +3,6 @@
   height: 50vh;
   max-width: 100%;
   background: inherit;
-  font-family: Arial, Helvetica, sans-serif;
   line-height: 1.125em;
 }
 
@@ -32,7 +31,6 @@
 
 .react-calendar button {
   margin: 0;
-  /* border: 0; */
   outline: none;
   flex-direction: column;
 }
@@ -179,7 +177,7 @@
   color: #2636C0;
 }
 .react-calendar__schedule {
-  font-size: 8px;
+  font-size: 10px;
   background: #E37C91;
   display: flex;
   align-items: center;

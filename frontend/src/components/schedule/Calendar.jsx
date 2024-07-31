@@ -43,7 +43,7 @@ function CalendarList () {
   
   const tileClassName=({ date })=>{
     if (date.getDay() === 0) {
-      return 'sunday'; //
+      return 'sunday';
     }
     if (date.getDay() === 6) {
       return 'saturday';
