@@ -47,14 +47,15 @@ public class PlantServiceImpl implements PlantService {
 	}
 
 	/**
-	 * @param room room 정보
+	 * @param userRoom userRoom 정보
 	 * @param type 활동 타입 (산책, 출석, 피드, 게시글)
 	 */
 	@Override
-	public void updateExp(Room room, ActivityType type) {
-		Plant plant = plantRepository.findByRoomRoomId(room.getRoomId())
+	public void updateExp(UserRoom userRoom, ActivityType type) {
+		Plant plant = plantRepository.findByRoomRoomId(userRoom.getRoom().getRoomId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
 
+		// TODO planid와 userroomid 조합해서 rank가져오기
 		MonthlyRank rank = rankRepository.findByPlantPlantId(plant.getPlantId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.RANK_NOT_FOUND));
 

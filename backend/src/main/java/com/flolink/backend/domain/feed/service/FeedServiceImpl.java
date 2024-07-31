@@ -14,6 +14,8 @@ import com.flolink.backend.domain.feed.entity.Feed;
 import com.flolink.backend.domain.feed.entity.FeedComment;
 import com.flolink.backend.domain.feed.repository.FeedCommentRepository;
 import com.flolink.backend.domain.feed.repository.FeedRepository;
+import com.flolink.backend.domain.plant.entity.ActivityType;
+import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.global.common.ResponseCode;
@@ -25,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService {
+
+	private final PlantService plantService;
 
 	private final FeedRepository feedRepository;
 	private final FeedCommentRepository feedCommentRepository;
@@ -51,7 +55,9 @@ public class FeedServiceImpl implements FeedService {
 		if (userRoom == null) {
 			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
 		}
+
 		Feed feed = feedRepository.save(feedCreateRequest.toEntityUsingUserRoom(userRoom));
+		plantService.updateExp(userRoom, ActivityType.FEED);
 		return FeedResponse.fromEntity(userRoom, feed);
 	}
 
@@ -94,6 +100,7 @@ public class FeedServiceImpl implements FeedService {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
 		feedCommentRepository.save(FeedComment.of(feed, userRoom, feedCommentRequest.getContent()));
+		plantService.updateExp(userRoom, ActivityType.COMMENT);
 	}
 
 	@Override
