@@ -16,10 +16,11 @@ function ScheduleList ({ schedules }) {
   else {
     return (
     <ul>
-      {schedules.map(schedule => (
+      {schedules.map((schedule, index) => (
         <>
-          <li className="flex items-center my-2" key={schedule.id}
+          <li className="flex items-center my-2" key={index}
           onClick={showNotificationModal}>
+            {console.log(index)}
             <span className="material-symbols-outlined mx-2" style={{'fontVariationSettings': '"FILL" 1', 'color': schedule.color}}>
               {schedule.icon}
             </span>

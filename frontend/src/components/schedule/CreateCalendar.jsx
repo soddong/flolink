@@ -2,8 +2,9 @@ import Calendar from 'react-calendar';
 import { useState } from 'react';
 import moment from "moment"
 
-function CreateCalendar () {
+function CreateCalendar (props) {
   const [dateValue, onDateValue] = useState(new Date())
+  const [newDate, setNewDate] = useState(props.date);
 
   const tileClassName=({ date })=>{
     if (date.getDay() === 0) {
@@ -17,11 +18,18 @@ function CreateCalendar () {
 
   function printSchedule (date) {
     const date2 = moment(date).format('YYYY-MM-DD')
-    console.log(date2)
   };
 
+  function submitSchedule (date) {
+    const date2 = moment(date).format('YYYY-MM-DD')
+    window.alert('날짜가 수정되었습니다.')
+    console.log(date2)
+    props.handleDate(date2);
+    props.setModal();
+  }
+
   return (
-    <div className="w-full h-30 fixed inset-x-1/2 z-30 bg-rose-200"
+    <div className="w-full h-30 fixed inset-x-1/2 z-30 bg-stone-300 rounded"
     style={{'transform': 'translateX(-50%)'}}>
       <Calendar onChange={onDateValue} value={dateValue}
       formatDay={(locale, date) => moment(date).format('D')}
@@ -30,7 +38,7 @@ function CreateCalendar () {
       calendarType="gregory"
       minDetail="year"
       tileClassName={tileClassName}
-      onClickDay={printSchedule}/>
+      onClickDay={submitSchedule}/>
     </div>
   )
 }
