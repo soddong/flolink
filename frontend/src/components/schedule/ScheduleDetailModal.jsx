@@ -2,6 +2,7 @@ import style from "../../css/main/main_modals.module.css"
 import { useState } from "react";
 import CreateCalendar from "./CreateCalendar";
 import WarningModal from "../main/modal/WarningModal";
+import TagSelect from "./TagSelect";
 
 function ScheduleDetailModal ({ setModal, schedule }) {
   const [modalstate, setModalstate] = useState('read')
@@ -10,6 +11,8 @@ function ScheduleDetailModal ({ setModal, schedule }) {
   const [inputCalendar, setInputCalendar] = useState(false)
   const [date, setDate] = useState(schedule.date)
   const [tag, setTag] = useState(schedule.tag)
+  const [icon, setIcon] = useState(schedule.icon)
+  const [color, setColor] = useState(schedule.color)
   const [warning, setWarning] = useState(false)
 
   function handleModalState () {
@@ -34,11 +37,16 @@ function ScheduleDetailModal ({ setModal, schedule }) {
     }
   }
 
-  function handleInputTagChange (event) {
-    setTag(event.target.value)
-    if (event.target.value.length > 10) {
-      window.alert('10자까지 입력 가능합니다.')
-    }
+  function handleInputTagChange (data) {
+    setTag(data)
+  }
+
+  function handleIconChange(data) {
+    setIcon(data)
+  }
+
+  function handleColorChange(data) {
+    setColor(data)
   }
 
   function submitSuccess (event) {
@@ -84,8 +92,8 @@ function ScheduleDetailModal ({ setModal, schedule }) {
         <div className="w-full py-4 px-8">
           <p className="text-lg font-bold">{inputTitleValue}</p>
           <p className="flex items-center text-base mt-4 text-gray-600">
-            <span className="material-symbols-outlined mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
-              sell
+            <span className="material-symbols-outlined mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': color}}>
+              {icon}
             </span>
             {tag}
           </p>
@@ -119,9 +127,7 @@ function ScheduleDetailModal ({ setModal, schedule }) {
             <span className="material-symbols-outlined mt-2 mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
               sell
             </span>
-            <input type="text" id="tag" maxLength={10} onChange={handleInputTagChange}
-            className="w-20 text-sm rounded border-0 ring-1 ring-inset ring-gray-400 p-1"
-            placeholder={schedule.tag} value={tag}/>
+            <TagSelect icon={icon} tag={tag} color={color} handleInputTagChange={handleInputTagChange} handleIconChange={handleIconChange} handleColorChange={handleColorChange}/>
           </p>
           <div className="flex items-center text-base my-2 text-gray-600">
             <span className="material-symbols-outlined mr-2" 

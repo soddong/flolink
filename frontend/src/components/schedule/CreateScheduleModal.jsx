@@ -2,13 +2,14 @@ import style from "../../css/main/main_modals.module.css"
 import CreateCalendar from "./CreateCalendar"
 import { useState } from "react";
 import moment from "moment"
+import TagSelect from "./TagSelect";
 
 function CreateScheduleModal (props) {
   const [inputTitleValue, setInputTitleValue] = useState('');
   const [inputContentValue, setInputContentValue] = useState('');
   const [inputCalendar, setInputCalendar] = useState(false)
   const [date, setDate] = useState(props.date)
-  const [tag, setTag] = useState('')
+  const [tag, setTag] = useState('cake')
 
   const nowDate = moment(date).format('YYYY-MM-DD')
 
@@ -66,13 +67,11 @@ function CreateScheduleModal (props) {
             placeholder="제목을 입력하세요" value={inputTitleValue}/>
             <p className="text-xs text-gray-500 absolute right-0" style={{'bottom': '-16px'}}>{inputTitleValue.length}/10</p>
           </div>
-          <p className="flex items-center text-base mt-2 text-gray-600">
+          <p className="flex items-center text-base mt-3 text-gray-600">
             <span className="material-symbols-outlined mt-2 mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
               sell
             </span>
-            <input type="text" id="tag" maxLength={10} onChange={handleInputTagChange}
-            className="w-20 text-sm rounded border-0 ring-1 ring-inset ring-gray-400 p-1"
-            placeholder="일정 종류" value={tag}/>
+            <TagSelect value={tag} handleInputTagChange={handleInputTagChange}/>
           </p>
           <div className="flex items-center text-base my-2 text-gray-600">
             <span className="material-symbols-outlined mr-2" 
@@ -89,10 +88,13 @@ function CreateScheduleModal (props) {
               </>
             )}
           </div>
-          <textarea type="text" id="content" maxLength={100} onChange={handleInputContentChange}
-          className="w-full h-20 rounded border-0 ring-1 ring-inset ring-gray-400 p-2 text-sm"
-          placeholder="메모를 입력하세요.." value={inputContentValue}/>
-          <p className="text-xs text-gray-500">{inputContentValue.length}/100</p>
+          <div className="relative">
+            <textarea type="text" id="content" maxLength={100} onChange={handleInputContentChange}
+            className="w-full h-20 rounded border-0 ring-1 ring-inset ring-gray-400 p-2 text-sm"
+            placeholder="메모를 입력하세요.." value={inputContentValue}/>
+            <p className="text-xs text-gray-500 absolute"
+            style={{'bottom': '-10px'}}>{inputContentValue.length}/100</p>
+          </div>
           <input type="submit"
            className="w-10 h-6 rounded absolute bottom-6 right-6 bg-rose-400 text-sm text-white"
            value="저장"
