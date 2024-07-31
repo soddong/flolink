@@ -25,18 +25,13 @@ const FeedItem = ({ feed }) => {
       </div>
 
       <div className="mt-4 flex justify-between text-gray-600 text-sm">
-        <span>좋아요 {likes}</span>
         <span>댓글 {feed.comments.length}</span>
       </div>
       <div className="mt-4 flex justify-end space-x-2">
-        <button 
-          className={`px-3 py-1 rounded-md ${liked ? 'bg-red-500' : 'bg-blue-500'} text-white`} 
-          onClick={handleLike}
-        >
-          {liked ? '좋아요 취소' : '좋아요'}
-        </button>
-        <button className="bg-yellow-500 text-white px-3 py-1 rounded-md">수정</button>
-        <button className="bg-red-500 text-white px-3 py-1 rounded-md">삭제</button>
+        {/* <button className="bg-yellow-500 text-white px-3 py-1 rounded-md">수정</button> */}
+        <button className="bg-transparent hover:bg-yellow-500 text-blue-500 font-semibold hover:text-yellow py-2 px-4 border border-yellow-500 hover:border-transparent rounded">✏️</button>
+        {/* <button className="bg-red-500 text-white px-3 py-1 rounded-md">삭제</button> */}
+        <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">🗑️</button>
       </div>
       <div className="mt-4">
         {feed.comments.slice(0, showAllComments ? feed.comments.length : 2).map((comment, index) => (

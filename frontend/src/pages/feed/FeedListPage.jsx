@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo/logo.png';
 import FeedList from '../../components/feed/FeedList';
 import NavBar from '../../components/common/nav_bar/NavBar';
-// import '../../css/feed/feedStyles.css';
+// import feedStyles from '../../css/feed/feedStyles.module.css';
+import '../../css/feed/feedStyles.module.css';
 
 const FeedListPage = () => {
   const navigate = useNavigate();
@@ -13,7 +14,6 @@ const FeedListPage = () => {
       content: '좋은 시간, 좋은 분위기',
       author: '로콜리',
       date: '2024-07-25 23:20',
-      likes: 10,
       comments: [
         { author: 'user1', content: '멋져요!' },
         { author: 'user2', content: '좋아요!' },
