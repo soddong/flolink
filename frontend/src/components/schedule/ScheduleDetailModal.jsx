@@ -1,6 +1,7 @@
 import style from "../../css/main/main_modals.module.css"
 import { useState } from "react";
 import CreateCalendar from "./CreateCalendar";
+import WarningModal from "../main/modal/WarningModal";
 
 function ScheduleDetailModal ({ setModal, schedule }) {
   const [modalstate, setModalstate] = useState('read')
@@ -9,6 +10,7 @@ function ScheduleDetailModal ({ setModal, schedule }) {
   const [inputCalendar, setInputCalendar] = useState(false)
   const [date, setDate] = useState(schedule.date)
   const [tag, setTag] = useState(schedule.tag)
+  const [warning, setWarning] = useState(false)
 
   function handleModalState () {
     if (modalstate === 'read') {
@@ -53,6 +55,10 @@ function ScheduleDetailModal ({ setModal, schedule }) {
     setDate(data)
   }
 
+  function showWarning () {
+    setWarning(!warning)
+  }
+
   if (modalstate === 'read') {
     return (
       <div className={`w-72 h-80 backdrop-blur-sm ${style.mainModal}`}>
@@ -61,10 +67,19 @@ function ScheduleDetailModal ({ setModal, schedule }) {
           cancel
         </span>
         <h1 className="text-xl m-3 font-bold flex items-center">일정 상세
-          <span className="material-symbols-outlined mx-1" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
+          <span className="material-symbols-outlined mx-1" 
+          style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}
+          onClick={showWarning}>
             delete
           </span>
         </h1>
+        {warning && (
+          <>
+            <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
+            onClick={showWarning}></div>
+            <WarningModal showWarning={showWarning} setModal={setModal} schedule={schedule} />
+          </>
+        )}
         <hr className="w-60 border-black" />
         <div className="w-full py-4 px-8">
           <p className="text-lg font-bold">{inputTitleValue}</p>
