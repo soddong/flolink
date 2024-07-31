@@ -177,7 +177,7 @@ public class RoomServiceImpl implements RoomService {
 		Room room = findRoomById(roomId);
 		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
 		if (isFirstAttendanceOfToday(userRoom.getLastLoginTime())) {
-			plantService.updateExp(room, ActivityType.Attendance);
+			plantService.updateExp(userRoom, ActivityType.Attendance);
 		}
 		userRoom.updateLoginTime();
 	}
