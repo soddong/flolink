@@ -137,24 +137,35 @@ public class RoomServiceImpl implements RoomService {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomId);
 		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
-		if (userRoom.getRole().equalsIgnoreCase("admin")) {
-			room.getUserRoomList().sort(Comparator.comparing(UserRoom::getCreateAt));
-			room.getUserRoomList().getFirst().setRole("admin"); //TODO: 본인 제외로 해야함
 
+		if (userRoom.getRole().equalsIgnoreCase("admin")) {
+			List<UserRoom> userRoomList = room.getUserRoomList();
+			userRoomList.sort(Comparator.comparing(UserRoom::getCreateAt));
+			for (UserRoom ur : userRoomList) {
+				if (!ur.getUser().getUserId().equals(userId)) {
+					ur.setRole("admin");
+					break;
+				}
+			}
 		}
 		userRoomRepository.delete(userRoom);
 
+		if (room.getUserRoomList().isEmpty()) {
+			roomRepository.delete(room);
+		}
 		return "success";
 	}
 
 	@Override
 	@Transactional
-	public String kickRoomMember(final Integer userId, final Integer roomId, final Integer userRoomId) {
+	public String kickRoomMember(final Integer userId, final Integer roomId, final Integer targetUserRoomId) {
 		String myRole = getMyRole(userId, roomId);
-		if (myRole.equalsIgnoreCase("member")) {
+		if (!myRole.equalsIgnoreCase("admin")) {
 			return "failed";
 		}
-		UserRoom userRoom = userRoomRepository.findUserRoomByUserRoomId(userRoomId);
+
+		UserRoom userRoom = userRoomRepository.findUserRoomByUserRoomId(targetUserRoomId);
+
 		userRoomRepository.delete(userRoom);
 		return "success";
 	}
