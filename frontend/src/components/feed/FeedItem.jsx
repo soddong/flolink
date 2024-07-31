@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
 
 const FeedItem = ({ feed }) => {
-  const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(feed.likes);
   const [showAllComments, setShowAllComments] = useState(false);
 
-  const handleLike = () => {
-    if (liked) {
-      setLikes(likes - 1);
-    } else {
-      setLikes(likes + 1);
-    }
-    setLiked(!liked);
-  };
 
   return (
     <div className="border border-gray-300 p-4 rounded-lg shadow-md mb-4">
@@ -29,9 +19,9 @@ const FeedItem = ({ feed }) => {
       </div>
       <div className="mt-4 flex justify-end space-x-2">
         {/* <button className="bg-yellow-500 text-white px-3 py-1 rounded-md">수정</button> */}
-        <button className="bg-transparent hover:bg-yellow-500 text-blue-500 font-semibold hover:text-yellow py-2 px-4 border border-yellow-500 hover:border-transparent rounded">✏️</button>
+        <button className="bg-transparent text-blue-500 font-semibold py-2 px-4 border border-yellow-500 rounded">✏️</button>
         {/* <button className="bg-red-500 text-white px-3 py-1 rounded-md">삭제</button> */}
-        <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">🗑️</button>
+        <button className="bg-transparent text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded">🗑️</button>
       </div>
       <div className="mt-4">
         {feed.comments.slice(0, showAllComments ? feed.comments.length : 2).map((comment, index) => (
