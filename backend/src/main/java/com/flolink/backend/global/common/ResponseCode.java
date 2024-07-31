@@ -16,6 +16,7 @@ public enum ResponseCode {
 	// User
 	USER_NOT_FOUND(404, "User not found", "NOT_FOUND_ERROR"),
 	UNREGISTERED_USER(401, "Unregistered User", "UNREGISTERED_USER"),
+	BLANK_NICKNAME(404, "Can't update blank nickname", "BLANK_NICKNAME"),
 
 	// Room
 	USER_ROOM_NOT_FOUND(404, "UserRoom not found", "NOT_FOUND_ERROR"),

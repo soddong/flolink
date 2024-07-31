@@ -16,8 +16,9 @@ spring:
   sql:
     init:
       mode: always
-  jwt:
-    secret: SSAFY-A608FloLinkProject35832517354352468743543873654387
+  config:
+    import:
+      - classpath:/application-private.yml
 
 springdoc:
   api-docs:

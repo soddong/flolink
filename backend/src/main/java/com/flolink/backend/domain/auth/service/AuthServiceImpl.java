@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,15 @@ public class AuthServiceImpl implements AuthService {
 	private final AuthRepository authRepository;
 	private final SuccessTokenRepository successTokenRepository;
 
+	@Value("${nurigo.api.key}")
+	private String apiKey;
+
+	@Value("${nurigo.api.secretKey}")
+	private String apiSecret;
+
+	@Value("${nurigo.api.url}")
+	private String domain;
+
 	/**
 	 *
 	 * @param tel (휴대전화번호)
@@ -42,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
 	@Transactional
 	public void sendAuthenticationNumber(String tel) {
 		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(
-			"NCSP0K6DNQVU8CXM", "AJAWO3QEAIT3B34061IGMOBD3PQX9QQR", "https://api.solapi.com");
+			apiKey, apiSecret, domain);
 
 		String randomAuthNum = RandomStringUtils.randomNumeric(6);
 
@@ -101,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
 			.build();
 
 		successTokenRepository.save(successToken);
-		
+
 		return SuccessTokenResponse.builder()
 			.token(successToken.getToken())
 			.build();
