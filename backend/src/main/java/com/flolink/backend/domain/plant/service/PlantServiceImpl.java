@@ -53,9 +53,8 @@ public class PlantServiceImpl implements PlantService {
 	public void updateExp(UserRoom userRoom, ActivityType type) {
 		Plant plant = plantRepository.findByRoomRoomId(userRoom.getRoom().getRoomId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
-
-		// TODO planid와 userroomid 조합해서 rank가져오기
-		MonthlyRank rank = rankRepository.findByPlantPlantId(plant.getPlantId())
+		
+		MonthlyRank rank = rankRepository.findMonthlyRankByUserRoomAndPlant(userRoom, plant)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.RANK_NOT_FOUND));
 
 		// if 마지막 수정시간이 오늘이 아니면, 오늘 경험치 0으로 초기화
