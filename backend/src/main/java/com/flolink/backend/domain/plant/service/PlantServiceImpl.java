@@ -13,9 +13,7 @@ import com.flolink.backend.domain.plant.repository.MonthlyRankRepository;
 import com.flolink.backend.domain.plant.repository.PlantRepository;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
-import com.flolink.backend.global.common.GlobalConstant;
 import com.flolink.backend.global.common.ResponseCode;
-import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -40,6 +38,7 @@ public class PlantServiceImpl implements PlantService {
 		Plant plant = plantRepository.save(
 			Plant.create(room)
 		);
+
 		rankRepository.save(
 			MonthlyRank.of(userRoom, plant)
 		);
@@ -47,15 +46,15 @@ public class PlantServiceImpl implements PlantService {
 	}
 
 	/**
-	 * @param room room 정보
+	 * @param userRoom userRoom 정보
 	 * @param type 활동 타입 (산책, 출석, 피드, 게시글)
 	 */
 	@Override
-	public void updateExp(Room room, ActivityType type) {
-		Plant plant = plantRepository.findByRoomRoomId(room.getRoomId())
+	public void updateExp(UserRoom userRoom, ActivityType type) {
+		Plant plant = plantRepository.findByRoomRoomId(userRoom.getRoom().getRoomId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
-
-		MonthlyRank rank = rankRepository.findByPlantPlantId(plant.getPlantId())
+		
+		MonthlyRank rank = rankRepository.findMonthlyRankByUserRoomAndPlant(userRoom, plant)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.RANK_NOT_FOUND));
 
 		// if 마지막 수정시간이 오늘이 아니면, 오늘 경험치 0으로 초기화
@@ -65,13 +64,9 @@ public class PlantServiceImpl implements PlantService {
 
 		// if 경험치가 제한보다 크면, 예외처리
 		int N = plant.getRoom().getUserRoomList().size();
-		if (plant.getTodayExp() + type.getPoint() >= GlobalConstant.TODAY_EXP_BASE_LIMIT * N) {
-			throw new BadRequestException(ResponseCode.DAILY_LIMIT_EXCEEDED);
-		}
 
-		plant.increaseExp(type.getPoint());
+		plant.increaseExp(type.getPoint(), N);
 		rank.increaseExpOfUser(type.getPoint());
-
 	}
 
 	/**
