@@ -25,4 +25,6 @@ public interface RoomService {
 	String exitRoom(final Integer userId, final Integer roomId);
 
 	String kickRoomMember(final Integer userId, final Integer roomId, final Integer targetUserRoomId);
+
+	void enterRoom(Integer userId, Integer roomId);
 }

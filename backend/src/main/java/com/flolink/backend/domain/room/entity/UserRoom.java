@@ -59,6 +59,9 @@ public class UserRoom {
 	@Column(name = "create_at", nullable = false)
 	private LocalDateTime createAt;
 
+	@Column(name = "last_login_time")
+	private LocalDateTime lastLoginTime;
+
 	@Column(name = "use_yn", nullable = false)
 	private Boolean useYn;
 
@@ -73,6 +76,10 @@ public class UserRoom {
 			.useYn(true)
 			.role("member")
 			.build();
+	}
+
+	public void updateLoginTime() {
+		lastLoginTime = LocalDateTime.now();
 	}
 
 }
