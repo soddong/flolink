@@ -110,7 +110,7 @@ function ScheduleDetailModal ({ setModal, schedule }) {
         <hr className="w-60 border-black" />
         <form action="" onSubmit={submitSuccess} className="w-full py-4 px-8 text-base">
           <div className="relative">
-            <input type="text" maxLength={10} onChange={handleInputTitleChange}
+            <input type="text" id="title" maxLength={10} onChange={handleInputTitleChange}
             className="w-full rounded border-0 ring-1 ring-inset ring-gray-400 p-1"
             placeholder={schedule.title} value={inputTitleValue}/>
             <p className="text-xs text-gray-500 absolute right-0" style={{'bottom': '-16px'}}>{inputTitleValue.length}/10</p>
@@ -119,7 +119,7 @@ function ScheduleDetailModal ({ setModal, schedule }) {
             <span className="material-symbols-outlined mt-2 mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
               sell
             </span>
-            <input type="text" maxLength={10} onChange={handleInputTagChange}
+            <input type="text" id="tag" maxLength={10} onChange={handleInputTagChange}
             className="w-20 text-sm rounded border-0 ring-1 ring-inset ring-gray-400 p-1"
             placeholder={schedule.tag} value={tag}/>
           </p>
@@ -138,8 +138,8 @@ function ScheduleDetailModal ({ setModal, schedule }) {
               </>
             )}
           </div>
-          <textarea type="text" maxLength={100} onChange={handleInputContentChange}
-          className="w-full h-20 rounded border-0 ring-1 ring-inset ring-gray-400 p-1"
+          <textarea type="text" id="content" maxLength={100} onChange={handleInputContentChange}
+          className="w-full h-20 rounded border-0 ring-1 ring-inset ring-gray-400 p-2 text-sm"
           placeholder={schedule.content} value={inputContentValue}/>
           <p className="text-xs text-gray-500">{inputContentValue.length}/100</p>
           <input type="submit"

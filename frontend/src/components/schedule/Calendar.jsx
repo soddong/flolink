@@ -3,6 +3,7 @@ import { useState } from 'react';
 import "../../css/calendar/Calendar.css";
 import moment from "moment"
 import ScheduleList from './ScheduleList';
+import CreateScheduleModal from './CreateScheduleModal';
 
 const schedules = [
   {
@@ -38,6 +39,7 @@ const schedules = [
 function CalendarList () {
   const [dateValue, onDateValue] = useState(new Date())
   const [todaySchedule, setTodaySchedule] = useState([])
+  const [createModal, setCreateModal] = useState(false)
   
   const tileClassName=({ date })=>{
     if (date.getDay() === 0) {
@@ -64,6 +66,10 @@ function CalendarList () {
     setTodaySchedule(schedule)
   };
 
+  function showCreateModal () {
+    setCreateModal(!createModal)
+  }
+
   return (
     <div  className="w-full px-5 flex flex-col items-center text-xl"
     style={{'height': '95vh'}}>
@@ -80,12 +86,21 @@ function CalendarList () {
       <div className="w-full absolute bottom-0 bg-white rounded-t-2xl p-4" style={{'height': '40vh'}}>
         <hr className="w-10 absolute top-2 left-1/2 translate-x-3/4 border-slate-600 border-2 rounded"
         style={{'transform': 'translateX(-50%)'}}/>
-        <button className="text-xs flex items-center bg-rose-400 w-20 h-6 justify-center rounded text-white">
+        <button 
+        className="text-xs flex items-center bg-rose-400 w-20 h-6 justify-center rounded text-white"
+        onClick={showCreateModal}>
           <span className="material-symbols-outlined text-lg">
           add
           </span>
           일정 추가
         </button>
+        {createModal && (
+          <>
+            <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
+            onClick={showCreateModal}></div>
+            <CreateScheduleModal showCreateModal={showCreateModal} date={dateValue} />
+          </>
+        )}
         <ScheduleList schedules={todaySchedule}/>
       </div>
     </div>

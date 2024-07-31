@@ -7,7 +7,7 @@ function CreateCalendar (props) {
 
   const tileClassName=({ date })=>{
     if (date.getDay() === 0) {
-      return 'sunday'; //
+      return 'sunday';
     }
     if (date.getDay() === 6) {
       return 'saturday';
@@ -17,7 +17,7 @@ function CreateCalendar (props) {
 
   function submitSchedule (date) {
     const date2 = moment(date).format('YYYY-MM-DD')
-    window.alert('날짜가 수정되었습니다.')
+    window.alert('날짜가 저장되었습니다.')
     props.handleDate(date2);
     props.setModal();
   }
