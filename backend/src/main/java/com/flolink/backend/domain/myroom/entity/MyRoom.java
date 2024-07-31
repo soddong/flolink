@@ -37,6 +37,7 @@ public class MyRoom {
 	private Integer myRoomId;
 
 	@OneToMany(mappedBy = "myRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
 	private List<HasItem> items = new ArrayList<>();
 
 	@Column(name = "item_stand")
@@ -62,7 +63,6 @@ public class MyRoom {
 
 	public static MyRoom createMyRoom() {
 		return MyRoom.builder()
-			.items(new ArrayList<>())
 			.build();
 	}
 
