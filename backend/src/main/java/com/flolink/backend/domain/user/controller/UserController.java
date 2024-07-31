@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
+import com.flolink.backend.domain.user.dto.request.NicknameRequest;
 import com.flolink.backend.domain.user.dto.request.UpdatePasswordCheckRequest;
 import com.flolink.backend.domain.user.dto.request.UpdatePasswordRequest;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
@@ -101,13 +102,14 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 
-	@Operation(summary = "닉네임 수정", description = "닉네임을 수정한다. 빈 문자열 불가")
-	@PostMapping("/myInfo")
-	public ResponseEntity<?> updateNickname(String nickname, Authentication authentication) {
+	@Operation(summary = "닉네임 변경", description = "닉네임을 수정한다. 빈 문자열 불가")
+	@PutMapping("/myInfo/nickname")
+	public ResponseEntity<?> updateNickname(@RequestBody NicknameRequest nicknameRequest,
+		Authentication authentication) {
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
-		log.info("===회원정보 수정 START===");
-		userService.modifyNickname(nickname, userDetails.getUserId());
-		log.info("===회원정보 수정 END===");
+		log.info("===닉네임 변경 START===");
+		userService.modifyNickname(nicknameRequest.getNickname(), userDetails.getUserId());
+		log.info("===닉네임 변경 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 }

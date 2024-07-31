@@ -248,6 +248,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void modifyNickname(String nickname, int userId) {
+		if (nickname.isBlank()) {
+			throw new NotFoundException(ResponseCode.BLANK_NICKNAME);
+		}
+
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
