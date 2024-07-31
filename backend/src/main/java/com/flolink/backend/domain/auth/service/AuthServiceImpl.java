@@ -13,6 +13,7 @@ import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 
 import com.flolink.backend.domain.auth.dto.request.CheckAuthRequest;
+import com.flolink.backend.domain.auth.dto.response.SuccessTokenResponse;
 import com.flolink.backend.domain.auth.entity.Auth;
 import com.flolink.backend.domain.auth.entity.SuccessToken;
 import com.flolink.backend.domain.auth.repository.AuthRepository;
@@ -77,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
 	 */
 	@Override
 	@Transactional
-	public String checkAuthenticationNumber(CheckAuthRequest checkAuthRequest) {
+	public SuccessTokenResponse checkAuthenticationNumber(CheckAuthRequest checkAuthRequest) {
 		Auth auth = authRepository.findByTel(checkAuthRequest.getTel())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
@@ -96,10 +97,13 @@ public class AuthServiceImpl implements AuthService {
 			.tel(checkAuthRequest.getTel())
 			.token(UUID.randomUUID().toString().replaceAll("\\-", ""))
 			.createAt(LocalDateTime.now())
-			.expiredAt(LocalDateTime.now().plusMinutes(5))
+			.expiredAt(LocalDateTime.now().plusMinutes(50))
 			.build();
 
 		successTokenRepository.save(successToken);
-		return successToken.getToken();
+		
+		return SuccessTokenResponse.builder()
+			.token(successToken.getToken())
+			.build();
 	}
 }

@@ -27,8 +27,8 @@ public class ReissueServiceImpl implements ReissueService {
 
 	private final JwtUtil jwtUtil;
 	private final RefreshRepository refreshRepository;
-	private final long accessTokenValidityInSeconds = 60 * 10L;
-	private final long refreshTokenValidityInSeconds = 60 * 60 * 24L;
+	private final long accessTokenValidityInSeconds = 1000 * 60 * 10L;
+	private final long refreshTokenValidityInSeconds = 1000 * 60 * 60 * 24L;
 
 	@Override
 	public void reissue(HttpServletRequest request, HttpServletResponse response) {
