@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import com.flolink.backend.domain.feed.entity.Feed;
 import com.flolink.backend.domain.user.entity.User;
 
 import jakarta.persistence.Column;
@@ -51,6 +52,9 @@ public class UserRoom {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
 	private List<Nickname> nickNameList;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
+	private List<Feed> feedList;
 
 	@Column(name = "create_at", nullable = false)
 	private LocalDateTime createAt;
