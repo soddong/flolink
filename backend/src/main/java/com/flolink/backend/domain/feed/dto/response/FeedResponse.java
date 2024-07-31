@@ -1,10 +1,10 @@
 package com.flolink.backend.domain.feed.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 import com.flolink.backend.domain.feed.entity.Feed;
-import com.flolink.backend.domain.feed.entity.FeedImage;
 import com.flolink.backend.domain.room.entity.Nickname;
 import com.flolink.backend.domain.room.entity.UserRoom;
 
@@ -21,7 +21,7 @@ public class FeedResponse {
 	private LocalDateTime createdDate;
 	private String author;
 	private List<FeedCommentResponse> feedCommentList;
-	private List<FeedImage> feedImages;
+	private List<FeedImageResponse> feedImages;
 
 	public static FeedResponse fromEntity(UserRoom userRoom, Feed feed) {
 		String nickName = feed.getUserRoom().getUser().getNickname();
@@ -38,8 +38,16 @@ public class FeedResponse {
 			.createdDate(feed.getCreateAt())
 			.author(nickName)
 			.feedCommentList(
-				feed.getFeedCommentList().stream().map((FeedCommentResponse::fromEntity)).toList().reversed())
-			.feedImages(feed.getFeedImageList())
+				feed.getFeedCommentList().stream().map((FeedCommentResponse::fromEntity)).toList().reversed()
+			)
+			.feedImages(
+				feed.getFeedImageList()
+					.stream()
+					.map((FeedImageResponse::fromEntity))
+					.toList()
+					.stream()
+					.sorted(Comparator.comparingInt(FeedImageResponse::getImageOrder)).toList()
+			)
 			.build();
 	}
 }
