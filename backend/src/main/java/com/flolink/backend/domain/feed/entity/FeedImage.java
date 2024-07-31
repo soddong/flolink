@@ -47,8 +47,8 @@ public class FeedImage {
 	@Column(name = "create_at")
 	private LocalDateTime createAt;
 
-	@Column(name = "order")
-	private Integer order;
+	@Column(name = "image_order")
+	private Integer imageOrder;
 
 	@Column(name = "use_yn")
 	private Boolean useYn;
