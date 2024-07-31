@@ -102,17 +102,56 @@ public class FeedServiceImpl implements FeedService {
 		if (!feed.getUserRoom().getUserRoomId().equals(userRoom.getUserRoomId())) {
 			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
 		}
+
+		List<FeedImage> images = feed.getFeedImageList();
+		int imgOrder = 1;
+		for (FeedImage image : images) {
+			imgOrder = Math.max(image.getImageOrder() + 1, imgOrder);
+			image.setUseYn(false);
+		}
+		for (MultipartFile multipartFile : feedUpdateRequest.getImages()) {
+			boolean isIn = false;
+			for (FeedImage image : images) {
+				if (image.getImageUrl().equals(multipartFile.getOriginalFilename())) {
+					isIn = true;
+					image.setUseYn(true);
+				}
+			}
+			if (!isIn) {
+				String uuid = UUID.randomUUID().toString();
+				String keyName = "image_" + uuid + ".jpg";
+				try {
+					s3Util.uploadImg(keyName, multipartFile.getInputStream(), multipartFile.getSize());
+					FeedImage feedImage = FeedImage.builder()
+						.imageOrder(imgOrder++)
+						.feed(feed)
+						.imageUrl(keyName)
+						.createAt(LocalDateTime.now())
+						.useYn(true)
+						.build();
+					feedImageRepository.save(feedImage);
+					feed.getFeedImageList().add(feedImage);
+				} catch (IOException e) {
+					throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+				}
+			}
+		}
 		feed.updateContent(feedUpdateRequest);
+		
 		return FeedResponse.fromEntity(userRoom, feed);
 	}
 
 	@Override
 	public String deleteFeed(final Integer userId, final Integer feedId) {
 		Feed feed = findFeedById(feedId);
-
 		if (!feed.getUserRoom().getUser().getUserId().equals(userId)) {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
+		List<FeedImage> feedImages = feed.getFeedImageList();
+		for (FeedImage feedImage : feedImages) {
+			s3Util.deleteImg(feedImage.getImageUrl());
+		}
+		feedImageRepository.deleteAll(feedImages);
 		feedRepository.delete(feed);
 		return "success";
 	}
