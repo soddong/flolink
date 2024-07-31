@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,7 +57,7 @@ public class FeedController {
 
 	@PostMapping("")
 	@Operation(summary = "피드 생성하기")
-	public ResponseEntity<?> createFeed(@RequestBody final FeedCreateRequest feedCreateRequest) {
+	public ResponseEntity<?> createFeed(@ModelAttribute final FeedCreateRequest feedCreateRequest) {
 		log.info("===피드 생성 START===");
 		Integer userId = 1;
 		FeedResponse feedResponse = feedService.createFeed(userId, feedCreateRequest);
