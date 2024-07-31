@@ -23,6 +23,11 @@ public enum ResponseCode {
 	NOT_AUTHORIZED(401, "Not authorized", "NOT_AUTHORIZED"),
 	ROOM_NOT_FOUND(404, "Room not found", "NOT_FOUND_ERROR"),
 
+	// Plant
+	PLANT_NOT_FOUND(404, "Plant not found", "NOT_FOUND_ERROR"),
+	DAILY_LIMIT_EXCEEDED(400, "Daily limit exceed", "BAD_REQUEST_ERROR"),
+	RANK_NOT_FOUND(404, "Rank not found", "NOT_FOUND_ERROR"),
+
 	//Auth
 	TIME_OUT_EXCEPTION(401, "Auth Time Out", "TIME_OUT_ERROR"),
 
@@ -38,8 +43,7 @@ public enum ResponseCode {
 	ITEM_NOT_IN_INVENTORY(400, "Item not in inventory", "BAD_REQUEST_ERROR"),
 	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
 	MY_ROOM_NOT_FOUND(404, "MY ROOM not found", "NOT_FOUND_ERROR"),
-	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR"),
-	;
+	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR");
 
 	private final int status;
 	private final String message;

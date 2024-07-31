@@ -1,5 +1,7 @@
 package com.flolink.backend.domain.room.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -7,6 +9,8 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flolink.backend.domain.plant.entity.ActivityType;
+import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomParticipateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
@@ -29,6 +33,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
+	private final PlantService plantService;
+
 	private final RoomRepository roomRepository;
 	private final UserRepository userRepository;
 	private final UserRoomRepository userRoomRepository;
@@ -46,9 +52,16 @@ public class RoomServiceImpl implements RoomService {
 	@Transactional
 	public RoomSummarizeResponse createRoom(final Integer userId, final RoomCreateRequest roomCreateRequest) {
 		User user = findUserById(userId);
-		Room room = roomCreateRequest.toEntity();
-		room = roomRepository.save(room);
-		userRoomRepository.save(UserRoom.of(user, room));
+
+		Room room = roomRepository.save(
+			roomCreateRequest.toEntity()
+		);
+
+		UserRoom userRoom = userRoomRepository.save(
+			UserRoom.of(user, room)
+		);
+
+		plantService.createPlant(userRoom, room);
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 
@@ -157,6 +170,18 @@ public class RoomServiceImpl implements RoomService {
 		return "success";
 	}
 
+	@Override
+	@Transactional
+	public void enterRoom(final Integer userId, final Integer roomId) {
+		User user = findUserById(userId);
+		Room room = findRoomById(roomId);
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+		if (isFirstAttendanceOfToday(userRoom.getLastLoginTime())) {
+			plantService.updateExp(room, ActivityType.Attendance);
+		}
+		userRoom.updateLoginTime();
+	}
+
 	private User findUserById(final Integer userId) {
 		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 	}
@@ -168,5 +193,17 @@ public class RoomServiceImpl implements RoomService {
 	private UserRoom findUserRoomByUserAndRoom(final User user, final Room room) {
 		return userRoomRepository.findByUserAndRoom(user, room)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND));
+	}
+
+	private boolean isFirstAttendanceOfToday(LocalDateTime lastLoginTime) {
+		if (lastLoginTime == null) {
+			return true;
+		}
+		LocalDate today = LocalDate.now();
+		LocalDate plantUpdateDate = lastLoginTime.toLocalDate();
+		System.out.println(today);
+		System.out.println(plantUpdateDate);
+		System.out.println(plantUpdateDate.isBefore(today));
+		return plantUpdateDate.isBefore(today);
 	}
 }
