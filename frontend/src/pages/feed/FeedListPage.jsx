@@ -46,8 +46,15 @@ const FeedListPage = () => {
   }else{
     return (
         <div className="w-full h-full min-h-screen bg-custom-gradient relative">
-          <img src={logo} alt="Logo" className="mx-auto h-20" />
-          
+          <header className="mb-4 flex justify-center items-center relative">
+            <button 
+            className="absolute left-4 text-xl text-black"
+            onClick={() => navigate('/main')}
+            >
+            &lt;
+            </button>
+            <img src={logo} alt="Logo" className="mx-auto h-20" />
+          </header>
           <div className="p-4 flex flex-col h-4/5">
             <div className="flex-1 overflow-auto hide-scrollbar">
               <FeedList feeds={feeds} />
