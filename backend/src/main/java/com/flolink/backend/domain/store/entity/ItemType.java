@@ -4,8 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum ItemType {
-	TABLE,
-	CHAIR,
-	POT,
-	PHOTO_FRAME;
+	RUG, SHELF, STAND, BED, MINITABLE, BIGTABLE, VASE
 }
