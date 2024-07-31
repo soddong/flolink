@@ -1,10 +1,13 @@
 package com.flolink.backend.domain.feed.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.flolink.backend.domain.feed.dto.request.FeedCommentRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
@@ -12,13 +15,16 @@ import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.feed.dto.response.FeedResponse;
 import com.flolink.backend.domain.feed.entity.Feed;
 import com.flolink.backend.domain.feed.entity.FeedComment;
+import com.flolink.backend.domain.feed.entity.FeedImage;
 import com.flolink.backend.domain.feed.repository.FeedCommentRepository;
+import com.flolink.backend.domain.feed.repository.FeedImageRepository;
 import com.flolink.backend.domain.feed.repository.FeedRepository;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
+import com.flolink.backend.global.util.S3Util;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +34,9 @@ public class FeedServiceImpl implements FeedService {
 
 	private final FeedRepository feedRepository;
 	private final FeedCommentRepository feedCommentRepository;
+	private final FeedImageRepository feedImageRepository;
 	private final UserRoomRepository userRoomRepository;
+	private final S3Util s3Util;
 
 	@Override
 	public List<FeedResponse> getFeeds(final Integer userId, final Integer roomId, final LocalDateTime lastFeedDate,
@@ -52,6 +60,26 @@ public class FeedServiceImpl implements FeedService {
 			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
 		}
 		Feed feed = feedRepository.save(feedCreateRequest.toEntityUsingUserRoom(userRoom));
+
+		int imgOrder = 1;
+		for (MultipartFile multipartFile : feedCreateRequest.getImages()) {
+			String uuid = UUID.randomUUID().toString();
+			String keyName = "image_" + uuid + ".jpg";
+			try {
+				s3Util.uploadImg(keyName, multipartFile.getInputStream(), multipartFile.getSize());
+				FeedImage feedImage = FeedImage.builder()
+					.imageOrder(imgOrder++)
+					.feed(feed)
+					.imageUrl(keyName)
+					.createAt(LocalDateTime.now())
+					.useYn(true)
+					.build();
+				feedImageRepository.save(feedImage);
+				feed.getFeedImageList().add(feedImage);
+			} catch (IOException e) {
+				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+			}
+		}
 		return FeedResponse.fromEntity(userRoom, feed);
 	}
 
