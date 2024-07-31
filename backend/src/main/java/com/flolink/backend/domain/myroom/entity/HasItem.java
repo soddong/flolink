@@ -60,6 +60,8 @@ public class HasItem {
 		return HasItem.builder()
 			.item(item)
 			.myRoom(myRoom)
+			.equippedYn(false)
+			.useYn(true)
 			.build();
 	}
 }
