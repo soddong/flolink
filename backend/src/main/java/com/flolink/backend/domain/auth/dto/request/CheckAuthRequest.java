@@ -1,7 +1,5 @@
 package com.flolink.backend.domain.auth.dto.request;
 
-import java.time.LocalDateTime;
-
 import lombok.Getter;
 
 @Getter

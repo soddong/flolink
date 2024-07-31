@@ -31,8 +31,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final JwtUtil jwtUtil;
 	private final RefreshRepository refreshRepository;
 	private final AuthenticationManager authenticationManager;
-	private final long accessTokenValidityInSeconds = 60 * 10L; //10분
-	private final long refreshTokenValidityInSeconds = 60 * 60 * 24L; //24시간
+	private final long accessTokenValidityInSeconds = 1000 * 60 * 10L; //10분
+	private final long refreshTokenValidityInSeconds = 1000 * 60 * 60 * 24L; //24시간
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws

@@ -2,10 +2,15 @@ package com.flolink.backend.domain.user.util;
 
 import org.springframework.stereotype.Component;
 
+import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
+
+import lombok.Data;
+
 @Component
+@Data
 public class LoginIdEditor {
 
-	public String maskId(String loginId) {
+	public FindUserIdResponse maskId(String loginId) {
 		if (loginId == null || loginId.length() < 6) {
 			throw new IllegalArgumentException("ID must be at least 6 characters long");
 		}
@@ -22,6 +27,8 @@ public class LoginIdEditor {
 		}
 
 		// 결과 문자열 구성
-		return prefix + maskedMiddle + suffix;
+		return FindUserIdResponse.builder()
+			.LoginId(prefix + maskedMiddle + suffix)
+			.build();
 	}
 }

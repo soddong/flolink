@@ -31,6 +31,7 @@ public enum ResponseCode {
 	UNAUTHORIZED_TOKEN(401, "Unauthorized Token", "UNAUTHORIZED_TOKEN"),
 	NO_REFRESHTOKEN(401, "No Refresh Token", "NO_REFRESHTOKEN"),
 	INVALID_REFRESHTOKEN(401, "Invalid Refresh Token", "INVALID_REFRESHTOKEN"),
+	PASSWORD_INCONSISTENCY(401, "Password inconsistency", "PASSWORD_INCONSISTENCY"),
 
 	// Purchase & Payment
 	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "BAD_REQUEST_ERROR"),

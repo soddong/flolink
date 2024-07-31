@@ -3,9 +3,9 @@ package com.flolink.backend.domain.user.dto.request;
 import lombok.Getter;
 
 @Getter
-public class UpdateUserPasswordRequest {
+public class UpdatePasswordCheckRequest {
 	private String loginId;
 	private String userName;
 	private String tel;
-	private String authNum;
+	private String token;
 }

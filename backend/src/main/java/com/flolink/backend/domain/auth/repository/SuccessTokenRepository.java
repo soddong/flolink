@@ -10,4 +10,6 @@ public interface SuccessTokenRepository extends JpaRepository<SuccessToken, Inte
 
 	Optional<SuccessToken> findByToken(String token);
 
+	void deleteByToken(String token);
+
 }
