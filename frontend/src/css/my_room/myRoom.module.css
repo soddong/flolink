@@ -17,16 +17,18 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 5%;
     left: 0;
+    background-color: white;
 }
 
 .myRoomIcons {
+    width : 20%;
     height: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 20px;
+    justify-content: space-between;
 }
 
 .myRoomInventory {
@@ -36,6 +38,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    
 }
 
 .myRoomItemStore {
@@ -95,10 +98,9 @@
 
 .rug {
     position: absolute;
-    width: 75%; /* rug의 크기를 조절하세요 */
-    left: 50%; /* 좌우 위치 조절 */
-    bottom: 10%; /* 상하 위치 조절 */
-    transform: translateX(-50%); /* 중앙 정렬을 위해 */
+    width: 75%; 
+    left: 10%; 
+    bottom: 10%;
     z-index: 5;
 }
 
@@ -150,18 +152,115 @@
     left : 30%;
 }
 
-.modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    background-color: white;
-    border: 2px solid #000;
-    box-shadow: 24px;
-    padding: 16px;
+.inventoryToast {
+    position: fixed;
+    top: 10%;
+    max-width: 390px;
+    width: 80%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    z-index : 1000;
 }
 
-.modal img {
-    width : 20%;
+.inventoryToastOpen {
+    opacity: 1;
 }
+
+.inventoryToastClosing {
+    opacity: 0;
+}
+
+.inventoryContentClosing {
+    animation: slideDown 0.3s forwards;
+}
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(50%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+.inventoryContent {
+    background-color: white;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 5%;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-out;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s forwards;
+    width : 100%;
+    overflow-y: auto;
+}
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(-50%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+.inventoryContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+.inventoryContent::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+
+  .itemTypeButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3%;
+  }
+  
+  .itemTypeButton {
+    padding: 10%;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .itemTypeButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .itemVariantButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3%;
+  }
+  
+  .itemVariantButton {
+    padding : 10%;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display : flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .itemImage {
+    width : 50%;
+  }
+  
+  .itemVariantButton:hover {
+    background-color: #d0d0d0;
+  }
