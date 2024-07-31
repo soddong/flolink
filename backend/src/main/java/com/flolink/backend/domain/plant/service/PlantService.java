@@ -9,7 +9,7 @@ public interface PlantService {
 
 	void createPlant(UserRoom userRoom, Room room);
 
-	void updateExp(Room room, ActivityType type);
+	void updateExp(UserRoom userRoom, ActivityType type);
 
 	PlantResponse getPlantInfo(Integer roomId);
 }
