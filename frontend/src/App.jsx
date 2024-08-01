@@ -7,13 +7,15 @@ import LoginPage from './pages/login/Loginpage';
 import FindAccount from './pages/login/FIndAccount';
 import LoadingPage from './pages/loading/Loadingpage';
 import PwResetPage from './pages/login/PwResetPage';
-import SettingPage from './pages/item_store/settingpage';
+import ItemStorePage from './pages/item_store/ItemStorePage';
 import SignupPage from './pages/login/SignupPage';
 import FeedListPage from './pages/feed/FeedListPage';
 import FeedCreatePage from './pages/feed/FeedCreatePage';
 import SchedulePage from './pages/schedule/SchedulePage';
 import FamilyGardenPage from './pages/garden/FamilyGardenPage';
 import MyRoomPage from './pages/my_room/myRoomPage';
+import PaymentPage from './pages/payment/PaymentPage';
+import SettingPage from './pages/setting/SettingPage';
 
 const router = createBrowserRouter([  
   {
@@ -45,8 +47,8 @@ const router = createBrowserRouter([
     element : <PwResetPage />
   },
   {
-    path : "/setting",
-    element : <SettingPage />
+    path : "/itemstore",
+    element : <ItemStorePage />
   },
   {
     path : "/signup",
@@ -71,6 +73,14 @@ const router = createBrowserRouter([
   {
     path: "/myroom",
     element: <MyRoomPage />
+  },
+  {
+    path: "/payment",
+    element: <PaymentPage />
+  },
+  {
+    path: "/setting",
+    element: <SettingPage />
   }
 ])
 
