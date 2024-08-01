@@ -29,18 +29,17 @@ const months = [
   {id: 12, name: '12월', image: Winter1},
 ]
 
-function Garden () {
+function Garden ({year}) {
   return (
-    <div className="w-full flex justify-center items-center relative" 
-    style={{'height': '60vh'}}>
+    <div className="w-full flex justify-center items-center relative h-2/3" >
       <div className="w-3/4 h-1/6 absolute top-0 bg-repeat-round flex items-center justify-center z-10" 
       style={{'backgroundImage': `url(${Fence})`}}>
         <div className='w-32 h-10 bg-contain bg-no-repeat bg-center flex items-center justify-center'
         style={{'backgroundImage': `url(${YearPanel})`}}>
-          <p className='text-orange-900 text-lg font-bold'>2024년</p>
+          <p className='text-orange-900 text-lg font-bold'>{year}년</p>
         </div>
       </div>
-      <div className="w-3/4 h-4/5 rounded-lg py-6 px-2 grid grid-rows-4 grid-cols-3" 
+      <div className="w-3/4 h-5/6 rounded-lg pt-8 pb-4 px-2 grid grid-rows-4 grid-cols-3" 
       style={{'backgroundColor': '#EBD4BF', 'filter': 'drop-shadow(0px 10px #D2AB86)'}}>
         {months.map(month => {
           return (
