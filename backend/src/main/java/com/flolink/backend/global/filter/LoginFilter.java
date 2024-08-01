@@ -73,7 +73,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		refreshRepository.save(refreshEntity);
 
 		//응답 설정
-		response.addHeader("access", access);
+		response.addHeader("Authorization", "Bearer " + access);
 		response.addCookie(jwtUtil.createCookies("refresh", refresh));
 		response.setStatus(HttpStatus.OK.value());
 	}

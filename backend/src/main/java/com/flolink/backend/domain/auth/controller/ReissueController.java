@@ -1,10 +1,10 @@
-package com.flolink.backend.domain.user.controller;
+package com.flolink.backend.domain.auth.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flolink.backend.domain.user.service.ReissueService;
+import com.flolink.backend.domain.auth.service.ReissueService;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
 

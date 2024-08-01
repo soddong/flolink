@@ -66,7 +66,6 @@ public class JwtUtil {
 	}
 
 	public String createJwt(String category, int userId, int myRoomId, Long expiredTime, Date now) {
-		System.out.println(new Date(now.getTime() + expiredTime));
 		return Jwts.builder()
 			.claim("category", category)
 			.claim("userId", userId)

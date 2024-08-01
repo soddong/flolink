@@ -5,9 +5,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.user.entity.enumtype.EmotionType;
+import com.flolink.backend.domain.user.entity.enumtype.ProfileType;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,7 +46,7 @@ public class User {
 	@Column(name = "login_id", nullable = false, length = 100)
 	private String loginId;
 
-	@Column(name = "password", nullable = false, length = 64)
+	@Column(name = "password", length = 64)
 	private String password;
 
 	@Column(name = "user_name", nullable = false, length = 15)
@@ -50,7 +55,7 @@ public class User {
 	@Column(name = "nickname", nullable = false, length = 100)
 	private String nickname;
 
-	@Column(name = "tel", nullable = false, length = 20)
+	@Column(name = "tel", length = 20)
 	private String tel;
 
 	@Column(name = "point", nullable = false, length = 21)
@@ -62,8 +67,18 @@ public class User {
 	@Column(name = "use_yn", nullable = false)
 	private boolean useYn;
 
+	@Column(name = "role", nullable = false)
+	private RoleType role;
+
+	@Builder.Default
 	@Column(name = "profile", nullable = false)
-	private String profile;
+	@Enumerated(EnumType.STRING)
+	private ProfileType profile = ProfileType.HONEYBEE;
+
+	@Builder.Default
+	@Column(name = "emotion", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private EmotionType emotion = EmotionType.NORMAL;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	List<UserRoom> userRoomList;

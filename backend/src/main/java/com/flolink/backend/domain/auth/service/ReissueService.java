@@ -1,4 +1,4 @@
-package com.flolink.backend.domain.user.service;
+package com.flolink.backend.domain.auth.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

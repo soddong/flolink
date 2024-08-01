@@ -2,6 +2,8 @@ package com.flolink.backend.domain.user.dto.response;
 
 import java.math.BigDecimal;
 
+import com.flolink.backend.domain.user.entity.enumtype.ProfileType;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +14,7 @@ import lombok.Setter;
 public class UserInfoResponse {
 	private String nickname;
 	private BigDecimal point;
-	private String profile;
+	private ProfileType profile;
 }
 
 
