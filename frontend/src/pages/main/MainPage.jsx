@@ -3,7 +3,7 @@ import UserStatusList from '../../components/main/user_status/UserStatusList';
 import PetStatusList from '../../components/main/tamagochi/PetStatusList';
 import NavBar from '../../components/common/nav_bar/NavBar';
 import Question from '../../components/main/today_question/Question';
-import Max from '../../assets/tamagochi/max.png'
+import Pet from '../../assets/tamagochi/flower1.png'
 import BackgroundPhoto from '../../assets/main/background_photo.png'
 import React, {useEffect, useRef, useState } from "react";
 import Sidebar from '../../components/common/side_bar/SideBar';
@@ -26,7 +26,7 @@ function MainPage() {
       <UserStatusList />
       <PetStatusList />
       <div className="w-full h-56 flex justify-center items-center relative">
-        <img src={Max} alt='dummy_pet_photo' className="h-52 z-10"/>
+        <img src={Pet} alt='dummy_pet_photo' className="h-52 z-10"/>
       </div>
       <Question message={Message}/>
     </div>
