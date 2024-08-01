@@ -8,11 +8,13 @@ import '../../css/feed/feedStyles.module.css';
 
 const FeedListPage = () => {
   const navigate = useNavigate();
+  const currentUser = 'user1';
+
   const [feeds, setFeeds] = useState([
     {
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-9gU5LyaXYrvd3hnKoUx8BjHih5a9WCb4_Q&s',
       content: '좋은 시간, 좋은 분위기',
-      author: '로콜리',
+      author: 'user1',
       date: '2024-07-25 23:20',
       comments: [
         { author: 'user1', content: '멋져요!' },
@@ -33,6 +35,29 @@ const FeedListPage = () => {
         ],
     },
   ]);
+
+  const handleEditComment = (feedIndex, commentIndex) => {
+    const newContent = prompt('새로운 댓글 내용을 입력하세요:', feeds[feedIndex].comments[commentIndex].content);
+    if (newContent) {
+      const updateFeeds = [...feeds];
+      updateFeeds[feedIndex].comments[commentIndex].content = newContent;
+      setFeeds(updateFeeds);
+    }
+  };
+
+  const handleDeleteComment = (feedIndex, commentIndex) => {
+    const updatedFeeds = feeds.map((feed, fIndex) => {
+      if (fIndex === feedIndex) {
+        return {
+          ...feed,
+          comments: feed.comments.filter((_, cIndex) => cIndex !== commentIndex)
+        };
+      }
+      return feed;
+    });
+    setFeeds(updatedFeeds);
+  };
+
   if(feeds.length==0){
     return
     (
@@ -48,8 +73,8 @@ const FeedListPage = () => {
         <div className="w-full h-full min-h-screen bg-custom-gradient relative">
           <header className="mb-4 flex justify-center items-center relative">
             <button 
-            className="absolute left-4 text-xl text-black"
-            onClick={() => navigate('/main')}
+              className="absolute left-4 text-xl text-black"
+              onClick={() => navigate('/main')}
             >
             &lt;
             </button>
@@ -57,7 +82,12 @@ const FeedListPage = () => {
           </header>
           <div className="p-4 flex flex-col h-4/5">
             <div className="flex-1 overflow-auto hide-scrollbar">
-              <FeedList feeds={feeds} />
+              <FeedList
+                feeds={feeds}
+                currentUser={currentUser}
+                onEditComment={handleEditComment}
+                onDeleteComment={handleDeleteComment}
+              />
             </div>
           </div>
           <button
