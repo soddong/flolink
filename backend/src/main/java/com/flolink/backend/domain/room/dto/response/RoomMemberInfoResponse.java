@@ -2,6 +2,7 @@ package com.flolink.backend.domain.room.dto.response;
 
 import com.flolink.backend.domain.room.entity.Nickname;
 import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.user.entity.enumtype.ProfileType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ public class RoomMemberInfoResponse {
 
 	private Integer userId;
 	private Integer roomId;
-	private String profile;
+	private ProfileType profile;
 	private String emotion;
 	private Integer targetUserRoomId;
 	private String targetNickname;

@@ -96,7 +96,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
 		//DB에 저장되어 있는지 확인
 		Boolean isExist = refreshRepository.existsByRefreshToken(refresh);
-		System.out.println("isExist : " + isExist.toString());
 
 		if (!isExist) {
 			log.info("No Refresh Token in DB");

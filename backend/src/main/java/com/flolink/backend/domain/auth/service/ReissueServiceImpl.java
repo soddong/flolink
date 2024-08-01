@@ -1,4 +1,4 @@
-package com.flolink.backend.domain.user.service;
+package com.flolink.backend.domain.auth.service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -72,7 +72,6 @@ public class ReissueServiceImpl implements ReissueService {
 
 		// DB에 저장되어 있는지 확인
 		Boolean isExist = refreshRepository.existsByRefreshToken(refresh);
-		System.out.println("isExist : " + isExist.toString());
 
 		if (!isExist) {
 			//response body
@@ -95,7 +94,7 @@ public class ReissueServiceImpl implements ReissueService {
 		refreshRepository.save(refreshToken);
 
 		//response
-		response.setHeader("access", newAccess);
+		response.addHeader("Authorization", "Bearer " + newAccess);
 		response.addCookie(jwtUtil.createCookies("refresh", newRefresh));
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.flolink.backend.domain.auth.service.ReissueService;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.global.common.ResponseCode;
@@ -24,33 +25,35 @@ import lombok.RequiredArgsConstructor;
 public class JwtFilter extends OncePerRequestFilter {
 
 	private final JwtUtil jwtUtil;
+	private final ReissueService reissueService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 		// 헤더에서 access키에 담긴 토큰을 꺼냄
-		String accessToken = request.getHeader("access");
+		String accessToken = request.getHeader("Authorization");
 
 		// 토큰이 없다면 다음 필터로 넘김
 		if (accessToken == null) {
-
 			filterChain.doFilter(request, response);
-
 			return;
 		}
 
-		// 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
+		// Bearer 일 경구 prefix
+		if (accessToken.startsWith("Bearer ")) {
+			accessToken = accessToken.substring(7);
+		}
+
+		// 토큰 만료 여부 확인, 만료시 재발급(reissue)
 		try {
 			jwtUtil.isExpired(accessToken);
 		} catch (ExpiredJwtException e) {
+			reissueService.reissue(request, response);
+			accessToken = response.getHeader("Authorization");
 
-			//response body
-			PrintWriter writer = response.getWriter();
-			writer.print("access token expired");
-
-			//response status code
-			response.setStatus(ResponseCode.UNAUTHORIZED_TOKEN.getStatus());
-			return;
+			if (accessToken.startsWith("Bearer ")) {
+				accessToken = accessToken.substring(7);
+			}
 		}
 
 		// 토큰이 access인지 확인 (발급시 페이로드에 명시)

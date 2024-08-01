@@ -17,6 +17,7 @@ import com.flolink.backend.domain.user.dto.request.UpdatePasswordRequest;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 import com.flolink.backend.domain.user.entity.User;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.domain.user.util.LoginIdEditor;
 import com.flolink.backend.global.common.ResponseCode;
@@ -93,7 +94,7 @@ public class UserServiceImpl implements UserService {
 			.point(BigDecimal.ZERO)
 			.createdAt(LocalDateTime.now())
 			.useYn(true)
-			.profile("profile_dummy")
+			.role(RoleType.LOCAL)
 			.build();
 
 		userRepository.save(user);
