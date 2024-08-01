@@ -4,7 +4,7 @@ const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment }) => {
   const [showAllComments, setShowAllComments] = useState(false);
 
   return (
-    <div className="border border-gray-300 p-4 rounded-lg shadow-md mb-4">
+    <div className="p-4 rounded-lg mb-4">
       <img src={feed.image} alt="Feed" className="w-full h-auto rounded-md" />
       <div className="mt-4">
         <p>{feed.content}</p>
