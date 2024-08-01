@@ -68,7 +68,7 @@ public class FeedController {
 	@PatchMapping("/{feedId}")
 	@Operation(summary = "피드 수정하기")
 	public ResponseEntity<?> updateFeed(@PathVariable final Integer feedId,
-		@RequestBody final FeedUpdateRequest feedUpdateRequest) {
+		@ModelAttribute final FeedUpdateRequest feedUpdateRequest) {
 		log.info("===피드 수정 START===");
 		Integer userId = 1;
 		FeedResponse feedResponse = feedService.updateFeed(userId, feedId, feedUpdateRequest);

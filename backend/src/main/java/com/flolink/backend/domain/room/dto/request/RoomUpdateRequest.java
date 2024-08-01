@@ -14,12 +14,13 @@ public class RoomUpdateRequest {
 	private Integer roomId;
 	private String roomName;
 	private String roomParticipatePassword;
+	private String notice;
 
 	public Room toEntity() {
 		return Room.builder()
 			.roomId(roomId)
 			.roomName(roomName)
 			.roomParticipatePassword(roomParticipatePassword)
-			.build();
+			.notice(notice).build();
 	}
 }

@@ -12,6 +12,8 @@ public interface RoomService {
 
 	List<RoomSummarizeResponse> getAllRooms(final Integer userId);
 
+	RoomSummarizeResponse getRoomById(final Integer roomId);
+
 	RoomSummarizeResponse createRoom(final Integer userId, final RoomCreateRequest roomCreateRequest);
 
 	RoomSummarizeResponse registerRoom(final Integer userId, final RoomParticipateRequest roomParticipateRequest);
