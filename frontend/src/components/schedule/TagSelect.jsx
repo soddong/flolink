@@ -65,6 +65,7 @@ function TagSelect (props) {
   }, [iconValue]);
 
   useEffect(() => {
+    console.log(props)
     props.handleIconChange(iconValue);
     props.handleInputTagChange(tagValue);
     props.handleColorChange(colorValue);

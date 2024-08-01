@@ -9,7 +9,9 @@ function CreateScheduleModal (props) {
   const [inputContentValue, setInputContentValue] = useState('');
   const [inputCalendar, setInputCalendar] = useState(false)
   const [date, setDate] = useState(props.date)
-  const [tag, setTag] = useState('cake')
+  const [tag, setTag] = useState('생일')
+  const [icon, setIcon] = useState('cake')
+  const [color, setColor] = useState('#E37C91')
 
   const nowDate = moment(date).format('YYYY-MM-DD')
 
@@ -27,11 +29,16 @@ function CreateScheduleModal (props) {
     }
   }
 
-  function handleInputTagChange (event) {
-    setTag(event.target.value)
-    if (event.target.value.length > 10) {
-      window.alert('10자까지 입력 가능합니다.')
-    }
+  function handleInputTagChange (data) {
+    setTag(data)
+  }
+
+  function handleIconChange(data) {
+    setIcon(data)
+  }
+
+  function handleColorChange(data) {
+    setColor(data)
   }
 
   function submitSuccess (event) {
@@ -71,7 +78,7 @@ function CreateScheduleModal (props) {
             <span className="material-symbols-outlined mt-2 mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
               sell
             </span>
-            <TagSelect value={tag} handleInputTagChange={handleInputTagChange}/>
+            <TagSelect value={tag} handleInputTagChange={handleInputTagChange} handleIconChange={handleIconChange} handleColorChange={handleColorChange}/>
           </p>
           <div className="flex items-center text-base my-2 text-gray-600">
             <span className="material-symbols-outlined mr-2" 
