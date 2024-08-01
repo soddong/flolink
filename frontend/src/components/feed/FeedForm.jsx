@@ -27,7 +27,6 @@ const FeedForm = () => {
       <div className="flex items-center mb-4">
         <label className="cursor-pointer flex items-center">
             <span className="text-gray-500 text-sm mr-2">+image</span>
-            {/* <span className="text-gray-500 text-sm leading-none">사진추가</span> */}
             <input
                 type="file" 
                 className="hidden"
@@ -40,7 +39,6 @@ const FeedForm = () => {
       <textarea
         ref={textareaRef}
         className="w-full p-2 rounded-md bg-transparent"
-        // className="w-full p-2 border border-black rounded-md bg-transparent"
         rows="4"
         value={content}
         onChange={(e) => setContent(e.target.value)}

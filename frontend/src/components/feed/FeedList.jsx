@@ -1,38 +1,47 @@
-// import React from 'react';
-// import FeedItem from './FeedItem';
-
-// const FeedList = ({ feeds }) => {
-//   return (
-//     <div className="mt-4">
-//       {feeds.length > 0 ? (
-//         feeds.map((feed, index) => <FeedItem key={index} feed={feed} />)
-//       ) : (
-//         <div className="text-center text-gray-600">피드가 없습니다</div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default FeedList;
-
-// src/components/FeedList.js
-
-
 import React, { useState } from 'react';
 import FeedItem from './FeedItem';
 
-const FeedList = ({ feeds }) => {
+const FeedList = ({ feeds, currentUser }) => {
   const [feedList, setFeedList] = useState(feeds);
 
-  const handleDelete = (id) => {
+  const handleDeleteFeed = (id) => {
     setFeedList(feedList.filter(feed => feed.id !== id));
+  };
+
+  const handleEditComment = (feedIndex, commentIndex) => {
+    const newContent = prompt('새로운 댓글 내용을 입력하세요:', feedList[feedIndex].comments[commentIndex].content);
+    if (newContent) {
+      const updatedFeedList = [...feedList];
+      updatedFeedList[feedIndex].comments[commentIndex].content = newContent;
+      setFeedList(updatedFeedList);
+    }
+  };
+
+  const handleDeleteComment = (feedIndex, commentIndex) => {
+    const updatedFeedList = feedList.map((feed, fIndex) => {
+      if (fIndex === feedIndex) {
+        return {
+          ...feed,
+          comments: feed.comments.filter((_, cIndex) => cIndex !== commentIndex)
+        };
+      }
+      return feed;
+    });
+    setFeedList(updatedFeedList);
   };
 
   return (
     <div className="mt-4">
       {feedList.length > 0 ? (
         feedList.map((feed, index) => (
-          <FeedItem key={index} feed={feed} onDelete={handleDelete} />
+          <FeedItem
+            key={index}
+            feed={feed}
+            onDelete={() => handleDeleteFeed(feed.id)}
+            currentUser={currentUser}
+            onEditComment={handleEditComment}
+            onDeleteComment={handleDeleteComment}
+          />
         ))
       ) : (
         <div className="text-center text-gray-600">
