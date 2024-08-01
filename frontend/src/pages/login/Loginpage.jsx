@@ -1,11 +1,14 @@
 import React from 'react';
 import { Button, TextField, Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo/logo.png'
 import kakaoLogo from '../../assets/login/kakao.png'; 
 import googleLogo from '../../assets/login/google.png'; 
 import LoginPageStyle from '../../css/login/Loginpage.module.css';
 
 function LoginPage() {
+  const navigate = useNavigate();
+  
   return (
     <div className={LoginPageStyle.root}>
       <img src={logo} alt="FLORINK" className={LoginPageStyle.logo} />
@@ -22,9 +25,9 @@ function LoginPage() {
       />
       <Button className={LoginPageStyle.customButton} variant="contained">로그인</Button>
       <Box className={LoginPageStyle.linksContainer}>
-        <Button className={LoginPageStyle.linkButton}>아이디 찾기</Button>
-        <Button className={LoginPageStyle.linkButton}>비밀번호 찾기</Button>
-        <Button className={LoginPageStyle.linkButton}>회원가입</Button>
+        <Button className={LoginPageStyle.linkButton} onClick={()=>navigate('/FindAccount')}>아이디 찾기</Button>
+        <Button className={LoginPageStyle.linkButton} onClick={()=>navigate('/FindAccount')}>비밀번호 찾기</Button>
+        <Button className={LoginPageStyle.linkButton} onClick={()=>navigate('/signup')}>회원가입</Button>
       </Box>
 
       <hr className={LoginPageStyle.divider} />

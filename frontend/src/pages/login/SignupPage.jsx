@@ -64,6 +64,7 @@ import logo from '../../assets/logo/logo.png';
 import Button from '../../components/signup/Button';
 import TextField from '../../components/signup/TextField';
 import ToastModal from '../../components/signup/ToastModal';
+import { useNavigate } from 'react-router-dom';
 
 function SignupPage() {
   const [selectedTelecom, setSelectedTelecom] = useState('SKT');
@@ -78,9 +79,11 @@ function SignupPage() {
     setIsModalOpen(false);
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-md mx-auto h-screen bg-white p-5 relative">
-      <button className="absolute top-2 right-2 text-2xl">&times;</button>
+      <button className="absolute top-2 right-2 text-2xl" onClick={() => navigate('/login')}>&times;</button>
       <img src={logo} alt="FLORINK" className="block mx-auto mb-5 w-24 h-auto" />
       <h2 className="text-center text-lg font-bold mb-5">회원가입</h2>
       <form className="flex flex-col gap-3">

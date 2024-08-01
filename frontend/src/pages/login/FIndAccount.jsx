@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import FindAccountStyle from '../../css/login/FindAccount.module.css';
 import logo from '../../assets/logo/logo.png';
+import { useNavigate } from 'react-router-dom';
 
 function FindAccount() {
   const [activeTab, setActiveTab] = useState('findId');
+  const navigate = useNavigate();
 
   return (
     <div className={FindAccountStyle.container}>
-      <button className={FindAccountStyle.closeButton}>&times;</button>
+      <button className={FindAccountStyle.closeButton} onClick={() => navigate(-1)}>&times;</button>
       <img src={logo} alt="FLORINK" className={FindAccountStyle.logo} />
       <div className={FindAccountStyle.tabs}>
         <div 
@@ -30,7 +32,8 @@ function FindAccount() {
           <TextField label="이름" variant="outlined" fullWidth className={FindAccountStyle.input} />
           <TextField label="휴대 전화번호 입력 ('-' 제외)" variant="outlined" fullWidth className={FindAccountStyle.input} />
           <Button variant="outlined" className={FindAccountStyle.button}>인증번호 전송</Button>
-          <TextField label="인증번호 입력" variant="outlined" fullWidth className={FindAccountStyle.input} />
+          <TextField label="인증번호 6자리를 입력해주세요" variant="outlined" fullWidth className={FindAccountStyle.input} />
+          <Button variant="outlined" className={FindAccountStyle.button}>확인</Button>
           <Button variant="contained" className={FindAccountStyle.submitButton}>아이디 찾기</Button>
         </div>
       )}
