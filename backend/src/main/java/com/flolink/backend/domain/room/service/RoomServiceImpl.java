@@ -48,6 +48,11 @@ public class RoomServiceImpl implements RoomService {
 			.toList();
 	}
 
+	public RoomSummarizeResponse getRoomById(final Integer roomId) {
+		Room room = findRoomById(roomId);
+		return RoomSummarizeResponse.fromEntity(room);
+	}
+
 	@Override
 	@Transactional
 	public RoomSummarizeResponse createRoom(final Integer userId, final RoomCreateRequest roomCreateRequest) {

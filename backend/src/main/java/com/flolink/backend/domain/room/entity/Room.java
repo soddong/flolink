@@ -51,6 +51,9 @@ public class Room {
 	@Column(name = "room_participate_password", nullable = false)
 	private String roomParticipatePassword;
 
+	@Column(name = "notice", length = 255)
+	private String notice;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
 	List<UserRoom> userRoomList;
 
@@ -65,5 +68,6 @@ public class Room {
 	public void updateRoomInfo(final RoomUpdateRequest roomUpdateRequest) {
 		this.roomName = roomUpdateRequest.getRoomName();
 		this.roomParticipatePassword = roomUpdateRequest.getRoomParticipatePassword();
+		this.notice = roomUpdateRequest.getNotice();
 	}
 }

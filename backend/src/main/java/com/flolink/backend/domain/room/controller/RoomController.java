@@ -87,6 +87,7 @@ public class RoomController {
 		Integer userId = 1;
 		roomService.enterRoom(userId, roomId);
 		RoomDetailResponse roomDetailResponse = RoomDetailResponse.of(
+			roomService.getRoomById(roomId),
 			roomService.getRoomMemberInfos(userId, roomId),
 			plantService.getPlantInfo(roomId)
 		);

@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomDetailResponse {
-	
+	private RoomSummarizeResponse roomSummarizeResponse;
 	private List<RoomMemberInfoResponse> memberInfoResponses;
 	private PlantResponse plantResponse;
 
@@ -25,5 +25,14 @@ public class RoomDetailResponse {
 			.memberInfoResponses(memberInfoResponses)
 			.plantResponse(plantResponse)
 			.build();
+	}
+
+	public static RoomDetailResponse of(RoomSummarizeResponse roomSummarizeResponse,
+		List<RoomMemberInfoResponse> memberInfoResponses, PlantResponse plantResponse) {
+		return RoomDetailResponse.builder()
+			.memberInfoResponses(memberInfoResponses)
+			.roomSummarizeResponse(roomSummarizeResponse)
+			.plantResponse(plantResponse).build();
+
 	}
 }
