@@ -13,8 +13,8 @@ public class RoomSummarizeResponse {
 	private Integer roomId;
 	private String roomName;
 	private Integer userCount;
-	private String roomParticipateCode;
 	private String roomParticipatePassword;
+	private String notice;
 
 	public static RoomSummarizeResponse fromEntity(Room room) {
 		return RoomSummarizeResponse.builder()
@@ -22,6 +22,7 @@ public class RoomSummarizeResponse {
 			.roomName(room.getRoomName())
 			.userCount(room.getUserRoomList() == null ? 1 : room.getUserRoomList().size())
 			.roomParticipatePassword(room.getRoomParticipatePassword())
+			.notice(room.getNotice() == null ? "" : room.getNotice())
 			.build();
 	}
 }
