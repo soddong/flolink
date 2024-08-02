@@ -2,8 +2,12 @@ package com.flolink.backend.domain.plant.entity;
 
 import static jakarta.persistence.GenerationType.*;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -28,14 +32,18 @@ public class PlantExpHistory {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	private Integer plantExpHistory;
+	private Integer plantHistoryId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "plant_id", nullable = false)
 	private Plant plant;
 
+	@Column(name = "plant_status", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private PlantStatus plantStatus;
+
 	@Column(name = "date_month", nullable = false)
-	private String dateMonth;
+	private LocalDate dateMonth;
 
 	@Column(name = "totalExp", nullable = false)
 	private Integer totalExp;

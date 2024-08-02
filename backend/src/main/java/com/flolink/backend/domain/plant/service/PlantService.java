@@ -12,5 +12,5 @@ public interface PlantService {
 	void updateExp(UserRoom userRoom, ActivityType type);
 
 	PlantResponse getPlantInfo(Integer roomId);
-
+	
 }
