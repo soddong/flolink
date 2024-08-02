@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+
 import Fence from '../../assets/garden/fence.png'
 import YearPanel from '../../assets/garden/panel_year.png'
 import Flower from './Flower'
@@ -13,6 +15,9 @@ import Fall3 from '../../assets/garden/fall3.png'
 import Winter1 from '../../assets/garden/winter1.png'
 import Winter2 from '../../assets/garden/winter2.png'
 import Winter3 from '../../assets/garden/winter3.png'
+import Level1 from '../../assets/garden/level_1.png'
+import Level2 from '../../assets/garden/level_2.png'
+import Level3 from '../../assets/garden/level_3.png'
 
 const months = [
   {id: 1, name: '1월', image: Winter2},
@@ -29,7 +34,12 @@ const months = [
   {id: 12, name: '12월', image: Winter1},
 ]
 
-function Garden ({year}) {
+function Garden ({year, flowers}) {
+  useEffect(() => {
+    flowers.map((flower) => (
+      flower
+    ))
+  })
   return (
     <div className="w-full flex justify-center items-center relative h-2/3" >
       <div className="w-3/4 h-1/6 absolute top-0 bg-repeat-round flex items-center justify-center z-10" 
