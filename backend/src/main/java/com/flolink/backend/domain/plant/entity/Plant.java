@@ -76,15 +76,14 @@ public class Plant {
 	}
 
 	public void increaseExp(int exp, int n) {
+		// 성장 완료
 		if (totalExp + exp >= GlobalConstant.TOTAL_EXP_MAX * n) {
 			this.plantStatus = PlantStatus.COMPLETED;
-			// throw new BadRequestException(ResponseCode.PLANT_ALREADY_COMPLETED);
-
 			return;
 		}
 
+		// 하루 최대경험치 초과
 		if (todayExp + exp >= GlobalConstant.TODAY_EXP_BASE_LIMIT * n) {
-			// throw new BadRequestException(ResponseCode.DAILY_LIMIT_EXCEEDED);
 			return;
 		}
 
