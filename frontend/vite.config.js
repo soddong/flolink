@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react-swc'
 import { VitePWA } from "vite-plugin-pwa"
 
 const manifestForPlugIn = {
+  strategies: 'injectManifest',
+  srcDir: 'src',
+  filename: 'sw.js',
   registerType:'autoUpdate',
   includeAssests:['favicon.ico', "apple-touc-icon.png", "masked-icon.svg"],
   manifest:{
