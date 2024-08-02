@@ -26,7 +26,7 @@ public enum ResponseCode {
 	// Plant
 	PLANT_NOT_FOUND(404, "Plant not found", "NOT_FOUND_ERROR"),
 	DAILY_LIMIT_EXCEEDED(400, "Daily limit exceed", "BAD_REQUEST_ERROR"),
-	RANK_NOT_FOUND(404, "Rank not found", "NOT_FOUND_ERROR"),
+	USER_EXP_NOT_FOUND(404, "User exp not found", "NOT_FOUND_ERROR"),
 	PLANT_ALREADY_COMPLETED(400, "Plant already completed", "BAD_REQUEST_ERROR"),
 
 	//Auth

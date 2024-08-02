@@ -1,9 +1,8 @@
 package com.flolink.backend.domain.plant.entity;
 
-import com.flolink.backend.domain.room.entity.UserRoom;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,37 +22,29 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "monthly_rank")
-public class MonthlyRank {
+@Table(name = "user_exp")
+public class UserExp {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "rank_id")
-	private Integer rankId;
+	@Column(name = "exp_id")
+	private Integer expId;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "plant_id", nullable = false)
 	private Plant plant;
 
-	@ManyToOne
-	@JoinColumn(name = "user_room_id", nullable = false)
-	private UserRoom userRoom;
+	@Column(name = "user_id", nullable = false)
+	private Integer userId;
 
 	@Column(name = "conribute_exp", nullable = false)
 	private Integer contributeExp;
 
-	@Column(name = "exp_rank")
-	private Integer rank;
-
-	@Column(name = "use_yn", nullable = false)
-	private Boolean useYn;
-
-	public static MonthlyRank of(UserRoom userRoom, Plant plant) {
-		return MonthlyRank.builder()
+	public static UserExp of(Integer userId, Plant plant) {
+		return UserExp.builder()
 			.plant(plant)
-			.userRoom(userRoom)
+			.userId(userId)
 			.contributeExp(0)
-			.useYn(true)
 			.build();
 	}
 
