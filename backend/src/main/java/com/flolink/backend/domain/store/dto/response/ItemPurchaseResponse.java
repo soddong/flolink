@@ -3,7 +3,7 @@ package com.flolink.backend.domain.store.dto.response;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.flolink.backend.domain.store.entity.ItemPurchase;
+import com.flolink.backend.domain.store.entity.ItemPurchaseHistory;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,12 +19,12 @@ public class ItemPurchaseResponse {
 	private LocalDateTime transactionAt;
 
 	// 엔티티 -> DTO
-	public static ItemPurchaseResponse fromEntity(ItemPurchase itemPurchase) {
+	public static ItemPurchaseResponse fromEntity(ItemPurchaseHistory itemPurchaseHistory) {
 		return ItemPurchaseResponse.builder()
-			.itemId(itemPurchase.getItem().getItemId())
-			.itemName(itemPurchase.getItem().getItemName())
-			.itemAmount(itemPurchase.getItem().getPrice())
-			.transactionAt(itemPurchase.getPurchaseAt())
+			.itemId(itemPurchaseHistory.getItem().getItemId())
+			.itemName(itemPurchaseHistory.getItem().getItemName())
+			.itemAmount(itemPurchaseHistory.getItem().getPrice())
+			.transactionAt(itemPurchaseHistory.getPurchaseAt())
 			.build();
 	}
 }

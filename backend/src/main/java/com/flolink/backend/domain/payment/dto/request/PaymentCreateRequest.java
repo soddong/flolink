@@ -7,6 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PaymentRequest {
+public class PaymentCreateRequest {
 	private BigDecimal amount;
 }

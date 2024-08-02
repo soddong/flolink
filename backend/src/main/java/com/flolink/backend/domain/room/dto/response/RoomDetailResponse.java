@@ -2,7 +2,7 @@ package com.flolink.backend.domain.room.dto.response;
 
 import java.util.List;
 
-import com.flolink.backend.domain.plant.dto.response.PlantResponse;
+import com.flolink.backend.domain.plant.dto.response.PlantSummaryResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,21 +18,22 @@ import lombok.Setter;
 public class RoomDetailResponse {
 	private RoomSummarizeResponse roomSummarizeResponse;
 	private List<RoomMemberInfoResponse> memberInfoResponses;
-	private PlantResponse plantResponse;
+	private PlantSummaryResponse plantSummaryResponse;
 
-	public static RoomDetailResponse of(List<RoomMemberInfoResponse> memberInfoResponses, PlantResponse plantResponse) {
+	public static RoomDetailResponse of(List<RoomMemberInfoResponse> memberInfoResponses,
+		PlantSummaryResponse plantSummaryResponse) {
 		return RoomDetailResponse.builder()
 			.memberInfoResponses(memberInfoResponses)
-			.plantResponse(plantResponse)
+			.plantSummaryResponse(plantSummaryResponse)
 			.build();
 	}
 
 	public static RoomDetailResponse of(RoomSummarizeResponse roomSummarizeResponse,
-		List<RoomMemberInfoResponse> memberInfoResponses, PlantResponse plantResponse) {
+		List<RoomMemberInfoResponse> memberInfoResponses, PlantSummaryResponse plantSummaryResponse) {
 		return RoomDetailResponse.builder()
 			.memberInfoResponses(memberInfoResponses)
 			.roomSummarizeResponse(roomSummarizeResponse)
-			.plantResponse(plantResponse).build();
+			.plantSummaryResponse(plantSummaryResponse).build();
 
 	}
 }

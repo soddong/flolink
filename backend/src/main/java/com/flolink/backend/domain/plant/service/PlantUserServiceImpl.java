@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.feed.dto.response.FeedImageResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantHistoryDetailResponse;
-import com.flolink.backend.domain.plant.dto.response.UserExpHistoryResponse;
+import com.flolink.backend.domain.plant.dto.response.PlantUserHistoryResponse;
 import com.flolink.backend.domain.plant.entity.PlantExpHistory;
 import com.flolink.backend.domain.plant.repository.PlantHistoryRepository;
 import com.flolink.backend.domain.plant.repository.UserExpHistoryRepository;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserExpServiceImpl {
+public class PlantUserServiceImpl {
 
 	private final UserExpHistoryRepository userExpHistoryRepository;
 	private final PlantHistoryRepository plantHistoryRepository;
@@ -40,7 +40,7 @@ public class UserExpServiceImpl {
 		PlantExpHistory plantExpHistory = loadPlantExpHistory(historyId);
 		String dateMonth = formatDateMonth(plantExpHistory);
 
-		List<UserExpHistoryResponse> userExpHistories = loadUserExpHistories(plantId, dateMonth);
+		List<PlantUserHistoryResponse> userExpHistories = loadUserExpHistories(plantId, dateMonth);
 
 		return PlantHistoryDetailResponse.fromEntity(feedImageResponses, userExpHistories);
 	}
@@ -60,18 +60,18 @@ public class UserExpServiceImpl {
 		return plantHistoryRepository.findById(historyId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_HISTORY_NOT_FOUND));
 	}
-	
+
 	private String formatDateMonth(PlantExpHistory plantExpHistory) {
 		return plantExpHistory.getDateMonth()
 			.format(DateTimeFormatter.ofPattern("yyyy-MM"));
 	}
 
-	private List<UserExpHistoryResponse> loadUserExpHistories(Integer plantId, String dateMonth) {
+	private List<PlantUserHistoryResponse> loadUserExpHistories(Integer plantId, String dateMonth) {
 		return userExpHistoryRepository.findByPlantIdAndDateMonth(plantId, dateMonth)
 			.stream()
 			.map(userExpHistory -> {
 				String nickname = loadUserNickname(userExpHistory.getUserId());
-				return UserExpHistoryResponse.fromEntity(userExpHistory, nickname);
+				return PlantUserHistoryResponse.fromEntity(userExpHistory, nickname);
 			})
 			.toList();
 	}
