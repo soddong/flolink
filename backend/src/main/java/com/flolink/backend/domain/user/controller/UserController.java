@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
 import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
 import com.flolink.backend.domain.user.dto.request.NicknameRequest;
-import com.flolink.backend.domain.user.dto.request.UpdatePasswordCheckRequest;
-import com.flolink.backend.domain.user.dto.request.UpdatePasswordRequest;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
@@ -64,20 +65,33 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, myId));
 	}
 
-	@Operation(summary = "비밀번호찾기 본인 확인", description = "비밀번호 찾기에서 휴대폰인증을 통해 본인임을 통과받는다.")
-	@PostMapping("/find/pw")
-	public ResponseEntity<?> findPasswordCheck(@RequestBody UpdatePasswordCheckRequest updatePasswordCheckRequest) {
+	@Operation(summary = "비밀번호찾기 본인 확인_비밀번호 분실", description = "비밀번호 찾기에서 휴대폰인증을 통해 본인임을 통과받는다.")
+	@PostMapping("/forgot/find/pw")
+	public ResponseEntity<?> forgotPasswordAuth(@RequestBody ForgotPasswordAuthRequest forgotPasswordAuthRequest) {
 		log.info("===비밀번호 찾기 본인확인 START===");
-		userService.updateMyPasswordCheck(updatePasswordCheckRequest);
+		userService.forgotPasswordAuth(forgotPasswordAuthRequest);
 		log.info("===비밀번호 찾기 본인확인 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 
-	@Operation(summary = "비밀번호 변경", description = "위에서 통과 후 발급받은 토큰을 들고 여기에 함께 들고온다.")
+	@Operation(summary = "비밀번호 변경_비밀번호 분실", description = "위에서 통과 후 발급받은 토큰을 들고 여기에 함께 들고온다.")
+	@PutMapping("/forgot/reset/pw")
+	public ResponseEntity<?> forgotPasswordChange(
+		@RequestBody ForgotPasswordChangeRequest forgotPasswordChangeRequest, Authentication authentication) {
+		log.info("===비밀번호 수정(비밀번호 분실) START===");
+		userService.forgotPasswordChange(forgotPasswordChangeRequest);
+		log.info("===비밀번호 수정(비밀번호 분실) END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
+
+	@Operation(summary = "비밀번호 변경", description = "로그인한 인원의 비밀번호 변경, OAuth 로그인 유저 사용불가")
 	@PutMapping("/reset/pw")
-	public ResponseEntity<?> findPassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+	public ResponseEntity<?> changePassword(
+		/*1*/ @RequestBody ChangePasswordRequest changePasswordRequest,
+		/*2*/ Authentication authentication) {
+		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
 		log.info("===비밀번호 수정 START===");
-		userService.updateMyPassword(updatePasswordRequest);
+		userService.passwordChange(changePasswordRequest, customUserDetails.getUserId());
 		log.info("===비밀번호 수정 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}

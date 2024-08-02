@@ -7,6 +7,8 @@ import lombok.Data;
 @Builder
 public class UserDTO {
 	private String loginId;
-	private String name;
+	private int myRoomId;
+	private String username;
+	private String role;
 
 }

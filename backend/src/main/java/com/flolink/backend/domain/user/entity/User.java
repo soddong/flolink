@@ -61,14 +61,18 @@ public class User {
 	@Column(name = "point", nullable = false, length = 21)
 	private BigDecimal point;
 
+	@Builder.Default
 	@Column(name = "create_at", nullable = false, updatable = false)
-	private LocalDateTime createdAt;
+	private LocalDateTime createdAt = LocalDateTime.now();
 
+	@Builder.Default
 	@Column(name = "use_yn", nullable = false)
-	private boolean useYn;
+	private boolean useYn = true;
 
+	@Builder.Default
 	@Column(name = "role", nullable = false)
-	private RoleType role;
+	@Enumerated(EnumType.STRING)
+	private RoleType role = RoleType.LOCAL;
 
 	@Builder.Default
 	@Column(name = "profile", nullable = false)

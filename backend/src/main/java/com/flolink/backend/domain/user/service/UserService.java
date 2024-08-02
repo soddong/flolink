@@ -1,9 +1,10 @@
 package com.flolink.backend.domain.user.service;
 
+import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
 import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
-import com.flolink.backend.domain.user.dto.request.UpdatePasswordCheckRequest;
-import com.flolink.backend.domain.user.dto.request.UpdatePasswordRequest;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 
@@ -15,9 +16,11 @@ public interface UserService {
 
 	FindUserIdResponse findMyId(FindUserIdRequest findUserIdRequest);
 
-	void updateMyPasswordCheck(UpdatePasswordCheckRequest UpdatePasswordCheckRequest);
+	void forgotPasswordAuth(ForgotPasswordAuthRequest ForgotPasswordAuthRequest);
 
-	void updateMyPassword(UpdatePasswordRequest updatePasswordRequest);
+	void forgotPasswordChange(ForgotPasswordChangeRequest forgotPasswordChangeRequest);
+
+	void passwordChange(ChangePasswordRequest changePasswordRequest, int userId);
 
 	UserInfoResponse getUserInfo(int userId);
 
