@@ -11,7 +11,7 @@ import com.flolink.backend.domain.plant.entity.UserExp;
 
 public interface UserExpRepository extends JpaRepository<UserExp, Integer> {
 
-	@Query("SELECT u FROM UserExp u ORDER BY u.plant, u.contributeExp DESC")
+	@Query("SELECT u FROM UserExp u ORDER BY u.plant.plantId, u.contributeExp DESC")
 	List<UserExp> findAllGroupedByPlantOrderByContributeExpAsc();
 
 	Optional<UserExp> findByUserIdAndPlant(Integer userId, Plant plant);

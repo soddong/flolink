@@ -1,4 +1,4 @@
-package com.flolink.backend.batch;
+package com.flolink.backend.global.batch;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
