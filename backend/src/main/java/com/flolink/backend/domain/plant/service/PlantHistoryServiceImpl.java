@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.plant.dto.response.PlantHistoryResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantHistorySummaryResponse;
+import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.plant.entity.PlantExpHistory;
 import com.flolink.backend.domain.plant.entity.PlantStatus;
 import com.flolink.backend.domain.plant.repository.PlantHistoryRepository;
+import com.flolink.backend.domain.plant.repository.PlantRepository;
+import com.flolink.backend.global.common.ResponseCode;
+import com.flolink.backend.global.common.exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,20 +24,27 @@ public class PlantHistoryServiceImpl implements PlantHistoryService {
 
 	private final PlantHistoryRepository plantHistoryRepository;
 
+	private final PlantRepository plantRepository;
+
 	@Override
 	public PlantHistorySummaryResponse getPlantHistorys(Integer plantId, Integer year) {
+		Plant plant = plantRepository.findById(plantId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
 
-		List<PlantExpHistory> histories = plantHistoryRepository.findByPlantIdAndYear(plantId, year);
+		int memberSize = plant.getRoom().getUserRoomList().size();
 
+		// 히스토리 리스트
+		List<PlantExpHistory> histories = plantHistoryRepository.findByPlantIdAndYear(plant, year);
+
+		// 각 히스토리 맵핑
 		List<PlantHistoryResponse> historyResponses = histories.stream()
-			.map(PlantHistoryResponse::fromEntity)
+			.map(response -> PlantHistoryResponse.fromEntity(response, memberSize))
 			.toList();
 
+		// 성취 카운트 계산
 		long achievementCount = histories.stream()
 			.filter(history -> history.getPlantStatus().equals(PlantStatus.COMPLETED))
 			.count();
-
-		System.out.println(achievementCount);
 
 		return PlantHistorySummaryResponse.fromEntity(historyResponses, achievementCount);
 

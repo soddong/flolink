@@ -1,6 +1,9 @@
 package com.flolink.backend.domain.plant.dto.response;
 
+import java.time.LocalDate;
+
 import com.flolink.backend.domain.plant.entity.PlantExpHistory;
+import com.flolink.backend.global.util.ExpUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,10 +18,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PlantHistoryResponse {
 	private Integer plantHistoryId;
+	private LocalDate dateMonth;
+	private Integer level;
 
-	public static PlantHistoryResponse fromEntity(PlantExpHistory plantExpHistory) {
+	public static PlantHistoryResponse fromEntity(PlantExpHistory plantExpHistory, int memberSize) {
 		return PlantHistoryResponse.builder()
 			.plantHistoryId(plantExpHistory.getPlantHistoryId())
+			.dateMonth(plantExpHistory.getDateMonth())
+			.level(ExpUtil.calculateLevel(plantExpHistory.getTotalExp(), memberSize))
 			.build();
 	}
 }
