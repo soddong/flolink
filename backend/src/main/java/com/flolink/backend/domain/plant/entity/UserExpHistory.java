@@ -1,11 +1,10 @@
 package com.flolink.backend.domain.plant.entity;
 
-import static jakarta.persistence.GenerationType.*;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,21 +22,28 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "plant_exp_history")
-public class PlantExpHistory {
+@Table(name = "user_exp_history")
+public class UserExpHistory {
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	private Integer plantExpHistory;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "rank_id")
+	private Integer rankId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "plant_id", nullable = false)
 	private Plant plant;
 
+	@Column(name = "user_id", nullable = false)
+	private Integer userId;
+
+	@Column(name = "contribute_exp", nullable = false)
+	private Integer contributeExp;
+
+	@Column(name = "monthly_rank", nullable = false)
+	private Integer monthlyRank;
+
 	@Column(name = "date_month", nullable = false)
 	private String dateMonth;
-
-	@Column(name = "totalExp", nullable = false)
-	private Integer totalExp;
-
+	
 }
