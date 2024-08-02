@@ -48,12 +48,13 @@ public class JwtFilter extends OncePerRequestFilter {
 		try {
 			jwtUtil.isExpired(accessToken);
 		} catch (ExpiredJwtException e) {
-			reissueService.reissue(request, response);
-			accessToken = response.getHeader("Authorization");
+			//response body
+			PrintWriter writer = response.getWriter();
+			writer.print("access token expired");
 
-			if (accessToken.startsWith("Bearer ")) {
-				accessToken = accessToken.substring(7);
-			}
+			//response status code
+			response.setStatus(ResponseCode.EXPIRED_TOKEN.getStatus());
+			return;
 		}
 
 		// 토큰이 access인지 확인 (발급시 페이로드에 명시)
@@ -81,7 +82,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 		CustomUserDetails customUserDetails = new CustomUserDetails(user);
 
-		Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null,
+		Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, accessToken,
 			customUserDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 

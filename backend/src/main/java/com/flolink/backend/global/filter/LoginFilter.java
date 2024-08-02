@@ -68,7 +68,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		Refresh refreshEntity = Refresh.builder()
 			.refreshToken(refresh)
 			.expiredAt(date.plusSeconds(refreshTokenValidityInSeconds))
-			// .expiredAt(LocalDateTime.now().plusDays(1))
 			.build();
 		refreshRepository.save(refreshEntity);
 

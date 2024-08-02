@@ -17,6 +17,7 @@ public enum ResponseCode {
 	USER_NOT_FOUND(404, "User not found", "NOT_FOUND_ERROR"),
 	UNREGISTERED_USER(401, "Unregistered User", "UNREGISTERED_USER"),
 	BLANK_NICKNAME(404, "Can't update blank nickname", "BLANK_NICKNAME"),
+	UNAUTHORIZED_USER(401, "Unauthorized_User", "UNAUTHORIZED_USER"),
 
 	// Room
 	USER_ROOM_NOT_FOUND(404, "UserRoom not found", "NOT_FOUND_ERROR"),
@@ -33,6 +34,7 @@ public enum ResponseCode {
 	NO_REFRESHTOKEN(401, "No Refresh Token", "NO_REFRESHTOKEN"),
 	INVALID_REFRESHTOKEN(401, "Invalid Refresh Token", "INVALID_REFRESHTOKEN"),
 	PASSWORD_INCONSISTENCY(401, "Password inconsistency", "PASSWORD_INCONSISTENCY"),
+	USER_INCONSISTENCY(401, "User inconsistency", "USER_INCONSISTENCY"),
 
 	// Purchase & Payment
 	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "BAD_REQUEST_ERROR"),

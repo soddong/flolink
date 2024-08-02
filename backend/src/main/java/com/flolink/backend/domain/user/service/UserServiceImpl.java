@@ -1,5 +1,7 @@
 package com.flolink.backend.domain.user.service;
 
+import static com.flolink.backend.domain.user.entity.enumtype.RoleType.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -10,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flolink.backend.domain.auth.entity.SuccessToken;
 import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
+import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
 import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
-import com.flolink.backend.domain.user.dto.request.UpdatePasswordCheckRequest;
-import com.flolink.backend.domain.user.dto.request.UpdatePasswordRequest;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 import com.flolink.backend.domain.user.entity.User;
-import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.domain.user.util.LoginIdEditor;
 import com.flolink.backend.global.common.ResponseCode;
@@ -94,7 +96,7 @@ public class UserServiceImpl implements UserService {
 			.point(BigDecimal.ZERO)
 			.createdAt(LocalDateTime.now())
 			.useYn(true)
-			.role(RoleType.LOCAL)
+			.role(LOCAL)
 			.build();
 
 		userRepository.save(user);
@@ -156,16 +158,16 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 	비밀번호 변경 전 휴대전화 인증 토큰을 발급받기 위한 절차
-	 *  @param updatePasswordCheckRequest (loginId, username, tel, token(SuccessToken))
+	 *  @param forgotPasswordAuthRequest (loginId, username, tel, token(SuccessToken))
 	 */
 	@Override
 	@Transactional
-	public void updateMyPasswordCheck(UpdatePasswordCheckRequest updatePasswordCheckRequest) {
+	public void forgotPasswordAuth(ForgotPasswordAuthRequest forgotPasswordAuthRequest) {
 		// 입력 들어온 전화번호를 가지고 인증 객체 찾는다.
-		SuccessToken token = successTokenRepository.findByToken(updatePasswordCheckRequest.getToken())
+		SuccessToken token = successTokenRepository.findByToken(forgotPasswordAuthRequest.getToken())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 		// 입력 들어온 전화번호를 가지고 유저 객체를 찾는다.
-		User user = userRepository.findByTel(updatePasswordCheckRequest.getTel())
+		User user = userRepository.findByTel(forgotPasswordAuthRequest.getTel())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
 		// 해당 객체의 유효기간이 지났다면 timeoutException, 객체의 인증번호가 입력값과 다르다면 notfoundException
@@ -174,33 +176,34 @@ public class UserServiceImpl implements UserService {
 			LocalDateTime now = LocalDateTime.now();
 			if (now.isAfter(token.getExpiredAt())) {
 				throw new TimeOutException(ResponseCode.TIME_OUT_EXCEPTION);
-			} else if (!token.getToken().equals(updatePasswordCheckRequest.getToken())) {
+			} else if (!token.getToken().equals(forgotPasswordAuthRequest.getToken())) {
 				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-			} else if (!user.getLoginId().equals(updatePasswordCheckRequest.getLoginId())) {
+			} else if (!user.getLoginId().equals(forgotPasswordAuthRequest.getLoginId())) {
 				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-			} else if (!user.getUserName().equals(updatePasswordCheckRequest.getUserName())) {
+			} else if (!user.getUserName().equals(forgotPasswordAuthRequest.getUserName())) {
 				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
 			}
 		} catch (TimeOutException | NotFoundException e) {
-			successTokenRepository.deleteByToken(updatePasswordCheckRequest.getToken());
+			successTokenRepository.deleteByToken(forgotPasswordAuthRequest.getToken());
 		}
 	}
 
 	/**
 	 * 비밀번호 분실 시 비밀번호를 재발급한다.
-	 * @param updatePasswordRequest (아이디, 패스워드, 패스워드확인, 전화번호 인증 성공토큰(SuccessToken))
+	 * @param forgotPasswordChangeRequest (아이디, 패스워드, 패스워드확인, 전화번호 인증 성공토큰(SuccessToken))
 	 */
 	//비밀번호 변경
 	@Override
 	@Transactional
-	public void updateMyPassword(UpdatePasswordRequest updatePasswordRequest) {
-		User user = userRepository.findByLoginId(updatePasswordRequest.getLoginId())
+	public void forgotPasswordChange(ForgotPasswordChangeRequest forgotPasswordChangeRequest) {
+		User user = userRepository.findByLoginId(forgotPasswordChangeRequest.getLoginId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
-		SuccessToken successToken = successTokenRepository.findByToken(updatePasswordRequest.getToken())
+		SuccessToken successToken = successTokenRepository.findByToken(forgotPasswordChangeRequest.getToken())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
 		try {
-			if (!updatePasswordRequest.getNewPassword().equals(updatePasswordRequest.getNewPasswordConfirm())) {
+			if (!forgotPasswordChangeRequest.getNewPassword()
+				.equals(forgotPasswordChangeRequest.getNewPasswordConfirm())) {
 				throw new UnAuthorizedException(ResponseCode.PASSWORD_INCONSISTENCY);
 			} else if (!user.getTel().equals(successToken.getTel())) {
 				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
@@ -208,7 +211,24 @@ public class UserServiceImpl implements UserService {
 		} finally {
 			successTokenRepository.deleteById(successToken.getSuccessTokenId());
 		}
-		user.setPassword(bCryptPasswordEncoder.encode(updatePasswordRequest.getNewPassword()));
+		user.setPassword(bCryptPasswordEncoder.encode(forgotPasswordChangeRequest.getNewPassword()));
+	}
+
+	@Override
+	@Transactional
+	public void passwordChange(ChangePasswordRequest changePasswordRequest, int userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+
+		if (!user.getLoginId().equals(changePasswordRequest.getLoginId())) {
+			throw new NotFoundException(ResponseCode.USER_INCONSISTENCY);
+		} else if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getNewPasswordConfirm())) {
+			throw new UnAuthorizedException(ResponseCode.PASSWORD_INCONSISTENCY);
+		} else if (!user.getRole().equals(LOCAL)) {
+			throw new UnAuthorizedException(ResponseCode.UNAUTHORIZED_USER);
+		}
+
+		user.setPassword(bCryptPasswordEncoder.encode(changePasswordRequest.getNewPassword()));
 	}
 
 	/**
