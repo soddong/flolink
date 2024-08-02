@@ -40,7 +40,7 @@ function Garden ({year}) {
         </div>
       </div>
       <div className="w-3/4 h-5/6 rounded-lg pt-8 pb-4 px-2 grid grid-rows-4 grid-cols-3" 
-      style={{'backgroundColor': '#EBD4BF', 'filter': 'drop-shadow(0px 10px #D2AB86)'}}>
+      style={{'backgroundColor': '#EBD4BF', 'boxShadow': '0px 10px 0px 0px #D2AB86'}}>
         {months.map(month => {
           return (
           <Flower key={month.id} id={month.id} month={month.name} flower={month.image}/>)
