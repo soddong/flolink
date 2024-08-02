@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.flolink.backend.domain.payment.dto.PortOnePayment;
-import com.flolink.backend.domain.payment.dto.request.PaymentRequest;
+import com.flolink.backend.domain.payment.dto.request.PaymentCreateRequest;
 import com.flolink.backend.domain.user.entity.User;
 
 import jakarta.persistence.Column;
@@ -33,7 +33,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "payment_history")
-public class Payment {
+public class PaymentHistory {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,12 +72,12 @@ public class Payment {
 	@Column(name = "receipt_url")
 	private String receiptUrl;
 
-	public static Payment createPayment(User user, PaymentRequest paymentRequest) {
-		return Payment.builder()
+	public static PaymentHistory createPayment(User user, PaymentCreateRequest paymentCreateRequest) {
+		return PaymentHistory.builder()
 			.user(user)
 			.orderId(generateRandomUUID())
-			.orderName(paymentRequest.getAmount().toString() + " 포인트")
-			.amount(paymentRequest.getAmount())
+			.orderName(paymentCreateRequest.getAmount().toString() + " 포인트")
+			.amount(paymentCreateRequest.getAmount())
 			.state(PaymentState.PENDING)
 			.currency("KRW")
 			.build();

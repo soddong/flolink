@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
-import com.flolink.backend.domain.plant.dto.response.PlantResponse;
-import com.flolink.backend.domain.plant.entity.ActivityType;
+import com.flolink.backend.domain.plant.dto.response.PlantSummaryResponse;
+import com.flolink.backend.domain.plant.entity.ActivityPoint;
 import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.plant.entity.UserExp;
 import com.flolink.backend.domain.plant.repository.PlantRepository;
@@ -46,7 +46,7 @@ public class PlantServiceImpl implements PlantService {
 	 * @param type 활동 타입 (산책, 출석, 피드, 게시글)
 	 */
 	@Override
-	public void updateExp(UserRoom userRoom, ActivityType type) {
+	public void updateExp(UserRoom userRoom, ActivityPoint type) {
 		Plant plant = plantRepository.findByRoomRoomId(userRoom.getRoom().getRoomId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
 
@@ -68,10 +68,10 @@ public class PlantServiceImpl implements PlantService {
 	 * @return 식물 정보
 	 */
 	@Override
-	public PlantResponse getPlantInfo(Integer roomId) {
+	public PlantSummaryResponse getPlantInfo(Integer roomId) {
 		Plant plant = plantRepository.findByRoomRoomId(roomId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
-		return PlantResponse.fromEntity(plant);
+		return PlantSummaryResponse.fromEntity(plant);
 	}
 
 	/**

@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.myroom.entity.HasItem;
 import com.flolink.backend.domain.myroom.service.HasItemService;
+import com.flolink.backend.domain.store.dto.response.ItemCommonResponse;
 import com.flolink.backend.domain.store.dto.response.ItemPurchaseResponse;
-import com.flolink.backend.domain.store.dto.response.ItemResponse;
 import com.flolink.backend.domain.store.entity.Item;
-import com.flolink.backend.domain.store.entity.ItemPurchase;
+import com.flolink.backend.domain.store.entity.ItemPurchaseHistory;
 import com.flolink.backend.domain.store.repository.ItemPurchaseRepository;
 import com.flolink.backend.domain.store.repository.ItemRepository;
 import com.flolink.backend.domain.user.entity.User;
@@ -38,9 +38,9 @@ public class ItemServiceImpl implements ItemService {
 	 */
 	@Override
 	@Transactional
-	public ItemResponse saveItem(final Item item) {
+	public ItemCommonResponse saveItem(final Item item) {
 		Item savedItem = itemRepository.save(item);
-		return ItemResponse.fromEntity(savedItem);
+		return ItemCommonResponse.fromEntity(savedItem);
 	}
 
 	/**
@@ -61,10 +61,10 @@ public class ItemServiceImpl implements ItemService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<ItemResponse> getAllItems() {
+	public List<ItemCommonResponse> getAllItems() {
 		return itemRepository.findAll()
 			.stream()
-			.map(ItemResponse::fromEntity)
+			.map(ItemCommonResponse::fromEntity)
 			.toList();
 	}
 
@@ -75,10 +75,10 @@ public class ItemServiceImpl implements ItemService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public ItemResponse getItemById(final Integer itemId) {
+	public ItemCommonResponse getItemById(final Integer itemId) {
 		Item item = itemRepository.findById(itemId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.ITEM_NOT_FOUND));
-		return ItemResponse.fromEntity(item);
+		return ItemCommonResponse.fromEntity(item);
 	}
 
 	/**
@@ -101,10 +101,10 @@ public class ItemServiceImpl implements ItemService {
 		}
 
 		processUserPurchase(user, item);                                // 사용자 포인트 업데이트
-		ItemPurchase itemPurchase = savePurchaseHistory(user, item);    // 구매 내역 저장
+		ItemPurchaseHistory itemPurchaseHistory = savePurchaseHistory(user, item);    // 구매 내역 저장
 		HasItem hasItem = hasItemService.saveHasItem(user, item);       // 인벤토리 저장
 
-		return ItemPurchaseResponse.fromEntity(itemPurchase);
+		return ItemPurchaseResponse.fromEntity(itemPurchaseHistory);
 	}
 
 	/**
@@ -128,8 +128,8 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public ItemPurchase savePurchaseHistory(User user, Item item) {
-		return itemPurchaseRepository.save(ItemPurchase.of(user, item));
+	public ItemPurchaseHistory savePurchaseHistory(User user, Item item) {
+		return itemPurchaseRepository.save(ItemPurchaseHistory.of(user, item));
 	}
 
 }

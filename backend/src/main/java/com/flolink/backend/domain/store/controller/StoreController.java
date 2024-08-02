@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flolink.backend.domain.store.dto.response.ItemCommonResponse;
 import com.flolink.backend.domain.store.dto.response.ItemPurchaseResponse;
-import com.flolink.backend.domain.store.dto.response.ItemResponse;
 import com.flolink.backend.domain.store.service.ItemService;
 import com.flolink.backend.global.common.CommonResponse;
 
@@ -34,7 +34,7 @@ public class StoreController {
 	@Operation(summary = "상점내 아이템 전체 조회하기")
 	public ResponseEntity<CommonResponse> getAllItems() {
 		log.info("===아이템 전체 조회 START===");
-		List<ItemResponse> items = itemService.getAllItems();
+		List<ItemCommonResponse> items = itemService.getAllItems();
 		log.info("===아이템 전체 조회 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, items));
 	}
@@ -43,7 +43,7 @@ public class StoreController {
 	@Operation(summary = "상점내 아이템 상세 조회하기")
 	public ResponseEntity<CommonResponse> getItemById(@PathVariable final Integer itemId) {
 		log.info("===아이템 상세 조회 START===");
-		ItemResponse item = itemService.getItemById(itemId);
+		ItemCommonResponse item = itemService.getItemById(itemId);
 		log.info("===아이템 상세 조회 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, item));
 	}

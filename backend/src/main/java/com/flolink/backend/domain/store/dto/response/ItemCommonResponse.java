@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ItemResponse {
+public class ItemCommonResponse {
 
 	private Integer itemId;
 	private String itemName;
@@ -22,8 +22,8 @@ public class ItemResponse {
 	private String imageUrl;
 
 	// 엔티티 -> DTO
-	public static ItemResponse fromEntity(Item item) {
-		return ItemResponse.builder()
+	public static ItemCommonResponse fromEntity(Item item) {
+		return ItemCommonResponse.builder()
 			.itemId(item.getItemId())
 			.itemName(item.getItemName())
 			.type(item.getType())
