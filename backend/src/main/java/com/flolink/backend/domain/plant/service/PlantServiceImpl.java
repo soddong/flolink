@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.plant.dto.response.PlantResponse;
 import com.flolink.backend.domain.plant.entity.ActivityType;
-import com.flolink.backend.domain.plant.entity.MonthlyRank;
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.domain.plant.repository.MonthlyRankRepository;
+import com.flolink.backend.domain.plant.entity.UserExp;
 import com.flolink.backend.domain.plant.repository.PlantRepository;
+import com.flolink.backend.domain.plant.repository.UserExpHistoryRepository;
+import com.flolink.backend.domain.plant.repository.UserExpRepository;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.global.common.ResponseCode;
@@ -25,7 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 public class PlantServiceImpl implements PlantService {
 
 	private final PlantRepository plantRepository;
-	private final MonthlyRankRepository rankRepository;
+
+	private final UserExpRepository userExpRepository;
+
+	private final UserExpHistoryRepository userExpHistoryRepository;
+
+	// private final UserExpRepository userExpRepository;
+	// private final MonthlyRankRepository rankRepository;
 
 	/**
 	 * 가족방 생성될때 애완식물 생성
@@ -39,8 +46,8 @@ public class PlantServiceImpl implements PlantService {
 			Plant.create(room)
 		);
 
-		rankRepository.save(
-			MonthlyRank.of(userRoom, plant)
+		userExpRepository.save(
+			UserExp.of(userRoom.getUser().getUserId(), plant)
 		);
 
 	}
@@ -53,20 +60,19 @@ public class PlantServiceImpl implements PlantService {
 	public void updateExp(UserRoom userRoom, ActivityType type) {
 		Plant plant = plantRepository.findByRoomRoomId(userRoom.getRoom().getRoomId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
-		
-		MonthlyRank rank = rankRepository.findMonthlyRankByUserRoomAndPlant(userRoom, plant)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.RANK_NOT_FOUND));
+
+		UserExp userExp = userExpRepository.findByUserIdAndPlant(userRoom.getUser().getUserId(), plant)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_EXP_NOT_FOUND));
 
 		// if 마지막 수정시간이 오늘이 아니면, 오늘 경험치 0으로 초기화
 		if (isPlantUpdatedBeforeToday(plant.getUpdateAt())) {
 			plant.initToday();
 		}
 
-		// if 경험치가 제한보다 크면, 예외처리
-		int N = plant.getRoom().getUserRoomList().size();
-
-		plant.increaseExp(type.getPoint(), N);
-		rank.increaseExpOfUser(type.getPoint());
+		// 경험치 증가
+		plant.increaseExp(type.getPoint(),
+			plant.getRoom().getUserRoomList().size());
+		userExp.increaseExpOfUser(type.getPoint());
 	}
 
 	/**
