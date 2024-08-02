@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flolink.backend.domain.plant.dto.response.PlantHistoryDetailResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantHistorySummaryResponse;
 import com.flolink.backend.domain.plant.service.PlantHistoryService;
+import com.flolink.backend.domain.plant.service.UserExpServiceImpl;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
 
@@ -27,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PlantController {
 
 	private final PlantHistoryService plantHistoryService;
+	private final UserExpServiceImpl userExpService;
 
 	@GetMapping("/{plantId}/historys")
 	@Operation(summary = "기억정원 추억 리스트 불러오기", description = "연 단위 조회 (조회하고 싶은 연도 입력필요)")
@@ -39,16 +42,15 @@ public class PlantController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, plantHistorys));
 	}
 
-	// @GetMapping("/{plantId}/historys/{historyId}")
-	// @Operation(summary = "기억정원 추억 불러오기", description = "특정달의 추억 조회")
-	// public ResponseEntity<?> getPlantHistoryDetail(@PathVariable("plantId") final Integer plantId,
-	// 	@PathVariable("historyId") final Integer historyId) {
-	// 	log.info("===기억정원 추억 불러오기 START===");
-	// 	// 유저별 랭킹
-	// 	Integer userId = 1;
-	//
-	// 	log.info("===기억정원 추억 불러오기 END===");
-	// 	return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, plantHistorys));
-	// }
+	@GetMapping("/{plantId}/historys/{historyId}")
+	@Operation(summary = "기억정원 추억 불러오기", description = "특정달의 추억 조회")
+	public ResponseEntity<?> getPlantHistoryDetail(@PathVariable("plantId") final Integer plantId,
+		@PathVariable("historyId") final Integer historyId) {
+		log.info("===기억정원 추억 불러오기 START===");
+		Integer userId = 1;
+		PlantHistoryDetailResponse historyDetailResponse = userExpService.getUserExpHistoryDetail(userId, historyId);
+		log.info("===기억정원 추억 불러오기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, historyDetailResponse));
+	}
 
 }

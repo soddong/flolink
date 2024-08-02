@@ -8,4 +8,8 @@ public class ExpUtil {
 			* memberSize)) + 1;
 		return Math.min(level, 4);
 	}
+
+	public static int calculateNowExp(int exp, int memberSize) {
+		return exp % (GlobalConstant.LEVEL_EXP_BASE_UNIT * memberSize);
+	}
 }
