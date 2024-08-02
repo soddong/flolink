@@ -14,15 +14,15 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlantResponse {
+public class PlantSummaryResponse {
 	// LEVEL - exp/40
 	// 현재 LEVEL 에서의 경험치 - exp%40
 	private Integer plantId;
 	private Integer nowLevel;
 	private Integer nowExp;
 
-	public static PlantResponse fromEntity(Plant plant) {
-		return PlantResponse.builder()
+	public static PlantSummaryResponse fromEntity(Plant plant) {
+		return PlantSummaryResponse.builder()
 			.plantId(plant.getPlantId())
 			.nowLevel(ExpUtil.calculateLevel(plant.getTotalExp()
 				, plant.getRoom().getUserRoomList().size()))

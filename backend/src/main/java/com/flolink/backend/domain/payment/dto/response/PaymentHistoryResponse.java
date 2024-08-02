@@ -3,7 +3,7 @@ package com.flolink.backend.domain.payment.dto.response;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.flolink.backend.domain.payment.entity.Payment;
+import com.flolink.backend.domain.payment.entity.PaymentHistory;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,12 +18,12 @@ public class PaymentHistoryResponse {
 	private LocalDateTime paymentAt;
 	private String method;
 
-	public static PaymentHistoryResponse fromEntity(Payment payment) {
+	public static PaymentHistoryResponse fromEntity(PaymentHistory paymentHistory) {
 		return PaymentHistoryResponse.builder()
-			.orderName(payment.getOrderName())
-			.amount(payment.getAmount())
-			.paymentAt(payment.getApprovedAt())
-			.method(payment.getMethod())
+			.orderName(paymentHistory.getOrderName())
+			.amount(paymentHistory.getAmount())
+			.paymentAt(paymentHistory.getApprovedAt())
+			.method(paymentHistory.getMethod())
 			.build();
 	}
 }

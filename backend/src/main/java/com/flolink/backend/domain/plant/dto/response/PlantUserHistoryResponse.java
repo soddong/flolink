@@ -13,14 +13,14 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserExpHistoryResponse {
+public class PlantUserHistoryResponse {
 
 	private Integer monthlyRank;
 	private String nickname;
 	private Integer contributeExp;
 
-	public static UserExpHistoryResponse fromEntity(UserExpHistory userExpHistory, String nickname) {
-		return UserExpHistoryResponse.builder()
+	public static PlantUserHistoryResponse fromEntity(UserExpHistory userExpHistory, String nickname) {
+		return PlantUserHistoryResponse.builder()
 			.monthlyRank(userExpHistory.getMonthlyRank())
 			.nickname(nickname)
 			.contributeExp(userExpHistory.getContributeExp())

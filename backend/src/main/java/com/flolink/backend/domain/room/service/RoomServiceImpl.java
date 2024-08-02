@@ -9,7 +9,7 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flolink.backend.domain.plant.entity.ActivityType;
+import com.flolink.backend.domain.plant.entity.ActivityPoint;
 import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomParticipateRequest;
@@ -182,7 +182,7 @@ public class RoomServiceImpl implements RoomService {
 		Room room = findRoomById(roomId);
 		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
 		if (isFirstAttendanceOfToday(userRoom.getLastLoginTime())) {
-			plantService.updateExp(userRoom, ActivityType.ATTENDANCE);
+			plantService.updateExp(userRoom, ActivityPoint.ATTENDANCE);
 		}
 		userRoom.updateLoginTime();
 	}

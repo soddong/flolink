@@ -19,7 +19,7 @@ import com.flolink.backend.domain.feed.entity.FeedImage;
 import com.flolink.backend.domain.feed.repository.FeedCommentRepository;
 import com.flolink.backend.domain.feed.repository.FeedImageRepository;
 import com.flolink.backend.domain.feed.repository.FeedRepository;
-import com.flolink.backend.domain.plant.entity.ActivityType;
+import com.flolink.backend.domain.plant.entity.ActivityPoint;
 import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
@@ -85,7 +85,7 @@ public class FeedServiceImpl implements FeedService {
 				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
 			}
 		}
-		plantService.updateExp(userRoom, ActivityType.FEED);
+		plantService.updateExp(userRoom, ActivityPoint.FEED);
 		return FeedResponse.fromEntity(userRoom, feed);
 	}
 
@@ -137,7 +137,7 @@ public class FeedServiceImpl implements FeedService {
 			}
 		}
 		feed.updateContent(feedUpdateRequest);
-		
+
 		return FeedResponse.fromEntity(userRoom, feed);
 	}
 
@@ -167,7 +167,7 @@ public class FeedServiceImpl implements FeedService {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
 		feedCommentRepository.save(FeedComment.of(feed, userRoom, feedCommentRequest.getContent()));
-		plantService.updateExp(userRoom, ActivityType.COMMENT);
+		plantService.updateExp(userRoom, ActivityPoint.COMMENT);
 	}
 
 	@Override

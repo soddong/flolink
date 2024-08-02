@@ -19,13 +19,13 @@ public class PlantHistoryDetailResponse {
 	// 피드이미지 랜덤 10개
 	private List<FeedImageResponse> feedImageResponses;
 	// 유저별 랭킹
-	private List<UserExpHistoryResponse> userExpHistoryResponses;
+	private List<PlantUserHistoryResponse> plantUserHistoryRespons;
 
 	public static PlantHistoryDetailResponse fromEntity(List<FeedImageResponse> feedImageResponses,
-		List<UserExpHistoryResponse> userExpHistoryResponses) {
+		List<PlantUserHistoryResponse> plantUserHistoryRespons) {
 		return PlantHistoryDetailResponse.builder()
 			.feedImageResponses(feedImageResponses)
-			.userExpHistoryResponses(userExpHistoryResponses)
+			.plantUserHistoryRespons(plantUserHistoryRespons)
 			.build();
 	}
 
