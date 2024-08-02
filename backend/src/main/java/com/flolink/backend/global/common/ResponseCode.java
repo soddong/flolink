@@ -28,7 +28,8 @@ public enum ResponseCode {
 	DAILY_LIMIT_EXCEEDED(400, "Daily limit exceed", "BAD_REQUEST_ERROR"),
 	USER_EXP_NOT_FOUND(404, "User exp not found", "NOT_FOUND_ERROR"),
 	PLANT_ALREADY_COMPLETED(400, "Plant already completed", "BAD_REQUEST_ERROR"),
-
+	PLANT_HISTORY_NOT_FOUND(404, "Plant history not found", "NOT_FOUND_ERROR"),
+	
 	//Auth
 	TIME_OUT_EXCEPTION(401, "Auth Time Out", "TIME_OUT_ERROR"),
 

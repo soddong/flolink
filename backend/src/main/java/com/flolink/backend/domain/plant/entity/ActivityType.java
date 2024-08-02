@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ActivityType {
-	Attendance(10),
+	ATTENDANCE(10),
 	WALK(50),
 	FEED(30),
 	COMMENT(20);

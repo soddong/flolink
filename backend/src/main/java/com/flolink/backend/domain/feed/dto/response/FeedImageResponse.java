@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-class FeedImageResponse {
+public class FeedImageResponse {
 
 	private Integer imageOrder;
 	private String imageUrl;

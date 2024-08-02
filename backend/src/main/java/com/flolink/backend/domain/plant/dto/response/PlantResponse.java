@@ -1,7 +1,7 @@
 package com.flolink.backend.domain.plant.dto.response;
 
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.global.common.GlobalConstant;
+import com.flolink.backend.global.util.ExpUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,12 +24,10 @@ public class PlantResponse {
 	public static PlantResponse fromEntity(Plant plant) {
 		return PlantResponse.builder()
 			.plantId(plant.getPlantId())
-			.nowLevel((plant.getTotalExp()
-				/ (GlobalConstant.LEVEL_EXP_BASE_UNIT
-				* plant.getRoom().getUserRoomList().size())) + 1)
-			.nowExp(plant.getTotalExp()
-				% (GlobalConstant.LEVEL_EXP_BASE_UNIT
-				* plant.getRoom().getUserRoomList().size()))
+			.nowLevel(ExpUtil.calculateLevel(plant.getTotalExp()
+				, plant.getRoom().getUserRoomList().size()))
+			.nowExp(ExpUtil.calculateNowExp(plant.getTotalExp()
+				, plant.getRoom().getUserRoomList().size()))
 			.build();
 	}
 }
