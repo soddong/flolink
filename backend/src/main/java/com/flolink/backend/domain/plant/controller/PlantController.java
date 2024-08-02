@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flolink.backend.domain.plant.dto.response.PlantHistoryDetailResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantHistorySummaryResponse;
 import com.flolink.backend.domain.plant.service.PlantHistoryService;
-import com.flolink.backend.domain.plant.service.UserExpServiceImpl;
+import com.flolink.backend.domain.plant.service.PlantUserServiceImpl;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
 
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PlantController {
 
 	private final PlantHistoryService plantHistoryService;
-	private final UserExpServiceImpl userExpService;
+	private final PlantUserServiceImpl userExpService;
 
 	@GetMapping("/{plantId}/historys")
 	@Operation(summary = "기억정원 추억 리스트 불러오기", description = "연 단위 조회 (조회하고 싶은 연도 입력필요)")

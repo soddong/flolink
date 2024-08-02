@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.domain.payment.dto.PortOnePayment;
-import com.flolink.backend.domain.payment.dto.request.PaymentRequest;
+import com.flolink.backend.domain.payment.dto.request.PaymentCreateRequest;
 import com.flolink.backend.domain.payment.dto.response.PaymentHistoryResponse;
 import com.flolink.backend.domain.payment.dto.response.PaymentPrepareResponse;
 import com.flolink.backend.domain.payment.service.PaymentService;
@@ -34,7 +34,7 @@ public class PaymentController {
 
 	@PostMapping("/prepare")
 	@Operation(summary = "결제 시작")
-	public ResponseEntity<CommonResponse> createPayment(@RequestBody final PaymentRequest request) {
+	public ResponseEntity<CommonResponse> createPayment(@RequestBody final PaymentCreateRequest request) {
 		Integer userId = 1;
 		PaymentPrepareResponse response = paymentService.preparePayment(userId, request);
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, response));

@@ -2,19 +2,19 @@ package com.flolink.backend.domain.store.service;
 
 import java.util.List;
 
+import com.flolink.backend.domain.store.dto.response.ItemCommonResponse;
 import com.flolink.backend.domain.store.dto.response.ItemPurchaseResponse;
-import com.flolink.backend.domain.store.dto.response.ItemResponse;
 import com.flolink.backend.domain.store.entity.Item;
-import com.flolink.backend.domain.store.entity.ItemPurchase;
+import com.flolink.backend.domain.store.entity.ItemPurchaseHistory;
 import com.flolink.backend.domain.user.entity.User;
 
 public interface ItemService {
 
-	ItemResponse saveItem(final Item item);
+	ItemCommonResponse saveItem(final Item item);
 
-	List<ItemResponse> getAllItems();
+	List<ItemCommonResponse> getAllItems();
 
-	ItemResponse getItemById(final Integer itemId);
+	ItemCommonResponse getItemById(final Integer itemId);
 
 	void deleteItem(final Integer itemId);
 
@@ -22,7 +22,7 @@ public interface ItemService {
 
 	List<ItemPurchaseResponse> getPurchaseHistory(final Integer userId);
 
-	ItemPurchase savePurchaseHistory(User user, Item item);
+	ItemPurchaseHistory savePurchaseHistory(User user, Item item);
 
 	void processUserPurchase(User user, Item item);
 
