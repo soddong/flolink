@@ -13,7 +13,7 @@ const family = [
   {id: 4, name: '엄마', rank: 4, point: 250},
 ]
 
-function FlowerModal ({ month, flower }) {
+function FlowerModal ({ month, flower, setFlowerModal }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const feedslides = imageData.map((image, index) => (
     <div className='w-full h-full bg-center bg-contain bg-no-repeat flex justify-center items-center'
@@ -28,11 +28,19 @@ function FlowerModal ({ month, flower }) {
     setCurrentIndex(index);
   }
 
+  function closeModal () {
+    setFlowerModal()
+  }
+
   const copyOfFamily = Array.from(family)
   const sortedFamily = copyOfFamily.sort((a, b) => a.rank - b.rank)
 
   return (
     <div className={`w-3/4 h-3/4 p-2 ${style.mainModal}`}>
+      <span className="material-symbols-outlined absolute top-2 right-2"
+        onClick={closeModal}>
+          cancel
+      </span>
       <p className='font-bold text-lg text-rose-400'>꿀벌 가족🍯: {month}의 기록</p>
       <div className='w-full h-2/3 m-2'>
         <Carousel

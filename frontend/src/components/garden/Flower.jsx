@@ -24,7 +24,7 @@ function Flower ({id, month, flower}) {
           <>
             <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
             onClick={showFlowermodal}></div>
-            <FlowerModal month={month} flower={flower} />
+            <FlowerModal month={month} flower={flower} setFlowerModal={setFlowerModal} />
           </>
         )}
     </>
