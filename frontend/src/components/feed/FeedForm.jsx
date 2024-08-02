@@ -38,7 +38,7 @@ const FeedForm = () => {
       </div>
       <textarea
         ref={textareaRef}
-        className="w-full p-2 rounded-md bg-transparent"
+        className="w-full h-96 p-2 rounded-md bg-transparent"
         rows="4"
         value={content}
         onChange={(e) => setContent(e.target.value)}

@@ -17,7 +17,7 @@ const FeedCreatePage = () => {
         </button>
         <img src={logo} alt="Logo" className="h-20" />
       </header>
-      <h1 className="text-center text-sm font-bold mb-4">Write your own diary</h1>
+      <h1 className="text-center text-sm font-bold mb-16">Write your own diary</h1>
       <div className="mt-4">
         <FeedForm />
       </div>
