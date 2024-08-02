@@ -1,7 +1,6 @@
 package com.flolink.backend.global.batch.plant;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
@@ -13,15 +12,14 @@ import com.flolink.backend.domain.plant.entity.PlantStatus;
 @Component
 public class PlantItemProcessor implements ItemProcessor<Plant, PlantExpHistory> {
 
-	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-
 	@Override
 	public PlantExpHistory process(Plant plant) {
 
 		PlantExpHistory plantExpHistory = PlantExpHistory.builder()
 			.plant(plant)
+			.plantStatus(plant.getPlantStatus())
 			.totalExp(plant.getTotalExp())
-			.dateMonth(LocalDate.now().minusMonths(1).format(formatter))
+			.dateMonth(LocalDate.now().minusMonths(1))
 			.build();
 
 		plant.setTotalExp(0);
