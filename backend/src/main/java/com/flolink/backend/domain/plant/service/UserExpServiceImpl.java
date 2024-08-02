@@ -28,16 +28,19 @@ public class UserExpServiceImpl {
 	private final PlantHistoryRepository plantHistoryRepository;
 	private final UserRepository userRepository;
 
+	/**
+	 * 식물의 경험치 히스토리 상세 정보를 조회 (월별 기억정원 조회시)
+	 * @param plantId 식물 ID
+	 * @param historyId 히스토리 ID
+	 * @return 식물 경험치 히스토리 상세 정보
+	 */
 	public PlantHistoryDetailResponse getUserExpHistoryDetail(Integer plantId, Integer historyId) {
 		List<FeedImageResponse> feedImageResponses = loadFeedImages();
 
 		PlantExpHistory plantExpHistory = loadPlantExpHistory(historyId);
 		String dateMonth = formatDateMonth(plantExpHistory);
 
-		List<UserExpHistoryResponse> userExpHistories = loadUserExpHistories(
-			plantId,
-			dateMonth
-		);
+		List<UserExpHistoryResponse> userExpHistories = loadUserExpHistories(plantId, dateMonth);
 
 		return PlantHistoryDetailResponse.fromEntity(feedImageResponses, userExpHistories);
 	}
@@ -57,7 +60,7 @@ public class UserExpServiceImpl {
 		return plantHistoryRepository.findById(historyId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_HISTORY_NOT_FOUND));
 	}
-
+	
 	private String formatDateMonth(PlantExpHistory plantExpHistory) {
 		return plantExpHistory.getDateMonth()
 			.format(DateTimeFormatter.ofPattern("yyyy-MM"));

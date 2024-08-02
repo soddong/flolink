@@ -26,33 +26,22 @@ import lombok.extern.slf4j.Slf4j;
 public class PlantServiceImpl implements PlantService {
 
 	private final PlantRepository plantRepository;
-
 	private final UserExpRepository userExpRepository;
-
 	private final UserExpHistoryRepository userExpHistoryRepository;
-
-	// private final UserExpRepository userExpRepository;
-	// private final MonthlyRankRepository rankRepository;
 
 	/**
 	 * 가족방 생성될때 애완식물 생성
-	 *
+	 * @param userRoom 처음 가족방 생성한 녀석
 	 * @param room 생성된 가족방
 	 */
 	@Override
 	public void createPlant(UserRoom userRoom, Room room) {
-
-		Plant plant = plantRepository.save(
-			Plant.create(room)
-		);
-
-		userExpRepository.save(
-			UserExp.of(userRoom.getUser().getUserId(), plant)
-		);
-
+		Plant plant = plantRepository.save(Plant.create(room));
+		userExpRepository.save(UserExp.of(userRoom.getUser().getUserId(), plant));
 	}
 
 	/**
+	 * 사용자 활동에 따른 경험치 업데이트
 	 * @param userRoom userRoom 정보
 	 * @param type 활동 타입 (산책, 출석, 피드, 게시글)
 	 */
@@ -64,21 +53,19 @@ public class PlantServiceImpl implements PlantService {
 		UserExp userExp = userExpRepository.findByUserIdAndPlant(userRoom.getUser().getUserId(), plant)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_EXP_NOT_FOUND));
 
-		// if 마지막 수정시간이 오늘이 아니면, 오늘 경험치 0으로 초기화
 		if (isPlantUpdatedBeforeToday(plant.getUpdateAt())) {
 			plant.initToday();
 		}
 
-		// 경험치 증가
-		plant.increaseExp(type.getPoint(),
-			plant.getRoom().getUserRoomList().size());
+		// 활동 타입에 따라 Plant와 UserExp 객체의 경험치를 증가
+		plant.increaseExp(type.getPoint(), plant.getRoom().getUserRoomList().size());
 		userExp.increaseExpOfUser(type.getPoint());
 	}
 
 	/**
-	 *
+	 * 방 ID로 식물 정보 조회
 	 * @param roomId 방 ID
-	 * @return 식물 정보를 반환
+	 * @return 식물 정보
 	 */
 	@Override
 	public PlantResponse getPlantInfo(Integer roomId) {
@@ -87,7 +74,12 @@ public class PlantServiceImpl implements PlantService {
 		return PlantResponse.fromEntity(plant);
 	}
 
-	public boolean isPlantUpdatedBeforeToday(LocalDateTime plantUpdateAt) {
+	/**
+	 * Plant의 마지막 업데이트 날짜가 오늘 이전인지 확인
+	 * @param plantUpdateAt Plant의 마지막 업데이트 날짜
+	 * @return 오늘 이전이면 true, 아니면 false
+	 */
+	private boolean isPlantUpdatedBeforeToday(LocalDateTime plantUpdateAt) {
 		LocalDate today = LocalDate.now();
 		if (plantUpdateAt == null) { // 첫 가입시 null임
 			return true;

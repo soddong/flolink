@@ -21,9 +21,6 @@ public class BatchScheduler {
 	@Autowired
 	private Job combinedJob;
 
-	@Autowired
-	private Job monthlyRankJob;
-
 	// 매월 1일 자정에 실행
 	@Scheduled(cron = "0 0 0 1 * ?")
 	public void runMonthlyPlantUserJob() throws Exception {

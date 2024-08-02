@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/plant")
+@RequestMapping("/plants")
 @RequiredArgsConstructor
 @Tag(name = "Plant API", description = "기억정원과 관련된 API")
 public class PlantController {
