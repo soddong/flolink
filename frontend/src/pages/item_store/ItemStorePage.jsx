@@ -1,21 +1,7 @@
-import styles from '../../css/item_store/settingPage.module.css'
+import styles from '../../css/item_store/ItemStorePage.module.css'
 import { useState } from 'react';
-import rug1 from '../../assets/myroom/items/rug1.png';
-import rug2 from '../../assets/myroom/items/rug2.png';
-import shelf1 from '../../assets/myroom/items/shelf1.png';
-import shelf2 from '../../assets/myroom/items/shelf2.png';
-import stand1 from '../../assets/myroom/items/stand1.png';
-import stand2 from '../../assets/myroom/items/stand2.png';
-import bed1 from '../../assets/myroom/items/bed1.png';
-import bed2 from '../../assets/myroom/items/bed2.png';
-import minitable1 from '../../assets/myroom/items/minitable1.png';
-import minitable2 from '../../assets/myroom/items/minitable2.png';
-import vase1 from '../../assets/myroom/items/vase1.png';
-import vase2 from '../../assets/myroom/items/vase2.png';
-import bigtable1 from '../../assets/myroom/items/bigtable1.png';
-import bigtable2 from '../../assets/myroom/items/bigtable2.png';
 
-function SettingPage(props) {
+function ItemStorePage(props) {
     const [activeTab, setActiveTab] = useState('items');
 
     return (
@@ -94,4 +80,4 @@ function SettingPage(props) {
     );
 }
 
-export default SettingPage;
+export default ItemStorePage;
