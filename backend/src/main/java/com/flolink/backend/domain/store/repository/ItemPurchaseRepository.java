@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.flolink.backend.domain.store.entity.ItemPurchase;
+import com.flolink.backend.domain.store.entity.ItemPurchaseHistory;
 
-public interface ItemPurchaseRepository extends JpaRepository<ItemPurchase, Integer> {
+public interface ItemPurchaseRepository extends JpaRepository<ItemPurchaseHistory, Integer> {
 
-	@Query("SELECT ip FROM ItemPurchase ip WHERE ip.user.userId = :userId ORDER BY ip.purchaseAt DESC")
-	List<ItemPurchase> findByUserIdOrderByPurchaseAtDesc(@Param("userId") Integer userId);
+	@Query("SELECT ip FROM ItemPurchaseHistory ip WHERE ip.user.userId = :userId ORDER BY ip.purchaseAt DESC")
+	List<ItemPurchaseHistory> findByUserIdOrderByPurchaseAtDesc(@Param("userId") Integer userId);
 
 }

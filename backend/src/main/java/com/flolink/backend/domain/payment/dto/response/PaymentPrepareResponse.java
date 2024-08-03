@@ -2,7 +2,7 @@ package com.flolink.backend.domain.payment.dto.response;
 
 import java.math.BigDecimal;
 
-import com.flolink.backend.domain.payment.entity.Payment;
+import com.flolink.backend.domain.payment.entity.PaymentHistory;
 import com.flolink.backend.domain.payment.entity.PaymentState;
 
 import lombok.Builder;
@@ -18,12 +18,12 @@ public class PaymentPrepareResponse {
 	private BigDecimal amount;
 	private PaymentState state;
 
-	public static PaymentPrepareResponse fromEntity(Payment payment) {
+	public static PaymentPrepareResponse fromEntity(PaymentHistory paymentHistory) {
 		return PaymentPrepareResponse.builder()
-			.orderId(payment.getOrderId())
-			.orderName(payment.getOrderName())
-			.amount(payment.getAmount())
-			.state(payment.getState())
+			.orderId(paymentHistory.getOrderId())
+			.orderName(paymentHistory.getOrderName())
+			.amount(paymentHistory.getAmount())
+			.state(paymentHistory.getState())
 			.build();
 	}
 }

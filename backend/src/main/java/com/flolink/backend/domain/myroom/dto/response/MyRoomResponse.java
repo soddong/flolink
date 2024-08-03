@@ -11,20 +11,24 @@ import lombok.Setter;
 @Builder
 public class MyRoomResponse {
 	private Integer myRoomId;
-	private Integer userId;
-	private Integer itemTable;
-	private Integer itemChair;
-	private Integer itemPot;
-	private Integer itemPhotoFrame;
+	private Integer itemStand;
+	private Integer itemRug;
+	private Integer itemShelf;
+	private Integer itemBed;
+	private Integer itemBigtable;
+	private Integer itemMinitable;
+	private Integer itemVase;
 
 	public static MyRoomResponse fromEntity(MyRoom myRoom) {
 		return MyRoomResponse.builder()
 			.myRoomId(myRoom.getMyRoomId())
-			// .userId(myRoom.getUser().getUserId()) // TODO
-			.itemTable(myRoom.getItemTable())
-			.itemChair(myRoom.getItemChair())
-			.itemPot(myRoom.getItemPot())
-			.itemPhotoFrame(myRoom.getItemPhotoFrame())
+			.itemStand(myRoom.getItemStand())
+			.itemRug(myRoom.getItemRug())
+			.itemShelf(myRoom.getItemShelf())
+			.itemBed(myRoom.getItemBed())
+			.itemBigtable(myRoom.getItemBigtable())
+			.itemMinitable(myRoom.getItemMinitable())
+			.itemVase(myRoom.getItemVase())
 			.build();
 	}
 }

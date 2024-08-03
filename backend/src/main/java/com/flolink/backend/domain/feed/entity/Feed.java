@@ -1,10 +1,12 @@
 package com.flolink.backend.domain.feed.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.room.entity.UserRoom;
 
 import jakarta.persistence.Column;
@@ -15,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -49,10 +52,16 @@ public class Feed {
 	@Column(name = "create_at")
 	private LocalDateTime createAt;
 
-	@Column(name = "like_cnt")
-	private Integer likeCnt;
-
 	@Column(name = "use_yn")
-	private boolean useYn;
+	private Boolean useYn;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+	private List<FeedComment> feedCommentList;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+	private List<FeedImage> feedImageList;
+
+	public void updateContent(final FeedUpdateRequest feedUpdateRequest) {
+		this.content = feedUpdateRequest.getContent();
+	}
 }

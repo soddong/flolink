@@ -3,7 +3,6 @@ package com.flolink.backend.domain.myroom.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flolink.backend.domain.myroom.dto.request.HasItemRequest;
 import com.flolink.backend.domain.myroom.dto.response.MyRoomResponse;
 import com.flolink.backend.domain.myroom.entity.HasItem;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
@@ -57,19 +56,20 @@ public class MyRoomServiceImpl implements MyRoomService {
 	 * 2. 해당 타입에 현재 다른 아이템이 장착되어 있으면 해제
 	 * 3. 장착하고자 하는 아이템 장착
 	 * @param userId 유저 ID
-	 * @param request 인벤토리에서 장착할 아이템 ID
+	 * @param hasItemId 인벤토리에서 장착할 아이템 ID
 	 * @return MyRoomResponse 업데이트 후 마이룸 정보
 	 */
 	@Override
 	@Transactional
-	public MyRoomResponse equipItem(Integer userId, HasItemRequest request) {
+	public MyRoomResponse equipItem(Integer userId, Integer hasItemId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
+		// TODO: user.getMyRoomId() 맵핑
 		MyRoom myRoom = myRoomRepository.findById(1)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.MY_ROOM_NOT_FOUND));
 
-		HasItem hasItem = hasItemRepository.findById(request.getHasItemId())
+		HasItem hasItem = hasItemRepository.findById(hasItemId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.INVENTORY_NOT_FOUND));
 
 		myRoom.unequipPreItemAndEquipItem(hasItem);
@@ -82,12 +82,12 @@ public class MyRoomServiceImpl implements MyRoomService {
 	 *  1. 마이룸에 해당 타입 해제 (null)
 	 * 	2. 인벤토리에 장착해제 표시 (false)
 	 * @param userId 유저 ID
-	 * @param request 인벤토리에서 장착 해제할 아이템 ID
+	 * @param hasItemId 인벤토리에서 장착 해제할 아이템 ID
 	 * @return MyRoomResponse 업데이트 후 마이룸 정보
 	 */
 	@Override
 	@Transactional
-	public MyRoomResponse unequipItem(Integer userId, HasItemRequest request) {
+	public MyRoomResponse unequipItem(Integer userId, Integer hasItemId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
@@ -95,7 +95,7 @@ public class MyRoomServiceImpl implements MyRoomService {
 		MyRoom myRoom = myRoomRepository.findById(1)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.MY_ROOM_NOT_FOUND));
 
-		HasItem hasItem = hasItemRepository.findById(request.getHasItemId())
+		HasItem hasItem = hasItemRepository.findById(hasItemId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.INVENTORY_NOT_FOUND));
 
 		myRoom.unequipItem(hasItem);
