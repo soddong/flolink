@@ -55,11 +55,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 		if (!userRepository.existsByLoginId(loginId)) {
 			MyRoom myRoom = MyRoom.builder()
-				.itemTable(0)
-				.itemChair(0)
-				.itemPot(0)
-				.itemPhotoFrame(0)
-				.build();
+					.itemStand(0)
+					.itemRug(0)
+					.itemShelf(0)
+					.itemBed(0)
+					.itemBigtable(0)
+					.itemMinitable(0)
+					.itemVase(0)
+					.build();
 
 			em.persist(myRoom);
 			em.flush();
