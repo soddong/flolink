@@ -26,6 +26,7 @@ public class RoomCreateRequest {
 			.createAt(LocalDateTime.now())
 			.roomParticipatePassword(roomParticipatePassword == null ? "000000" : roomParticipatePassword)
 			.useYn(true)
+			.notice("")
 			.build();
 	}
 }

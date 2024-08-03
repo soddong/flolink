@@ -37,52 +37,74 @@ public class MyRoom {
 	private Integer myRoomId;
 
 	@OneToMany(mappedBy = "myRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
 	private List<HasItem> items = new ArrayList<>();
 
-	@Column(name = "item_table")
-	private Integer itemTable;
+	@Column(name = "item_stand")
+	private Integer itemStand;
 
-	@Column(name = "item_chair")
-	private Integer itemChair;
+	@Column(name = "item_rug")
+	private Integer itemRug;
 
-	@Column(name = "item_pot")
-	private Integer itemPot;
+	@Column(name = "item_shelf")
+	private Integer itemShelf;
 
-	@Column(name = "item_photo_frame")
-	private Integer itemPhotoFrame;
+	@Column(name = "item_bed")
+	private Integer itemBed;
+
+	@Column(name = "item_bigtable")
+	private Integer itemBigtable;
+
+	@Column(name = "item_minitable")
+	private Integer itemMinitable;
+
+	@Column(name = "item_vase")
+	private Integer itemVase;
 
 	public static MyRoom createMyRoom() {
 		return MyRoom.builder()
-			.items(new ArrayList<>())
 			.build();
 	}
 
 	public void unequipPreItemAndEquipItem(HasItem hasItem) {
 		Item item = hasItem.getItem();
 		switch (item.getType()) {
-			case TABLE:
-				if (this.itemTable != null) {
-					unequipItem(findById(this.itemTable));
+			// RUG, SHELF, STAND, BED, MINITABLE, BIGTABLE, VASE
+			case RUG:
+				if (this.itemRug != null) {
+					unequipItem(findById(this.itemRug));
 				}
-				this.itemTable = hasItem.getHasItemId();
+				this.itemRug = hasItem.getHasItemId();
 				break;
-			case CHAIR:
-				if (this.itemChair != null) {
-					unequipItem(findById(this.itemChair));
+			case SHELF:
+				if (this.itemShelf != null) {
+					unequipItem(findById(this.itemShelf));
 				}
-				this.itemChair = hasItem.getHasItemId();
+				this.itemShelf = hasItem.getHasItemId();
 				break;
-			case POT:
-				if (this.itemPot != null) {
-					unequipItem(findById(this.itemPot));
+			case BED:
+				if (this.itemBed != null) {
+					unequipItem(findById(this.itemBed));
 				}
-				this.itemPot = hasItem.getHasItemId();
+				this.itemBed = hasItem.getHasItemId();
 				break;
-			case PHOTO_FRAME:
-				if (this.itemPhotoFrame != null) {
-					unequipItem(findById(this.itemPhotoFrame));
+			case MINITABLE:
+				if (this.itemMinitable != null) {
+					unequipItem(findById(this.itemMinitable));
 				}
-				this.itemPhotoFrame = hasItem.getHasItemId();
+				this.itemMinitable = hasItem.getHasItemId();
+				break;
+			case BIGTABLE:
+				if (this.itemBigtable != null) {
+					unequipItem(findById(this.itemBigtable));
+				}
+				this.itemBigtable = hasItem.getHasItemId();
+				break;
+			case VASE:
+				if (this.itemVase != null) {
+					unequipItem(findById(this.itemVase));
+				}
+				this.itemVase = hasItem.getHasItemId();
 				break;
 			default:
 				throw new BadRequestException(ResponseCode.INVALID_ITEM_TYPE);
@@ -93,17 +115,23 @@ public class MyRoom {
 	public void unequipItem(HasItem hasItem) {
 		Item item = hasItem.getItem();
 		switch (item.getType()) {
-			case TABLE:
-				this.itemTable = null;
+			case RUG:
+				this.itemRug = null;
 				break;
-			case CHAIR:
-				this.itemChair = null;
+			case SHELF:
+				this.itemShelf = null;
 				break;
-			case POT:
-				this.itemPot = null;
+			case BED:
+				this.itemBed = null;
 				break;
-			case PHOTO_FRAME:
-				this.itemPhotoFrame = null;
+			case MINITABLE:
+				this.itemMinitable = null;
+				break;
+			case BIGTABLE:
+				this.itemBigtable = null;
+				break;
+			case VASE:
+				this.itemVase = null;
 				break;
 			default:
 				throw new BadRequestException(ResponseCode.INVALID_ITEM_TYPE);

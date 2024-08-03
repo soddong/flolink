@@ -26,6 +26,13 @@ public enum ResponseCode {
 	NOT_AUTHORIZED(401, "Not authorized", "NOT_AUTHORIZED"),
 	ROOM_NOT_FOUND(404, "Room not found", "NOT_FOUND_ERROR"),
 
+	// Plant
+	PLANT_NOT_FOUND(404, "Plant not found", "NOT_FOUND_ERROR"),
+	DAILY_LIMIT_EXCEEDED(400, "Daily limit exceed", "BAD_REQUEST_ERROR"),
+	USER_EXP_NOT_FOUND(404, "User exp not found", "NOT_FOUND_ERROR"),
+	PLANT_ALREADY_COMPLETED(400, "Plant already completed", "BAD_REQUEST_ERROR"),
+	PLANT_HISTORY_NOT_FOUND(404, "Plant history not found", "NOT_FOUND_ERROR"),
+	
 	//Auth
 	TIME_OUT_EXCEPTION(401, "Auth Time Out", "TIME_OUT_ERROR"),
 	DUPLICATE_LOGIN_ID(401, "Duplicate login id", "DUPLICATE_LOGIN_ID"),

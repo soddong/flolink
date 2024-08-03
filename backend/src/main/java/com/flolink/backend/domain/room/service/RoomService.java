@@ -12,6 +12,8 @@ public interface RoomService {
 
 	List<RoomSummarizeResponse> getAllRooms(final Integer userId);
 
+	RoomSummarizeResponse getRoomById(final Integer roomId);
+
 	RoomSummarizeResponse createRoom(final Integer userId, final RoomCreateRequest roomCreateRequest);
 
 	RoomSummarizeResponse registerRoom(final Integer userId, final RoomParticipateRequest roomParticipateRequest);
@@ -25,4 +27,6 @@ public interface RoomService {
 	String exitRoom(final Integer userId, final Integer roomId);
 
 	String kickRoomMember(final Integer userId, final Integer roomId, final Integer targetUserRoomId);
+
+	void enterRoom(Integer userId, Integer roomId);
 }

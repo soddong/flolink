@@ -26,7 +26,7 @@ import lombok.Setter;
 @Table(name = "item_purchase_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class ItemPurchase {
+public class ItemPurchaseHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "purchase_id")
@@ -43,8 +43,8 @@ public class ItemPurchase {
 	@Column(name = "purchase_at", nullable = false, length = 100)
 	private LocalDateTime purchaseAt;
 
-	public static ItemPurchase of(User user, Item item) {
-		return ItemPurchase.builder()
+	public static ItemPurchaseHistory of(User user, Item item) {
+		return ItemPurchaseHistory.builder()
 			.item(item)
 			.user(user)
 			.purchaseAt(LocalDateTime.now())
