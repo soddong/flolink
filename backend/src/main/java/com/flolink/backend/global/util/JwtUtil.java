@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,14 @@ public class JwtUtil {
 			Jwts.SIG.HS256.key().build().getAlgorithm());
 	}
 
-	;
+	public RoleType getRoleType(String token) {
+		return Jwts.parser()
+				.verifyWith(secretKey)
+				.build()
+				.parseSignedClaims(token)
+				.getPayload()
+				.get("role", RoleType.class);
+	}
 
 	public int getUserId(String token) {
 		return Jwts.parser()
@@ -65,11 +73,12 @@ public class JwtUtil {
 			.before(new Date());
 	}
 
-	public String createJwt(String category, int userId, int myRoomId, Long expiredTime, Date now) {
+	public String createJwt(String category, int userId, int myRoomId, RoleType role, Long expiredTime, Date now) {
 		return Jwts.builder()
 			.claim("category", category)
 			.claim("userId", userId)
 			.claim("myRoomId", myRoomId)
+			.claim("role", role)
 			.issuedAt(now)
 			.expiration(new Date(now.getTime() + expiredTime))
 			.signWith(secretKey)
@@ -86,23 +95,6 @@ public class JwtUtil {
 		cookie.setHttpOnly(true);
 
 		return cookie;
-	}
-
-	public Claims decryptToken(String token) {
-
-		try {
-			return Jwts.parser()
-				.verifyWith(secretKey)
-				.build()
-				.parseSignedClaims(token)
-				.getPayload();
-		} catch (SignatureException e) {
-			// 서명 검증 실패 시 처리
-			throw new RuntimeException("Invalid JWT signature");
-		} catch (Exception e) {
-			// 토큰 파싱 오류 시 처리
-			throw new RuntimeException("Invalid JWT token");
-		}
 	}
 
 	public int tempReturnUserId() {

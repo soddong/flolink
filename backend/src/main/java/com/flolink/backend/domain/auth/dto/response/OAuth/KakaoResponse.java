@@ -1,5 +1,7 @@
 package com.flolink.backend.domain.auth.dto.response.OAuth;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+
 import java.util.Map;
 
 public class KakaoResponse implements OAuth2Response {
@@ -8,6 +10,10 @@ public class KakaoResponse implements OAuth2Response {
 
 	public KakaoResponse(Map<String, Object> attributes) {
 		this.attributes = (Map<String, Object>)attributes;
+	}
+
+	public RoleType getRoleType() {
+		return RoleType.KAKAO;
 	}
 
 	@Override

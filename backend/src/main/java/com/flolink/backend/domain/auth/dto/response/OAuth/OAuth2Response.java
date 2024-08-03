@@ -1,6 +1,10 @@
 package com.flolink.backend.domain.auth.dto.response.OAuth;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+
 public interface OAuth2Response {
+
+	RoleType getRoleType();
 
 	//제공자 (Ex. naver, google, ...)
 	String getProvider();

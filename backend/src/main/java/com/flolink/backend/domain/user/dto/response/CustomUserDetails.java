@@ -3,6 +3,7 @@ package com.flolink.backend.domain.user.dto.response;
 import java.util.Collection;
 import java.util.List;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -40,6 +41,10 @@ public class CustomUserDetails implements UserDetails {
 
 	public Integer getMyRoomId() {
 		return user.getMyRoomId();
+	}
+
+	public RoleType getRoleType(){
+		return user.getRole();
 	}
 
 	@Override
