@@ -38,6 +38,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 		String registrationId = request.getClientRegistration().getRegistrationId();
 		OAuth2Response oAuth2Response = null;
 
+
+
 		if (registrationId.equals("kakao")) {
 			oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
 
@@ -67,12 +69,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 				.loginId(loginId)
 				.userName(oAuth2Response.getName())
 				.nickname(oAuth2Response.getName())
+				.role(oAuth2Response.getRoleType())
 				.build();
 
 			userRepository.save(user);
 
 			UserDTO userDTO = UserDTO.builder()
-				.loginId(loginId)
 				.username(oAuth2Response.getName())
 				.role(oAuth2Response.getProvider())
 				.build();
@@ -80,7 +82,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			return new CustomOAuth2UserResponse(userDTO);
 		} else {
 			UserDTO userDTO = UserDTO.builder()
-				.loginId(loginId)
 				.username(oAuth2Response.getName())
 				.role(oAuth2Response.getProvider())
 				.build();

@@ -1,5 +1,7 @@
 package com.flolink.backend.domain.auth.dto.response.OAuth;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+
 import java.util.Map;
 
 public class GoogleResponse implements OAuth2Response {
@@ -8,6 +10,10 @@ public class GoogleResponse implements OAuth2Response {
 
 	public GoogleResponse(Map<String, Object> attribute) {
 		this.attribute = attribute;
+	}
+
+	public RoleType getRoleType() {
+		return RoleType.GOOGLE;
 	}
 
 	@Override

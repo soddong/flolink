@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,21 +41,17 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		//OAuth2User
 		CustomOAuth2UserResponse customUserDetails = (CustomOAuth2UserResponse)authentication.getPrincipal();
 
-		St userId = customUserDetails.getLoginId();
-		Integer myRoomId = customUserDetails.getMyRoomId();
-
-		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-		Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-		GrantedAuthority auth = iterator.next();
-		String role = auth.getAuthority();
+		int userId = customUserDetails.getUserId();
+		int myRoomId = customUserDetails.getMyRoomId();
+        RoleType role = customUserDetails.getRoleType();
 
 		//현재 시간
 		LocalDateTime date = LocalDateTime.now();
 		Date now = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(date);
 
 		//토큰 생성
-		String access = jwtUtil.createJwt("access", userId, myRoomId, accessTokenValidityInSeconds, now);
-		String refresh = jwtUtil.createJwt("refresh", userId, myRoomId, refreshTokenValidityInSeconds, now);
+		String access = jwtUtil.createJwt("access", userId, myRoomId, role, accessTokenValidityInSeconds, now);
+		String refresh = jwtUtil.createJwt("refresh", userId, myRoomId, role, refreshTokenValidityInSeconds, now);
 
 		//Refresh 토큰 저장
 		Refresh refreshEntity = Refresh.builder()

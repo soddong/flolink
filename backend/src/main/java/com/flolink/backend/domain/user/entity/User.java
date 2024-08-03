@@ -49,7 +49,7 @@ public class User {
 	@Column(name = "password", length = 64)
 	private String password;
 
-	@Column(name = "user_name", nullable = false, length = 15)
+	@Column(name = "user_name", nullable = false, length = 256)
 	private String userName;
 
 	@Column(name = "nickname", nullable = false, length = 100)
@@ -58,8 +58,9 @@ public class User {
 	@Column(name = "tel", length = 20)
 	private String tel;
 
+	@Builder.Default
 	@Column(name = "point", nullable = false, length = 21)
-	private BigDecimal point;
+	private BigDecimal point = BigDecimal.ZERO;
 
 	@Builder.Default
 	@Column(name = "create_at", nullable = false, updatable = false)

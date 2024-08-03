@@ -3,6 +3,7 @@ package com.flolink.backend.domain.auth.service;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Service;
 
@@ -80,10 +81,11 @@ public class ReissueServiceImpl implements ReissueService {
 
 		int userId = jwtUtil.getUserId(refresh);
 		int myRoomId = jwtUtil.getMyRoomId(refresh);
+		RoleType role = jwtUtil.getRoleType(refresh);
 
 		//make new JWT
-		String newAccess = jwtUtil.createJwt("access", userId, myRoomId, accessTokenValidityInSeconds, now);
-		String newRefresh = jwtUtil.createJwt("refresh", userId, myRoomId, refreshTokenValidityInSeconds, now);
+		String newAccess = jwtUtil.createJwt("access", userId, myRoomId, role, accessTokenValidityInSeconds, now);
+		String newRefresh = jwtUtil.createJwt("refresh", userId, myRoomId, role, refreshTokenValidityInSeconds, now);
 
 		//Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
 		Refresh refreshToken = Refresh.builder()

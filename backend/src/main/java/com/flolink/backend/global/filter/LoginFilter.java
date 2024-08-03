@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,12 +58,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
 
-		Integer userId = customUserDetails.getUserId();
-		Integer myRoomId = customUserDetails.getMyRoomId();
+		int userId = customUserDetails.getUserId();
+		int myRoomId = customUserDetails.getMyRoomId();
+		RoleType roleType = customUserDetails.getRoleType();
 
 		//토큰 생성
-		String access = jwtUtil.createJwt("access", userId, myRoomId, accessTokenValidityInSeconds, now);
-		String refresh = jwtUtil.createJwt("refresh", userId, myRoomId, refreshTokenValidityInSeconds, now);
+		String access = jwtUtil.createJwt("access", userId, myRoomId, roleType, accessTokenValidityInSeconds, now);
+		String refresh = jwtUtil.createJwt("refresh", userId, myRoomId, roleType, refreshTokenValidityInSeconds, now);
 
 		//Refresh 토큰 저장
 		Refresh refreshEntity = Refresh.builder()
