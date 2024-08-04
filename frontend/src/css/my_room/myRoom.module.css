@@ -10,7 +10,7 @@
 
 .myRoomHeader {
     width: 100%;
-    height: 10%;
+    height: 7%;
     z-index: 11;
     box-sizing: border-box;
     display: flex;
@@ -20,6 +20,18 @@
     padding: 5%;
     left: 0;
     background-color: white;
+    position : relative;
+}
+
+.myRoomHeader > div:first-child {
+    z-index: 12;
+  }
+  
+.myRoomHeader > div:nth-child(2) {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
 }
 
 .myRoomIcons {
@@ -29,6 +41,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    z-index : 12;
 }
 
 .myRoomInventory {
@@ -73,35 +86,22 @@
 }
 
 .myRoomItems {
-    position : relative;
-    display : flex;
-    justify-content: center;
-    align-items: center;
-    width : 100%;
-    height : 90%;
+    position: relative;
+    width: 100%;
+    height : 93%;
 }
 
 .roomImg {
-    position: absolute;
     width: 100%;
-    top : 10%;
+    height: 100%;
     object-fit: contain;
-    z-index: 3;
-}
-
-.backgroundgrass {
-    position : absolute;
-    width : 100%;
-    height : 40%;
-    bottom : 4rem;
-    z-index: 0;
 }
 
 .rug {
     position: absolute;
     width: 75%; 
     left: 10%; 
-    bottom: 10%;
+    top : 42%;
     z-index: 5;
 }
 
@@ -110,7 +110,7 @@
     z-index : 6;
     width : 55%;
     left : 30%;
-    top : 27%;
+    top : 32%;
 }
 
 .stand {
@@ -141,23 +141,22 @@
     position : absolute;
     z-index : 8;
     width : 27%;
-    top : 56%;
-    left : 13%;
+    top : 55%;
+    left : 15%;
 }
 
 .bigtable {
     position : absolute;
     z-index : 9;
     width : 35%;
-    top : 60%;
-    left : 30%;
+    top : 58%;
+    left : 32%;
 }
 
 .inventoryToast {
     position: fixed;
-    top: 10%;
-    max-width: 390px;
-    width: 80%;
+    top : 7%;
+    width: 100%;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
