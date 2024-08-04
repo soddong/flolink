@@ -25,6 +25,9 @@
     "react-router-dom": "^6.25.1",
     "styled-components": "^6.1.12",
     "vite-plugin-pwa": "^0.20.1",
+    "web-push": "^3.6.7",
+    "workbox-core": "^7.1.0",
+    "workbox-precaching": "^7.1.0",
     "workbox-window": "^7.1.0",
     "zustand": "^4.5.4"
   },
