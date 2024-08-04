@@ -39,6 +39,7 @@ public class Calendar {
     private String content;
 
     @Column(name = "tag")
+    @Enumerated(EnumType.STRING)
     private TagType tag;
 
     @Builder.Default

@@ -5,6 +5,7 @@ import static com.flolink.backend.domain.user.entity.enumtype.RoleType.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.flolink.backend.domain.user.dto.request.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flolink.backend.domain.auth.entity.SuccessToken;
 import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
-import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
-import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
-import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
-import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
-import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 import com.flolink.backend.domain.user.entity.User;
@@ -280,6 +276,13 @@ public class UserServiceImpl implements UserService {
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
 		user.setNickname(nickname);
+	}
+
+	@Override
+	public void modifyMessage(StatusMessageRequest statusMessageRequest, int userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+		user.setStatusMessage(statusMessageRequest.getStatusMessage());
 	}
 
 }

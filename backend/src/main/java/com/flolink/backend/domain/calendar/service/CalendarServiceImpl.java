@@ -92,6 +92,5 @@ public class CalendarServiceImpl implements CalendarService{
         calendar.setDate(updateCalendarRequest.getDate());
         calendar.setContent(updateCalendarRequest.getContent());
         calendar.setTag(updateCalendarRequest.getTag());
-        calendarRepository.save(calendar);
     }
 }

@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.user.controller;
 
+import com.flolink.backend.domain.user.dto.request.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,12 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
-import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
-import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
-import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
-import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
-import com.flolink.backend.domain.user.dto.request.NicknameRequest;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
@@ -126,4 +121,16 @@ public class UserController {
 		log.info("===닉네임 변경 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
+
+	@Operation(summary = "상태메세지 변경", description = "상태메세지를 수정한다.")
+	@PutMapping("/myInfo/message")
+	public ResponseEntity<?> updateMessage(@RequestBody StatusMessageRequest statusMessageRequest,
+										   Authentication authentication) {
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		log.info("===상태 메세지 변경 START===");
+		userService.modifyMessage(statusMessageRequest, userDetails.getUserId());
+		log.info("===상태 메세지 변경 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
+
 }
