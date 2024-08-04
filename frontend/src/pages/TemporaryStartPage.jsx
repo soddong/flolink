@@ -21,6 +21,7 @@ function TemporaryStartPage() {
             <Link to="/myroom"><button>MyRoom Page</button></Link>
             <Link to="/payment"><button>Payment Page</button></Link>
             <Link to="/setting"><button>Setting Page</button></Link>
+            <Link to="/location"><button>Location Page</button></Link>
             <PushNotificationSubscriber />
         </div>
     )

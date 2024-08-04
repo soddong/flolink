@@ -16,6 +16,7 @@ import FamilyGardenPage from './pages/garden/FamilyGardenPage';
 import MyRoomPage from './pages/my_room/myRoomPage';
 import PaymentPage from './pages/payment/PaymentPage';
 import SettingPage from './pages/setting/SettingPage';
+import LocationPage from './pages/location/LocationPage';
 
 const router = createBrowserRouter([  
   {
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
   {
     path: "/setting",
     element: <SettingPage />
+  },
+  {
+    path: "/location",
+    element: <LocationPage />
   }
 ])
 
