@@ -100,7 +100,20 @@ public class RoomController {
 	public ResponseEntity<?> updateRoomDetail(@RequestBody final RoomUpdateRequest roomUpdateRequest) {
 		log.info("===가족 방 상세 정보 수정하기 START===");
 		Integer userId = 1;
-		RoomSummarizeResponse roomSummarizeResponse = roomService.updateRoomDetail(userId, roomUpdateRequest);
+		//TODO: validation
+		RoomSummarizeResponse roomSummarizeResponse = null;
+		if (roomUpdateRequest.getRoomParticipatePassword() != null) {
+			roomSummarizeResponse = roomService.updateParticipatePassword(userId, roomUpdateRequest);
+		}
+		if (roomUpdateRequest.getRoomName() != null) {
+			roomSummarizeResponse = roomService.updateRoomName(userId, roomUpdateRequest);
+		}
+		if (roomUpdateRequest.getNotice() != null) {
+			roomSummarizeResponse = roomService.updateNotice(userId, roomUpdateRequest);
+		}
+		if (roomUpdateRequest.getMessage() != null) {
+			roomSummarizeResponse = roomService.updateEmotion(userId, roomUpdateRequest);
+		}
 		log.info("===가족 방 상세 정보 수정하기 END===");
 		return roomSummarizeResponse == null ? ResponseEntity.ok(CommonResponse.of(ResponseCode.NOT_FOUND_ERROR)) :
 			ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomSummarizeResponse));
