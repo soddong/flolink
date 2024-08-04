@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.domain.feed.dto.request.FeedCommentRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
+import com.flolink.backend.domain.feed.dto.request.FeedImageRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
+import com.flolink.backend.domain.feed.dto.response.FeedImageResponse;
 import com.flolink.backend.domain.feed.dto.response.FeedResponse;
 import com.flolink.backend.domain.feed.service.FeedService;
 import com.flolink.backend.global.common.CommonResponse;
@@ -116,5 +118,15 @@ public class FeedController {
 		feedService.deleteComment(userId, feedId, commentId);
 		log.info("===피드 댓글 삭제하기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
+
+	@GetMapping("/images")
+	@Operation(summary = "이미지 불러오기")
+	public ResponseEntity<?> getImages(@RequestBody final FeedImageRequest feedImageRequest) {
+		log.info("===이미지 불러오기 START===");
+		Integer userId = 1;
+		List<FeedImageResponse> feedImageResponseList = feedService.getImages(userId, feedImageRequest);
+		log.info("===이미지 불러오기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, feedImageResponseList));
 	}
 }
