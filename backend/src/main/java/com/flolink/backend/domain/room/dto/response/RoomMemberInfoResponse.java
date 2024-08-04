@@ -20,6 +20,7 @@ public class RoomMemberInfoResponse {
 	private Integer roomId;
 	private String profile;
 	private String emotion;
+	private String message;
 	private Integer targetUserRoomId;
 	private String targetNickname;
 
@@ -35,6 +36,7 @@ public class RoomMemberInfoResponse {
 			.userId(userRoom.getUser().getUserId())
 			.roomId(userRoom.getRoom().getRoomId())
 			.profile(userRoom.getUser().getProfile())
+			.message(userRoom.getMessage().getContent())
 			.emotion("good") // message entity 추가하면서 끌고오기
 			.targetUserRoomId(userRoom.getUserRoomId())
 			.targetNickname(userRoom.getUser().getNickname())
