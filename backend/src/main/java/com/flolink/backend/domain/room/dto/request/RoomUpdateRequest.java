@@ -1,7 +1,5 @@
 package com.flolink.backend.domain.room.dto.request;
 
-import com.flolink.backend.domain.room.entity.Room;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,12 +13,6 @@ public class RoomUpdateRequest {
 	private String roomName;
 	private String roomParticipatePassword;
 	private String notice;
+	private String message;
 
-	public Room toEntity() {
-		return Room.builder()
-			.roomId(roomId)
-			.roomName(roomName)
-			.roomParticipatePassword(roomParticipatePassword)
-			.notice(notice).build();
-	}
 }

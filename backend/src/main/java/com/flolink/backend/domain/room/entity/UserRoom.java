@@ -18,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,10 @@ public class UserRoom {
 	@JoinColumn(name = "room_id", nullable = false)
 	private Room room;
 
+	@OneToOne
+	@JoinColumn(name = "message_id")
+	private Message message;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
 	private List<Nickname> nickNameList;
 
@@ -72,6 +77,24 @@ public class UserRoom {
 		return UserRoom.builder()
 			.user(user)
 			.room(room)
+			.message(
+				Message.builder()
+					.content("")
+					.createAt(LocalDateTime.now())
+					.useYn(true)
+					.build()
+			)
+			.createAt(LocalDateTime.now())
+			.useYn(true)
+			.role("member")
+			.build();
+	}
+
+	public static UserRoom of(User user, Room room, Message message) {
+		return UserRoom.builder()
+			.user(user)
+			.room(room)
+			.message(message)
 			.createAt(LocalDateTime.now())
 			.useYn(true)
 			.role("member")
