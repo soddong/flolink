@@ -20,10 +20,24 @@ function PushNotificationSubscriber() {
       })
       
       console.log('Push notification subscription successful')
+
+      triggerNotification(registration);
     } catch (error) {
       console.error('Error subscribing to push notifications:', error)
     }
   }
+
+  const triggerNotification = async (registration) => {
+    try {
+      const title = '알림';
+      const options = {
+        body: '당신의 주말이 삭제되었습니다.',
+      };
+      registration.showNotification(title, options);
+    } catch (error) {
+      console.error('Error triggering notification:', error);
+    }
+  };
 
   return (
     <button onClick={subscribeToPushNotifications}>
