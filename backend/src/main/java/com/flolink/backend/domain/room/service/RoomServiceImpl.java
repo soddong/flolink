@@ -19,6 +19,7 @@ import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
 import com.flolink.backend.domain.room.entity.Nickname;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.room.repository.MessageRepository;
 import com.flolink.backend.domain.room.repository.RoomRepository;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.domain.user.entity.User;
@@ -38,6 +39,7 @@ public class RoomServiceImpl implements RoomService {
 	private final RoomRepository roomRepository;
 	private final UserRepository userRepository;
 	private final UserRoomRepository userRoomRepository;
+	private final MessageRepository messageRepository;
 
 	@Override
 	public List<RoomSummarizeResponse> getAllRooms(final Integer userId) {
@@ -122,17 +124,56 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	@Transactional
-	public RoomSummarizeResponse updateRoomDetail(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
+	public RoomSummarizeResponse updateEmotion(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomUpdateRequest.getRoomId());
 		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
-		if (userRoom.getRole().equalsIgnoreCase("member")) {
-			if (!roomUpdateRequest.getRoomParticipatePassword().equalsIgnoreCase(room.getRoomName())) {
-				throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
-			}
+		if (userRoom != null) {
+			userRoom.getMessage().setContent(roomUpdateRequest.getMessage());
 		}
-		room.updateRoomInfo(roomUpdateRequest);
-		room = roomRepository.save(room);
+		return RoomSummarizeResponse.fromEntity(room);
+	}
+
+	@Override
+	@Transactional
+	public RoomSummarizeResponse updateRoomName(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
+		User user = findUserById(userId);
+		Room room = findRoomById(roomUpdateRequest.getRoomId());
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+
+		if (userRoom.getRole().equalsIgnoreCase("admin")) {
+			room.setRoomName(roomUpdateRequest.getRoomName());
+		}
+
+		return RoomSummarizeResponse.fromEntity(room);
+	}
+
+	@Override
+	@Transactional
+	public RoomSummarizeResponse updateParticipatePassword(final Integer userId,
+		final RoomUpdateRequest roomUpdateRequest) {
+		User user = findUserById(userId);
+		Room room = findRoomById(roomUpdateRequest.getRoomId());
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+
+		if (userRoom.getRole().equalsIgnoreCase("admin")) { //validate는 controller에서
+			room.setRoomParticipatePassword(roomUpdateRequest.getRoomParticipatePassword());
+		}
+
+		return RoomSummarizeResponse.fromEntity(room);
+	}
+
+	@Override
+	@Transactional
+	public RoomSummarizeResponse updateNotice(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
+		User user = findUserById(userId);
+		Room room = findRoomById(roomUpdateRequest.getRoomId());
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+
+		if (userRoom != null) {
+			room.setNotice(roomUpdateRequest.getNotice());
+		}
+
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 

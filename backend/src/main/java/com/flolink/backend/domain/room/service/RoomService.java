@@ -22,7 +22,13 @@ public interface RoomService {
 
 	List<RoomMemberInfoResponse> getRoomMemberInfos(final Integer userId, final Integer roomId);
 
-	RoomSummarizeResponse updateRoomDetail(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
+	RoomSummarizeResponse updateEmotion(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
+
+	RoomSummarizeResponse updateRoomName(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
+
+	RoomSummarizeResponse updateParticipatePassword(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
+
+	RoomSummarizeResponse updateNotice(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
 
 	String exitRoom(final Integer userId, final Integer roomId);
 
