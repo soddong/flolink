@@ -11,7 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.flolink.backend.domain.feed.dto.request.FeedCommentRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
+import com.flolink.backend.domain.feed.dto.request.FeedImageRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
+import com.flolink.backend.domain.feed.dto.response.FeedImageResponse;
 import com.flolink.backend.domain.feed.dto.response.FeedResponse;
 import com.flolink.backend.domain.feed.entity.Feed;
 import com.flolink.backend.domain.feed.entity.FeedComment;
@@ -137,11 +139,12 @@ public class FeedServiceImpl implements FeedService {
 			}
 		}
 		feed.updateContent(feedUpdateRequest);
-		
+
 		return FeedResponse.fromEntity(userRoom, feed);
 	}
 
 	@Override
+	@Transactional
 	public String deleteFeed(final Integer userId, final Integer feedId) {
 		Feed feed = findFeedById(feedId);
 		if (!feed.getUserRoom().getUser().getUserId().equals(userId)) {
@@ -157,6 +160,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional
 	public void createComment(final Integer userId, final Integer feedId, final FeedCommentRequest feedCommentRequest) {
 		Feed feed = findFeedById(feedId);
 		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, feedCommentRequest.getRoomId());
@@ -171,6 +175,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional
 	public void updateComment(final Integer userId, final Integer feedId, final Integer commentId,
 		final FeedCommentRequest feedCommentRequest) {
 
@@ -194,6 +199,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteComment(final Integer userId, final Integer feedId, final Integer commentId) {
 
 		FeedComment feedComment = feedCommentRepository.findById(commentId)
@@ -205,6 +211,18 @@ public class FeedServiceImpl implements FeedService {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
 		feedCommentRepository.delete(feedComment);
+	}
+
+	@Override
+	public List<FeedImageResponse> getImages(Integer userId, FeedImageRequest feedImageRequest) {
+		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, feedImageRequest.getRoomId());
+		if (userRoom == null) {
+			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+		}
+		return feedImageRepository.findFeedImagesByUserIdAndRoomIdAndCreateAtBetween(
+			userId, feedImageRequest.getRoomId(), feedImageRequest.getEndDate().atStartOfDay(),
+			feedImageRequest.getEndDate().atTime(23, 59, 59)
+		).stream().map((FeedImageResponse::fromEntity)).toList();
 	}
 
 	private Feed findFeedById(final Integer feedId) {
