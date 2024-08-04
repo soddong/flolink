@@ -16,7 +16,7 @@ public interface CalendarRepository extends JpaRepository<Calendar, Integer> {
             "AND FUNCTION('DAY', c.date) = FUNCTION('DAY', :date) " +
             "AND c.room.roomId = :roomId " +
             "ORDER BY c.createAt ASC")
-    List<CalendarResponse> findByDateAndRoomId(@Param("date") Date date, @Param("roomId") Integer roomId);
+    List<Calendar> findByDateAndRoomId(@Param("date") Date date, @Param("roomId") Integer roomId);
 
 
 }
