@@ -1,12 +1,12 @@
 package com.flolink.backend.domain.auth.service;
 
 import com.flolink.backend.domain.auth.dto.request.CheckAuthRequest;
-import com.flolink.backend.domain.auth.dto.request.PhoneAuthRequest;
+import com.flolink.backend.domain.auth.dto.response.SuccessTokenResponse;
 
 public interface AuthService {
 
-	void sendAuthenticationNumber(PhoneAuthRequest phoneAuthRequest);
+	void sendAuthenticationNumber(String tel);
 
-	void checkAuthenticationNumber(CheckAuthRequest checkAuthRequest);
+	SuccessTokenResponse checkAuthenticationNumber(CheckAuthRequest checkAuthRequest);
 
 }

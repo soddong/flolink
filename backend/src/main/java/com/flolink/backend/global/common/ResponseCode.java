@@ -15,6 +15,9 @@ public enum ResponseCode {
 
 	// User
 	USER_NOT_FOUND(404, "User not found", "NOT_FOUND_ERROR"),
+	UNREGISTERED_USER(401, "Unregistered User", "UNREGISTERED_USER"),
+	BLANK_NICKNAME(404, "Can't update blank nickname", "BLANK_NICKNAME"),
+	UNAUTHORIZED_USER(401, "Unauthorized_User", "UNAUTHORIZED_USER"),
 
 	// Room
 	USER_ROOM_NOT_FOUND(404, "UserRoom not found", "NOT_FOUND_ERROR"),
@@ -32,6 +35,13 @@ public enum ResponseCode {
 	
 	//Auth
 	TIME_OUT_EXCEPTION(401, "Auth Time Out", "TIME_OUT_ERROR"),
+	DUPLICATE_LOGIN_ID(401, "Duplicate login id", "DUPLICATE_LOGIN_ID"),
+	EXPIRED_TOKEN(401, "Token has Expired", "EXPIRED_TOKEN"),
+	UNAUTHORIZED_TOKEN(401, "Unauthorized Token", "UNAUTHORIZED_TOKEN"),
+	NO_REFRESHTOKEN(401, "No Refresh Token", "NO_REFRESHTOKEN"),
+	INVALID_REFRESHTOKEN(401, "Invalid Refresh Token", "INVALID_REFRESHTOKEN"),
+	PASSWORD_INCONSISTENCY(401, "Password inconsistency", "PASSWORD_INCONSISTENCY"),
+	USER_INCONSISTENCY(401, "User inconsistency", "USER_INCONSISTENCY"),
 
 	// Purchase & Payment
 	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "BAD_REQUEST_ERROR"),
