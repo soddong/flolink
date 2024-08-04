@@ -85,6 +85,9 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private EmotionType emotion = EmotionType.NORMAL;
 
+	@Column(name = "status_message")
+	private String statusMessage;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	List<UserRoom> userRoomList;
 
