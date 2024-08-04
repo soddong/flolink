@@ -51,7 +51,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			return null;
 		}
 
-		String loginId = oAuth2Response.getProviderId() + "-" + oAuth2Response.getProviderId();
+		String loginId = oAuth2Response.getProvider() + "-" + oAuth2Response.getProviderId();
 
 		if (!userRepository.existsByLoginId(loginId)) {
 			MyRoom myRoom = MyRoom.builder()

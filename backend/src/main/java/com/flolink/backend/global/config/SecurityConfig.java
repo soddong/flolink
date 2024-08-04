@@ -2,6 +2,7 @@ package com.flolink.backend.global.config;
 
 import java.util.Collections;
 
+import com.flolink.backend.domain.auth.handler.CustomSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +39,7 @@ public class SecurityConfig {
 	private final RefreshRepository refreshRepository;
 	private final ReissueService reissueService;
 	private final DefaultOAuth2UserService customOAuth2UserService;
+	private final CustomSuccessHandler customSuccessHandler;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -101,7 +103,8 @@ public class SecurityConfig {
 		http
 				.oauth2Login(oauth2 -> oauth2
 						.redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/*"))
-						.userInfoEndpoint(endpoint -> endpoint.userService(customOAuth2UserService)));
+						.userInfoEndpoint(endpoint -> endpoint.userService(customOAuth2UserService))
+						.successHandler(customSuccessHandler));
 
 
 		//jwt 검증 필터
