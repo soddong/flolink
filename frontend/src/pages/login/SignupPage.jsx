@@ -67,6 +67,7 @@ import TextField from '../../components/signup/TextField';
 import ToastModal from '../../components/signup/ToastModal';
 import { useNavigate } from 'react-router-dom';
 import PwField from '../../components/signup/PwField';
+import NicknameField from '../../components/signup/NicknameField';
 
 function SignupPage() {
   const [selectedTelecom, setSelectedTelecom] = useState('SKT');
@@ -74,9 +75,29 @@ function SignupPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordSame, setPasswordSame] = useState(true);
+  const [nickname, setNickname] = useState('');
+  const [nicknameError, setNicknameError] = useState('');
+  const [username, setUsername] = useState('');
+  const [usernameMessage, setUsernameMessage] = useState('');
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    setUsernameMessage('');
+  };
+  
+  const checkUsernameAvailability = (e) => {
+    e.preventDefault();
+    const currentUsername = username;
+    // 임의로 설정. 아이디 사용 가능 여부를 확인
+    if (currentUsername === 'testuser') {
+      setUsernameMessage('이미 사용 중인 아이디입니다.');
+    } else {
+      setUsernameMessage('사용 가능한 아이디입니다.');
+    }
+  };
 
   const handleSendCode = (e) => {
-    e.preventDefault(); // Prevent form submission and page reload
+    e.preventDefault();
     setIsModalOpen(true);
   };
 
@@ -95,6 +116,17 @@ function SignupPage() {
     setConfirmPassword(value);
     setPasswordSame(value === password);
   };
+  const handleNicknameChange = (e) => {
+    const value = e.target.value;
+    setNickname(value);
+
+    if (value.length > 8) {
+      setNicknameError('닉네임은 최대 8글자까지 입력 가능합니다.');
+    } else {
+      setNicknameError('');
+    }
+    
+  };
 
   const navigate = useNavigate();
 
@@ -106,10 +138,15 @@ function SignupPage() {
       <form className="flex flex-col gap-3">
         <div className="flex items-end gap-3 mb-0">
           <div className="flex-1">
-            <TextField placeholder="아이디를 입력해주세요" label="아이디" />
+            <TextField placeholder="아이디를 입력해주세요" label="아이디" value={username} onChange={handleUsernameChange} />
           </div>
-          <Button text="중복확인" variant="outline" className="text-sm flex-none" />
+          <Button text="중복확인" variant="outline" className="text-sm flex-none" onClick={checkUsernameAvailability}/>
         </div>
+        {usernameMessage && (
+  <p className="text-sm mt-1" style={{ color: usernameMessage.includes('사용 가능한') ? 'green' : 'red' }}>
+    {usernameMessage}
+  </p>
+)}
 
         <PwField 
           label="비밀번호" 
@@ -128,7 +165,11 @@ function SignupPage() {
         {!passwordSame && (
           <p className="text-red-500 text-sm">비밀번호가 일치하지 않습니다.</p>
         )}
-        <TextField label="닉네임" placeholder="닉네임을 입력해주세요"/>
+        <NicknameField label="닉네임" placeholder="닉네임을 입력해주세요" value={nickname} onChange={handleNicknameChange}/>
+
+      {nicknameError && (
+        <p className="text-red-500 text-sm">{nicknameError}</p>
+      )}
         <TextField label="이름" placeholder="예) 이싸피" />
         <div className="flex items-center gap-3 mb-0">
           <div className="flex flex-col">
@@ -158,4 +199,3 @@ function SignupPage() {
 }
 
 export default SignupPage;
-

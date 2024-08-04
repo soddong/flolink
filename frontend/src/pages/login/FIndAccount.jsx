@@ -20,6 +20,12 @@ function FindAccount() {
     }
   }, [countdown]);
 
+  // useEffect(() => {
+  //   // 테스트 : 아이디 찾았을 경우
+  //   setMaskedId('app**');
+  //   setOpenModal(true);
+  // }, []);
+
   const handleSendCode = async () => {
     // 인증번호 전송
     try {

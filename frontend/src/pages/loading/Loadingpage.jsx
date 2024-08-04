@@ -1,5 +1,5 @@
 import React from 'react';
-import loadingImage from '../../assets/logo/logo.png'; // 로고 이미지 경로를 실제 경로로 변경하세요
+import loadingImage from '../../assets/logo/logo.png';
 import waveImage from '../../assets/loading_background/image.png';
 import LoadingPageStyle from '../../css/loading/Loadingpage.module.css';
 
