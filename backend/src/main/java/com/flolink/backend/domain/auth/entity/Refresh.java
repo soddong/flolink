@@ -1,6 +1,6 @@
 package com.flolink.backend.domain.auth.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,22 +18,20 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "user_phone_token")
+@Builder
+@Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PhoneToken {
+@AllArgsConstructor
+public class Refresh {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "phone_token_id", nullable = false, length = 36)
-	private int phoneTokenId;
+	@Column(name = "refresh_id", nullable = false, length = 36)
+	private Integer refreshId;
 
-	@Column(name = "user_id", nullable = false, length = 36)
-	private int userId;
+	@Column(name = "refresh_token", nullable = false, length = 256)
+	private String refreshToken;
 
-	@Column(name = "phone_token", nullable = false, length = 256)
-	private String phoneToken;
-
-	@Column(name = "expire_at", nullable = false)
-	private Timestamp expireAt;
-
+	@Column(name = "expired_at", nullable = false)
+	private LocalDateTime expiredAt;
 }

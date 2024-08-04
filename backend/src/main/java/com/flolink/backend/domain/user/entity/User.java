@@ -5,9 +5,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.user.entity.enumtype.EmotionType;
+import com.flolink.backend.domain.user.entity.enumtype.ProfileType;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,36 +36,57 @@ import lombok.Setter;
 public class User {
 
 	@Id
-	@Column(name = "user_id", nullable = false, length = 36)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id", length = 36)
 	private Integer userId;
 
-	@Column(name = "login_id", nullable = false, length = 20)
+	@Column(name = "my_room_id", nullable = false, length = 36)
+	private Integer myRoomId;
+
+	@Column(name = "login_id", nullable = false, length = 100)
 	private String loginId;
 
-	@Column(name = "password", nullable = false, length = 64)
+	@Column(name = "password", length = 64)
 	private String password;
 
-	@Column(name = "user_name", nullable = false, length = 100)
+	@Column(name = "user_name", nullable = false, length = 256)
 	private String userName;
 
 	@Column(name = "nickname", nullable = false, length = 100)
 	private String nickname;
 
-	@Column(name = "tel", nullable = false, length = 20)
+	@Column(name = "tel", length = 20)
 	private String tel;
 
+	@Builder.Default
 	@Column(name = "point", nullable = false, length = 21)
-	private BigDecimal point;
+	private BigDecimal point = BigDecimal.ZERO;
 
+	@Builder.Default
 	@Column(name = "create_at", nullable = false, updatable = false)
-	private LocalDateTime createdAt;
+	private LocalDateTime createdAt = LocalDateTime.now();
 
+	@Builder.Default
 	@Column(name = "use_yn", nullable = false)
-	private boolean useYn;
+	private boolean useYn = true;
 
+	@Builder.Default
+	@Column(name = "role", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private RoleType role = RoleType.LOCAL;
+
+	@Builder.Default
 	@Column(name = "profile", nullable = false)
-	private String profile;
+	@Enumerated(EnumType.STRING)
+	private ProfileType profile = ProfileType.HONEYBEE;
+
+	@Builder.Default
+	@Column(name = "emotion", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private EmotionType emotion = EmotionType.NORMAL;
+
+	@Column(name = "status_message")
+	private String statusMessage;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	List<UserRoom> userRoomList;
