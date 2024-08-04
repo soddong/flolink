@@ -17,11 +17,15 @@ import MyRoomPage from './pages/my_room/myRoomPage';
 import PaymentPage from './pages/payment/PaymentPage';
 import SettingPage from './pages/setting/SettingPage';
 import LocationPage from './pages/location/LocationPage';
+import UserCertPage from './pages/certificate/UserCertPage';
 
 const router = createBrowserRouter([  
   {
     path : "/",
-    element : <TemporaryStartPage/>
+    element : 
+    <UserCertPage>
+      <TemporaryStartPage/>
+    </UserCertPage>
   },
   {
     path : "/test",

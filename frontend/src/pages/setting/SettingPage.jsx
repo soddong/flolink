@@ -11,6 +11,7 @@ import SettingNicknameModal from '../../components/setting/settingNicknameModal'
 import SettingMessageModal from '../../components/setting/settingMessageModal';
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function SettingPage() {
     const [animal, setAnimal] = useState(null);
@@ -21,13 +22,15 @@ function SettingPage() {
     const [showNicknameModal, setShowNicknameModal] = useState(false);
     const [showMessageModal, setShowMessageModal] = useState(false);
 
+    const navigate = useNavigate();
+
     return (
         <div className={styles.setting}>
             {showModal && <SettingModal setShowModal={setShowModal} setAnimal={setAnimal} />}
             {showNicknameModal && <SettingNicknameModal nickname={nickname} setShowNicknameModal={setShowNicknameModal} setNickname={setNickname}/>}
             {showMessageModal && <SettingMessageModal />}
             <div className={styles.header}>
-                <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }}/>
+                <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
                 <div className={styles.title}>
                     <span>설정</span>
                 </div>

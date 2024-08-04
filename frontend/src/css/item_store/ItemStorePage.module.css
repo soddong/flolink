@@ -5,8 +5,21 @@
 
 .header {
     width : 100%;
-    height : 5%;
+    height : 7%;
     background-color: white;
+    display: flex;
+    flex-direction: row;
+    position : relative;
+    align-items: center;
+    padding : 5%;
+    box-sizing: border-box;
+}
+
+.title {
+    position : absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
 }
 
 .mycardcontainer {
@@ -66,7 +79,7 @@
 
 .settinglist {
     width: 100%;
-    height: 65%;
+    height: 63%;
     background-color: #f0f0f0;
     padding: 20px;
     box-sizing: border-box;
@@ -119,4 +132,61 @@
 
 .list li:hover {
     background-color: #f8f8f8;
+}
+
+.itemListItem {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.itemInfo {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+.itemImage {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.itemName {
+    font-weight: bold;
+}
+
+.itemVariants {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: #fff;
+}
+
+.itemVariants.expanded {
+    max-height: 500px; /* 적절한 높이로 조정 */
+    transition: max-height 0.5s ease-in;
+}
+
+.variantItem {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+.variantImage {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.variantNumber {
+    font-size: 14px;
+    color: #666;
 }
