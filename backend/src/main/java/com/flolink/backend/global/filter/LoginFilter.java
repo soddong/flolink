@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
