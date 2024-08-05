@@ -4,13 +4,13 @@ import logo from '../../assets/logo/logo.png';
 import Button from '../../components/signup/Button';
 import TextField from '../../components/signup/TextField';
 import ToastModal from '../../components/signup/ToastModal';
-import { useNavigate } from 'react-router-dom';
+import { Router, useNavigate } from 'react-router-dom';
 import PwField from '../../components/signup/PwField';
 import NicknameField from '../../components/signup/NicknameField';
 import IdField from '../../components/signup/IdField';
 import NameField from '../../components/signup/NameField';
 import PhoneNumberField from '../../components/signup/PhoneNumber';
-
+import { axiosCommonInstance } from '../../apis/axiosInstance';
 function SignupPage() {
   const [selectedTelecom, setSelectedTelecom] = useState('SKT');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,6 +87,20 @@ function SignupPage() {
       setNicknameError('');
     }
   };
+
+  const handleRegist=()=>{
+    axiosCommonInstance.post("/users/join",{
+      loginId : username,
+      password : password,
+      userName : fullName,
+      nickname : nickname,
+      tel : phoneNumber,
+      token : successToken
+    }).then((data)=>{
+      console.log("우왕 회원가입이다");
+      navigate('/login');
+    })
+  }
 
   const handleFullNameChange = (e) => {
     setFullName(e.target.value);
@@ -176,8 +190,8 @@ function SignupPage() {
           {successToken==="" && (
             <Button text="전송" variant="solid" onClick={handleSendCode} disabled={!isFormValid} />
           )}{
-            !successToken==="" && (
-              <Button text="가입하기" variant="solid" onClick={handleSendCode} disabled={!isFormValid} />
+            successToken!=="" && (
+              <Button text="가입하기" variant="solid" onClick={handleRegist} disabled={!isFormValid} />
             )
           }
         </form>
