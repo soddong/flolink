@@ -36,7 +36,7 @@ function SignupPage() {
   const checkUsernameAvailability = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosCommonInstance.get(`http://localhost:8081/users/duplicate/${username}`);
+      const response = await axiosCommonInstance.get(`/users/duplicate/${username}`);
       console.log(response);
       // 응답이 성공적으로 왔을 때
       if (response.data.data) {
@@ -88,15 +88,16 @@ function SignupPage() {
     }
   };
 
-  const handleRegist=()=>{
-    axiosCommonInstance.post("/users/join",{
-      loginId : username,
-      password : password,
-      userName : fullName,
-      nickname : nickname,
-      tel : phoneNumber,
-      token : successToken
-    }).then((data)=>{
+  const handleRegist = () => {
+    console.log("1234");
+    axiosCommonInstance.post("/users/join", {
+      loginId: username,
+      password: password,
+      userName: fullName,
+      nickname: nickname,
+      tel: phoneNumber,
+      token: successToken
+    }).then((data) => {
       console.log("우왕 회원가입이다");
       navigate('/login');
     })
@@ -187,10 +188,10 @@ function SignupPage() {
               onChange={handlePhoneNumberChange}
             />
           </div>
-          {successToken==="" && (
+          {successToken === "" && (
             <Button text="전송" variant="solid" onClick={handleSendCode} disabled={!isFormValid} />
           )}{
-            successToken!=="" && (
+            successToken !== "" && (
               <Button text="가입하기" variant="solid" onClick={handleRegist} disabled={!isFormValid} />
             )
           }
