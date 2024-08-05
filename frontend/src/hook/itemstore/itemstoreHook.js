@@ -1,11 +1,5 @@
 import { useQuery } from 'react-query';
-import { axiosCommonInstance } from '../../apis/axiosInstance';
-
-
-const fetchItems = async () => {
- const { data } = await axiosCommonInstance.get('/store');
-  return data;
-};
+import { fetchItems, fetchPaymentHistory, fetchPurchaseHistory } from '../../service/itemstore/itemstoreApi';
 
 export const useItems = () => {
   return useQuery({
@@ -13,3 +7,17 @@ export const useItems = () => {
     queryFn: fetchItems,
   });
 };
+
+export const usePaymentHistory = () => {
+    return useQuery({
+        queryKey: ['paymenthistory'],
+        queryFn: fetchPaymentHistory,
+    })
+}
+
+export const usePurchaseHistory = () => {
+    return useQuery({
+        queryKey: ['purchasehistory'],
+        queryFn: fetchPurchaseHistory,
+    })
+}

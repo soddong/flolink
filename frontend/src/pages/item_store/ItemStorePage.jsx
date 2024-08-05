@@ -1,26 +1,52 @@
 import styles from '../../css/item_store/ItemStorePage.module.css'
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import useItemStore from '../../store/itemStore';
-import {useItems} from '../../hook/itemstore/itemstoreHook.js'
+import { useItems, usePaymentHistory, usePurchaseHistory } from '../../hook/itemstore/itemstoreHook.js'
 
 function ItemStorePage(props) {
     const [activeTab, setActiveTab] = useState('itemlist');
     const [expandedItem, setExpandedItem] = useState(null);
-    const { items, images } = useItemStore();
-
-    const { data, isLoading, error } = useItems();
+    const { items, images, setItems, setImages, generateImagesFromNames } = useItemStore();
+    const { data: itemsData, isLoading: itemsLoading, error: itemsError } = useItems();
+    const { data: paymentHistoryData, isLoading: paymentHistoryLoading, error: paymentHistoryError } = usePaymentHistory();
     
+
+    useEffect(() => {
+        if (itemsData && itemsData.data) {
+            const processedItems = [];
+            const itemNames = [];
+
+            itemsData.data.forEach(item => {
+                const baseName = item.itemName.replace(/[0-9]/g, '');
+
+                if (!processedItems.some(el => el.name === baseName)) {
+                    processedItems.push({ name: baseName, variants: [] });
+                }
+
+                const itemIndex = processedItems.findIndex(el => el.name === baseName);
+                processedItems[itemIndex].variants.push(item.itemName);
+
+                if (!itemNames.includes(item.itemName)) {
+                    itemNames.push(item.itemName);
+                }
+            });
+
+            setItems(processedItems);
+            setImages(generateImagesFromNames(itemNames));
+        }
+    }, [itemsData]);
+
     const navigate = useNavigate();
 
     const toggleItem = (itemName) => {
-        console.log(data)
+        console.log(items)
         setExpandedItem(expandedItem === itemName ? null : itemName);
     };
 
-    if (isLoading) return <div>로딩 중...</div>;
-    if (error) return <div>에러 발생: {error.message}</div>;
+    // if (itemsLoading) return <div>로딩 중...</div>;
+    // if (itemsError) return <div>에러 발생: {error.message}</div>;
 
     return (
         <div className={styles.settingpage}>
@@ -82,7 +108,7 @@ function ItemStorePage(props) {
                                         {item.variants.map((variant, variantIndex) => (
                                             <div key={variantIndex} className={styles.variantItem}>
                                                 <img 
-                                                    src={variant} 
+                                                    src={images[item.name][variantIndex]} 
                                                     alt={`${item.name} variant ${variantIndex + 1}`} 
                                                     className={styles.variantImage}
                                                 />

@@ -14,25 +14,19 @@ import vase2 from '../assets/myroom/items/vase2.png';
 import bigtable1 from '../assets/myroom/items/bigtable1.png';
 import bigtable2 from '../assets/myroom/items/bigtable2.png';
 
+const imageMap = {
+    rug: [rug1, rug2],
+    shelf: [shelf1, shelf2],
+    stand: [stand1, stand2],
+    bed: [bed1, bed2],
+    minitable: [minitable1, minitable2],
+    vase: [vase1, vase2],
+    bigtable: [bigtable1, bigtable2],
+};
+
 const useItemStore = create((set) => ({
-    items : [
-        { name: 'rug', variants: [rug1, rug2] },
-        { name: 'shelf', variants: [shelf1, shelf2] },
-        { name: 'stand', variants: [stand1, stand2] },
-        { name: 'bed', variants: [bed1, bed2] },
-        { name: 'minitable', variants: [minitable1, minitable2] },
-        { name: 'vase', variants: [vase1, vase2] },
-        { name: 'bigtable', variants: [bigtable1, bigtable2] },
-    ],
-    images : {
-        rug: [rug1, rug2],
-        shelf: [shelf1, shelf2],
-        stand: [stand1, stand2],
-        bed: [bed1, bed2],
-        minitable: [minitable1, minitable2],
-        vase: [vase1, vase2],
-        bigtable: [bigtable1, bigtable2],
-    },
+    items : [],
+    images : {},
     userInventory : {
         rug: [1, 2],
         shelf: [1, 2],
@@ -63,6 +57,28 @@ const useItemStore = create((set) => ({
           [itemName]: [...(state.userInventory[itemName] || []), variantIndex],
         },
     })),
+    setItems: (newItems) => set((state) => ({
+        items: newItems,
+    })),
+    setImages: (newImages) => set((state) => ({
+        images: newImages,
+    })),
+    generateImagesFromNames: (itemNames) => {
+        const processedImages = {};
+
+        itemNames.forEach((itemName) => {
+            const baseName = itemName.replace(/[0-9]/g, ''); 
+            if (imageMap[baseName]) {
+                const variantIndex = parseInt(itemName.replace(/\D/g, '')) - 1;
+                if (!processedImages[baseName]) {
+                    processedImages[baseName] = [];
+                }
+                processedImages[baseName][variantIndex] = imageMap[baseName][variantIndex];
+            }
+        });
+
+        return processedImages;
+    }
 }))
 
 export default useItemStore;
