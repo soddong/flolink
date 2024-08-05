@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.convert.Jsr310Converters;
@@ -47,7 +48,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 		CustomOAuth2UserResponse customUserDetails = (CustomOAuth2UserResponse)authentication.getPrincipal();
 
 		int userId = customUserDetails.getUserId();
-		int myRoomId = customUserDetails.getMyRoomId();
+		MyRoom myRoomId = customUserDetails.getMyRoom();
         RoleType role = customUserDetails.getRoleType();
 
 		//현재 시간
