@@ -1,31 +1,23 @@
 import ProfilePhoto from './ProfilePhoto';
-import { useState } from 'react';
-import Modal from '../modal/UserStatusModifyModal';
+import Photo from '../../../assets/profile/profile_dummy.jpg'
 
 function UserStatusList () {
-  const imageList = ['엄마', '아빠', '첫째', '둘째']
-  const [modal, setModal] = useState()
-  function showStatusModal () {
-    setModal(!modal)
-  } 
+  const memberList = [
+    { id: 1, name: '엄마', photo: Photo, status: '화남', manager: 1},
+    { id: 2, name: '아빠', photo: Photo, status: '행복', manager: 0},
+    { id: 3, name: '첫째', photo: Photo, status: '행복', manager: 0},
+    { id: 4, name: '둘째', photo: Photo, status: '슬픔', manager: 0},
+  ]
   
   return (
     <div className="border-box mt-3.5 h-24 py-1 px-5 bg-white/75 rounded-xl flex flex-col items-center">
       <div className='flex w-full relative justify-center items-center'>
         <p className="text-base m-0 font-bold text-zinc-500">오늘 우리의 기분은?</p>
-        <button onClick={showStatusModal} className='absolute right-0 w-10 text-xs flex justify-center rounded bg-rose-400 text-white'>수정</button>
       </div>
-      {modal && (
-          <>
-            <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
-            onClick={showStatusModal}></div>
-            <Modal member='user1' />
-          </>
-      )}
       <div className="flex w-full justify-around my-1.5">
-        {imageList.map((image, index) => {
+        {memberList.map((member) => {
           return (
-            <ProfilePhoto name={image} key={index} />
+            <ProfilePhoto name={member.name} photo={member.photo} status={member.status} key={member.id} manager={member.manager} />
           );
         })}
       </div>
