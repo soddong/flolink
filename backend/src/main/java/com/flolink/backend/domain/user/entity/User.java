@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
 import com.flolink.backend.domain.user.entity.enumtype.EmotionType;
 import com.flolink.backend.domain.user.entity.enumtype.ProfileType;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
@@ -99,5 +100,22 @@ public class User {
 	public void subtractPoint(BigDecimal point) {
 		BigDecimal newPoint = this.point.subtract(point);
 		this.point = newPoint;
+	}
+
+	public static User toEntity(String loginId, String password, MyRoom myRoom, JoinUserRequest joinUserRequest, RoleType role){
+		return User.builder()
+				.loginId(loginId)
+				.myRoom(myRoom)
+				.password(password)
+				.userName(joinUserRequest.getUserName())
+				.nickname(joinUserRequest.getNickname())
+				.tel(joinUserRequest.getTel())
+				.point(BigDecimal.ZERO)
+				.createdAt(LocalDateTime.now())
+				.useYn(true)
+				.role(role)
+				.profile(ProfileType.HONEYBEE)
+				.emotion(EmotionType.NORMAL)
+				.build();
 	}
 }

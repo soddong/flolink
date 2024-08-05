@@ -1,23 +1,17 @@
 package com.flolink.backend.global.util;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 @Slf4j
 @Component
@@ -52,21 +46,6 @@ public class JwtUtil {
 			.get("userId", Integer.class);
 	}
 
-	public MyRoom getMyRoom(String token) throws JsonProcessingException {
-		Claims claims = Jwts.parser()
-			.verifyWith(secretKey) // 비밀키 설정
-			.build()
-			.parseSignedClaims(token)
-			.getPayload();
-
-		// 클레임에서 'myRoom' 값을 JSON 문자열로 가져옵니다.
-		String myRoomJson = claims.get("myRoom", String.class);
-
-		// JSON 문자열을 MyRoom 객체로 변환합니다.
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(myRoomJson, MyRoom.class);
-	}
-
 	public String getCategory(String token) {
 		return Jwts.parser()
 			.verifyWith(secretKey)
@@ -86,11 +65,10 @@ public class JwtUtil {
 			.before(new Date());
 	}
 
-	public String createJwt(String category, int userId, MyRoom myRoom, RoleType role, Long expiredTime, Date now) {
+	public String createJwt(String category, int userId, RoleType role, Long expiredTime, Date now) {
 		return Jwts.builder()
 			.claim("category", category)
 			.claim("userId", userId)
-			.claim("myRoom", myRoom)
 			.claim("role", role.name())
 			.issuedAt(now)
 			.expiration(new Date(now.getTime() + expiredTime))
