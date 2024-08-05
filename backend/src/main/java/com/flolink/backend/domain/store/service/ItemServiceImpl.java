@@ -123,8 +123,7 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public void processUserPurchase(User user, Item item) {
-		// TODO : User 엔티티에서 update 하도록 수정필요
-		user.setPoint(user.getPoint().subtract(item.getPrice()));
+		user.subtractPoint(item.getPrice());
 	}
 
 	@Override

@@ -65,9 +65,7 @@ public class MyRoomServiceImpl implements MyRoomService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
-		// TODO: user.getMyRoomId() 맵핑
-		MyRoom myRoom = myRoomRepository.findById(1)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.MY_ROOM_NOT_FOUND));
+		MyRoom myRoom = user.getMyRoom();
 
 		HasItem hasItem = hasItemRepository.findById(hasItemId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.INVENTORY_NOT_FOUND));
@@ -91,9 +89,7 @@ public class MyRoomServiceImpl implements MyRoomService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
-		// TODO: MyRoom myRoom = user.getMyRoom();
-		MyRoom myRoom = myRoomRepository.findById(1)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.MY_ROOM_NOT_FOUND));
+		MyRoom myRoom = user.getMyRoom();
 
 		HasItem hasItem = hasItemRepository.findById(hasItemId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.INVENTORY_NOT_FOUND));
