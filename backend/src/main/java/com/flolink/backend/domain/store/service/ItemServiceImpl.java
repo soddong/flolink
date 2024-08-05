@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flolink.backend.domain.myroom.entity.HasItem;
 import com.flolink.backend.domain.myroom.service.HasItemService;
 import com.flolink.backend.domain.store.dto.response.ItemCommonResponse;
 import com.flolink.backend.domain.store.dto.response.ItemPurchaseResponse;
@@ -100,11 +99,12 @@ public class ItemServiceImpl implements ItemService {
 			throw new BadRequestException(ResponseCode.INSUFFICIENT_FUNDS);
 		}
 
-		processUserPurchase(user, item);                                // 사용자 포인트 업데이트
-		ItemPurchaseHistory itemPurchaseHistory = savePurchaseHistory(user, item);    // 구매 내역 저장
-		HasItem hasItem = hasItemService.saveHasItem(user, item);       // 인벤토리 저장
+		hasItemService.saveHasItem(user, item);       // 인벤토리 저장
+		processUserPurchase(user, item);              // 사용자 포인트 업데이트
 
-		return ItemPurchaseResponse.fromEntity(itemPurchaseHistory);
+		return ItemPurchaseResponse.fromEntity(
+			savePurchaseHistory(user, item)
+		);
 	}
 
 	/**
