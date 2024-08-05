@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.domain.auth.dto.request.CheckAuthRequest;
+import com.flolink.backend.domain.auth.dto.request.SendAuthRequest;
 import com.flolink.backend.domain.auth.dto.response.SuccessTokenResponse;
 import com.flolink.backend.domain.auth.service.AuthService;
 import com.flolink.backend.global.common.CommonResponse;
@@ -29,9 +30,9 @@ public class AuthController {
 
 	@Operation(summary = "인증번호 발송", description = "작성한 휴대전홥 번호로 인증번호 발송")
 	@PostMapping("/authentication")
-	public ResponseEntity<?> sendAuth(@RequestBody String tel) {
+	public ResponseEntity<?> sendAuth(@RequestBody SendAuthRequest sendAuthRequest) {
 		log.info("===휴대폰 본인인증번호 전송 START===");
-		authService.sendAuthenticationNumber(tel);
+		authService.sendAuthenticationNumber(sendAuthRequest.getTel());
 		log.info("===휴대폰 본인인증번호 전송 END===");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
