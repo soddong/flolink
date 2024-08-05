@@ -18,7 +18,7 @@ import Winter3 from '../../assets/garden/winter3.png'
 import Level1 from '../../assets/garden/level_1.png'
 import Level2 from '../../assets/garden/level_2.png'
 import Level3 from '../../assets/garden/level_3.png'
-import None from '../../assets/garden/none.png';
+import NoFlower from '../../assets/garden/none.png';
 
 const months = [
   {id: 1, name: '1월', image: Winter2},
@@ -52,7 +52,7 @@ function Garden ({year, flowers, nextYear, postYear}) {
           ? { ...month, image: month.image }
           : { ...month, image: levelImages[level] || month.image };
       } else {
-        return { ...month, image: None };
+        return { ...month, image: NoFlower };
       }
     });
     setUpdatedMonths(newMonths);
