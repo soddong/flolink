@@ -5,7 +5,6 @@ import static com.flolink.backend.domain.user.entity.enumtype.RoleType.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.flolink.backend.domain.user.dto.request.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flolink.backend.domain.auth.entity.SuccessToken;
 import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
+import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
+import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
+import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
+import com.flolink.backend.domain.user.dto.request.StatusMessageRequest;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 import com.flolink.backend.domain.user.entity.User;
@@ -73,21 +78,21 @@ public class UserServiceImpl implements UserService {
 		}
 
 		MyRoom myRoom = MyRoom.builder()
-				.itemStand(0)
-				.itemRug(0)
-				.itemShelf(0)
-				.itemBed(0)
-				.itemBigtable(0)
-				.itemMinitable(0)
-				.itemVase(0)
-				.build();
+			.itemStand(0)
+			.itemRug(0)
+			.itemShelf(0)
+			.itemBed(0)
+			.itemBigtable(0)
+			.itemMinitable(0)
+			.itemVase(0)
+			.build();
 
 		em.persist(myRoom);
 		em.flush();
 
 		User user = User.builder()
 			.loginId(loginId)
-			.myRoomId(myRoom.getMyRoomId())
+			.myRoom(myRoom)
 			.password(bCryptPasswordEncoder.encode(password))
 			.userName(joinUserRequest.getUserName())
 			.nickname(joinUserRequest.getNickname())
@@ -281,7 +286,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void modifyMessage(StatusMessageRequest statusMessageRequest, int userId) {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 		user.setStatusMessage(statusMessageRequest.getStatusMessage());
 	}
 

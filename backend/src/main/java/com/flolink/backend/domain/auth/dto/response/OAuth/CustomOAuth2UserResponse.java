@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 
 import lombok.AllArgsConstructor;
@@ -41,8 +42,8 @@ public class CustomOAuth2UserResponse implements OAuth2User {
 		return userDTO.getUserId();
 	}
 
-	public int getMyRoomId() {
-		return userDTO.getMyRoomId();
+	public MyRoom getMyRoom() {
+		return userDTO.getMyRoom();
 	}
 
 }
