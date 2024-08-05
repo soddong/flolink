@@ -100,6 +100,7 @@ public class AuthServiceImpl implements AuthService {
 				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
 			}
 		} finally {
+			log.info("===Tel_Auth_Num 삭제 진행===");
 			authRepository.deleteByTel(checkAuthRequest.getTel());
 		}
 
