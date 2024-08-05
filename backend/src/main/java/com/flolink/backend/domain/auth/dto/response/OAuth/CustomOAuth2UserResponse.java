@@ -1,16 +1,14 @@
 package com.flolink.backend.domain.auth.dto.response.OAuth;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import lombok.AllArgsConstructor;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 
-import javax.management.relation.Role;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CustomOAuth2UserResponse implements OAuth2User {
@@ -35,7 +33,9 @@ public class CustomOAuth2UserResponse implements OAuth2User {
 		return userDTO.getUsername();
 	}
 
-	public RoleType getRoleType(){return userDTO.getRoleType();}
+	public RoleType getRoleType() {
+		return userDTO.getRoleType();
+	}
 
 	public int getUserId() {
 		return userDTO.getUserId();
