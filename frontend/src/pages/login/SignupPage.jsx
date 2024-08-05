@@ -36,7 +36,7 @@ function SignupPage() {
   const checkUsernameAvailability = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`http://localhost:8081/users/duplicate/${username}`);
+      const response = await axiosCommonInstance.get(`http://localhost:8081/users/duplicate/${username}`);
       console.log(response);
       // 응답이 성공적으로 왔을 때
       if (response.data.data) {
