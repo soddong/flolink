@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PaymentCreateRequest {
+	private String orderName;
 	private BigDecimal amount;
 }

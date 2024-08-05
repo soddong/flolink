@@ -76,19 +76,16 @@ public class PaymentHistory {
 		return PaymentHistory.builder()
 			.user(user)
 			.orderId(generateRandomUUID())
-			.orderName(paymentCreateRequest.getAmount().toString() + " 포인트")
+			.orderName(paymentCreateRequest.getOrderName() + " 포인트")
 			.amount(paymentCreateRequest.getAmount())
 			.state(PaymentState.PENDING)
-			.currency("KRW")
+			.currency("CURRENCY_KRW")
 			.build();
 	}
 
 	public void completePayment(PortOnePayment portOne) {
 		this.paymentKey = portOne.getPaymentKey();
-		this.currency = portOne.getCurrency();
-		this.method = portOne.getMethod();
-		this.receiptUrl = portOne.getReceipt().getUrl();
-		this.approvedAt = portOne.getApprovedAt();
+		this.approvedAt = LocalDateTime.now();
 		this.state = PaymentState.PAID;
 	}
 
