@@ -98,7 +98,8 @@ function CalendarList () {
           <>
             <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
             onClick={showCreateModal}></div>
-            <CreateScheduleModal showCreateModal={showCreateModal} date={dateValue} />
+            <CreateScheduleModal showCreateModal={showCreateModal} date={dateValue}
+            title="" content="" tag="생일" icon="cake" color="#E37C91" />
           </>
         )}
         <ScheduleList schedules={todaySchedule}/>

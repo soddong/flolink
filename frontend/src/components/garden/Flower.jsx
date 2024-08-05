@@ -1,11 +1,14 @@
 import FlowerModal from "./FlowerModal";
 import { useState } from "react";
+import NoFlower from '../../assets/garden/none.png';
 
 function Flower ({id, month, flower}) {
   const [flowerModal, setFlowerModal] = useState(false)
 
   function showFlowermodal () {
-    setFlowerModal(!flowerModal)
+    if (flower !== NoFlower) {
+      setFlowerModal(!flowerModal)
+    }
   }
 
   return (

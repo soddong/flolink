@@ -10,7 +10,7 @@ function YearStatus ({year, total, success, feedCount}) {
     } else if (score < 0.7) {
       setComment('예쁜 정원이네요!')
     } else {
-      setComment('이번 해는 소통이 활발했어요. 정원이 꽉 찼어요!')
+      setComment('이번 해는 소통이 활발했네요. 정원이 꽉 찼어요!')
     }
   }, [score])
 
