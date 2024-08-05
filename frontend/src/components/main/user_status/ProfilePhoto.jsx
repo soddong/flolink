@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Modal from '../modal/UserStatusModal';
 
-function ProfilePhoto ({ name, photo, status}) {
+function ProfilePhoto ({ name, photo, status, manager}) {
   const [modal, setModal] = useState(false);
   function showMemberModal () {
     setModal(!modal)
@@ -17,7 +17,7 @@ function ProfilePhoto ({ name, photo, status}) {
           <>
             <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
             onClick={showMemberModal}></div>
-            <Modal name={name} photo={photo} status={status} />
+            <Modal name={name} photo={photo} status={status} manager={manager} />
           </>
         )}
     </div>

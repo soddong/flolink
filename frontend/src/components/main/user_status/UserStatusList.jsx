@@ -3,10 +3,10 @@ import Photo from '../../../assets/profile/profile_dummy.jpg'
 
 function UserStatusList () {
   const memberList = [
-    { id: 1, name: '엄마', photo: Photo, status: '화남'},
-    { id: 2, name: '아빠', photo: Photo, status: '행복'},
-    { id: 3, name: '첫째', photo: Photo, status: '행복'},
-    { id: 4, name: '둘째', photo: Photo, status: '슬픔'},
+    { id: 1, name: '엄마', photo: Photo, status: '화남', manager: 1},
+    { id: 2, name: '아빠', photo: Photo, status: '행복', manager: 0},
+    { id: 3, name: '첫째', photo: Photo, status: '행복', manager: 0},
+    { id: 4, name: '둘째', photo: Photo, status: '슬픔', manager: 0},
   ]
   
   return (
@@ -17,7 +17,7 @@ function UserStatusList () {
       <div className="flex w-full justify-around my-1.5">
         {memberList.map((member) => {
           return (
-            <ProfilePhoto name={member.name} photo={member.photo} status={member.status} key={member.id} />
+            <ProfilePhoto name={member.name} photo={member.photo} status={member.status} key={member.id} manager={member.manager} />
           );
         })}
       </div>

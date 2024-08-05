@@ -3,7 +3,7 @@ import style from "../../../css/main/main_modals.module.css"
 function UserStatusModal ({name, photo, status}) {
 
   return (
-    <div className={`w-72 h-56 backdrop-blur-sm ${style.mainModal}`}>
+    <div className={`w-72 h-52 backdrop-blur-sm ${style.mainModal}`}>
       <img src={photo} alt="dummy_profile" className='w-10 rounded-full mt-2' />
       <div className='flex items-center'>
         <div className='flex justify-center items-center w-6 h-3 bg-rose-400 rounded-sm text-white font-bold' style={{'fontSize': '8px'}}>방장</div>
@@ -19,22 +19,18 @@ function UserStatusModal ({name, photo, status}) {
         <p className="text-xs">작성글: n개</p>
       </div>
       <div className='flex items-center justify-around w-52 my-1'>
-        <div className='w-24 h-8 bg-rose-400 rounded-lg text-white flex items-center justify-center'>
-          <span className="material-symbols-outlined text-lg" style={{'fontVariationSettings': '"FILL" 1'}}>
-            meeting_room
-          </span>
-          <p className="m-0 text-sm font-bold">
-            마이룸 보기
-          </p>
-        </div>
-        <div className='w-24 h-8 bg-blue-300 rounded-lg text-white flex items-center justify-center'>
-          <span className="material-symbols-outlined text-lg" style={{'fontVariationSettings': '"FILL" 1'}}>
-            meeting_room
-          </span>
-          <p className="m-0 text-sm font-bold">
-            작성글 보기
-          </p>
-        </div>
+        <button className='w-24 h-8 bg-rose-400 rounded-lg text-white'>
+          <p className="m-0 text-sm font-bold flex justify-center items-center">
+            <span className="material-symbols-outlined text-lg" style={{'fontVariationSettings': '"FILL" 1'}}>
+              meeting_room
+            </span>마이룸 보기</p>
+        </button>
+        <button className='w-24 h-8 bg-blue-300 rounded-lg text-white flex items-center justify-center'>
+          <p className="m-0 text-sm font-bold flex justify-center items-center">
+            <span className="material-symbols-outlined text-lg" style={{'fontVariationSettings': '"FILL" 1'}}>
+              meeting_room
+            </span>작성글 보기</p>
+        </button>
       </div>
     </div>
   )
