@@ -8,7 +8,7 @@ import { useItems, usePaymentHistory, usePurchaseHistory } from '../../hook/item
 function ItemStorePage(props) {
     const [activeTab, setActiveTab] = useState('itemlist');
     const [expandedItem, setExpandedItem] = useState(null);
-    const { items, images, setItems, setImages, generateImagesFromNames } = useItemStore();
+    const { items, images, setItems, setImages, generateImagesFromNames, setPurchaseHistory, setPaymentHistory, histories } = useItemStore();
     const { data: itemsData, isLoading: itemsLoading, error: itemsError } = useItems();
     const { data: paymentHistoryData, isLoading: paymentHistoryLoading, error: paymentHistoryError } = usePaymentHistory();
     const { data: purchaseHistoryData, isLoading: purchaseHistoryLoading, error: purchaseHistoryError } = usePurchaseHistory();
@@ -42,25 +42,20 @@ function ItemStorePage(props) {
     useEffect(() => {
         if (paymentHistoryData && paymentHistoryData.data) {
 
-            paymentHistoryData.data.forEach(history => {
-                console.log(history)
-            })
+            setPaymentHistory(paymentHistoryData.data)
         }
     }, [paymentHistoryData])
 
     useEffect(() => {
         if (purchaseHistoryData && purchaseHistoryData.data) {
-
-            purchaseHistoryData.data.forEach(history => {
-                console.log(history)
-            })
+            setPurchaseHistory(purchaseHistoryData.data)
         }
     }, [purchaseHistoryData])
 
     const navigate = useNavigate();
 
     const toggleItem = (itemName) => {
-        console.log(items)
+        console.log(histories)
         setExpandedItem(expandedItem === itemName ? null : itemName);
     };
 

@@ -80,6 +80,26 @@ const useItemStore = create((set) => ({
 
         return processedImages;
     },
+    setPurchaseHistory: (purchaseHistory) => set((state) => {
+        const processedHistory = purchaseHistory.map(event => ({
+            ...event,
+            transactionAt: new Date(event.transactionAt),
+        }));
+
+        return {
+            histories: [...state.histories, ...processedHistory],
+        };
+    }),
+    setPaymentHistory: (paymentHistory) => set((state) => {
+        const processedHistory = paymentHistory.map(event => ({
+            ...event,
+            paymentAt: new Date(event.paymentAt),
+        }));
+
+        return {
+            histories: [...state.histories, ...processedHistory],
+        };
+    }),
 }))
 
 export default useItemStore;
