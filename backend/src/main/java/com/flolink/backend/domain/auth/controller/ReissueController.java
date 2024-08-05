@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.auth.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ public class ReissueController {
 
 	@Operation(summary = "토큰 재발급", description = "AccessToken, RefreshToken 재발급")
 	@PostMapping("/reissue")
-	public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
 		log.info("===AccessToken 재발급 START===");
 		reissueService.reissue(request, response);
 		log.info("===AccessToken 재발급 END===");
