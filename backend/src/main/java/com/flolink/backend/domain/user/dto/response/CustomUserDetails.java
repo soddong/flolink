@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 
@@ -39,8 +40,8 @@ public class CustomUserDetails implements UserDetails {
 		return user.getUserId();
 	}
 
-	public Integer getMyRoomId() {
-		return user.getMyRoom().getMyRoomId();
+	public MyRoom getMyRoom() {
+		return user.getMyRoom();
 	}
 
 	public RoleType getRoleType() {

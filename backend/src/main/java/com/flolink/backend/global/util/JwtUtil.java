@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -45,13 +46,13 @@ public class JwtUtil {
 			.get("userId", Integer.class);
 	}
 
-	public int getMyRoomId(String token) {
+	public MyRoom getMyRoom(String token) {
 		return Jwts.parser()
 			.verifyWith(secretKey)
 			.build()
 			.parseSignedClaims(token)
 			.getPayload()
-			.get("myRoomId", Integer.class);
+			.get("myRoom", MyRoom.class);
 	}
 
 	public String getCategory(String token) {
@@ -73,11 +74,11 @@ public class JwtUtil {
 			.before(new Date());
 	}
 
-	public String createJwt(String category, int userId, int myRoomId, RoleType role, Long expiredTime, Date now) {
+	public String createJwt(String category, int userId, MyRoom myRoom, RoleType role, Long expiredTime, Date now) {
 		return Jwts.builder()
 			.claim("category", category)
 			.claim("userId", userId)
-			.claim("myRoomId", myRoomId)
+			.claim("myRoom", myRoom)
 			.claim("role", role)
 			.issuedAt(now)
 			.expiration(new Date(now.getTime() + expiredTime))

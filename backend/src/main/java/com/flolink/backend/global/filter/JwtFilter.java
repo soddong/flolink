@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.flolink.backend.domain.auth.service.ReissueService;
+import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.global.common.ResponseCode;
@@ -73,11 +74,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
 		// userId, myRoomId 값을 획득
 		int userId = jwtUtil.getUserId(accessToken);
-		int myRoomId = jwtUtil.getMyRoomId(accessToken);
+		MyRoom myRoom = jwtUtil.getMyRoom(accessToken);
 		
 		User user = User.builder()
 			.userId(userId)
-			.myRoom(myRoomId)
+			.myRoom(myRoom)
 			.build();
 
 		CustomUserDetails customUserDetails = new CustomUserDetails(user);
