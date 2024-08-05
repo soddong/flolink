@@ -1,26 +1,24 @@
 package com.flolink.backend.domain.auth.service;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.flolink.backend.domain.myroom.entity.MyRoom;
-import com.flolink.backend.domain.user.entity.enumtype.RoleType;
-import org.springframework.data.convert.Jsr310Converters;
-import org.springframework.stereotype.Service;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.flolink.backend.domain.auth.entity.Refresh;
 import com.flolink.backend.domain.auth.repository.RefreshRepository;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
 import com.flolink.backend.global.util.JwtUtil;
-
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.convert.Jsr310Converters;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Slf4j
 @Service
@@ -33,7 +31,7 @@ public class ReissueServiceImpl implements ReissueService {
 	private final long refreshTokenValidityInSeconds = 1000 * 60 * 60 * 24L;
 
 	@Override
-	public void reissue(HttpServletRequest request, HttpServletResponse response) {
+	public void reissue(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
 		String refresh = null;
 		LocalDateTime date = LocalDateTime.now();
 		Date now = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(date);
@@ -81,12 +79,11 @@ public class ReissueServiceImpl implements ReissueService {
 		}
 
 		int userId = jwtUtil.getUserId(refresh);
-		MyRoom myRoom = jwtUtil.getMyRoom(refresh);
 		RoleType role = jwtUtil.getRoleType(refresh);
 
 		//make new JWT
-		String newAccess = jwtUtil.createJwt("access", userId, myRoom, role, accessTokenValidityInSeconds, now);
-		String newRefresh = jwtUtil.createJwt("refresh", userId, myRoom, role, refreshTokenValidityInSeconds, now);
+		String newAccess = jwtUtil.createJwt("access", userId, role, accessTokenValidityInSeconds, now);
+		String newRefresh = jwtUtil.createJwt("refresh", userId, role, refreshTokenValidityInSeconds, now);
 
 		//Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
 		Refresh refreshToken = Refresh.builder()

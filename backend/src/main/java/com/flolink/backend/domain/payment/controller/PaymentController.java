@@ -55,7 +55,7 @@ public class PaymentController {
 	@Operation(summary = "결제내역 조회")
 	public ResponseEntity<CommonResponse> getPaymentHistory() {
 		log.info("===결제 내역 조회 START===");
-		List<PaymentHistoryResponse> responses = paymentService.getPaymentHistory();
+		List<PaymentHistoryResponse> responses = paymentService.getPaymentHistory(1);
 		log.info("===결제 내역 조회 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, responses));
 	}

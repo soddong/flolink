@@ -1,23 +1,9 @@
 package com.flolink.backend.domain.user.service;
 
-import static com.flolink.backend.domain.user.entity.enumtype.RoleType.*;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flolink.backend.domain.auth.entity.SuccessToken;
 import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
-import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
-import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
-import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
-import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
-import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
-import com.flolink.backend.domain.user.dto.request.StatusMessageRequest;
+import com.flolink.backend.domain.user.dto.request.*;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 import com.flolink.backend.domain.user.entity.User;
@@ -29,10 +15,16 @@ import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.TimeOutException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
 import com.flolink.backend.global.util.JwtUtil;
-
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
+import static com.flolink.backend.domain.user.entity.enumtype.RoleType.LOCAL;
 
 @Slf4j
 @Service
@@ -77,31 +69,13 @@ public class UserServiceImpl implements UserService {
 			successTokenRepository.delete(successToken);
 		}
 
-		MyRoom myRoom = MyRoom.builder()
-			.itemStand(0)
-			.itemRug(0)
-			.itemShelf(0)
-			.itemBed(0)
-			.itemBigtable(0)
-			.itemMinitable(0)
-			.itemVase(0)
-			.build();
+		MyRoom myRoom = MyRoom.createMyRoom();
 
 		em.persist(myRoom);
 		em.flush();
 
-		User user = User.builder()
-			.loginId(loginId)
-			.myRoom(myRoom)
-			.password(bCryptPasswordEncoder.encode(password))
-			.userName(joinUserRequest.getUserName())
-			.nickname(joinUserRequest.getNickname())
-			.tel(joinUserRequest.getTel())
-			.point(BigDecimal.ZERO)
-			.createdAt(LocalDateTime.now())
-			.useYn(true)
-			.role(LOCAL)
-			.build();
+		User user = User.toEntity(loginId, bCryptPasswordEncoder.encode(password),
+				myRoom, joinUserRequest, LOCAL);
 
 		userRepository.save(user);
 	}
