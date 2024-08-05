@@ -3,17 +3,24 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import useItemStore from '../../store/itemStore';
+import {useItems} from '../../hook/itemstore/itemstoreHook.js'
 
 function ItemStorePage(props) {
     const [activeTab, setActiveTab] = useState('itemlist');
     const [expandedItem, setExpandedItem] = useState(null);
     const { items, images } = useItemStore();
+
+    const { data, isLoading, error } = useItems();
     
     const navigate = useNavigate();
 
     const toggleItem = (itemName) => {
+        console.log(data)
         setExpandedItem(expandedItem === itemName ? null : itemName);
     };
+
+    if (isLoading) return <div>로딩 중...</div>;
+    if (error) return <div>에러 발생: {error.message}</div>;
 
     return (
         <div className={styles.settingpage}>
@@ -90,9 +97,7 @@ function ItemStorePage(props) {
                     
                     {activeTab === 'purchaseHistories' && (
                         <ul className={styles.list}>
-                            <li>구매 내역 1</li>
-                            <li>구매 내역 2</li>
-                            <li>구매 내역 3</li>
+    
                         </ul>
                     )}
                 </div>
