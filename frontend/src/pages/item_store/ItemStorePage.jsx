@@ -11,6 +11,7 @@ function ItemStorePage(props) {
     const { items, images, setItems, setImages, generateImagesFromNames } = useItemStore();
     const { data: itemsData, isLoading: itemsLoading, error: itemsError } = useItems();
     const { data: paymentHistoryData, isLoading: paymentHistoryLoading, error: paymentHistoryError } = usePaymentHistory();
+    const { data: purchaseHistoryData, isLoading: purchaseHistoryLoading, error: purchaseHistoryError } = usePurchaseHistory();
     
 
     useEffect(() => {
@@ -37,6 +38,24 @@ function ItemStorePage(props) {
             setImages(generateImagesFromNames(itemNames));
         }
     }, [itemsData]);
+
+    useEffect(() => {
+        if (paymentHistoryData && paymentHistoryData.data) {
+
+            paymentHistoryData.data.forEach(history => {
+                console.log(history)
+            })
+        }
+    }, [paymentHistoryData])
+
+    useEffect(() => {
+        if (purchaseHistoryData && purchaseHistoryData.data) {
+
+            purchaseHistoryData.data.forEach(history => {
+                console.log(history)
+            })
+        }
+    }, [purchaseHistoryData])
 
     const navigate = useNavigate();
 

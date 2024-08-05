@@ -27,6 +27,7 @@ const imageMap = {
 const useItemStore = create((set) => ({
     items : [],
     images : {},
+    histories : [],
     userInventory : {
         rug: [1, 2],
         shelf: [1, 2],
@@ -78,7 +79,7 @@ const useItemStore = create((set) => ({
         });
 
         return processedImages;
-    }
+    },
 }))
 
 export default useItemStore;
