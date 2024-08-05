@@ -11,5 +11,5 @@ import com.flolink.backend.domain.payment.entity.PaymentState;
 public interface PaymentRepository extends JpaRepository<PaymentHistory, Integer> {
 	Optional<PaymentHistory> findByOrderId(String orderId);
 
-	List<PaymentHistory> findByState(PaymentState state);
+	List<PaymentHistory> findByStateAndUserUserId(PaymentState paymentState, Integer userId);
 }

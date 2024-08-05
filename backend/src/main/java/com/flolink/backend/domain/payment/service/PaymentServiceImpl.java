@@ -54,8 +54,8 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Override
 	@Transactional
-	public List<PaymentHistoryResponse> getPaymentHistory() {
-		List<PaymentHistory> paymentHistories = paymentRepository.findByState(PaymentState.PAID);
+	public List<PaymentHistoryResponse> getPaymentHistory(Integer userId) {
+		List<PaymentHistory> paymentHistories = paymentRepository.findByStateAndUserUserId(PaymentState.PAID, userId);
 		return paymentHistories.stream()
 			.map(PaymentHistoryResponse::fromEntity)
 			.toList();

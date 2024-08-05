@@ -13,5 +13,5 @@ public interface PaymentService {
 
 	void completePayment(PortOnePayment portOne);
 
-	List<PaymentHistoryResponse> getPaymentHistory();
+	List<PaymentHistoryResponse> getPaymentHistory(Integer userId);
 }
