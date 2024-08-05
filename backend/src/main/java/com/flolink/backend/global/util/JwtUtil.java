@@ -6,13 +6,13 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,12 +28,16 @@ public class JwtUtil {
 	}
 
 	public RoleType getRoleType(String token) {
-		return Jwts.parser()
-				.verifyWith(secretKey)
-				.build()
-				.parseSignedClaims(token)
-				.getPayload()
-				.get("role", RoleType.class);
+		Claims claims = Jwts.parser()
+			.verifyWith(secretKey) // 비밀키 설정
+			.build()
+			.parseSignedClaims(token)
+			.getPayload();
+		// 클레임에서 'role' 값을 문자열로 읽기
+		String roleString = claims.get("role", String.class);
+
+		// 문자열을 RoleType으로 변환
+		return RoleType.valueOf(roleString);
 	}
 
 	public int getUserId(String token) {
@@ -78,7 +82,7 @@ public class JwtUtil {
 			.claim("category", category)
 			.claim("userId", userId)
 			.claim("myRoomId", myRoomId)
-			.claim("role", role)
+			.claim("role", role.name())
 			.issuedAt(now)
 			.expiration(new Date(now.getTime() + expiredTime))
 			.signWith(secretKey)
