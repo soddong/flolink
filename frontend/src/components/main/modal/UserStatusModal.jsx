@@ -1,20 +1,18 @@
 import style from "../../../css/main/main_modals.module.css"
-import { useState } from "react"
-import Photo from '../../../assets/profile/profile_dummy.jpg'
 
-function UserStatusModal (props) {
+function UserStatusModal ({name, photo, status}) {
 
   return (
     <div className={`w-72 h-56 backdrop-blur-sm ${style.mainModal}`}>
-      <img src={Photo} alt="dummy_profile" className='w-10 rounded-full mt-2' />
+      <img src={photo} alt="dummy_profile" className='w-10 rounded-full mt-2' />
       <div className='flex items-center'>
         <div className='flex justify-center items-center w-6 h-3 bg-rose-400 rounded-sm text-white font-bold' style={{'fontSize': '8px'}}>방장</div>
-        <p className='text-sm font-bold text-center leading-3 mx-2'>{props.member}</p>
+        <p className='font-bold text-center leading-3 mx-2'>{name}</p>
         <span className="material-symbols-outlined text-xl">
           edit
         </span>
       </div>
-      <p className="my-3 text-xs text-zinc-500">상태메세지 어쩌구저쩌구</p>
+      <p className="my-2 text-sm text-zinc-500">{status}</p>
       <hr className="w-56 border-zinc-400"/>
       <div className='flex items-center justify-around w-48'>
         <p className="text-xs">가입일: 0000-00-00</p> | 
