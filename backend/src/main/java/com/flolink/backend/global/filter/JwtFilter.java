@@ -74,10 +74,10 @@ public class JwtFilter extends OncePerRequestFilter {
 		// userId, myRoomId 값을 획득
 		int userId = jwtUtil.getUserId(accessToken);
 		int myRoomId = jwtUtil.getMyRoomId(accessToken);
-
+		
 		User user = User.builder()
 			.userId(userId)
-			.myRoomId(myRoomId)
+			.myRoom(myRoomId)
 			.build();
 
 		CustomUserDetails customUserDetails = new CustomUserDetails(user);
