@@ -9,26 +9,5 @@ import lombok.Setter;
 @Setter
 public class PortOnePayment {
 	private String paymentKey;
-
 	private String orderId;
-
-	private String orderName;
-
-	private Integer totalAmount;
-
-	private String status;
-
-	private LocalDateTime approvedAt;
-
-	private String currency;
-
-	private String method;
-
-	private Receipt receipt;
-
-	@Getter
-	@Setter
-	public static class Receipt {
-		private String url;
-	}
 }

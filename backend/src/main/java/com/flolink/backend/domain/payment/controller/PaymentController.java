@@ -35,22 +35,28 @@ public class PaymentController {
 	@PostMapping("/prepare")
 	@Operation(summary = "결제 시작")
 	public ResponseEntity<CommonResponse> createPayment(@RequestBody final PaymentCreateRequest request) {
-		Integer userId = 1;
+		log.info("===결제 시작하기 START===");
+		Integer userId = 7;
 		PaymentPrepareResponse response = paymentService.preparePayment(userId, request);
+		log.info("===결제 시작하기 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, response));
 	}
 
 	@PostMapping("/complete")
 	@Operation(summary = "결제 완료")
 	public ResponseEntity<CommonResponse> completePayment(@RequestBody final PortOnePayment portOne) {
+		log.info("===결제 완료 START===");
 		paymentService.completePayment(portOne);
+		log.info("===결제 완료 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS));
 	}
 
 	@GetMapping("/history")
 	@Operation(summary = "결제내역 조회")
 	public ResponseEntity<CommonResponse> getPaymentHistory() {
+		log.info("===결제 내역 조회 START===");
 		List<PaymentHistoryResponse> responses = paymentService.getPaymentHistory();
+		log.info("===결제 내역 조회 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, responses));
 	}
 }
