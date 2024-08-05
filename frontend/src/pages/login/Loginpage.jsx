@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Button, TextField, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../../assets/logo/logo.png'
-import kakaoLogo from '../../assets/login/kakao.png'; 
-import googleLogo from '../../assets/login/google.png'; 
+import kakaoLogo from '../../assets/login/kakao.png';
+import googleLogo from '../../assets/login/google.png';
 import LoginPageStyle from '../../css/login/Loginpage.module.css';
-
+import { axiosCommonInstance } from '../../apis/axiosInstance';
 function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -14,20 +14,17 @@ function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('/api/login', {
-        username,
-        password,
-      });
-      
-      // 로그인 성공 시 JWT 토큰 저장
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('refreshtoken', response.data.refreshToken);
+
+      axiosCommonInstance.post('/login', {
+        loginId: username,
+        password: password,
+      }).then((e) => console.log(e));
       navigate('/main');
     } catch (error) {
       alert('로그인 실패: 아이디 또는 비밀번호를 확인해주세요.');
     }
   };
-  
+
   return (
     <div className={LoginPageStyle.root}>
       <img src={logo} alt="FLORINK" className={LoginPageStyle.logo} />
@@ -48,9 +45,9 @@ function LoginPage() {
       />
       <Button className={LoginPageStyle.customButton} variant="contained" onClick={handleLogin}>로그인</Button>
       <Box className={LoginPageStyle.linksContainer}>
-        <Button className={LoginPageStyle.linkButton} onClick={()=>navigate('/FindAccount')}>아이디 찾기</Button>
-        <Button className={LoginPageStyle.linkButton} onClick={()=>navigate('/FindAccount')}>비밀번호 찾기</Button>
-        <Button className={LoginPageStyle.linkButton} onClick={()=>navigate('/signup')}>회원가입</Button>
+        <Button className={LoginPageStyle.linkButton} onClick={() => navigate('/FindAccount')}>아이디 찾기</Button>
+        <Button className={LoginPageStyle.linkButton} onClick={() => navigate('/FindAccount')}>비밀번호 찾기</Button>
+        <Button className={LoginPageStyle.linkButton} onClick={() => navigate('/signup')}>회원가입</Button>
       </Box>
 
       <hr className={LoginPageStyle.divider} />
