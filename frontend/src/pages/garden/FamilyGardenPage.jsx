@@ -63,6 +63,7 @@ function FamilyGardenPage () {
 
   function nextYear () {
     setStatusYear(statusYear + 1)
+    console.log(statusYear)
   }
 
   function postYear () {
@@ -80,7 +81,7 @@ function FamilyGardenPage () {
           <h1 className='text-2xl font-bold text-red-900 absolute top-8'>기억정원🌷</h1>
         </div>
       </header>
-      <Garden year = {yearData.year} flowers={yearData.flowers}/>
+      <Garden year = {yearData.year} flowers={yearData.flowers} nextYear={nextYear} postYear={postYear}/>
       <YearStatus year = {yearData.year} total={yearData.flowerTotal} success={yearData.flowerSuccess} />
       <NavBar />
     </div>

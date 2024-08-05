@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 
 import Fence from '../../assets/garden/fence.png'
 import YearPanel from '../../assets/garden/panel_year.png'
@@ -18,6 +18,7 @@ import Winter3 from '../../assets/garden/winter3.png'
 import Level1 from '../../assets/garden/level_1.png'
 import Level2 from '../../assets/garden/level_2.png'
 import Level3 from '../../assets/garden/level_3.png'
+import None from '../../assets/garden/none.png';
 
 const months = [
   {id: 1, name: '1월', image: Winter2},
@@ -34,12 +35,29 @@ const months = [
   {id: 12, name: '12월', image: Winter1},
 ]
 
-function Garden ({year, flowers}) {
+const levelImages = {
+  1: Level1,
+  2: Level2,
+  3: Level3,
+};
+
+function Garden ({year, flowers, nextYear, postYear}) {
+  const [updatedMonths, setUpdatedMonths] = useState(months);
   useEffect(() => {
-    flowers.map((flower) => (
-      flower
-    ))
-  })
+    const newMonths = months.map(month => {
+      const flowerForMonth = flowers.find(flower => flower.name === month.name);
+      if (flowerForMonth) {
+        const { level } = flowerForMonth;
+        return level === 4
+          ? { ...month, image: month.image }
+          : { ...month, image: levelImages[level] || month.image };
+      } else {
+        return { ...month, image: None };
+      }
+    });
+    setUpdatedMonths(newMonths);
+  }, [flowers]);
+
   return (
     <div className="w-full flex justify-center items-center relative h-2/3" >
       <div className="w-3/4 h-1/6 absolute top-0 bg-repeat-round flex items-center justify-center z-10" 
@@ -51,19 +69,23 @@ function Garden ({year, flowers}) {
       </div>
       <div className="w-3/4 h-5/6 rounded-lg pt-8 pb-4 px-2 grid grid-rows-4 grid-cols-3" 
       style={{'backgroundColor': '#EBD4BF', 'boxShadow': '0px 10px 0px 0px #D2AB86'}}>
-        {months.map(month => {
+        {updatedMonths.map(month => {
           return (
           <Flower key={month.id} id={month.id} month={month.name} flower={month.image}/>)
         })}
       </div>
-      <span className="material-symbols-outlined absolute left-1 text-4xl text-white/80"
-      style={{'fontVariationSettings': '"FILL" 1'}}>
-      arrow_circle_left
-      </span>
-      <span className="material-symbols-outlined absolute right-1 text-4xl text-white/80"
-      style={{'fontVariationSettings': '"FILL" 1'}}>
-      arrow_circle_right
-      </span>
+      {year > 2022 && (
+        <span className="material-symbols-outlined absolute left-1 text-4xl text-white/80"
+        style={{'fontVariationSettings': '"FILL" 1'}} onClick={postYear}>
+        arrow_circle_left
+        </span>
+      )}
+      {year < 2024 && (
+        <span className="material-symbols-outlined absolute right-1 text-4xl text-white/80"
+        style={{'fontVariationSettings': '"FILL" 1'}} onClick={nextYear}>
+        arrow_circle_right
+        </span>
+      )}
     </div>
   )
 }

@@ -5,13 +5,13 @@ import moment from "moment"
 import TagSelect from "./TagSelect";
 
 function CreateScheduleModal (props) {
-  const [inputTitleValue, setInputTitleValue] = useState('');
-  const [inputContentValue, setInputContentValue] = useState('');
+  const [inputTitleValue, setInputTitleValue] = useState(props.title);
+  const [inputContentValue, setInputContentValue] = useState(props.content);
   const [inputCalendar, setInputCalendar] = useState(false)
   const [date, setDate] = useState(props.date)
-  const [tag, setTag] = useState('생일')
-  const [icon, setIcon] = useState('cake')
-  const [color, setColor] = useState('#E37C91')
+  const [tag, setTag] = useState(props.tag)
+  const [icon, setIcon] = useState(props.icon)
+  const [color, setColor] = useState(props.color)
 
   const nowDate = moment(date).format('YYYY-MM-DD')
 
@@ -55,7 +55,7 @@ function CreateScheduleModal (props) {
     setDate(data)
   }
   function submitSuccess (event) {
-    window.alert('일정이 생성되었습니다.')
+    window.alert('저장되었습니다.')
     event.preventDefault()
     props.showCreateModal()
   }
