@@ -1,5 +1,9 @@
 package com.flolink.backend.domain.plant.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,6 +27,8 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_exp")
+@SQLDelete(sql = "UPDATE user_exp SET use_yn = false WHERE exp_id = ?")
+@Where(clause = "use_yn = true")
 public class UserExp {
 
 	@Id
@@ -37,14 +43,19 @@ public class UserExp {
 	@Column(name = "user_id", nullable = false)
 	private Integer userId;
 
-	@Column(name = "conribute_exp", nullable = false)
+	@Column(name = "contribute_exp", nullable = false)
 	private Integer contributeExp;
+
+	@ColumnDefault("1")
+	@Column(name = "use_yn", nullable = false)
+	private Boolean useYn;
 
 	public static UserExp of(Integer userId, Plant plant) {
 		return UserExp.builder()
 			.plant(plant)
 			.userId(userId)
 			.contributeExp(0)
+			.useYn(true)
 			.build();
 	}
 

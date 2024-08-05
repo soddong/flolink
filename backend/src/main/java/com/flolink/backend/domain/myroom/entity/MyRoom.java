@@ -3,6 +3,10 @@ package com.flolink.backend.domain.myroom.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.flolink.backend.domain.store.entity.Item;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.BadRequestException;
@@ -30,6 +34,8 @@ import lombok.Setter;
 @Table(name = "my_room")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE my_room SET use_yn = false WHERE my_room_id = ?")
+@Where(clause = "use_yn = true")
 public class MyRoom {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,15 +67,19 @@ public class MyRoom {
 	@Column(name = "item_vase")
 	private Integer itemVase;
 
+	@ColumnDefault("1")
+	@Column(name = "use_yn", nullable = false)
+	private Boolean useYn;
+
 	public static MyRoom createMyRoom() {
 		return MyRoom.builder()
+			.useYn(true)
 			.build();
 	}
 
 	public void unequipPreItemAndEquipItem(HasItem hasItem) {
 		Item item = hasItem.getItem();
 		switch (item.getType()) {
-			// RUG, SHELF, STAND, BED, MINITABLE, BIGTABLE, VASE
 			case RUG:
 				if (this.itemRug != null) {
 					unequipItem(findById(this.itemRug));
