@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
 		Auth auth = Auth.builder()
 			.tel(tel)
 			.authNum(randomAuthNum)
-			.expiredAt(LocalDateTime.now().plusMinutes(5))
+			.expiredAt(LocalDateTime.now().plusMinutes(3))
 			.build();
 
 		// 이미 있으면 기존 인증 지우기 (재발송의 경우)
