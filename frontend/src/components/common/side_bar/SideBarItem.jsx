@@ -1,26 +1,13 @@
-import { useState, useRef } from "react";
-import Modal from "../../main/modal/memberItemModal";
+import { Link } from 'react-router-dom';
 
-function SideBarItem (props) {
-  const [modal, setModal] = useState(false);
-  const modalRef = useRef();
-
-  function showMemberModal(event) {
-    setModal(!modal)
-    console.log(event.target)
-  };
+function SideBarItem ({ name, router }) {
 
   return (
-    <div className={`h-8 my-2 w-28 relative flex justify-center items-center rounded ${modal === true ? "bg-rose-400/50" : null}`}>
-    <p className="my-2 text-white text-white text-xl" onClick={showMemberModal}>{props.name}</p>
-    {modal && (
-      <>
-        <div className="fixed top-0 left-0 w-screen h-full bg-zinc-800/50 z-20"
-           onClick={showMemberModal}></div>
-        <Modal member={props.name} />
-      </>
-    )}
-  </div>
+    <Link to={router}>
+      <div className="h-8 my-2 w-28 relative flex justify-center items-center rounded hover:bg-rose-400">
+        <p className="my-2 text-white text-white text-xl">{name}</p>
+      </div>
+    </Link>
   )
 }
 

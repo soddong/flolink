@@ -9,15 +9,15 @@ function Sidebar ({ width = 150, children }){
   const [isOpen, setOpen] = useState(false);
   const [xPosition, setX] = useState(width);
   const side = useRef();
-  const FamilyMembers = ['엄마', '아빠', '첫째', '둘째']
-  // const [openModal, setOpenModal] = useState(false);
-
-  // function handleOpenModal() {
-  //   setOpenModal(!openModal)
-  //   console.log(openModal)
-  // };
-
-  // button 클릭 시 토글
+  const sideItems = [
+    { id: 1, name: '상점', router: '/payment'},
+    { id: 2, name: '마이룸', router: '/myroom'},
+    { id: 3, name: '가족방 변경', router: '/test'},
+    { id: 4, name: '설정 페이지', router: '/setting'},
+    { id: 5, name: '로그아웃', router: '/login'},
+    { id: 6, name: '가족방 탈퇴', router: '/test'},
+  ]
+  
   function toggleMenu () {
     if (xPosition > 0) {
       setX(0);
@@ -52,10 +52,10 @@ function Sidebar ({ width = 150, children }){
           <p className="text-center text-base font-bold mb-5 text-white">User1님</p>
           <p className="my-1 text-white text-xl font-bold">가족 이름</p>
           <hr className="w-28 border-white mb-2"/>
-          {FamilyMembers.map((member, index) => {
+          {sideItems.map((item) => {
             return (
-              <div>
-                <SideBarItem name={member} key={index}/>
+              <div key={item.id}>
+                <SideBarItem name={item.name} router={item.router}/>
               </div>
             )
           })}

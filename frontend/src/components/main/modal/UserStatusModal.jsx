@@ -16,8 +16,28 @@ function UserStatusModal (props) {
       </div>
       <p className="my-3 text-xs text-zinc-500">상태메세지 어쩌구저쩌구</p>
       <hr className="w-56 border-zinc-400"/>
-      <p className="my-3 text-xs font-bold text-rose-500">오늘의 질문</p>
-      <p className="text-xs text-zinc-500">오늘의답변 어쩌구저쩌구</p>
+      <div className='flex items-center justify-around w-48'>
+        <p className="text-xs">가입일: 0000-00-00</p> | 
+        <p className="text-xs">작성글: n개</p>
+      </div>
+      <div className='flex items-center justify-around w-52 my-1'>
+        <div className='w-24 h-8 bg-rose-400 rounded-lg text-white flex items-center justify-center'>
+          <span className="material-symbols-outlined text-lg" style={{'fontVariationSettings': '"FILL" 1'}}>
+            meeting_room
+          </span>
+          <p className="m-0 text-sm font-bold">
+            마이룸 보기
+          </p>
+        </div>
+        <div className='w-24 h-8 bg-blue-300 rounded-lg text-white flex items-center justify-center'>
+          <span className="material-symbols-outlined text-lg" style={{'fontVariationSettings': '"FILL" 1'}}>
+            meeting_room
+          </span>
+          <p className="m-0 text-sm font-bold">
+            작성글 보기
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
