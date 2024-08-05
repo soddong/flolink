@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const FeedForm = () => {
   const [content, setContent] = useState('');
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -12,29 +14,39 @@ const FeedForm = () => {
   }, []);
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    const files = Array.from(e.target.files);
+    setImages((prevImages) => [...prevImages, ...files]);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // 피드 제출 로직 추가
     console.log('내용:', content);
-    console.log('이미지:', image);
+    console.log('이미지들:', images);
   };
 
   return (
     <form onSubmit={handleSubmit} className="border border-black p-4 rounded-lg shadow-md">
       <div className="flex items-center mb-4">
         <label className="cursor-pointer flex items-center">
-            <span className="text-gray-500 text-sm mr-2">+image</span>
-            <input
-                type="file" 
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageChange}
-            />
+          <span className="text-gray-500 text-sm mr-2">+image</span>
+          <input
+            type="file"
+            className="hidden"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+          />
         </label>
-        {image && <span className="ml-2">{image.name}</span>}
+        {images.length > 0 && (
+          <Carousel className="mt-2 w-full" showThumbs={false}>
+            {images.map((image, index) => (
+              <div key={index}>
+                <img src={URL.createObjectURL(image)} alt={`Uploaded ${index + 1}`} />
+              </div>
+            ))}
+          </Carousel>
+        )}
       </div>
       <textarea
         ref={textareaRef}
