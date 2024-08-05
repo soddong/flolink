@@ -49,21 +49,6 @@ public class PaymentServiceImpl implements PaymentService {
 		PaymentHistory paymentHistory = paymentRepository.findByOrderId(portOne.getOrderId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PAYMENT_NOT_FOUND));
 
-		BigDecimal amount = new BigDecimal(portOne.getTotalAmount());
-		String status = portOne.getStatus();
-
-		if (paymentHistory.getAmount().compareTo(amount) != 0) {
-			paymentHistory.failPayment();
-			paymentRepository.save(paymentHistory);
-			throw new BadRequestException(ResponseCode.PAYMENT_AMOUNT_MISMATCH);
-		}
-
-		if (!"DONE".equals(status)) {
-			paymentHistory.failPayment();
-			paymentRepository.save(paymentHistory);
-			throw new BadRequestException(ResponseCode.PAYMENT_BANK_FAILED);
-		}
-
 		paymentHistory.completePayment(portOne);
 	}
 
