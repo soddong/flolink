@@ -1,13 +1,29 @@
 import styles from '../../css/item_store/ItemStorePage.module.css'
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
+import useItemStore from '../../store/itemStore';
 
 function ItemStorePage(props) {
-    const [activeTab, setActiveTab] = useState('items');
+    const [activeTab, setActiveTab] = useState('itemlist');
+    const [expandedItem, setExpandedItem] = useState(null);
+    const { items, images } = useItemStore();
+    
+    const navigate = useNavigate();
+
+    const toggleItem = (itemName) => {
+        setExpandedItem(expandedItem === itemName ? null : itemName);
+    };
 
     return (
         <div className={styles.settingpage}>
             <div className={styles.header}>
-                여기는 헤더 뒤로가기가 있지
+                <div>
+                    <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
+                </div>
+                <div className={styles.title}>
+                    <span>상점</span>
+                </div>
             </div>
             <div className={styles.mycardcontainer}>
                 <div className={styles.mycard}>
@@ -27,16 +43,10 @@ function ItemStorePage(props) {
             <div className={styles.settinglist}>
                 <div className={styles.tabs}>
                     <button 
-                        className={`${styles.tab} ${activeTab === 'items' ? styles.active : ''}`}
-                        onClick={() => setActiveTab('items')}
+                        className={`${styles.tab} ${activeTab === 'itemlist' ? styles.active : ''}`}
+                        onClick={() => setActiveTab('itemlist')}
                     >
                         아이템
-                    </button>
-                    <button 
-                        className={`${styles.tab} ${activeTab === 'points' ? styles.active : ''}`}
-                        onClick={() => setActiveTab('points')}
-                    >
-                        포인트
                     </button>
                     <button 
                         className={`${styles.tab} ${activeTab === 'purchaseHistories' ? styles.active : ''}`}
@@ -46,27 +56,38 @@ function ItemStorePage(props) {
                     </button>
                 </div>
                 <div className={styles.tabContent}>
-                    {activeTab === 'items' && (
+                    {activeTab === 'itemlist' && (
                         <ul className={styles.list}>
-                            <li>
-                                <img></img>
-                            </li>
-                            <li>아이템 2</li>
-                            <li>아이템 3</li>
-                            <li>아이템 1</li>
-                            <li>아이템 2</li>
-                            <li>아이템 3</li>    
-                            <li>아이템 2</li>
-                            <li>아이템 3</li>
+                            {items.map((item, index) => (
+                                <li key={index} className={styles.itemListItem}>
+                                    <div 
+                                        className={styles.itemInfo}
+                                        onClick={() => toggleItem(item.name)}
+                                    >
+                                        <img 
+                                            src={images[item.name][0]} 
+                                            alt={item.name} 
+                                            className={styles.itemImage}
+                                        />
+                                        <span className={styles.itemName}>{item.name}</span>
+                                    </div>
+                                    <div className={`${styles.itemVariants} ${expandedItem === item.name ? styles.expanded : ''}`}>
+                                        {item.variants.map((variant, variantIndex) => (
+                                            <div key={variantIndex} className={styles.variantItem}>
+                                                <img 
+                                                    src={variant} 
+                                                    alt={`${item.name} variant ${variantIndex + 1}`} 
+                                                    className={styles.variantImage}
+                                                />
+                                                <span className={styles.variantNumber}>{item.name} {variantIndex + 1}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </li>
+                            ))}                         
                         </ul>
                     )}
-                    {activeTab === 'points' && (
-                        <ul className={styles.list}>
-                            <li>포인트 내역 1</li>
-                            <li>포인트 내역 2</li>
-                            <li>포인트 내역 3</li>
-                        </ul>
-                    )}
+                    
                     {activeTab === 'purchaseHistories' && (
                         <ul className={styles.list}>
                             <li>구매 내역 1</li>

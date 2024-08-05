@@ -40,7 +40,7 @@
     padding: 2%;
     border-radius: 8px;
     position: relative;
-    width: 390px;
+    width: 100%;
     animation: slideDown 0.3s ease-out;
     display: flex;
     flex-direction: column;
@@ -120,7 +120,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
-    padding-right: 40px; /* 글자 수 표시를 위한 공간 */
+    padding-right: 40px;
 }
 
 .nicknameInput:focus {

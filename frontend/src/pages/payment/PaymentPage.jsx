@@ -8,12 +8,15 @@ import PaymentItem from './PaymentItem';
 import PaymentModal from './PaymentModal';
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function PaymentPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState(null);
+
+    const navigate = useNavigate();
 
     const paymentItems = [
         { image: coin1, points: '1,000', price: '1,000' },
@@ -78,7 +81,7 @@ function PaymentPage() {
             />
 
             <div className={styles.header}>
-                <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }}/>
+                <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
                 <div className={styles.title}>
                     <span>결제하기</span>
                 </div>

@@ -5,7 +5,7 @@
 
 .header {
     width: 100%;
-    height : 10%;
+    height : 7%;
     background-color: white;
     display : flex;
     flex-direction: row;
@@ -68,7 +68,6 @@
 }
 
 .list li ul img {
-    height : 100%;
     width : 30%;
     object-fit: cover;
     padding : 5%;
@@ -87,8 +86,7 @@
 .modal {
     bottom : 0;
     position: fixed;
-    max-width: 390px;
-    width: 80%;
+    width: 100%;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;

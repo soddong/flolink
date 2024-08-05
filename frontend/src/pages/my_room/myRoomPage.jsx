@@ -3,7 +3,6 @@ import Inventory from '@mui/icons-material/Inventory2';
 import ItemStore from '@mui/icons-material/StorefrontOutlined';
 import NavBar from '../../components/common/nav_bar/NavBar';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import backgroundgrass from '../../assets/main/background_photo.png';
 import room from '../../assets/myroom/bg_myroom.png';
 import { useState, useEffect,useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -128,14 +127,14 @@ function MyRoomPage() {
 
 
     const gotoItemStore = () => {
-        navigate('/setting');
+        navigate('/itemstore');
     }
 
     return (
         <div className={styles.myRoom}>
             <div className={styles.myRoomHeader}>
                 <div>
-                    <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }}/>
+                    <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
                 </div>
                 <div>
                     <span>OOO님의 마이룸</span>
@@ -158,13 +157,12 @@ function MyRoomPage() {
                         <img 
                             key={item.name}
                             src={item.variants[selectedItems[item.name] - 1]} 
-                            className={styles[item.name]}
+                            className={`${styles[item.name]} ${styles.item}`}
                             alt={item.name}
                         />
                     )
                 ))}
             </div>
-            <img src={backgroundgrass} className={styles.backgroundgrass} alt="Background grass"/>
             <NavBar/>
             {isInventoryOpen && (
                 <div 
