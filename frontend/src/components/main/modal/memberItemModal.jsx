@@ -21,7 +21,7 @@ function Modal(props){
         <span className="material-symbols-outlined text-lg" style={{'fontVariationSettings': '"FILL" 1'}}>
           meeting_room
         </span>
-        <p className="m-0 text-xs font-bold">
+        <p className="m-0 text-sm font-bold">
           마이룸 보기
         </p>
       </div>
@@ -29,7 +29,7 @@ function Modal(props){
         <span className="material-symbols-outlined text-lg" style={{'fontVariationSettings': '"FILL" 1'}}>
           meeting_room
         </span>
-        <p className="m-0 text-xs font-bold">
+        <p className="m-0 text-sm font-bold">
           작성글 보기
         </p>
       </div>

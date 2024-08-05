@@ -10,6 +10,13 @@ function Sidebar ({ width = 150, children }){
   const [xPosition, setX] = useState(width);
   const side = useRef();
   const FamilyMembers = ['엄마', '아빠', '첫째', '둘째']
+  // const [openModal, setOpenModal] = useState(false);
+
+  // function handleOpenModal() {
+  //   setOpenModal(!openModal)
+  //   console.log(openModal)
+  // };
+
   // button 클릭 시 토글
   function toggleMenu () {
     if (xPosition > 0) {
@@ -21,20 +28,13 @@ function Sidebar ({ width = 150, children }){
     }
   }
 
-  // // 사이드바 외부 클릭시 닫히는 함수
-  // const handleClose = function(event) {
-  //   if (side.current && !side.current.contains(event.target)) {
-  //     setX(width);
-  //     setOpen(false);
-  //   }
-  // };
 
   return (
     <div className="bg-white">
       <div
         ref={side}
         className= {`${style.sidebar}` + " bg-zinc-800/80 backdrop-blur-md"}
-        style={{ width: `${width}px`, height: '100%', transform: `translateX(${-xPosition}px)` }}
+        style={{ width: `${width}px`, height: '100%', left: isOpen ? '0' : `-${width}px` }}
       >
         <div onClick={toggleMenu} className={`${style.sideBarButton}` + " bg-zinc-800/80"}>
           {isOpen ? (
@@ -61,6 +61,7 @@ function Sidebar ({ width = 150, children }){
           })}
         </div>
       </div>
+      
     </div>
   );
 };
