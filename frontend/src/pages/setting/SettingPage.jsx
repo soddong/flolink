@@ -28,7 +28,7 @@ function SettingPage() {
         <div className={styles.setting}>
             {showModal && <SettingModal setShowModal={setShowModal} setAnimal={setAnimal} />}
             {showNicknameModal && <SettingNicknameModal nickname={nickname} setShowNicknameModal={setShowNicknameModal} setNickname={setNickname}/>}
-            {showMessageModal && <SettingMessageModal />}
+            {showMessageModal && <SettingMessageModal setShowMessageModal={setShowMessageModal} setStatus={setStatus} status={status}/>}
             <div className={styles.header}>
                 <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
                 <div className={styles.title}>
