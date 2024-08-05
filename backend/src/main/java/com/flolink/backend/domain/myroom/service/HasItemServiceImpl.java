@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.myroom.dto.response.HasItemInfoResponse;
 import com.flolink.backend.domain.myroom.entity.HasItem;
-import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.myroom.repository.HasItemRepository;
 import com.flolink.backend.domain.store.entity.Item;
 import com.flolink.backend.domain.user.entity.User;
@@ -34,17 +33,11 @@ public class HasItemServiceImpl implements HasItemService {
 	@Override
 	@Transactional
 	public HasItem saveHasItem(final User user, final Item item) {
-
 		if (hasItemRepository.existsByItem_itemId(item.getItemId())) {
 			throw new BadRequestException(ResponseCode.ITEM_ALREADY_PURCHASE);
 		}
-
-		// TODO: user.getMyRoom() 으로 대체
-		MyRoom myRoom = MyRoom.builder()
-			.myRoomId(1)
-			.build();
-
-		return hasItemRepository.save(HasItem.of(myRoom, item));
+		
+		return hasItemRepository.save(HasItem.of(user.getMyRoom(), item));
 	}
 
 	/**
@@ -58,12 +51,7 @@ public class HasItemServiceImpl implements HasItemService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
-		// TODO: user.getMyRoom() 으로 대체
-		MyRoom myRoom = MyRoom.builder()
-			.myRoomId(1)
-			.build();
-
-		return hasItemRepository.findByMyRoom(myRoom)
+		return hasItemRepository.findByMyRoom(user.getMyRoom())
 			.stream()
 			.map(HasItemInfoResponse::fromEntity)
 			.toList();

@@ -1,6 +1,8 @@
 package com.flolink.backend.domain.myroom.entity;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import com.flolink.backend.domain.store.entity.Item;
 
@@ -26,6 +28,8 @@ import lombok.Setter;
 @Table(name = "has_item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE has_item SET use_yn = false WHERE has_item_id = ?")
+@Where(clause = "use_yn = true")
 public class HasItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
