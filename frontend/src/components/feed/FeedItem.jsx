@@ -1,11 +1,30 @@
 import React, { useState } from 'react';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment }) => {
   const [showAllComments, setShowAllComments] = useState(false);
 
   return (
     <div className="p-4 rounded-lg mb-4">
-      <img src={feed.image} alt="Feed" className="w-full h-auto rounded-md" />
+      {Array.isArray(feed.images) && feed.images.length > 0 ? (
+        <Carousel
+          showArrows={true}
+          showThumbs={false}
+          showStatus={false}
+          infiniteLoop={true}
+          swipeable={true} // 손으로 넘길 수 있도록 설정
+          emulateTouch={true} // 터치 이벤트를 에뮬레이션
+        >
+          {feed.images.map((src, index) => (
+            <div key={index}>
+              <img src={src} alt={`feed-${index}`} className="w-full h-auto rounded-md" />
+            </div>
+          ))}
+        </Carousel>
+      ) : (
+        <img src={feed.images} alt="Feed" className="w-full h-auto rounded-md" />
+      )}
       <div className="mt-4">
         <p>{feed.content}</p>
         <p><strong>작성자:</strong> {feed.author}</p>
@@ -38,13 +57,13 @@ const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment }) => {
               <div className="flex space-x-2">
                 <button
                   className="text-blue-500 hover:underline"
-                  onClick={() => onEditComment(feed.index, index)}
+                  onClick={() => onEditComment(feed.id, index)}
                 >
                   수정
                 </button>
                 <button
                   className="text-red-500 hover:underline"
-                  onClick={() => onDeleteComment(feed.index, index)}
+                  onClick={() => onDeleteComment(feed.id, index)}
                 >
                   삭제
                 </button>
