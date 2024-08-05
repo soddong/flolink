@@ -29,7 +29,7 @@ const UserCertPage = ({children}) => {
 
     useEffect(() => {
         if (!isLoading) {
-            setShowContent(true); // 로딩이 끝나면 children을 보여주도록 설정
+            setShowContent(true); 
         }
     }, [isLoading]);
 
