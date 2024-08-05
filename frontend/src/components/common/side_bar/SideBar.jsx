@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import style from '../../../css/main/side_bar.module.css';
 import SideBarItem from "./SideBarItem";
 import Photo from '../../../assets/profile/profile_dummy.jpg'
