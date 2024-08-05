@@ -1,14 +1,34 @@
 import style from "../../../css/main/main_modals.module.css"
+import { useState } from "react";
 
 function UserStatusModal ({name, photo, status}) {
+  const [username, setUsername] = useState(name)
+  const [isModify, setIsModify] = useState(false)
+
+  function handleIsModify () {
+    setIsModify(!isModify)
+  }
+
+  function handleUsername (event) {
+    setUsername(event.target.value)
+    if (event.target.value.length > 10) {
+      window.alert('10자까지 입력 가능합니다.')
+    }
+  }
 
   return (
     <div className={`w-72 h-52 backdrop-blur-sm ${style.mainModal}`}>
       <img src={photo} alt="dummy_profile" className='w-10 rounded-full mt-2' />
       <div className='flex items-center'>
         <div className='flex justify-center items-center w-6 h-3 bg-rose-400 rounded-sm text-white font-bold' style={{'fontSize': '8px'}}>방장</div>
-        <p className='font-bold text-center leading-3 mx-2'>{name}</p>
-        <span className="material-symbols-outlined text-xl">
+        { isModify ? 
+          <input type="text" onChange={handleUsername}
+          maxLength={10} value={username} placeholder={username}
+          className="border-0 ring-1 ring-inset ring-gray-300 mx-1 w-24" /> :
+          <p className='font-bold text-center leading-3 mx-2'>{username}</p>
+        }
+        <span className="material-symbols-outlined text-xl"
+        onClick={handleIsModify}>
           edit
         </span>
       </div>
