@@ -33,17 +33,24 @@
 // }
 
 // export default ToastModal;
+import { teal } from '@mui/material/colors';
 import React, { useState, useEffect } from 'react';
+import { axiosCommonInstance } from '../../apis/axiosInstance';
 
-function ToastModal({ message, onClose }) {
+function ToastModal({ message, onClose, setSuccessToken, phoneNumber }) {
   const [timeLeft, setTimeLeft] = useState(180); // 3분 = 180초
-
+  const [requested, setRequested] = useState(false);
   useEffect(() => {
+    if(!requested){
+      axiosCommonInstance.post("/auth/authentication",{
+        tel:phoneNumber
+      })
+      setRequested(true);
+    }
     if (timeLeft === 0) {
       onClose();
       return;
     }
-
     const timer = setTimeout(() => {
       setTimeLeft(timeLeft - 1);
     }, 1000);
@@ -57,6 +64,26 @@ function ToastModal({ message, onClose }) {
     return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  const retry = () => {
+    setTimeLeft(180);
+    setRequested(false);
+    //대충 인증번호 api 한번더 콜하기
+  }
+
+  const validate = () => {
+    axiosCommonInstance.post("/auth/authentication/check", {
+      tel: phoneNumber,
+      authNum : document.querySelector("#authnum").value
+    }).then((data)=>{
+      if(data.code == "SUCCESS"){
+        setSuccessToken(data.token);
+      }else{
+        retry();
+      }
+    })
+    setSuccessToken("123411");
+    onClose();
+  }
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
       <div className="bg-white p-5 rounded shadow-lg w-80 relative">
@@ -65,17 +92,18 @@ function ToastModal({ message, onClose }) {
           문자로 전달받은<br />인증번호 6자리를 입력해주세요.
         </p>
         <div className="flex flex-col gap-3">
-          <input 
-            type="text" 
-            placeholder="인증번호" 
+          <input
+            type="text"
+            id='authnum'
+            placeholder="인증번호"
             className="w-full p-2 border rounded focus:outline-none focus:border-pink-500"
           />
           <div className="flex justify-between items-center text-sm text-gray-600">
             <span>{formatTime(timeLeft)}</span>
-            <button className="text-pink-500">재전송</button>
+            <button className="text-pink-500" onClick={retry}>재전송</button>
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={validate}
             className="w-full bg-pink-500 text-white p-2 rounded">
             확인
           </button>
