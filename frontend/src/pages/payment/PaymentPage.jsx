@@ -1,30 +1,36 @@
 import styles from '../../css/payment/payment.module.css';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import coin1 from '../../assets/payment/coin1.png';
-import coin2 from '../../assets/payment/coin2.png';
-import coin3 from '../../assets/payment/coin3.png';
-import coin4 from '../../assets/payment/coin4.png';
 import PaymentItem from './PaymentItem';
 import PaymentModal from './PaymentModal';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePreparePayment } from '../../hook/payment/paymentHook';
+import { usePreparePayment, usePaymentItems } from '../../hook/payment/paymentHook';
+
+const getImagePath = (imageName) => {
+    return new URL(`../../assets/payment/${imageName}`, import.meta.url).href;
+};
 
 function PaymentPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState(null);
+    const [paymentItems, setPaymentItems] = useState([]);
 
     const navigate = useNavigate();
     const { mutateAsync: preparePayment } = usePreparePayment();
+    const { data, isLoading, error } = usePaymentItems();
 
-    const paymentItems = [
-        { image: coin1, points: '1000', price: '1000' },
-        { image: coin2, points: '3000', price: '2800' },
-        { image: coin3, points: '5000', price: '4600' },
-        { image: coin4, points: '10000', price: '9000' },
-    ];
+    useEffect(() => {
+        if (data) {
+            console.log('Fetched payment items:', data.data);
+            const itemsWithFullPath = data.data.map(item => ({
+                ...item,
+                image: getImagePath(item.image),
+            }));
+            setPaymentItems(itemsWithFullPath);
+        }
+    }, [data]);
 
     useEffect(() => {
         if (isModalOpen) {
@@ -61,13 +67,11 @@ function PaymentPage() {
         const REDIRECT_URL = import.meta.env.VITE_PAYMENT_REDIRECT_URL;
 
         try {
-            // 서버에서 paymentId를 받아옴
             const respOfServer = await preparePayment({
-                orderName: selectedItem.points,
-                amount: selectedItem.price,
+                pointId: selectedItem.pointId
             });
 
-            console.log(respOfServer)
+            console.log(respOfServer);
 
             if (!respOfServer || !respOfServer.data.orderId) {
                 throw new Error("Invalid response from preparePayment");
@@ -81,7 +85,7 @@ function PaymentPage() {
                 totalAmount: selectedItem.price,
                 currency: 'CURRENCY_KRW',
                 payMethod: 'CARD',
-                redirectUrl: REDIRECT_URL, // 리디렉션 URL 추가
+                redirectUrl: REDIRECT_URL,
             });
 
             if (response.code != null) {
@@ -99,6 +103,14 @@ function PaymentPage() {
         const result = await handlePayment();
         setPaymentStatus(result ? '결제가 완료되었습니다.' : '결제가 취소되었습니다.');
     };
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error loading payment items</div>;
+    }
 
     return (
         <div className={`${styles.payment} bg-custom-gradient`}>
@@ -122,9 +134,10 @@ function PaymentPage() {
             </div>
             <div className={styles.list}>
                 <li>
-                    {paymentItems.map((item, index) => (
+                    {Array.isArray(paymentItems) && paymentItems.map((item, index) => (
                         <PaymentItem
                             key={index}
+                            pointId={item.pointId}
                             image={item.image}
                             points={item.points}
                             price={item.price}
