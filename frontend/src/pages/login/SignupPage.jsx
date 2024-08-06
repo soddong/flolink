@@ -10,7 +10,7 @@ import NicknameField from '../../components/signup/NicknameField';
 import IdField from '../../components/signup/IdField';
 import NameField from '../../components/signup/NameField';
 import PhoneNumberField from '../../components/signup/PhoneNumber';
-import { axiosCommonInstance } from '../../apis/axiosInstance';
+import { checkDuplicateUsername, registUser } from '../../service/auth/auth';
 function SignupPage() {
   const [selectedTelecom, setSelectedTelecom] = useState('SKT');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,10 +36,10 @@ function SignupPage() {
   const checkUsernameAvailability = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosCommonInstance.get(`/users/duplicate/${username}`);
+      const response = checkDuplicateUsername(username);
       console.log(response);
       // 응답이 성공적으로 왔을 때
-      if (response.data.data) {
+      if (response.data) {
         // 중복된 아이디가 있는 경우
         setUsernameMessage('이미 사용 중인 아이디입니다.');
       } else {
@@ -90,15 +90,15 @@ function SignupPage() {
 
   const handleRegist = () => {
     console.log("1234");
-    axiosCommonInstance.post("/users/join", {
+    const userinfo={
       loginId: username,
       password: password,
       userName: fullName,
       nickname: nickname,
       tel: phoneNumber,
       token: successToken
-    }).then((data) => {
-      console.log("우왕 회원가입이다");
+    }
+    registUser(userinfo).then(()=>{
       navigate('/login');
     })
   }
