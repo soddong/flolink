@@ -8,7 +8,7 @@ const FeedList = ({ feeds: initialFeeds, currentUser }) => {
   console.log(feeds)
   const handleAddComment = (feedId, commentContent) => {
     setFeeds(prevFeeds => prevFeeds.map(feed => 
-      feed.id === feedId ? {
+      feed.feedId === feedId ? {
         ...feed,
         comments: [...feed.comments, { author: currentUser, content: commentContent }]
       } : feed
@@ -17,7 +17,7 @@ const FeedList = ({ feeds: initialFeeds, currentUser }) => {
 
 
   const handleEditComment = (feedId, commentIndex) => {
-    const feedIndex = feeds.findIndex(feed => feed.id === feedId);
+    const feedIndex = feeds.findIndex(feed => feed.feedId === feedId);
     if (feedIndex !== -1) {
       const newContent = prompt('수정할 댓글 내용을 입력하세요:', feeds[feedIndex].comments[commentIndex].content);
       if (newContent) {
@@ -33,7 +33,7 @@ const FeedList = ({ feeds: initialFeeds, currentUser }) => {
   const handleDeleteComment = (feedId, commentIndex) => {
     setFeeds(prevFeeds => {
       const updatedFeeds = prevFeeds.map(feed => 
-        feed.id === feedId ? {
+        feed.feedId === feedId ? {
           ...feed,
           comments: feed.comments.filter((_, cIndex) => cIndex !== commentIndex)
         } : feed
@@ -41,7 +41,7 @@ const FeedList = ({ feeds: initialFeeds, currentUser }) => {
       return updatedFeeds;
     });
   };
-  //   const feedIndex = feeds.findIndex(feed => feed.id === feedId);
+  //   const feedIndex = feeds.findIndex(feed => feed.feedId === feedId);
   //   if (feedIndex !== -1) {
   //     const updatedFeeds = [...feeds];
   //     updatedFeeds[feedIndex].comments = updatedFeeds[feedIndex].comments.filter((_, cIndex) => cIndex !== commentIndex);
@@ -57,7 +57,7 @@ const FeedList = ({ feeds: initialFeeds, currentUser }) => {
 
   const handleDeleteFeed = (feedId) => {
     console.log(feedId);
-    // setFeeds(prevFeeds => prevFeeds.filter(feed => feed.id !== feedId));
+    // setFeeds(prevFeeds => prevFeeds.filter(feed => feed.feedId !== feedId));
   };
   const navigate = useNavigate();
   return (

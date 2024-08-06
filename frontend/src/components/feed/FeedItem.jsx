@@ -26,13 +26,15 @@ const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment, onAddComm
           emulateTouch={true}
         >
           {feed.images.map((src, index) => (
-            <div key={index}>
-              <img src={src} alt={`feed-${index}`} className="w-full h-auto rounded-md" />
+            <div key={index} className='relative w-full h-64'>
+              <img src={src} alt={`feed-${index}`} className="absolute inset-0 w-full h-full object-cover rounded-md" />
             </div>
           ))}
         </Carousel>
       ) : (
-        <img src={feed.images} alt="Feed" className="w-full h-auto rounded-md" />
+        <div className="relative w-full h-64">
+          <img src={feed.images} alt="Feed" className="absolute inset-0 w-full h-full object-cover rounded-md" />
+        </div>
       )}
       <div className="mt-4">
         <p>{feed.content}</p>
