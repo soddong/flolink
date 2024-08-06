@@ -20,8 +20,8 @@ public class PaymentHistoryResponse {
 
 	public static PaymentHistoryResponse fromEntity(PaymentHistory paymentHistory) {
 		return PaymentHistoryResponse.builder()
-			.orderName(paymentHistory.getOrderName())
-			.amount(paymentHistory.getAmount())
+			.orderName(paymentHistory.getPaymentItem().getPoints())
+			.amount(paymentHistory.getPaymentItem().getPrice())
 			.paymentAt(paymentHistory.getApprovedAt())
 			.method(paymentHistory.getMethod())
 			.build();

@@ -7,17 +7,20 @@ import java.time.LocalDateTime;
 
 import com.flolink.backend.domain.payment.dto.PortOnePayment;
 import com.flolink.backend.domain.payment.dto.request.PaymentCreateRequest;
+import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,11 +53,9 @@ public class PaymentHistory {
 	@Column(name = "payment_key")
 	private String paymentKey;
 
-	@Column(name = "order_name")
-	private String orderName;
-
-	@Column(name = "amount", nullable = false)
-	private BigDecimal amount;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "point_id", nullable = false)
+	private PaymentItem paymentItem;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "state", nullable = false)
@@ -72,12 +73,11 @@ public class PaymentHistory {
 	@Column(name = "receipt_url")
 	private String receiptUrl;
 
-	public static PaymentHistory createPayment(User user, PaymentCreateRequest paymentCreateRequest) {
+	public static PaymentHistory createPayment(User user, PaymentItem paymentItem) {
 		return PaymentHistory.builder()
 			.user(user)
 			.orderId(generateRandomUUID())
-			.orderName(paymentCreateRequest.getOrderName() + " 포인트")
-			.amount(paymentCreateRequest.getAmount())
+			.paymentItem(paymentItem)
 			.state(PaymentState.PENDING)
 			.currency("CURRENCY_KRW")
 			.build();
