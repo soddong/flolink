@@ -13,7 +13,8 @@ export const fetchYears = async ({ queryKey }) => {
   }
 }
 
-export const fetchFlowers = async () => {
-  const {data} = await axiosCommonInstance.get('/plant/history');
+export const fetchHistorys = async ({ queryKey }) => {
+  const [_, plantId, historyId] = queryKey;
+  const {data} = await axiosCommonInstance.get(`/plants/${plantId}/historys/${historyId}`);
   return data;
 }
