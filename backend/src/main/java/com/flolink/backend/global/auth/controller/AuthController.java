@@ -1,11 +1,9 @@
 package com.flolink.backend.global.auth.controller;
 
+import com.flolink.backend.global.auth.dto.request.ResetPassword;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.flolink.backend.global.auth.dto.request.CheckAuthRequest;
 import com.flolink.backend.global.auth.dto.request.SendAuthRequest;
@@ -34,7 +32,7 @@ public class AuthController {
 		log.info("===휴대폰 본인인증번호 전송 START===");
 		authService.sendAuthenticationNumber(sendAuthRequest.getTel());
 		log.info("===휴대폰 본인인증번호 전송 END===");
-		return new ResponseEntity<>(HttpStatus.OK);
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 
 	@Operation(summary = "인증번호 확인", description = "발송한 인증번호와 일치하는지 확인")
@@ -44,6 +42,15 @@ public class AuthController {
 		SuccessTokenResponse token = authService.checkAuthenticationNumber(checkAuthRequest);
 		log.info("===인증번호 일치 확인 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, token));
+	}
+
+	@Operation(summary = "임시비밀번호 문자 발송 및 재설정", description = "비밀번호 찾기 진행 시 휴대폰인증을 완료하면 문자로 임시 비밀번호 발급")
+	@PatchMapping("/reset/pw")
+	public ResponseEntity<?> resetPassword(@RequestBody ResetPassword resetPassword){
+		log.info("===임시 비밀번호 발송 START===");
+		authService.sendTempPassword(resetPassword);
+		log.info("===임시 비밀번호 발송 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 }
 
