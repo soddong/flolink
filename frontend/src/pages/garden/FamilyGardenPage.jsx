@@ -68,12 +68,9 @@ const years = [
 function FamilyGardenPage () {
   const [statusYear, setStatusYear] = useState(2024)
   const [plantId, setPlantId] = useState(1)
-  const { data: yearData, isLoading: yearLoading, error: yearError, refetch } = getYearData(plantId, statusYear);
+  const { data: yearData, isLoading: yearLoading, error: yearError } = getYearData(plantId, statusYear);
   const [itemData, setItemData] = useState(null);
 
-  useEffect (() => {
-    
-  })
   useEffect (() => {
     if (yearData && yearData.data) {
       console.log(yearData.data)
@@ -82,11 +79,6 @@ function FamilyGardenPage () {
       console.log(yearError, yearLoading)
     }
   },[yearData, yearError, yearLoading])
-
-  // useEffect(() => {
-  //   console.log(statusYear)
-  //   refetch(); // statusYear가 변경될 때 데이터를 다시 가져옴
-  // }, [statusYear]);
 
   function nextYear () {
     setStatusYear(statusYear + 1)
