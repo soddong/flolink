@@ -4,6 +4,7 @@ import Header from '../../assets/garden/panel_head.png'
 import Garden from '../../components/garden/Garden';
 import YearStatus from '../../components/garden/YearStatus';
 import { useState, useEffect } from 'react';
+import { getYearData } from '../../hook/garden/gardenHook.js'
 
 const years = [
   {
@@ -66,17 +67,34 @@ const years = [
 
 function FamilyGardenPage () {
   const [statusYear, setStatusYear] = useState(2024)
+  const [plantId, setPlantId] = useState(1)
+  const { data: yearData, isLoading: yearLoading, error: yearError, refetch } = getYearData(plantId, statusYear);
+  const [itemData, setItemData] = useState(null);
+
+  useEffect (() => {
+    
+  })
+  useEffect (() => {
+    if (yearData && yearData.data) {
+      console.log(yearData.data)
+      setItemData(yearData.data)
+    } else {
+      console.log(yearError, yearLoading)
+    }
+  },[yearData, yearError, yearLoading])
+
+  // useEffect(() => {
+  //   console.log(statusYear)
+  //   refetch(); // statusYear가 변경될 때 데이터를 다시 가져옴
+  // }, [statusYear]);
 
   function nextYear () {
     setStatusYear(statusYear + 1)
-    console.log(statusYear)
   }
 
   function postYear () {
     setStatusYear(statusYear - 1)
   }
-
-  const yearData = years.find(item => item["year"] === statusYear)
 
   return (
     <div className="w-full h-full box-border relative bg-cover flex flex-col items-center"
@@ -87,8 +105,13 @@ function FamilyGardenPage () {
           <h1 className='text-2xl font-bold text-red-900 absolute top-8'>기억정원🌷</h1>
         </div>
       </header>
-      <Garden year = {yearData["year"]} flowers={yearData["data"]["plantHistorys"]} nextYear={nextYear} postYear={postYear}/>
-      <YearStatus year = {yearData["year"]} total={yearData["totalCount"]} success={yearData["achievementCount"]} />
+      {itemData ? (
+        <>
+          <Garden year = {statusYear} flowers={itemData["plantHistorys"]} nextYear={nextYear} postYear={postYear}/>
+          <YearStatus year = {statusYear} total={itemData["totalCount"]} success={itemData["achievementCount"]} />
+        </>) : (
+          <p>Loading...</p>
+        )}
       <NavBar />
     </div>
   )

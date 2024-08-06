@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function YearStatus ({year, total, success, feedCount}) {
+function YearStatus ({year, total, success}) {
   const [comment, setComment] = useState()
   const score = success / total
   
@@ -17,10 +17,15 @@ function YearStatus ({year, total, success, feedCount}) {
   return (
     <div className="w-3/4 bg-white/50 rounded-lg flex items-center justify-center"
     style={{'height': '10vh', 'boxShadow': '0px 0px 10px 0px #00000034'}}>
-      <div className="text-sm text-gray-700">
-        <p>{year}년 통계</p>
-        <p>개화 성공률: {success}/{total}</p>
-        <p>{comment}</p>
+      <div className="text-sm text-gray-700 text-center">
+        {total ? (
+          <>
+            <p>{year}년 통계</p>
+            <p>개화 성공률: {success}/{total}</p>
+            <p>{comment}</p>
+          </> ) : (
+            <p>해당 년도의 기록이 없어요.</p>
+          )}
       </div>
     </div>
   )
