@@ -11,7 +11,6 @@ import Sidebar from '../../components/common/side_bar/SideBar';
 
 function MainPage() {
   const [status, setStatus] = useState(60)
-
   const Message = '오늘은 어떤 일이 있었나요?'
   return (
   <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
