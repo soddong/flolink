@@ -3,6 +3,7 @@ import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } 
 import FindAccountStyle from '../../css/login/FindAccount.module.css';
 import logo from '../../assets/logo/logo.png';
 import { useNavigate } from 'react-router-dom';
+import { axiosCommonInstance } from '../../apis/axiosInstance';
 
 function FindAccount() {
   const [activeTab, setActiveTab] = useState('findId');
@@ -11,6 +12,10 @@ function FindAccount() {
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [maskedId, setMaskedId] = useState('');
   const [openModal, setOpenModal] = useState(false);
+  const [username, setUsername] = useState('');
+  const [tel, setTel] = useState('');
+  const [authNum, setAuthNum] = useState('');
+  const [successToken, setSuccessToken] = useState('')
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,11 +31,16 @@ function FindAccount() {
   //   setOpenModal(true);
   // }, []);
 
+  // 인증번호 전송
   const handleSendCode = async () => {
-    // 인증번호 전송
     try {
       // 예시
-      await fetch('/api/send-verification-code', { method: 'POST' });
+      await axiosCommonInstance.post('/auth/authentication',{
+        tel: tel
+      }).then((res) => {
+        setAuthNum(res.data)
+      })
+      
       setIsCodeSent(true);
       setCountdown(180); // 3분
     } catch (error) {
@@ -39,19 +49,21 @@ function FindAccount() {
     }
   };
 
+  // 인증번호 확인
   const handleVerifyCode = async () => {
-    // 인증번호 확인
     if (countdown <= 0) {
       alert('인증번호가 만료되었습니다. 다시 요청해주세요.');
       return;
     }
 
     try {
-      // 예시
-      const response = await fetch('/api/verify-code', { 
-        method: 'POST', 
-        body: JSON.stringify({ code: verificationCode }),
-      });
+      await axiosCommonInstance.post('/auth/authentication/check',{
+        tel: tel,
+        authNum: authNum
+      }).then((res) => {
+        setSuccessToken(res.data.token)
+      })
+
       if (response.status === 200) {
         const result = await response.json();
         setMaskedId(result.maskedId); // 마스킹된 아이디
@@ -64,6 +76,19 @@ function FindAccount() {
       alert('인증번호 확인에 실패했습니다.');
     }
   };
+
+  // 아이디 반환
+  const handleFindId = async () => {
+    try{
+      axiosCommonInstance.post('/find/id', {
+        username: username,
+        tel: tel,
+        token: successToken
+      })
+    } catch (e) {
+
+    }
+  }
 
   return (
     <div className={FindAccountStyle.container}>
@@ -85,8 +110,10 @@ function FindAccount() {
       </div>
       {activeTab === 'findId' && (
         <div className={FindAccountStyle.form}>
-          <TextField label="이름" variant="outlined" fullWidth className={FindAccountStyle.input} />
-          <TextField label="휴대 전화번호 입력 ('-' 제외)" variant="outlined" fullWidth className={FindAccountStyle.input} />
+          <TextField label="이름" variant="outlined" fullWidth className={FindAccountStyle.input} 
+            onChange={(e) => setUsername(e.target.value)}/>
+          <TextField label="휴대 전화번호 입력 ('-' 제외)" variant="outlined" fullWidth className={FindAccountStyle.input} 
+            onChange={(e) => setTel(e.target.value)}/>
           <Button 
             variant="outlined" 
             className={FindAccountStyle.button}
@@ -111,7 +138,8 @@ function FindAccount() {
           >
             확인
           </Button>
-          <Button variant="contained" className={FindAccountStyle.submitButton}>아이디 찾기</Button>
+          <Button variant="contained" className={FindAccountStyle.submitButton}
+          onClick={handleFindId}>아이디 찾기</Button>
         </div>
       )}
       
