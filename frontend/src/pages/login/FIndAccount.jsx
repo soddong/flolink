@@ -37,7 +37,7 @@ function FindAccount() {
   const handleSendCode = async () => {
     try {
       // 예시
-      const authNum = sendAuthNum(tel).data;
+      const authNum = await sendAuthNum(tel).data;
       setAuthNum(authNum)     
       setIsCodeSent(true);
       setCountdown(180); // 3분
@@ -55,7 +55,7 @@ function FindAccount() {
     }
 
     try {
-      const successTokenRes = phoneNumberCheck(tel, authNum).data;
+      const successTokenRes = await phoneNumberCheck(tel, verificationCode).data;
       setSuccessToken(successTokenRes.token);
       
       if (response.status === 200) {
@@ -90,10 +90,10 @@ function FindAccount() {
   // 비밀번호 반환?
   const handleFindPw = async () => {
     try{
-      const secretId = await findpw(loginId, username, tel, successToken);
+      const secretId = await resetPw(loginId, username, tel, verificationCode);
       console.log(secretId.data.loginId)
       if (secretId.status === 200) {
-
+        alert('임시비밀번호가 발송되었습니다.');
       } else {
         alert('일치하는 정보가 없습니다.');
       }
@@ -163,7 +163,8 @@ function FindAccount() {
             onChange={(e) => setloginId(e.target.value)} />
           <TextField label="휴대 전화번호 입력 ('-' 제외)" variant="outlined" fullWidth className={FindAccountStyle.input}
             onChange={(e) => setTel(e.target.value)} />
-          <Button variant="outlined" className={FindAccountStyle.button}>인증번호 전송</Button>
+          <Button variant="outlined" className={FindAccountStyle.button} 
+            onClick={handleSendCode} >인증번호 전송</Button>
           <TextField label="인증번호 입력" variant="outlined" fullWidth className={FindAccountStyle.input} 
             onChange={(e) => setVerificationCode(e.target.value)} />
           <Button variant="contained" className={FindAccountStyle.submitButton} onClick={handleFindPw}>비밀번호 찾기</Button>

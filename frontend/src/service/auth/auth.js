@@ -44,11 +44,11 @@ export const login = async (loginId, password) => {
   };
 
 // 아이디 반환
-export const findId = async (userName, tel, token) => {
-    const {data} = await axiosCommonInstance.post("users/find/id", {
+export const findId = async (userName, tel, successToken) => {
+    const {data} = await axiosCommonInstance.post("/users/find/id", {
         userName: userName,
         tel: tel,
-        token: token
+        token: successToken
     });
     return data;
 }
@@ -66,5 +66,13 @@ export const findpw = async (loginId, userName, tel, token) => {
 
 
 
-// 비밀번호 재설정
-// export const resetPw = async ( )
+// 비밀번호 재설정 (여기서 authNum은 문자발송 후 받은 인증번호다.)
+export const resetPw = async (loginId, userName, tel, authNum) => {
+    const {data} = await axiosCommonInstance.patch("/auth/reset/pw",{
+        userName: userName,
+        loginId: loginId,
+        tel: tel,
+        authNum: authNum
+    })
+    return data;
+}
