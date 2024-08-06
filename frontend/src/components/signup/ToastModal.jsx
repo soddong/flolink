@@ -36,14 +36,15 @@
 import { teal } from '@mui/material/colors';
 import React, { useState, useEffect } from 'react';
 import { axiosCommonInstance } from '../../apis/axiosInstance';
+import { phoneNumberCheck } from '../../service/auth/auth';
 
 function ToastModal({ message, onClose, setSuccessToken, phoneNumber }) {
   const [timeLeft, setTimeLeft] = useState(180); // 3분 = 180초
   const [requested, setRequested] = useState(false);
   useEffect(() => {
-    if(!requested){
-      axiosCommonInstance.post("/auth/authentication",{
-        tel:phoneNumber
+    if (!requested) {
+      axiosCommonInstance.post("/auth/authentication", {
+        tel: phoneNumber
       })
       setRequested(true);
     }
@@ -71,17 +72,12 @@ function ToastModal({ message, onClose, setSuccessToken, phoneNumber }) {
   }
 
   const validate = () => {
-    axiosCommonInstance.post("/auth/authentication/check", {
-      tel: phoneNumber,
-      authNum : document.querySelector("#authnum").value
-    }).then((data)=>{
-      if(data.code == "SUCCESS"){
-        setSuccessToken(data.token);
-      }else{
-        retry();
-      }
-    })
-    setSuccessToken("123411");
+    const data = phoneNumberCheck(phoneNumber, document.querySelector("#authnum").value);
+    if (data.code == "SUCCESS") {
+      setSuccessToken(data.token);
+    } else {
+      retry();
+    }
     onClose();
   }
   return (
