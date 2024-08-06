@@ -3,58 +3,64 @@ import Background from '../../assets/garden/garden_background.png'
 import Header from '../../assets/garden/panel_head.png'
 import Garden from '../../components/garden/Garden';
 import YearStatus from '../../components/garden/YearStatus';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const years = [
   {
     id: 1,
-    year: 2022, 
-    flowerSuccess: 5,
-    flowerTotal: 8,
-    flowers: [
-      {id: 1, name: '6월', level: 4},
-      {id: 2, name: '7월', level: 1},
-      {id: 3, name: '8월', level: 4},
-      {id: 4, name: '9월', level: 4},
-      {id: 5, name: '10월', level: 4},
-      {id: 6, name: '11월', level: 2},
-      {id: 7, name: '12월', level: 4},
-    ]
+    "year": 2022, 
+    "achievementCount": 5,
+    "totalCount": 8,
+    "data": {
+      "plantHistorys": [
+        {"plantHistoryId": 1, "dateMonth": "2022-06-02", "level": 4},
+        {"plantHistoryId": 2, "dateMonth": "2022-07-02", "level": 1},
+        {"plantHistoryId": 3, "dateMonth": "2022-08-02", "level": 4},
+        {"plantHistoryId": 4, "dateMonth": "2022-09-02", "level": 4},
+        {"plantHistoryId": 5, "dateMonth": "2022-10-02", "level": 4},
+        {"plantHistoryId": 6, "dateMonth": "2022-11-02", "level": 2},
+        {"plantHistoryId": 7, "dateMonth": "2022-12-02", "level": 4},
+      ]
+    }
   },
   {
     id: 2,
-    year: 2023, 
-    flowerSuccess: 10,
-    flowerTotal: 12,
-    flowers: [
-      {id: 1, name: '1월', level: 4},
-      {id: 2, name: '2월', level: 4},
-      {id: 3, name: '3월', level: 3},
-      {id: 4, name: '4월', level: 4},
-      {id: 5, name: '5월', level: 4},
-      {id: 6, name: '6월', level: 4},
-      {id: 7, name: '7월', level: 4},
-      {id: 8, name: '8월', level: 4},
-      {id: 9, name: '9월', level: 4},
-      {id: 10, name: '10월', level: 4},
-      {id: 11, name: '11월', level: 3},
-      {id: 12, name: '12월', level: 4},
-    ]
+    "year": 2023, 
+    "achievementCount": 10,
+    "totalCount": 12,
+    "data": {
+      "plantHistorys": [
+        {"plantHistoryId": 1, "dateMonth": '2023-01-02', "level": 4},
+        {"plantHistoryId": 2, "dateMonth": '2023-02-02', "level": 4},
+        {"plantHistoryId": 3, "dateMonth": '2023-03-02', "level": 3},
+        {"plantHistoryId": 4, "dateMonth": '2023-04-02', "level": 4},
+        {"plantHistoryId": 5, "dateMonth": '2023-05-02', "level": 4},
+        {"plantHistoryId": 6, "dateMonth": '2023-06-02', "level": 4},
+        {"plantHistoryId": 7, "dateMonth": '2023-07-02', "level": 4},
+        {"plantHistoryId": 8, "dateMonth": '2023-08-02', "level": 4},
+        {"plantHistoryId": 9, "dateMonth": '2023-09-02', "level": 4},
+        {"plantHistoryId": 10, "dateMonth": '2023-10-02', "level": 4},
+        {"plantHistoryId": 11, "dateMonth": '2023-11-02', "level": 3},
+        {"plantHistoryId": 12, "dateMonth": '2023-12-02', "level": 4},
+      ]
+    }
   },
   {
     id: 3,
-    year: 2024, 
-    flowerSuccess: 2,
-    flowerTotal: 7,
-    flowers: [
-      {id: 1, name: '1월', level: 2},
-      {id: 2, name: '2월', level: 4},
-      {id: 3, name: '3월', level: 3},
-      {id: 4, name: '4월', level: 1},
-      {id: 5, name: '5월', level: 2},
-      {id: 6, name: '6월', level: 4},
-      {id: 7, name: '7월', level: 1},
-    ]
+    "year": 2024, 
+    "achievementCount": 2,
+    "totalCount": 7,
+    "data": {
+      "plantHistorys": [
+        {"plantHistoryId": 1, "dateMonth": '2024-01-02', "level": 2},
+        {"plantHistoryId": 2, "dateMonth": '2024-02-02', "level": 4},
+        {"plantHistoryId": 3, "dateMonth": '2024-03-02', "level": 3},
+        {"plantHistoryId": 4, "dateMonth": '2024-04-02', "level": 1},
+        {"plantHistoryId": 5, "dateMonth": '2024-05-02', "level": 2},
+        {"plantHistoryId": 6, "dateMonth": '2024-06-02', "level": 4},
+        {"plantHistoryId": 7, "dateMonth": '2024-07-02', "level": 1},
+      ]
+    }
   }
 ]
 
@@ -70,7 +76,7 @@ function FamilyGardenPage () {
     setStatusYear(statusYear - 1)
   }
 
-  const yearData = years.find(item => item.year === statusYear)
+  const yearData = years.find(item => item["year"] === statusYear)
 
   return (
     <div className="w-full h-full box-border relative bg-cover flex flex-col items-center"
@@ -81,8 +87,8 @@ function FamilyGardenPage () {
           <h1 className='text-2xl font-bold text-red-900 absolute top-8'>기억정원🌷</h1>
         </div>
       </header>
-      <Garden year = {yearData.year} flowers={yearData.flowers} nextYear={nextYear} postYear={postYear}/>
-      <YearStatus year = {yearData.year} total={yearData.flowerTotal} success={yearData.flowerSuccess} />
+      <Garden year = {yearData["year"]} flowers={yearData["data"]["plantHistorys"]} nextYear={nextYear} postYear={postYear}/>
+      <YearStatus year = {yearData["year"]} total={yearData["totalCount"]} success={yearData["achievementCount"]} />
       <NavBar />
     </div>
   )

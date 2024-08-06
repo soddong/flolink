@@ -19,20 +19,21 @@ import Level1 from '../../assets/garden/level_1.png'
 import Level2 from '../../assets/garden/level_2.png'
 import Level3 from '../../assets/garden/level_3.png'
 import NoFlower from '../../assets/garden/none.png';
+import moment from 'moment';
 
 const months = [
-  {id: 1, name: '1월', image: Winter2},
-  {id: 2, name: '2월', image: Winter3},
-  {id: 3, name: '3월', image: Spring1},
-  {id: 4, name: '4월', image: Spring2},
-  {id: 5, name: '5월', image: Spring3},
-  {id: 6, name: '6월', image: Summer1},
-  {id: 7, name: '7월', image: Summer2},
-  {id: 8, name: '8월', image: Summer3},
-  {id: 9, name: '9월', image: Fall1},
-  {id: 10, name: '10월', image: Fall2},
-  {id: 11, name: '11월', image: Fall3},
-  {id: 12, name: '12월', image: Winter1},
+  {id: 1, name: '01', image: Winter2},
+  {id: 2, name: '02', image: Winter3},
+  {id: 3, name: '03', image: Spring1},
+  {id: 4, name: '04', image: Spring2},
+  {id: 5, name: '05', image: Spring3},
+  {id: 6, name: '06', image: Summer1},
+  {id: 7, name: '07', image: Summer2},
+  {id: 8, name: '08', image: Summer3},
+  {id: 9, name: '09', image: Fall1},
+  {id: 10, name: '10', image: Fall2},
+  {id: 11, name: '11', image: Fall3},
+  {id: 12, name: '12', image: Winter1},
 ]
 
 const levelImages = {
@@ -45,9 +46,9 @@ function Garden ({year, flowers, nextYear, postYear}) {
   const [updatedMonths, setUpdatedMonths] = useState(months);
   useEffect(() => {
     const newMonths = months.map(month => {
-      const flowerForMonth = flowers.find(flower => flower.name === month.name);
+      const flowerForMonth = flowers.find(flower => moment(flower["dateMonth"]).format("MM") === month.name);
       if (flowerForMonth) {
-        const { level } = flowerForMonth;
+        const level = flowerForMonth["level"];
         return level === 4
           ? { ...month, image: month.image }
           : { ...month, image: levelImages[level] || month.image };
