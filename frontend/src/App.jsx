@@ -15,9 +15,11 @@ import SchedulePage from './pages/schedule/SchedulePage';
 import FamilyGardenPage from './pages/garden/FamilyGardenPage';
 import MyRoomPage from './pages/my_room/myRoomPage';
 import PaymentPage from './pages/payment/PaymentPage';
+import PaymentSuccessPage from './pages/payment/PaymentSuccessPage';
 import SettingPage from './pages/setting/SettingPage';
 import LocationPage from './pages/location/LocationPage';
 import UserCertPage from './pages/certificate/UserCertPage';
+import FeedEditPage from './pages/feed/FeedEditPage';
 
 const router = createBrowserRouter([  
   {
@@ -84,12 +86,20 @@ const router = createBrowserRouter([
     element: <PaymentPage />
   },
   {
+    path: "/payment-success",
+    element: <PaymentSuccessPage />
+  },
+  {
     path: "/setting",
     element: <SettingPage />
   },
   {
     path: "/location",
     element: <LocationPage />
+  },
+  {
+    path: "/feededit",
+    element: <FeedEditPage />
   }
 ])
 

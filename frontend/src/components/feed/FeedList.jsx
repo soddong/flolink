@@ -1,7 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Router, useNavigate } from 'react-router-dom';
 import FeedItem from './FeedItem';
 
-const FeedList = ({ feeds, currentUser, onEditComment, onDeleteComment }) => {
+
+const FeedList = ({ feeds: initialFeeds, currentUser }) => {
+  const [feeds, setFeeds] = useState(initialFeeds);
+  console.log(feeds)
+  const handleAddComment = (feedId, commentContent) => {
+    setFeeds(prevFeeds => prevFeeds.map(feed => 
+      feed.id === feedId ? {
+        ...feed,
+        comments: [...feed.comments, { author: currentUser, content: commentContent }]
+      } : feed
+    ));
+  };
+
+
+  const handleEditComment = (feedId, commentIndex) => {
+    const feedIndex = feeds.findIndex(feed => feed.id === feedId);
+    if (feedIndex !== -1) {
+      const newContent = prompt('수정할 댓글 내용을 입력하세요:', feeds[feedIndex].comments[commentIndex].content);
+      if (newContent) {
+        setFeeds(prevFeeds => {
+          const updatedFeeds = [...prevFeeds];
+          updatedFeeds[feedIndex].comments[commentIndex].content = newContent;
+          return updatedFeeds;
+        });
+      }
+    }
+  };
+
+  const handleDeleteComment = (feedId, commentIndex) => {
+    setFeeds(prevFeeds => {
+      const updatedFeeds = prevFeeds.map(feed => 
+        feed.id === feedId ? {
+          ...feed,
+          comments: feed.comments.filter((_, cIndex) => cIndex !== commentIndex)
+        } : feed
+      );
+      return updatedFeeds;
+    });
+  };
+  //   const feedIndex = feeds.findIndex(feed => feed.id === feedId);
+  //   if (feedIndex !== -1) {
+  //     const updatedFeeds = [...feeds];
+  //     updatedFeeds[feedIndex].comments = updatedFeeds[feedIndex].comments.filter((_, cIndex) => cIndex !== commentIndex);
+  //     setFeeds(updatedFeeds);
+  //   }
+  // };
+
+  const handleEditFeed = (feedId) => {
+    const feed = feeds.filter(feed => feed.feedId === feedId);
+    
+    navigate("/feededit",{state:{feed}});
+  };
+
+  const handleDeleteFeed = (feedId) => {
+    console.log(feedId);
+    // setFeeds(prevFeeds => prevFeeds.filter(feed => feed.id !== feedId));
+  };
+  const navigate = useNavigate();
   return (
     <div className="mt-4">
       {feeds.length > 0 ? (
@@ -10,8 +68,11 @@ const FeedList = ({ feeds, currentUser, onEditComment, onDeleteComment }) => {
             key={index}
             feed={feed}
             currentUser={currentUser}
-            onEditComment={onEditComment}
-            onDeleteComment={onDeleteComment}
+            onAddComment={handleAddComment}
+            onEditComment={handleEditComment}
+            onDeleteComment={handleDeleteComment}
+            onEditFeed={handleEditFeed}
+            onDeleteFeed={handleDeleteFeed}
           />
         ))
       ) : (
