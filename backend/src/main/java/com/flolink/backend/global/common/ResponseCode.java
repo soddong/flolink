@@ -44,8 +44,8 @@ public enum ResponseCode {
 	USER_INCONSISTENCY(401, "User inconsistency", "USER_INCONSISTENCY"),
 
 	// Purchase & Payment
-	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "BAD_REQUEST_ERROR"),
-	INSUFFICIENT_FUNDS(400, "Insufficient funds", "ITEM_PURCHASE_ERROR"),
+	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "ITEM_ALREADY_PURCHASE_ERROR"),
+	INSUFFICIENT_FUNDS(400, "Insufficient funds", "ITEM_INSUFFICIENT_FUNDS_ERROR"),
 	PAYMENT_BANK_FAILED(400, "Bank error", "PAYMENT_ERROR"),
 	PAYMENT_AMOUNT_MISMATCH(400, "Amount mismatch", "PAYMENT_ERROR"),
 	PAYMENT_NOT_FOUND(404, "Payment not found", "NOT_FOUND_ERROR"),
