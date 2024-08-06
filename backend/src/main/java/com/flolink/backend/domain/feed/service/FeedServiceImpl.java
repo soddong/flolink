@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.flolink.backend.domain.feed.dto.request.FeedCommentRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
-import com.flolink.backend.domain.feed.dto.request.FeedImageRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.feed.dto.response.FeedImageResponse;
 import com.flolink.backend.domain.feed.dto.response.FeedResponse;
@@ -24,6 +23,7 @@ import com.flolink.backend.domain.feed.repository.FeedRepository;
 import com.flolink.backend.domain.plant.entity.ActivityPoint;
 import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.room.repository.RoomRepository;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -42,6 +42,7 @@ public class FeedServiceImpl implements FeedService {
 	private final FeedCommentRepository feedCommentRepository;
 	private final FeedImageRepository feedImageRepository;
 	private final UserRoomRepository userRoomRepository;
+	private final RoomRepository roomRepository;
 	private final S3Util s3Util;
 
 	@Override
@@ -214,14 +215,10 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
-	public List<FeedImageResponse> getImages(Integer userId, FeedImageRequest feedImageRequest) {
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, feedImageRequest.getRoomId());
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-		}
+	public List<FeedImageResponse> getImages(final Integer roomId,
+		final LocalDateTime startDate, final LocalDateTime endDate) {
 		return feedImageRepository.findFeedImagesByUserIdAndRoomIdAndCreateAtBetween(
-			userId, feedImageRequest.getRoomId(), feedImageRequest.getEndDate().atStartOfDay(),
-			feedImageRequest.getEndDate().atTime(23, 59, 59)
+			roomId, startDate, endDate
 		).stream().map((FeedImageResponse::fromEntity)).toList();
 	}
 

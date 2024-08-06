@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.flolink.backend.domain.feed.dto.request.FeedCommentRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
-import com.flolink.backend.domain.feed.dto.request.FeedImageRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.feed.dto.response.FeedImageResponse;
 import com.flolink.backend.domain.feed.dto.response.FeedResponse;
@@ -27,5 +26,5 @@ public interface FeedService {
 
 	void deleteComment(final Integer userId, final Integer feedId, final Integer commentId);
 
-	List<FeedImageResponse> getImages(final Integer userId, final FeedImageRequest feedImageRequest);
+	List<FeedImageResponse> getImages(final Integer roomId, final LocalDateTime startDate, final LocalDateTime endDate);
 }

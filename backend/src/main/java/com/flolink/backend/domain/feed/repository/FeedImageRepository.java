@@ -16,15 +16,14 @@ public interface FeedImageRepository extends JpaRepository<FeedImage, Integer> {
 	@Query("SELECT fi FROM FeedImage fi "
 		+ "JOIN fi.feed f "
 		+ "JOIN f.userRoom ur "
-		+ "WHERE ur.user.userId =:userId "
-		+ "AND ur.room.roomId =:roomId "
+		+ "WHERE ur.room.roomId =:roomId "
 		+ "AND fi.createAt BETWEEN :startDate AND :endDate "
 		+ "AND fi.useYn = true "
 		+ "ORDER BY fi.createAt DESC"
 	)
 	List<FeedImage> findFeedImagesByUserIdAndRoomIdAndCreateAtBetween(
-		@Param("userId") Integer userId,
 		@Param("roomId") Integer roomId,
 		@Param("startDate") LocalDateTime startDate,
-		@Param("endDate") LocalDateTime endDate);
+		@Param("endDate") LocalDateTime endDate
+	);
 }
