@@ -7,6 +7,8 @@ import kakaoLogo from '../../assets/login/kakao.png';
 import googleLogo from '../../assets/login/google.png';
 import LoginPageStyle from '../../css/login/Loginpage.module.css';
 import { axiosCommonInstance } from '../../apis/axiosInstance';
+import { login } from '../../service/auth/auth.js' 
+
 function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -14,18 +16,14 @@ function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      // 로그인 후 API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-      axiosCommonInstance.post('/login', {
-        loginId: username,
-        password: password,
-      }).then((res) => {
-        const accessToken = res.headers.authorization;
-        localStorage.setItem('ACCESS_TOKEN', accessToken);
-        axiosCommonInstance.defaults.headers.common['Authorization'] = accessToken;
-      });
-      navigate('/main');
+      const { headers } = await login(username, password); // await으로 로그인 요청 처리
+      const accessToken = headers.authorization; // headers에서 accessToken 추출
+      localStorage.setItem('ACCESS_TOKEN', accessToken); // localStorage에 저장
+      axiosCommonInstance.defaults.headers.common['Authorization'] = accessToken; // axios 인스턴스에 헤더 설정
+      navigate('/main'); // 로그인 성공 후 페이지 이동
     } catch (error) {
-      alert('로그인 실패: 아이디 또는 비밀번호를 확인해주세요.');
+      console.error(error); // 자세한 에러 정보를 로그로 남김
+      alert('로그인 실패: 아이디 또는 비밀번호를 확인해주세요.'); // 에러 처리
     }
   };
 

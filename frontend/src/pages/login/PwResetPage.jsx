@@ -4,6 +4,16 @@ import FindAccountStyle from '../../css/login/FindAccount.module.css';
 import logo from '../../assets/logo/logo.png';
 
 function FindAccount() {
+  const handleResetPw = async () => {
+    try {
+      const authNum = sendAuthNum(tel).data;
+      setAuthNum(authNum)     
+      setIsCodeSent(true);
+    } catch (error) {
+      console.error(error);
+      alert('비밀번호 재설정을 완료하였습니다.');
+    }
+  };
   return (
     <div className={FindAccountStyle.container}>
       <button className={FindAccountStyle.closeButton}>&times;</button>
@@ -21,7 +31,7 @@ function FindAccount() {
             <TextField label="기존 아이디를 입력해주세요" variant="outlined" fullWidth className={FindAccountStyle.input} />
             <TextField label="새로운 비밀번호를 설정해주세요" variant="outlined" fullWidth className={FindAccountStyle.input} type="password" />
             <TextField label="한번 더 입력해주세요" variant="outlined" fullWidth className={FindAccountStyle.input} type="password" />
-            <Button variant="contained" className={FindAccountStyle.submitButton}>확인</Button>
+            <Button variant="contained" className={FindAccountStyle.submitButton} onClick={handleResetPw}>확인</Button>
         </div>
       
     </div>

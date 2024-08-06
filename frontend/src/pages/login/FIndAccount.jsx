@@ -4,6 +4,7 @@ import FindAccountStyle from '../../css/login/FindAccount.module.css';
 import logo from '../../assets/logo/logo.png';
 import { useNavigate } from 'react-router-dom';
 import { axiosCommonInstance } from '../../apis/axiosInstance';
+import { findId, phoneNumberCheck, sendAuthNum } from '../../service/auth/auth';
 
 function FindAccount() {
   const [activeTab, setActiveTab] = useState('findId');
@@ -16,6 +17,7 @@ function FindAccount() {
   const [tel, setTel] = useState('');
   const [authNum, setAuthNum] = useState('');
   const [successToken, setSuccessToken] = useState('')
+  const [loginId, setloginId] = useState('')
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,12 +37,8 @@ function FindAccount() {
   const handleSendCode = async () => {
     try {
       // 예시
-      await axiosCommonInstance.post('/auth/authentication',{
-        tel: tel
-      }).then((res) => {
-        setAuthNum(res.data)
-      })
-      
+      const authNum = sendAuthNum(tel).data;
+      setAuthNum(authNum)     
       setIsCodeSent(true);
       setCountdown(180); // 3분
     } catch (error) {
@@ -57,17 +55,11 @@ function FindAccount() {
     }
 
     try {
-      await axiosCommonInstance.post('/auth/authentication/check',{
-        tel: tel,
-        authNum: authNum
-      }).then((res) => {
-        setSuccessToken(res.data.token)
-      })
-
+      const successTokenRes = phoneNumberCheck(tel, authNum).data;
+      setSuccessToken(successTokenRes.token);
+      
       if (response.status === 200) {
-        const result = await response.json();
-        setMaskedId(result.maskedId); // 마스킹된 아이디
-        setOpenModal(true);
+        alert('인증성공');
       } else {
         alert('인증번호가 틀렸습니다. 다시 시도해주세요.');
       }
@@ -77,16 +69,36 @@ function FindAccount() {
     }
   };
 
+  
+
   // 아이디 반환
   const handleFindId = async () => {
     try{
-      axiosCommonInstance.post('/find/id', {
-        username: username,
-        tel: tel,
-        token: successToken
-      })
+      const secretId = await findId(username, tel, successToken);
+      console.log(secretId.data.loginId)
+      if (secretId.status === 200) {
+        setMaskedId(secretId.data.loginId);
+        setOpenModal(true);
+      } else {
+        alert('일치하는 정보가 없습니다.');
+      }
     } catch (e) {
+        alert('처리 중 오류가 발생했습니다.');
+    }
+  }
+  
+  // 비밀번호 반환?
+  const handleFindPw = async () => {
+    try{
+      const secretId = await findpw(loginId, username, tel, successToken);
+      console.log(secretId.data.loginId)
+      if (secretId.status === 200) {
 
+      } else {
+        alert('일치하는 정보가 없습니다.');
+      }
+    } catch (e) {
+        alert('처리 중 오류가 발생했습니다.');
     }
   }
 
@@ -145,12 +157,16 @@ function FindAccount() {
       
       {activeTab === 'findPw' && (
         <div className={FindAccountStyle.form}>
-          <TextField label="이름" variant="outlined" fullWidth className={FindAccountStyle.input} />
-          <TextField label="아이디" variant="outlined" fullWidth className={FindAccountStyle.input} />
-          <TextField label="휴대 전화번호 입력 ('-' 제외)" variant="outlined" fullWidth className={FindAccountStyle.input} />
+          <TextField label="이름" variant="outlined" fullWidth className={FindAccountStyle.input} 
+            onChange={(e) => setUsername(e.target.value)} />
+          <TextField label="아이디" variant="outlined" fullWidth className={FindAccountStyle.input}
+            onChange={(e) => setloginId(e.target.value)} />
+          <TextField label="휴대 전화번호 입력 ('-' 제외)" variant="outlined" fullWidth className={FindAccountStyle.input}
+            onChange={(e) => setTel(e.target.value)} />
           <Button variant="outlined" className={FindAccountStyle.button}>인증번호 전송</Button>
-          <TextField label="인증번호 입력" variant="outlined" fullWidth className={FindAccountStyle.input} />
-          <Button variant="contained" className={FindAccountStyle.submitButton}>비밀번호 찾기</Button>
+          <TextField label="인증번호 입력" variant="outlined" fullWidth className={FindAccountStyle.input} 
+            onChange={(e) => setVerificationCode(e.target.value)} />
+          <Button variant="contained" className={FindAccountStyle.submitButton} onClick={handleFindPw}>비밀번호 찾기</Button>
         </div>
       )}
       {/* 찾은 아이디 표시 모달 */}
