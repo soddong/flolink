@@ -1,24 +1,27 @@
 package com.flolink.backend.domain.auth.handler;
 
-import com.flolink.backend.domain.auth.dto.response.OAuth.CustomOAuth2UserResponse;
-import com.flolink.backend.domain.auth.entity.Refresh;
-import com.flolink.backend.domain.auth.repository.RefreshRepository;
-import com.flolink.backend.domain.user.entity.enumtype.RoleType;
-import com.flolink.backend.global.util.JwtUtil;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Date;
+import com.flolink.backend.domain.auth.dto.response.OAuth.CustomOAuth2UserResponse;
+import com.flolink.backend.domain.auth.entity.Refresh;
+import com.flolink.backend.domain.auth.repository.RefreshRepository;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+import com.flolink.backend.global.util.JwtUtil;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -30,6 +33,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
 	private final JwtUtil jwtUtil;
 	private final RefreshRepository refreshRepository;
+	@Value("${spring.login.target-uri}")
+	private String targetUrl;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -40,7 +45,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 		CustomOAuth2UserResponse customUserDetails = (CustomOAuth2UserResponse)authentication.getPrincipal();
 
 		int userId = customUserDetails.getUserId();
-        RoleType role = customUserDetails.getRoleType();
+		RoleType role = customUserDetails.getRoleType();
 
 		//현재 시간
 		LocalDateTime date = LocalDateTime.now();
@@ -58,8 +63,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 		refreshRepository.save(refreshEntity);
 
 		//응답 설정
-		response.addHeader("Authorization", "Bearer " + access);
+
+		targetUrl += "?accessToken=Bearer " + access;
+		// response.addHeader("Authorization", "Bearer " + access);
 		response.addCookie(jwtUtil.createCookies("refresh", refresh));
 		response.setStatus(HttpStatus.OK.value());
+		response.sendRedirect(targetUrl);
 	}
 }

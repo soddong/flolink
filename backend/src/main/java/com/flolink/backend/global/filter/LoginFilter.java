@@ -1,18 +1,10 @@
 package com.flolink.backend.global.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flolink.backend.domain.auth.entity.Refresh;
-import com.flolink.backend.domain.auth.repository.RefreshRepository;
-import com.flolink.backend.domain.user.dto.request.LoginUserRequest;
-import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
-import com.flolink.backend.domain.user.entity.enumtype.RoleType;
-import com.flolink.backend.global.util.JwtUtil;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,9 +13,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Date;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flolink.backend.domain.auth.entity.Refresh;
+import com.flolink.backend.domain.auth.repository.RefreshRepository;
+import com.flolink.backend.domain.user.dto.request.LoginUserRequest;
+import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+import com.flolink.backend.global.util.JwtUtil;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,6 +37,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final long accessTokenValidityInSeconds = 1000 * 60 * 10L; //10분
 	private final long refreshTokenValidityInSeconds = 1000 * 60 * 60 * 24L; //24시간
+
+	@Value("${spring.login.target-uri}")
+	private String targetUrl;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
@@ -70,6 +76,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 			.refreshToken(refresh)
 			.expiredAt(date.plusSeconds(refreshTokenValidityInSeconds))
 			.build();
+
 		refreshRepository.save(refreshEntity);
 
 		//응답 설정
