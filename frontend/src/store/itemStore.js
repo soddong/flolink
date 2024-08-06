@@ -13,6 +13,10 @@ import vase1 from '../assets/myroom/items/vase1.png';
 import vase2 from '../assets/myroom/items/vase2.png';
 import bigtable1 from '../assets/myroom/items/bigtable1.png';
 import bigtable2 from '../assets/myroom/items/bigtable2.png';
+import coin1 from '../assets/payment/coin1.png'
+import coin2 from '../assets/payment/coin2.png'
+import coin3 from '../assets/payment/coin3.png'
+import coin4 from '../assets/payment/coin4.png'
 
 const imageMap = {
     rug: [rug1, rug2],
@@ -28,13 +32,14 @@ const useItemStore = create((set) => ({
     items : [],
     images : {},
     histories : [],
+    coins : [coin1, coin2, coin3, coin4],
     userInventory : {
         rug: [1, 2],
         shelf: [1, 2],
         stand: [1, 2],
-        bed: [1, 2],
+        bed: [1],
         minitable: [1,2],
-        vase: [1, 2],
+        vase: [null],
         bigtable: [1, 2],
     },
     selectedItems : {
@@ -80,6 +85,37 @@ const useItemStore = create((set) => ({
 
         return processedImages;
     },
+    setPurchaseHistory: (purchaseHistory) => set((state) => {
+        const processedHistory = purchaseHistory.map(event => ({
+            ...event,
+            date: new Date(event.transactionAt),
+            isPurchase : true,
+        }));
+
+        const updatedHistory = [...state.histories, ...processedHistory];
+
+        updatedHistory.sort((a,b) => b.date - a.date)
+
+        return {
+            histories: updatedHistory,
+        };
+    }),
+    setPaymentHistory: (paymentHistory) => set((state) => {
+        const processedHistory = paymentHistory.map(event => ({
+            ...event,
+            date: new Date(event.paymentAt),
+            isPurchase : false,
+        }));
+
+        const updatedHistory = [...state.histories, ...processedHistory];
+
+        updatedHistory.sort((a,b) => b.date - a.date)
+
+        return {
+            histories: updatedHistory,
+        };
+    }),
+    
 }))
 
 export default useItemStore;

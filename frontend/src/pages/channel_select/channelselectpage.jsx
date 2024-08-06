@@ -17,6 +17,7 @@ function ChannelSelectPage() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const [channelStatus, setChannelStatus] = useState(null);
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -33,20 +34,22 @@ function ChannelSelectPage() {
 
     const handleAddNewChannel = () => {
         setIsModalOpen(true);
+        setChannelStatus('선택')
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setChannelStatus(null)
     };
 
     const handleCreateFamily = () => {
-        console.log("가족 생성");
-        setIsModalOpen(false);
+        setChannelStatus('생성');
+       
     };
 
     const handleJoinFamily = () => {
-        console.log("가족 추가");
-        setIsModalOpen(false);
+        setChannelStatus('추가')
+       
     };
 
     return (
@@ -92,6 +95,7 @@ function ChannelSelectPage() {
                 onClose={handleCloseModal}
                 onCreateFamily={handleCreateFamily}
                 onJoinFamily={handleJoinFamily}
+                channelStatus={channelStatus}
             />
         </div>
     );
