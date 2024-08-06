@@ -14,8 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flolink.backend.domain.auth.entity.Refresh;
-import com.flolink.backend.domain.auth.repository.RefreshRepository;
+import com.flolink.backend.global.auth.entity.Refresh;
+import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.domain.user.dto.request.LoginUserRequest;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
