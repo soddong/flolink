@@ -1,7 +1,7 @@
 package com.flolink.backend.domain.user.service;
 
-import com.flolink.backend.domain.auth.entity.SuccessToken;
-import com.flolink.backend.domain.auth.repository.SuccessTokenRepository;
+import com.flolink.backend.global.auth.entity.SuccessToken;
+import com.flolink.backend.global.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.user.dto.request.*;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
@@ -15,9 +15,11 @@ import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.TimeOutException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
 import com.flolink.backend.global.util.JwtUtil;
+
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +77,7 @@ public class UserServiceImpl implements UserService {
 		em.flush();
 
 		User user = User.toEntity(loginId, bCryptPasswordEncoder.encode(password),
-				myRoom, joinUserRequest, LOCAL);
+			myRoom, joinUserRequest, LOCAL);
 
 		userRepository.save(user);
 	}

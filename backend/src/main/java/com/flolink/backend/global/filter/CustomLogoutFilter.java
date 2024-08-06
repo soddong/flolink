@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.flolink.backend.domain.auth.repository.RefreshRepository;
+import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.util.JwtUtil;
