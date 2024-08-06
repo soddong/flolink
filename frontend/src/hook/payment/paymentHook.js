@@ -1,8 +1,14 @@
-import { useMutation } from 'react-query';
-import { preparePayment, completePayment } from '../../service/payment/paymentApi';
+import { useMutation, useQuery } from 'react-query';
+import { preparePayment, completePayment, fetchPaymentItems } from '../../service/payment/paymentApi';
+
+export const usePaymentItems = () => {
+    return useQuery({
+        queryFn: fetchPaymentItems
+    });
+};
 
 export const usePreparePayment = () => {
-    return useMutation(({ orderName, amount }) => preparePayment(orderName, amount));
+    return useMutation(({ pointId }) => preparePayment(pointId));
 };
 
 export const useCompletePayment = () => {
