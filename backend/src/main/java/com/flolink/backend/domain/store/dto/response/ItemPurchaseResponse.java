@@ -14,16 +14,14 @@ import lombok.Setter;
 @Builder
 public class ItemPurchaseResponse {
 	private Integer itemId;
-	private String itemName;
-	private BigDecimal itemAmount;
 	private LocalDateTime transactionAt;
+	private BigDecimal remainedPoint;
 
 	// 엔티티 -> DTO
 	public static ItemPurchaseResponse fromEntity(ItemPurchaseHistory itemPurchaseHistory) {
 		return ItemPurchaseResponse.builder()
 			.itemId(itemPurchaseHistory.getItem().getItemId())
-			.itemName(itemPurchaseHistory.getItem().getItemName())
-			.itemAmount(itemPurchaseHistory.getItem().getPrice())
+			.remainedPoint(itemPurchaseHistory.getUser().getPoint())
 			.transactionAt(itemPurchaseHistory.getPurchaseAt())
 			.build();
 	}
