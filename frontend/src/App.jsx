@@ -15,6 +15,7 @@ import SchedulePage from './pages/schedule/SchedulePage';
 import FamilyGardenPage from './pages/garden/FamilyGardenPage';
 import MyRoomPage from './pages/my_room/myRoomPage';
 import PaymentPage from './pages/payment/PaymentPage';
+import PaymentSuccessPage from './pages/payment/PaymentSuccessPage';
 import SettingPage from './pages/setting/SettingPage';
 import LocationPage from './pages/location/LocationPage';
 import UserCertPage from './pages/certificate/UserCertPage';
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
   {
     path: "/payment",
     element: <PaymentPage />
+  },
+  {
+    path: "/payment-success",
+    element: <PaymentSuccessPage />
   },
   {
     path: "/setting",
