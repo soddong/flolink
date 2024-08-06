@@ -14,11 +14,15 @@ function LoginPage() {
 
   const handleLogin = async () => {
     try {
-
+      // 로그인 후 API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
       axiosCommonInstance.post('/login', {
         loginId: username,
         password: password,
-      }).then((e) => console.log(e));
+      }).then((res) => {
+        const accessToken = res.headers.authorization;
+        localStorage.setItem('ACCESS_TOKEN', accessToken);
+        axiosCommonInstance.defaults.headers.common['Authorization'] = accessToken;
+      });
       navigate('/main');
     } catch (error) {
       alert('로그인 실패: 아이디 또는 비밀번호를 확인해주세요.');
@@ -54,10 +58,18 @@ function LoginPage() {
 
       <Typography className={LoginPageStyle.snsLogin}>SNS 로그인</Typography>
       <Box className={LoginPageStyle.snsContainer}>
-        <Button className={`${LoginPageStyle.snsButton} ${LoginPageStyle.kakaoButton}`} variant="contained">
+      <Button
+          className={`${LoginPageStyle.snsButton} ${LoginPageStyle.kakaoButton}`}
+          variant="contained"
+          href='http://localhost:8081/oauth2/authorization/kakao'
+        >
           <img src={kakaoLogo} alt="Kakao" className={LoginPageStyle.snsLogo} /> 카카오로 계속
         </Button>
-        <Button className={`${LoginPageStyle.snsButton} ${LoginPageStyle.googleButton}`} variant="contained">
+        <Button
+          className={`${LoginPageStyle.snsButton} ${LoginPageStyle.googleButton}`}
+          variant="contained"
+          href='http://localhost:8081/oauth2/authorization/google'
+        >
           <img src={googleLogo} alt="Google" className={LoginPageStyle.snsLogo} /> 구글로 계속
         </Button>
       </Box>

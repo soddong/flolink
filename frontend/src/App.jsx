@@ -19,6 +19,7 @@ import PaymentSuccessPage from './pages/payment/PaymentSuccessPage';
 import SettingPage from './pages/setting/SettingPage';
 import LocationPage from './pages/location/LocationPage';
 import UserCertPage from './pages/certificate/UserCertPage';
+import LoginRedirectPage from './pages/login/LoginRedirectPage';
 import FeedEditPage from './pages/feed/FeedEditPage';
 
 const router = createBrowserRouter([  
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
   {
     path: "/location",
     element: <LocationPage />
+  },
+  {
+    path: "/auth/fetch",
+    element: <LoginRedirectPage />
   },
   {
     path: "/feededit",
