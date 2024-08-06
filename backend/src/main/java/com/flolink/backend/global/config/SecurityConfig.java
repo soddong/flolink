@@ -101,9 +101,11 @@ public class SecurityConfig {
 		//					.userService(customOAuth2UserService)));
 		http
 			.oauth2Login(oauth2 -> oauth2
+				// .authorizationEndpoint(endpoint -> endpoint.baseUri("/oauth2/authorization/*"))
 				.redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/*"))
 				.userInfoEndpoint(endpoint -> endpoint.userService(customOAuth2UserService))
 				.successHandler(customSuccessHandler));
+		// .addFilterBefore(new JwtFilter(jwtUtil, reissueService), UsernamePasswordAuthenticationFilter.class);
 
 		//jwt 검증 필터
 		http
