@@ -11,9 +11,10 @@ const FeedListPage = () => {
 
   const [feeds, setFeeds] = useState([
     {
+      feedId: 1,
       images: [
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqdJjnvUgBV1lz_05tD6iP1Es8Kx7TQU1S2A&s',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqdJjnvUgBV1lz_05tD6iP1Es8Kx7TQU1S2A&s'
+        'https://cdn.apartmenttherapy.info/image/upload/f_auto,q_auto:eco,c_fit,w_730,h_730/k%2Farchive%2Fd852987f86aeae8b65926f9e7a260c28285ea744'
       ],
       content: '좋은 시간, 좋은 분위기',
       author: 'user1',
@@ -25,6 +26,7 @@ const FeedListPage = () => {
       ],
     },
     {
+      feedId: 2,
       images: [
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqdJjnvUgBV1lz_05tD6iP1Es8Kx7TQU1S2A&s'
       ],
@@ -39,28 +41,6 @@ const FeedListPage = () => {
       ],
     },
   ]);
-
-  const handleEditComment = (feedIndex, commentIndex) => {
-    const newContent = prompt('새로운 댓글 내용을 입력하세요:', feeds[feedIndex].comments[commentIndex].content);
-    if (newContent) {
-      const updatedFeeds = [...feeds];
-      updatedFeeds[feedIndex].comments[commentIndex].content = newContent;
-      setFeeds(updatedFeeds);
-    }
-  };
-
-  const handleDeleteComment = (feedIndex, commentIndex) => {
-    const updatedFeeds = feeds.map((feed, fIndex) => {
-      if (fIndex === feedIndex) {
-        return {
-          ...feed,
-          comments: feed.comments.filter((_, cIndex) => cIndex !== commentIndex)
-        };
-      }
-      return feed;
-    });
-    setFeeds(updatedFeeds);
-  };
 
   if (feeds.length === 0) {
     return (
@@ -88,8 +68,7 @@ const FeedListPage = () => {
             <FeedList
               feeds={feeds}
               currentUser={currentUser}
-              onEditComment={handleEditComment}
-              onDeleteComment={handleDeleteComment}
+              
             />
           </div>
         </div>
