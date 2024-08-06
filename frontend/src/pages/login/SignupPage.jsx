@@ -10,7 +10,7 @@ import NicknameField from '../../components/signup/NicknameField';
 import IdField from '../../components/signup/IdField';
 import NameField from '../../components/signup/NameField';
 import PhoneNumberField from '../../components/signup/PhoneNumber';
-import { checkDuplicateUsername } from '../../service/auth/auth';
+import { checkDuplicateUsername, registUser } from '../../service/auth/auth';
 function SignupPage() {
   const [selectedTelecom, setSelectedTelecom] = useState('SKT');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,15 +90,15 @@ function SignupPage() {
 
   const handleRegist = () => {
     console.log("1234");
-    axiosCommonInstance.post("/users/join", {
+    const userinfo={
       loginId: username,
       password: password,
       userName: fullName,
       nickname: nickname,
       tel: phoneNumber,
       token: successToken
-    }).then((data) => {
-      console.log("우왕 회원가입이다");
+    }
+    registUser(userinfo).then(()=>{
       navigate('/login');
     })
   }

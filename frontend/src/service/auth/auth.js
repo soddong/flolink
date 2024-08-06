@@ -17,3 +17,7 @@ export const phoneNumberCheck = async (tel, authNum) => {
     return data;
 }
 
+export const registUser = async (userinfo)=>{
+    const {data} = axiosCommonInstance.post("/users/join", userinfo);
+    return data;
+}
