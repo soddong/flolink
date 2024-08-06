@@ -1,17 +1,20 @@
 package com.flolink.backend.global.util;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 @Slf4j
 @Component
@@ -80,9 +83,6 @@ public class JwtUtil {
 		Cookie cookie = new Cookie(key, value);
 		cookie.setMaxAge(24 * 60 * 60);
 		cookie.setSecure(true);
-		// cookie.setPath("/login");
-		// cookie.setPath("/reissue");
-		// cookie.setPath("/logout");
 		cookie.setHttpOnly(true);
 
 		return cookie;
