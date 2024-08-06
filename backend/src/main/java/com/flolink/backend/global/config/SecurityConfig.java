@@ -17,9 +17,9 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import com.flolink.backend.domain.auth.handler.CustomSuccessHandler;
-import com.flolink.backend.domain.auth.repository.RefreshRepository;
-import com.flolink.backend.domain.auth.service.ReissueService;
+import com.flolink.backend.global.auth.handler.CustomSuccessHandler;
+import com.flolink.backend.global.auth.repository.RefreshRepository;
+import com.flolink.backend.global.auth.service.ReissueService;
 import com.flolink.backend.global.filter.CustomLogoutFilter;
 import com.flolink.backend.global.filter.JwtFilter;
 import com.flolink.backend.global.filter.LoginFilter;
