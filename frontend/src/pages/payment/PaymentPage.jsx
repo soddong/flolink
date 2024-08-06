@@ -1,29 +1,36 @@
 import styles from '../../css/payment/payment.module.css';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import coin1 from '../../assets/payment/coin1.png';
-import coin2 from '../../assets/payment/coin2.png';
-import coin3 from '../../assets/payment/coin3.png';
-import coin4 from '../../assets/payment/coin4.png';
 import PaymentItem from './PaymentItem';
 import PaymentModal from './PaymentModal';
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePreparePayment, usePaymentItems } from '../../hook/payment/paymentHook';
+
+const getImagePath = (imageName) => {
+    return new URL(`../../assets/payment/${imageName}`, import.meta.url).href;
+};
 
 function PaymentPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState(null);
+    const [paymentItems, setPaymentItems] = useState([]);
 
     const navigate = useNavigate();
+    const { mutateAsync: preparePayment } = usePreparePayment();
+    const { data, isLoading, error } = usePaymentItems();
 
-    const paymentItems = [
-        { image: coin1, points: '1,000', price: '1,000' },
-        { image: coin2, points: '3,000', price: '2,800' },
-        { image: coin3, points: '5,000', price: '4,600' },
-        { image: coin4, points: '10,000', price: '9,000' },
-    ];
+    useEffect(() => {
+        if (data) {
+            console.log('Fetched payment items:', data.data);
+            const itemsWithFullPath = data.data.map(item => ({
+                ...item,
+                image: getImagePath(item.image),
+            }));
+            setPaymentItems(itemsWithFullPath);
+        }
+    }, [data]);
 
     useEffect(() => {
         if (isModalOpen) {
@@ -55,12 +62,41 @@ function PaymentPage() {
     };
 
     const handlePayment = async () => {
-        // 여기에 나중에 결제 처리 할것
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(Math.random() > 0.5);
-            }, 1000);
-        });
+        const storeId = import.meta.env.VITE_PAYMENT_STORE_ID;
+        const channelKey = import.meta.env.VITE_PAYMENT_CHANNEL_KEY;
+        const REDIRECT_URL = import.meta.env.VITE_PAYMENT_REDIRECT_URL;
+
+        try {
+            const respOfServer = await preparePayment({
+                pointId: selectedItem.pointId
+            });
+
+            console.log(respOfServer);
+
+            if (!respOfServer || !respOfServer.data.orderId) {
+                throw new Error("Invalid response from preparePayment");
+            }
+
+            const response = await PortOne.requestPayment({
+                storeId: storeId,
+                channelKey: channelKey,
+                paymentId: respOfServer.data.orderId,
+                orderName: respOfServer.data.orderName,
+                totalAmount: selectedItem.price,
+                currency: 'CURRENCY_KRW',
+                payMethod: 'CARD',
+                redirectUrl: REDIRECT_URL,
+            });
+
+            if (response.code != null) {
+                return alert(response.message);
+            }
+            return true;
+        } catch (error) {
+            console.error('결제 요청 실패:', error.message);
+            alert('결제 요청 중 오류가 발생했습니다.');
+            return false;
+        }
     };
 
     const processPayment = async () => {
@@ -68,9 +104,16 @@ function PaymentPage() {
         setPaymentStatus(result ? '결제가 완료되었습니다.' : '결제가 취소되었습니다.');
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error loading payment items</div>;
+    }
+
     return (
         <div className={`${styles.payment} bg-custom-gradient`}>
-
             <PaymentModal 
                 isOpen={isModalOpen}
                 isClosing={isClosing}
@@ -81,7 +124,7 @@ function PaymentPage() {
             />
 
             <div className={styles.header}>
-                <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
+                <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={() => { navigate(-1); }} />
                 <div className={styles.title}>
                     <span>결제하기</span>
                 </div>
@@ -91,9 +134,10 @@ function PaymentPage() {
             </div>
             <div className={styles.list}>
                 <li>
-                    {paymentItems.map((item, index) => (
+                    {Array.isArray(paymentItems) && paymentItems.map((item, index) => (
                         <PaymentItem
                             key={index}
+                            pointId={item.pointId}
                             image={item.image}
                             points={item.points}
                             price={item.price}
@@ -103,7 +147,7 @@ function PaymentPage() {
                 </li>
             </div>
         </div>
-    )
+    );
 }
 
 export default PaymentPage;

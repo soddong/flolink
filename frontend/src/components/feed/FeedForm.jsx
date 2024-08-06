@@ -2,18 +2,35 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-const FeedForm = () => {
+const FeedForm = ({feed}) => {
   const [content, setContent] = useState('');
   const [images, setImages] = useState([]);
   const textareaRef = useRef(null);
-
+  
+  console.log("feed_form");
   useEffect(() => {
+    if(feed && feed[0]?.feedId !== undefined){
+      setContent(feed[0]?.content);
+      feed[0]?.images?.forEach(element => {
+        fetch(element)
+        .then(response=>response.blob())
+        .then((blob)=>{
+          return new File([blob],element,{type:blob.type})
+        })
+        .then((file)=>{
+          setImages((prevImages) => [...prevImages, file]);
+        })
+      });
+      // setImages(feed[0]?.images | []);
+    }
     if (textareaRef.current) {
       textareaRef.current.placeholder = "당신의 하루는 어떠셨나요?\n이야기를 작성해주세요";
     }
   }, []);
 
   const handleImageChange = (e) => {
+    console.log(e.target.files);
+    console.log(e);
     const files = Array.from(e.target.files);
     setImages((prevImages) => [...prevImages, ...files]);
   };
