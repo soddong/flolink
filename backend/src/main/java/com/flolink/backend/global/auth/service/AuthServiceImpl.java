@@ -3,8 +3,12 @@ package com.flolink.backend.global.auth.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.flolink.backend.domain.user.entity.User;
+import com.flolink.backend.domain.user.repository.UserRepository;
+import com.flolink.backend.global.auth.dto.request.ResetPassword;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +37,9 @@ public class AuthServiceImpl implements AuthService {
 
 	private final AuthRepository authRepository;
 	private final SuccessTokenRepository successTokenRepository;
+	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 	@Value("${nurigo.api.key}")
 	private String apiKey;
@@ -55,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
 			apiKey, apiSecret, domain);
 
 		String randomAuthNum = RandomStringUtils.randomNumeric(6);
+
 
 		Message message = new Message();
 		message.setFrom("01042121037");
@@ -100,7 +108,6 @@ public class AuthServiceImpl implements AuthService {
 				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
 			}
 		} finally {
-			log.info("===Tel_Auth_Num 삭제 진행===");
 			authRepository.deleteByTel(checkAuthRequest.getTel());
 		}
 
@@ -116,5 +123,48 @@ public class AuthServiceImpl implements AuthService {
 		return SuccessTokenResponse.builder()
 			.token(successToken.getToken())
 			.build();
+	}
+
+	@Override
+	public void sendTempPassword(ResetPassword resetPassword) {
+		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(
+				apiKey, apiSecret, domain);
+
+		Auth auth = authRepository.findByTel(resetPassword.getTel())
+				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+
+		try { // 현재시간(now) 이 유효기간을 지났다면 TimeOutException, 인증번호 불일치라면 NotFoundException
+			LocalDateTime now = LocalDateTime.now();
+			if (now.isAfter(auth.getExpiredAt())) {
+				throw new TimeOutException(ResponseCode.TIME_OUT_EXCEPTION);
+			} else if (!auth.getAuthNum().equals(resetPassword.getAuthNum())) {
+				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+			}
+		} finally {
+			authRepository.deleteByTel(resetPassword.getTel());
+		}
+
+		// 입력받은 아이디를 통해 유저객체 찾아오기
+		User user = userRepository.findByLoginId(resetPassword.getLoginId())
+				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+		// 문자+숫자 혼용된 8자리 임시 비밀번호
+		String randomPassword = RandomStringUtils.randomAlphanumeric(8);
+
+		Message message = new Message();
+		message.setFrom("01042121037");
+		message.setTo(resetPassword.getTel());
+		message.setText("임시 비밀번호는 " + "[" + randomPassword + "] 입니다. 로그인 후 반드시 비밀번호를 변경해주세요. 타인 노출 금지");
+
+		// 메세지 보내고 해당 유저객체의 비밀번호를 임시비밀번호로 변경한다 (암호화하여)
+		try {
+			messageService.send(message);
+			user.setPassword(bCryptPasswordEncoder.encode(randomPassword));
+		} catch (NurigoMessageNotReceivedException exception) {
+			System.out.println(exception.getFailedMessageList());
+			System.out.println(exception.getMessage());
+		} catch (Exception exception) {
+			System.out.println(exception.getMessage());
+		}
+
 	}
 }

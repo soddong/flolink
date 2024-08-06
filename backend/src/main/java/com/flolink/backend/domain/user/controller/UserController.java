@@ -72,7 +72,7 @@ public class UserController {
 	@Operation(summary = "비밀번호 변경_비밀번호 분실", description = "위에서 통과 후 발급받은 토큰을 들고 여기에 함께 들고온다.")
 	@PutMapping("/forgot/reset/pw")
 	public ResponseEntity<?> forgotPasswordChange(
-		@RequestBody ForgotPasswordChangeRequest forgotPasswordChangeRequest, Authentication authentication) {
+		@RequestBody ForgotPasswordChangeRequest forgotPasswordChangeRequest) {
 		log.info("===비밀번호 수정(비밀번호 분실) START===");
 		userService.forgotPasswordChange(forgotPasswordChangeRequest);
 		log.info("===비밀번호 수정(비밀번호 분실) END===");
