@@ -35,6 +35,7 @@ function MainPage() {
     getRoomMemberInfos(roomId)
       .then(({ data }) => {
         setRoomDetail(data);
+        console.log(roomDetail.roomSummarizeResponse?.roomName)
       })
       .then(() => console.log(roomDetail))
       .catch((e) => {
@@ -43,11 +44,11 @@ function MainPage() {
   }, []);
   return (
     <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
-      <Sidebar />
+      <Sidebar myRole={myRole} roomId={roomId} />
       <div className="py-7 w-5/6">
         <header className="flex justify-between">
           <h1 className="m-0 font-bold text-2xl text-rose-500">
-            우리는 꿀벌 가족🍯
+            {roomDetail.roomSummarizeResponse?.roomName}
           </h1>
           <AlarmModal />
         </header>

@@ -9,3 +9,8 @@ export const fetchMyroom = async () => {
     const { data } = await axiosCommonInstance.get('/myroom');
     return data;
 }
+
+export const getMyInfo = async () => {
+    const { data } = await axiosCommonInstance.get('/users/myInfo');
+    return data;
+}

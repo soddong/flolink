@@ -22,6 +22,7 @@ function ChannelSelectPage() {
     setIsDropdownOpen(!isDropdownOpen);
   };
   useEffect(() => {
+    setFamily([]);
     getMyUserRooms()
       .then(({ data }) => {
         data?.forEach((element) => {

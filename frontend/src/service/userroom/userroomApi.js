@@ -26,7 +26,7 @@ export const updateRoomDetail = async (roomId, roomUpdateRequest) => {
     return data;
 }
 export const exitRoom = async (roomId) => {
-    const { data } = await axiosCommonInstance.post(`/rooms/${roomId}`,);
+    const { data } = await axiosCommonInstance.delete(`/rooms/${roomId}`,);
     return data;
 }
 export const kickRoomMember = async (roomId, targetUserRoomId) => {

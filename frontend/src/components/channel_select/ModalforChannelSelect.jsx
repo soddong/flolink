@@ -52,7 +52,7 @@ function ModalforChannelSelect({
         {
           roomId: data.roomId,
           title: data.roomName,
-          familySize: data.userCouont,
+          familySize: data.userCount,
         },
       ]);
       onClose();
