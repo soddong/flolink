@@ -19,7 +19,6 @@ import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
 import com.flolink.backend.domain.room.entity.Nickname;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
-import com.flolink.backend.domain.room.repository.MessageRepository;
 import com.flolink.backend.domain.room.repository.RoomRepository;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.domain.user.entity.User;
@@ -39,7 +38,6 @@ public class RoomServiceImpl implements RoomService {
 	private final RoomRepository roomRepository;
 	private final UserRepository userRepository;
 	private final UserRoomRepository userRoomRepository;
-	private final MessageRepository messageRepository;
 
 	@Override
 	public List<RoomSummarizeResponse> getAllRooms(final Integer userId) {
@@ -124,18 +122,6 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	@Transactional
-	public RoomSummarizeResponse updateEmotion(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
-		User user = findUserById(userId);
-		Room room = findRoomById(roomUpdateRequest.getRoomId());
-		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
-		if (userRoom != null) {
-			userRoom.getMessage().setContent(roomUpdateRequest.getMessage());
-		}
-		return RoomSummarizeResponse.fromEntity(room);
-	}
-
-	@Override
-	@Transactional
 	public RoomSummarizeResponse updateRoomName(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomUpdateRequest.getRoomId());
@@ -144,7 +130,7 @@ public class RoomServiceImpl implements RoomService {
 		if (userRoom.getRole().equalsIgnoreCase("admin")) {
 			room.setRoomName(roomUpdateRequest.getRoomName());
 		}
-
+		roomRepository.save(room);
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 
@@ -159,7 +145,7 @@ public class RoomServiceImpl implements RoomService {
 		if (userRoom.getRole().equalsIgnoreCase("admin")) { //validate는 controller에서
 			room.setRoomParticipatePassword(roomUpdateRequest.getRoomParticipatePassword());
 		}
-
+		roomRepository.save(room);
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 
@@ -173,7 +159,8 @@ public class RoomServiceImpl implements RoomService {
 		if (userRoom != null) {
 			room.setNotice(roomUpdateRequest.getNotice());
 		}
-
+		System.out.println(roomUpdateRequest.getNotice());
+		roomRepository.save(room);
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 
