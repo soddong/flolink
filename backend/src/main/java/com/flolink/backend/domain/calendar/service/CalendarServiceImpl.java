@@ -37,7 +37,7 @@ public class CalendarServiceImpl implements CalendarService {
 	public List<CalendarResponse> getList(DateCalendarRequest dateCalendarRequest, Integer roomId,
 		CustomUserDetails customUserDetails) {
 		if (dateCalendarRequest.getRoomId() != roomId) {
-			throw new UnAuthorizedException(ResponseCode.UNAUTHORIZED_USER);
+			throw new UnAuthorizedException(ResponseCode.NOT_MATCH_ROOMID);
 		}
 
 		List<Calendar> list = calendarRepository.findByYearAndMonthAndRoomId(dateCalendarRequest.getYear(),
@@ -50,7 +50,8 @@ public class CalendarServiceImpl implements CalendarService {
 
 	@Override
 	public void addCalendar(CalendarRequest calendarRequest) {
-		Room room = roomRepository.findById(calendarRequest.getRoomId()).get();
+		Room room = roomRepository.findById(calendarRequest.getRoomId())
+				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_MATCH_ROOMID));
 
 		calendarRepository.save(Calendar.of(calendarRequest, room));
 	}
@@ -83,7 +84,7 @@ public class CalendarServiceImpl implements CalendarService {
 
 		// 해당 캘린더 가져와서
 		Calendar calendar = calendarRepository.findById(updateCalendarRequest.getCalendarId())
-			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.CALENDAR_NOT_FOUND));
 
 		calendar.setTitle(updateCalendarRequest.getTitle());
 		calendar.setDate(updateCalendarRequest.getDate());
