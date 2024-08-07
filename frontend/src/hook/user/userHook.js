@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { fetchInventory, fetchMyroom } from '../../service/user/userApi';
+import { fetchInventory } from '../../service/user/userApi';
 
 export const useInventory = () => {
     return useQuery({
@@ -8,9 +8,9 @@ export const useInventory = () => {
     });
 }
 
-export const useMyroom = () => {
-    return useQuery({
-        queryKey: ['myroom'],
-        queryFn: fetchMyroom,
-    })
-}
+// export const useMyroom = () => {
+//     return useQuery({
+//         queryKey: ['myroom'],
+//         queryFn: fetchMyroom,
+//     })
+// }

@@ -109,7 +109,7 @@ function ItemStorePage() {
             });
 
             setItems(processedItems);
-            setImages(generateImagesFromNames(itemNames));
+            generateImagesFromNames(itemNames);
         }
     }, [itemsData]);
 
@@ -261,7 +261,7 @@ function ItemStorePage() {
                                         variantIndex = parseInt(history.itemName.replace(/\D/g, '')) - 1; 
                                     }
                                     else {
-                                        basePoint = history.orderName.replace(' 포인트', '')
+                                        basePoint = history.orderName
                                         if (basePoint == '1000') {
                                             imgSource = 0
                                         }

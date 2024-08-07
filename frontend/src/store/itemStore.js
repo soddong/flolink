@@ -58,9 +58,6 @@ const useItemStore = create((set) => ({
     setItems: (newItems) => set((state) => ({
         items: newItems,
     })),
-    setImages: (newImages) => set((state) => ({
-        images: newImages,
-    })),
     setPrices: (newPrices) => set((state) => ({
         prices: newPrices,
     })),
@@ -78,7 +75,9 @@ const useItemStore = create((set) => ({
             }
         });
 
-        return processedImages;
+        return {
+            images : processedImages
+        };
     },
     setPurchaseHistory: (purchaseHistory) => set((state) => {
         const processedHistory = purchaseHistory.map(event => ({
@@ -113,25 +112,22 @@ const useItemStore = create((set) => ({
     setUserInventory: (inventory) => set((state) => {
         const newUserInventory = {};
 
-        inventory.forEach((item) => {
+        inventory?.forEach((item) => {
            
             const baseName = item.itemName.replace(/[0-9]/g, '');  
             const variantIndex = parseInt(item.itemName.replace(/\D/g, '')); 
-
     
             if (newUserInventory[baseName]) {
                 newUserInventory[baseName].push(variantIndex);
+                newUserInventory[baseName].sort((a,b) => (a - b))
             } else {
                 newUserInventory[baseName] = [variantIndex];
+                newUserInventory[baseName].sort((a,b) => (a - b))
             }
         });
 
-  
-        return {
-            userInventory: {
-                ...newUserInventory,  
-            }
-        };
+        return { userInventory: newUserInventory };
+
         }),
 }))
 

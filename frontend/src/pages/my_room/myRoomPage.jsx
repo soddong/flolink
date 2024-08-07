@@ -1,13 +1,13 @@
 import styles from '../../css/my_room/myRoom.module.css';
 import Inventory from '@mui/icons-material/Inventory2';
 import ItemStore from '@mui/icons-material/StorefrontOutlined';
-import NavBar from '../../components/common/nav_bar/NavBar';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import room from '../../assets/myroom/bg_myroom.png';
-import { useState, useEffect,useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useItemStore from '../../store/itemStore';
-import { useInventory, useMyroom } from '../../hook/user/userHook.js';
+import { useInventory } from '../../hook/user/userHook.js';
+import { useItems } from '../../hook/itemstore/itemstoreHook.js'
 
 
 function MyRoomPage() {
@@ -16,7 +16,7 @@ function MyRoomPage() {
     const [selectedItemType, setSelectedItemType] = useState(null);
     const [isClosing, setIsClosing] = useState(false);
     const { data: inventory, isLoading: inventoryLoading, error: inventoryError } = useInventory();
-    const { data: myroom, isLoading: myroomLoading, error: myroomError } = useMyroom();
+    const { data: itemsData, isLoading: itemsDataLoading, error: itemsDataError } = useItems();
 
     useEffect(() => {
         if (isInventoryOpen) {
@@ -33,15 +33,23 @@ function MyRoomPage() {
         };
     }, [isInventoryOpen]);
 
-    // useEffect(() => {
-    //     if (inventory && inventory.data) {
-    //         setUserInventory(inventory.data);
-    //     }
-    // }, [inventory])
+    useEffect(() => {
+        if (inventory && inventory.data) {
+            setUserInventory(inventory.data);
+        }
+    }, [inventory])
+
+    useEffect(() => {
+        if (itemsData && itemsData.data) {
+            console.log(itemsData.data)
+        }
+    }, [itemsData])
 
     const inventoryRef = useRef(null);
 
-    const openInventory = () => setIsInventoryOpen(true);
+    const openInventory = () => {
+        setIsInventoryOpen(true);
+    }
     
     const closeInventory = () => {
         setIsClosing(true);

@@ -26,9 +26,6 @@ function MainPage() {
       <Question message={Message}/>
       <img src={BackgroundPhoto} alt="background_photo" className="w-full absolute bottom-16" /> 
     </>
-      
-    
-    
   )
 }
 
