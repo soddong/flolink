@@ -35,9 +35,8 @@ public class PlantServiceImpl implements PlantService {
 	 * @param room 생성된 가족방
 	 */
 	@Override
-	public void createPlant(UserRoom userRoom, Room room) {
-		Plant plant = plantRepository.save(Plant.create(room));
-		userExpRepository.save(UserExp.of(userRoom.getUser().getUserId(), plant));
+	public Plant createPlant(UserRoom userRoom, Room room) {
+		return plantRepository.save(Plant.create(room));
 	}
 
 	/**
