@@ -29,20 +29,12 @@ const imageMap = {
 };
 
 const useItemStore = create((set) => ({
-    items: [],
-    images: {},
-    histories: [],
-    coins: [coin1, coin2, coin3, coin4],
-    userInventory: {
-        rug: [1, 2],
-        shelf: [1, 2],
-        stand: [1, 2],
-        bed: [1],
-        minitable: [1, 2],
-        vase: [null],
-        bigtable: [1, 2],
-    },
-    selectedItems: {
+    items : [],
+    images : {},
+    histories : [],
+    coins : [coin1, coin2, coin3, coin4],
+    userInventory : {},
+    selectedItems : {
         rug: 1,
         shelf: 1,
         stand: 1,
@@ -68,6 +60,9 @@ const useItemStore = create((set) => ({
     })),
     setImages: (newImages) => set((state) => ({
         images: newImages,
+    })),
+    setPrices: (newPrices) => set((state) => ({
+        prices: newPrices,
     })),
     generateImagesFromNames: (itemNames) => {
         const processedImages = {};
@@ -115,7 +110,29 @@ const useItemStore = create((set) => ({
             histories: updatedHistory,
         };
     }),
+    setUserInventory: (inventory) => set((state) => {
+        const newUserInventory = {};
 
+        inventory.forEach((item) => {
+           
+            const baseName = item.itemName.replace(/[0-9]/g, '');  
+            const variantIndex = parseInt(item.itemName.replace(/\D/g, '')); 
+
+    
+            if (newUserInventory[baseName]) {
+                newUserInventory[baseName].push(variantIndex);
+            } else {
+                newUserInventory[baseName] = [variantIndex];
+            }
+        });
+
+  
+        return {
+            userInventory: {
+                ...newUserInventory,  
+            }
+        };
+        }),
 }))
 
 export default useItemStore;
