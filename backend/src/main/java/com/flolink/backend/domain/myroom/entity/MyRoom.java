@@ -92,6 +92,12 @@ public class MyRoom {
 				}
 				this.itemShelf = hasItem.getHasItemId();
 				break;
+			case STAND:
+				if (this.itemStand != null) {
+					unequipItem(findById(this.itemStand));
+				}
+				this.itemStand = hasItem.getHasItemId();
+				break;
 			case BED:
 				if (this.itemBed != null) {
 					unequipItem(findById(this.itemBed));
@@ -131,6 +137,8 @@ public class MyRoom {
 			case SHELF:
 				this.itemShelf = null;
 				break;
+			case STAND:
+				this.itemStand = null;
 			case BED:
 				this.itemBed = null;
 				break;
