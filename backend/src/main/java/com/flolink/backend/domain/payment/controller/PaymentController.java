@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import com.flolink.backend.domain.payment.dto.response.PaymentItemResponse;
 import com.flolink.backend.domain.payment.dto.response.PaymentPrepareResponse;
 import com.flolink.backend.domain.payment.service.PaymentItemService;
 import com.flolink.backend.domain.payment.service.PaymentService;
+import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.CommonResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,10 +50,11 @@ public class PaymentController {
 
 	@PostMapping("/prepare")
 	@Operation(summary = "결제 시작")
-	public ResponseEntity<CommonResponse> createPayment(@RequestBody final Map<String, Long> request) {
+	public ResponseEntity<CommonResponse> createPayment(@RequestBody final Map<String, Long> request,
+		Authentication authentication) {
 		log.info("===결제 시작하기 START===");
-		Integer userId = 7;
-		PaymentPrepareResponse response = paymentService.preparePayment(userId, request);
+		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+		PaymentPrepareResponse response = paymentService.preparePayment(customUserDetails.getUserId(), request);
 		log.info("===결제 시작하기 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, response));
 	}
@@ -67,9 +70,10 @@ public class PaymentController {
 
 	@GetMapping("/history")
 	@Operation(summary = "결제내역 조회")
-	public ResponseEntity<CommonResponse> getPaymentHistory() {
+	public ResponseEntity<CommonResponse> getPaymentHistory(Authentication authentication) {
 		log.info("===결제 내역 조회 START===");
-		List<PaymentHistoryResponse> responses = paymentService.getPaymentHistory(1);
+		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+		List<PaymentHistoryResponse> responses = paymentService.getPaymentHistory(customUserDetails.getUserId());
 		log.info("===결제 내역 조회 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, responses));
 	}
