@@ -32,6 +32,7 @@ function UserStatusList({ members }) {
               name={member?.targetNickname}
               photo={Photo} //{"dog.png"}
               status={"화남"}
+              targetUserRoomId={member?.targetUserRoomId}
               key={member?.targetUserRoomId}
               manager={1}
             />

@@ -37,6 +37,7 @@ function Sidebar({ width = 150, roomId, myRole }) {
     getMyInfo()
       .then(({ data }) => {
         setUsername(data?.nickname)
+        console.log(data)
       })
       .catch((e) => {
         console.log(e);
@@ -84,7 +85,10 @@ function Sidebar({ width = 150, roomId, myRole }) {
           <ul className="text-xl text-white text-center">
             <li className="py-3" onClick={(() => navigate("/itemstore"))}>상점</li>
             <li className="py-3" onClick={(() => navigate("/channelselect"))}>가족방 변경</li>
-            <li className="py-3">내 정보 설정</li>
+            <li className="py-3" onClick={(() => navigate("/setting"))}>내 정보 설정</li>
+            {myRole === "admin" && (
+              <li className="py-3">가족방 정보 수정</li>
+            )}
           </ul>
           <div className="absolute bottom-4 text-center text-xl text-white/70">
             <ul>
