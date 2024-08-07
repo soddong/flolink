@@ -2,7 +2,7 @@ import ProfilePhoto from "./ProfilePhoto";
 import Photo from "../../../assets/profile/profile_dummy.jpg";
 import { useEffect, useState } from "react";
 
-function UserStatusList({ members }) {
+function UserStatusList({ members, setRoomDetail }) {
   const [memberList, setMemberList] = useState([]);
   useEffect(() => {
     if (members) {
@@ -35,6 +35,7 @@ function UserStatusList({ members }) {
               targetUserRoomId={member?.targetUserRoomId}
               key={member?.targetUserRoomId}
               manager={1}
+              setRoomDetail={setRoomDetail}
             />
           );
         })}

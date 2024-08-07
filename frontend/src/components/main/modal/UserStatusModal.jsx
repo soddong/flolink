@@ -1,9 +1,13 @@
 import style from "../../../css/main/main_modals.module.css"
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { updateRoomMemberNickname } from "../../../service/userroom/userroomApi";
+import userRoomStore from "../../../store/userRoomStore";
 
-function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setUsername, submitUsername }) {
+function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setRoomDetail }) {
   const [isModify, setIsModify] = useState(false)
+  const roomId = userRoomStore((state) => state.roomId);
+  const [username, setUsername] = useState(name)
 
   function handleIsModify() {
     setIsModify(!isModify)
@@ -14,6 +18,19 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setUs
     if (event.target.value.length > 10) {
       window.alert('10자까지 입력 가능합니다.')
     }
+  }
+
+  function submitUsername(event) {
+    event.preventDefault()
+    updateRoomMemberNickname({
+      targetNickname : username,
+      roomId,
+      targetUserRoomId
+    })
+    console.log(targetUserRoomId);
+    console.log(username);
+    window.alert('변경변경?')
+    handleIsModify()
   }
 
   return (
@@ -29,13 +46,13 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setUs
         {isModify ?
         <form action="" onSubmit={submitUsername}>
           <input type="text" onChange={handleUsername}
-            maxLength={10} value={name} placeholder={name}
+            maxLength={10} value={username} placeholder={username}
             className="border-0 ring-1 ring-inset ring-gray-300 mx-1 w-24" />
           <input type="submit" value="변경" />
         </form>
            :
           <>
-            <p className='font-bold text-center leading-3 mx-2'>{name}</p>
+            <p className='font-bold text-center leading-3 mx-2'>{username}</p>
             <span className="material-symbols-outlined text-xl"
               onClick={handleIsModify}>
               edit

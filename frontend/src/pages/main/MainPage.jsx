@@ -69,7 +69,7 @@ function MainPage() {
           <AlarmModal />
         </header>
         <Notification notice={roomDetail?.roomSummarizeResponse?.notice} />
-        <UserStatusList members={roomDetail?.memberInfoResponses} />
+        <UserStatusList members={roomDetail?.memberInfoResponses} setRoomDetail={setRoomDetail} />
         <PetStatusList pet={petstatus} status={status} />
       </div>
       <Question message={Message} />
