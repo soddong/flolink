@@ -81,3 +81,9 @@ export const resetPw = async (loginId, userName, tel, authNum) => {
     })
     return data;
 }
+
+// AccessToken 재발급
+export const reissue = async () => {
+    await axiosCommonInstance.patch("/reissue")
+}
+

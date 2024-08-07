@@ -18,6 +18,7 @@ import rabbitmad from '../../assets/profile/rabbit_mad.png';
 import cow from '../../assets/profile/cow.png';
 import cowsad from '../../assets/profile/cow_sad.png';
 import cowmad from '../../assets/profile/cow_mad.png';
+import {changeProfileAndEmotion} from '../../service/user/userApi'
 
 function SettingModal({ setShowModal, setAnimal }) {
     const animals = {
@@ -41,11 +42,16 @@ function SettingModal({ setShowModal, setAnimal }) {
         setSelectedEmotion(emotion);
     };
 
-    const handleSave = () => {
-        if (selectedAnimal && selectedEmotion) {
-            setAnimal(animals[selectedAnimal][selectedEmotion]);
-            setShowModal(false);
-        }
+    const handleSave = async () => {
+        await changeProfileAndEmotion(selectedAnimal, selectedEmotion);
+        console.log(selectedAnimal)
+        console.log(selectedEmotion)
+        setShowModal(false);
+
+        // if (selectedAnimal && selectedEmotion) {
+        //     setAnimal(animals[selectedAnimal][selectedEmotion]);
+        //     setShowModal(false);
+        // }
     };
 
     return (
