@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.plant.entity.ActivityPoint;
+import com.flolink.backend.domain.plant.entity.Plant;
+import com.flolink.backend.domain.plant.entity.UserExp;
+import com.flolink.backend.domain.plant.repository.PlantRepository;
+import com.flolink.backend.domain.plant.repository.UserExpRepository;
 import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.dto.request.NicknameUpdateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
@@ -39,8 +43,10 @@ public class RoomServiceImpl implements RoomService {
 
 	private final RoomRepository roomRepository;
 	private final UserRepository userRepository;
+	private final UserExpRepository userExpRepository;
 	private final UserRoomRepository userRoomRepository;
 	private final NicknameRepository nicknameRepository;
+	private final PlantRepository plantRepository;
 
 	@Override
 	public List<RoomSummarizeResponse> getAllRooms(final Integer userId) {
@@ -70,7 +76,9 @@ public class RoomServiceImpl implements RoomService {
 		);
 		userRoom.setRole("admin");
 
-		plantService.createPlant(userRoom, room);
+		Plant createdPlant = plantService.createPlant(userRoom, room);
+		userExpRepository.save(UserExp.of(userRoom.getUser().getUserId(), createdPlant));
+
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 
@@ -89,7 +97,14 @@ public class RoomServiceImpl implements RoomService {
 		if (!room.getRoomParticipatePassword().equals(roomParticipateRequest.getRoomParticipatePassword())) {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
-		userRoomRepository.save(UserRoom.of(user, room));
+		UserRoom userRoom = userRoomRepository.save(UserRoom.of(user, room));
+		Plant plant = plantRepository.findByRoomRoomId(room.getRoomId())
+				.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
+
+		if (!userExpRepository.existsByPlantIdAndUserId(userId, plant.getPlantId())) {
+			userExpRepository.save(UserExp.of(userRoom.getUser().getUserId(), plant));
+		}
+
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 
