@@ -13,7 +13,7 @@ import com.flolink.backend.domain.user.entity.User;
 public interface UserRoomRepository extends JpaRepository<UserRoom, Integer> {
 	Optional<UserRoom> findByUserAndRoom(User user, Room room);
 
-	UserRoom findUserRoomByUserRoomId(Integer userRoomId);
+	Optional<UserRoom> findUserRoomByUserRoomId(Integer userRoomId);
 
-	UserRoom findByUserUserIdAndRoomRoomId(Integer userId, Integer roomId);
+	Optional<UserRoom> findByUserUserIdAndRoomRoomId(Integer userId, Integer roomId);
 }
