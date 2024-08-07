@@ -52,11 +52,11 @@ public class HasItem {
 	@Column(name = "use_yn", nullable = false)
 	private Boolean useYn;
 
-	public void equip() {
+	public void displayEquip() {
 		this.equippedYn = true;
 	}
 
-	public void unequip() {
+	public void displayUnequip() {
 		this.equippedYn = false;
 	}
 
