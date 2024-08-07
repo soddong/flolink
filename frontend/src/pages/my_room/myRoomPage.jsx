@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import useItemStore from '../../store/itemStore';
 import { useInventory } from '../../hook/user/userHook.js';
 import { useItems } from '../../hook/itemstore/itemstoreHook.js'
+import { useEquip, useUnequip } from '../../hook/myroom/myroomHook.js';
 
 
 function MyRoomPage() {
@@ -17,6 +18,8 @@ function MyRoomPage() {
     const [isClosing, setIsClosing] = useState(false);
     const { data: inventory, isLoading: inventoryLoading, error: inventoryError } = useInventory();
     const { data: itemsData, isLoading: itemsDataLoading, error: itemsDataError } = useItems();
+    const { mutate: equipItem, eisLoading, eisError, edata } = useEquip();
+    const { mutate: unequipItem, uisLoading, uisError, udata } = useUnequip();
 
     useEffect(() => {
         if (isInventoryOpen) {
@@ -35,7 +38,7 @@ function MyRoomPage() {
 
     useEffect(() => {
         if (inventory && inventory.data) {
-            console.log(inventory.data)
+            // console.log(inventory.data)
             setUserInventory(inventory.data);
         }
     }, [inventory])
@@ -69,7 +72,7 @@ function MyRoomPage() {
     const inventoryRef = useRef(null);
 
     const openInventory = () => {
-        console.log(items)
+        // console.log(items)
         setIsInventoryOpen(true);
     }
     
@@ -88,7 +91,17 @@ function MyRoomPage() {
     };
 
     const handleItemSelect = (itemType, variantIndex) => {
-        console.log(hasitemids)
+        
+        const originalItemName = `${itemType}${variantIndex}`;
+        const curItemid = hasitemids[originalItemName]
+
+        if (variantIndex == null) {
+            unequipItem(itemType.toUpperCase())
+        }
+        else {
+            equipItem(curItemid)
+        }
+
         setSelectedItems(itemType, variantIndex);
         setSelectedItemType(null);
     };

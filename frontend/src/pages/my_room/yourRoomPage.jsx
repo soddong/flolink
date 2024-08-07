@@ -47,7 +47,7 @@ function YourRoomPage({userRoomId}) {
 
     useEffect(() => {
       if (data) {
-        console.log(data.data.hasItemInfos)
+        // console.log(data.data.hasItemInfos)
         setUserInventory(data.data.hasItemInfos)
       }
     }, [data, setUserInventory]);
