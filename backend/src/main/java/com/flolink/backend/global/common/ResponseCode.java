@@ -16,7 +16,7 @@ public enum ResponseCode {
 	// User
 	USER_NOT_FOUND(404, "User not found", "NOT_FOUND_ERROR"),
 	UNREGISTERED_USER(401, "Unregistered User", "UNREGISTERED_USER"),
-	BLANK_NICKNAME(404, "Can't update blank nickname", "BLANK_NICKNAME"),
+	BLANK_NICKNAME(404, "Cannot make the nickname due to a blank space.", "BLANK_NICKNAME"),
 	UNAUTHORIZED_USER(401, "Unauthorized_User", "UNAUTHORIZED_USER"),
 
 	// Room
@@ -42,6 +42,20 @@ public enum ResponseCode {
 	INVALID_REFRESHTOKEN(401, "Invalid Refresh Token", "INVALID_REFRESHTOKEN"),
 	PASSWORD_INCONSISTENCY(401, "Password inconsistency", "PASSWORD_INCONSISTENCY"),
 	USER_INCONSISTENCY(401, "User inconsistency", "USER_INCONSISTENCY"),
+	NOT_FOUND_SUCCESSTOKEN(404, "Not Found Success Token", "NOT_FOUND_ERROR"),
+	NOT_MATCH_TOKEN(401, "The token entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	NOT_MATCH_TEL(401, "The Telephone Number entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	NOT_MATCH_NAME(401, "The Username entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	NOT_MATCH_LOGINID(401, "The LoginId entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	UNAUTHORIZED_USER_ROLE(401, "OAuth login users cannot change their passwords.", "UNAUTHORIZED_USER_ROLE"),
+	NOT_MATCH_ROOMID(401, "The RoomId entered does not match the DB.", "NOT_MATCH_TOKEN"),
+
+
+	//Calendar
+	CALENDAR_NOT_FOUND(401, "Calendar not found", "CALENDAR_NOT_FOUND"),
+
+
+
 
 	// Purchase & Payment
 	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "ITEM_ALREADY_PURCHASE_ERROR"),

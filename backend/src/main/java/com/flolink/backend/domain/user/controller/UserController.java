@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.user.controller;
 
+import com.flolink.backend.domain.user.dto.request.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,15 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
-import com.flolink.backend.domain.user.dto.request.EmotionRequest;
-import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
-import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
-import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
-import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
-import com.flolink.backend.domain.user.dto.request.NicknameRequest;
-import com.flolink.backend.domain.user.dto.request.ProfileRequest;
-import com.flolink.backend.domain.user.dto.request.StatusMessageRequest;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
@@ -141,23 +133,14 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 
-	@Operation(summary = "프로필 사진 변경", description = "사전에 정의된 프로필사진 중 원하는 프로필사진을 선택해 변경한다.")
-	@PutMapping("/myInfo/profile")
-	public ResponseEntity<?> updateProfile(@RequestBody ProfileRequest profileRequest, Authentication authentication) {
+	@Operation(summary = "프로필 사진 및 기분 상태 변경", description = "사전에 정의된 프로필사진 및 기분상태를 변경한다.")
+	@PutMapping("/myInfo/profile/emotion")
+	public ResponseEntity<?> updateProfileAndEmotion(@RequestBody ProfileAndEmotionRequest profileAndEmotionRequest,
+													 Authentication authentication) {
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
-		log.info("===프로필 사진 변경 START===");
-		userService.modifyProfile(profileRequest, userDetails.getUserId());
-		log.info("===프로필 사진 변경 END===");
-		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
-	}
-
-	@Operation(summary = "기분 상태 변경", description = "3가지 기분상태 (보통, 화남, 슬픔) 중 1가지 선택")
-	@PutMapping("/myInfo/emotion")
-	public ResponseEntity<?> updateProfile(@RequestBody EmotionRequest emotionRequest, Authentication authentication) {
-		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
-		log.info("===기분 상태 변경 START===");
-		userService.modifyEmotion(emotionRequest, userDetails.getUserId());
-		log.info("===기분 상태 변경 END===");
+		log.info("===프로필 및 기분 변경 START===");
+		userService.modifyProfileAndEmotion(profileAndEmotionRequest, userDetails.getUserId());
+		log.info("===프로필 및 기분 변경 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 
