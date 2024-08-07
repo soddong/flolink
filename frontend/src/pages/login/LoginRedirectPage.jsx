@@ -18,7 +18,7 @@ function KakaoLoginRedirectPage() {
 
   useEffect(() => {
     fetchData().then(() => {
-      navigate("/main")
+      navigate("/channelselect")
     })
       .catch((e) => console.log(e));
   });
@@ -48,6 +48,6 @@ function KakaoLoginRedirectPage() {
       </div>
     </div>
   );
-};
+}
 
 export default KakaoLoginRedirectPage;
