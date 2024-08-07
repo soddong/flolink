@@ -13,6 +13,5 @@ public class RoomUpdateRequest {
 	private String roomName;
 	private String roomParticipatePassword;
 	private String notice;
-	private String message;
 
 }
