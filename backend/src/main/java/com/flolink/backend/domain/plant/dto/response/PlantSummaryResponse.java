@@ -26,7 +26,7 @@ public class PlantSummaryResponse {
 			.plantId(plant.getPlantId())
 			.nowLevel(ExpUtil.calculateLevel(plant.getTotalExp()
 				, plant.getRoom().getUserRoomList().size()))
-			.nowExp(ExpUtil.calculateNowExp(plant.getTotalExp()
+			.nowExp(ExpUtil.calculateDisplayNowExp(plant.getTotalExp()
 				, plant.getRoom().getUserRoomList().size()))
 			.build();
 	}
