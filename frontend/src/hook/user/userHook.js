@@ -7,10 +7,3 @@ export const useInventory = () => {
         queryFn: fetchInventory,
     });
 }
-
-// export const useMyroom = () => {
-//     return useQuery({
-//         queryKey: ['myroom'],
-//         queryFn: fetchMyroom,
-//     })
-// }

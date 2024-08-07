@@ -11,7 +11,7 @@ import { useItems } from '../../hook/itemstore/itemstoreHook.js'
 
 
 function MyRoomPage() {
-    const { items, images, selectedItems, userInventory, setSelectedItems, setUserInventory } = useItemStore();
+    const { items, images, selectedItems, userInventory, setSelectedItems, setUserInventory, setItems, generateImagesFromNames, hasitemids } = useItemStore();
     const [isInventoryOpen, setIsInventoryOpen] = useState(false);
     const [selectedItemType, setSelectedItemType] = useState(null);
     const [isClosing, setIsClosing] = useState(false);
@@ -35,19 +35,41 @@ function MyRoomPage() {
 
     useEffect(() => {
         if (inventory && inventory.data) {
+            console.log(inventory.data)
             setUserInventory(inventory.data);
         }
     }, [inventory])
 
     useEffect(() => {
         if (itemsData && itemsData.data) {
-            console.log(itemsData.data)
+            const processedItems = [];
+            const itemNames = [];
+
+            itemsData.data.forEach(item => {
+                const baseName = item.itemName.replace(/[0-9]/g, '');
+
+                if (!processedItems.some(el => el.name === baseName)) {
+                    processedItems.push({ name: baseName, variants: [], prices: [] });
+                }
+
+                const itemIndex = processedItems.findIndex(el => el.name === baseName);
+                processedItems[itemIndex].variants.push(item.itemName);
+                processedItems[itemIndex].prices.push(item.price);
+
+                if (!itemNames.includes(item.itemName)) {
+                    itemNames.push(item.itemName);
+                }
+            });
+
+            setItems(processedItems);
+            generateImagesFromNames(itemNames);
         }
-    }, [itemsData])
+    }, [itemsData]);
 
     const inventoryRef = useRef(null);
 
     const openInventory = () => {
+        console.log(items)
         setIsInventoryOpen(true);
     }
     
@@ -66,6 +88,7 @@ function MyRoomPage() {
     };
 
     const handleItemSelect = (itemType, variantIndex) => {
+        console.log(hasitemids)
         setSelectedItems(itemType, variantIndex);
         setSelectedItemType(null);
     };
@@ -116,7 +139,6 @@ function MyRoomPage() {
 
     const navigate = useNavigate();
 
-
     const gotoItemStore = () => {
         navigate('/itemstore');
     }
@@ -125,7 +147,7 @@ function MyRoomPage() {
         <div className={styles.myRoom}>
             <div className={styles.myRoomHeader}>
                 <div>
-                    <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
+                    
                 </div>
                 <div>
                     <span>OOO님의 마이룸</span>
@@ -143,16 +165,20 @@ function MyRoomPage() {
             </div>
             <div className={styles.myRoomItems}>
                 <img src={room} className={styles.roomImg} alt="Room"/>
-                {items.map(item => (
-                    selectedItems[item.name] && (
-                        <img 
-                            key={item.name}
-                            src={item.variants[selectedItems[item.name] - 1]} 
-                            className={`${styles[item.name]} ${styles.item}`}
-                            alt={item.name}
-                        />
-                    )
-                ))}
+                {items.map(item => {
+                    const selectedVariant = selectedItems[item.name];
+                    if (selectedVariant !== undefined && selectedVariant !== null) {
+                        return (
+                            <img 
+                                key={item.name}
+                                src={images[item.name][selectedVariant - 1]}
+                                alt={`${item.name} ${selectedVariant}`}
+                                className={styles[item.name]}
+                            />
+                        );
+                    }
+                    return null;
+                })}
             </div>
             {isInventoryOpen && (
                 <div 

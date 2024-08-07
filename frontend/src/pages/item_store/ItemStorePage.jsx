@@ -13,7 +13,7 @@ import { useQueryClient } from 'react-query';
 function ItemStorePage() {
     const [activeTab, setActiveTab] = useState('itemlist');
     const [expandedItem, setExpandedItem] = useState(null);
-    const { userInventory, setUserInventory, items, images, setItems, setImages, generateImagesFromNames, setPurchaseHistory, setPaymentHistory, histories, coins } = useItemStore();
+    const { userInventory, setUserInventory, items, images, setItems, generateImagesFromNames, setPurchaseHistory, setPaymentHistory, histories, coins } = useItemStore();
     const { data: itemsData, isLoading: itemsLoading, error: itemsError } = useItems();
     const { data: paymentHistoryData, isLoading: paymentHistoryLoading, error: paymentHistoryError } = usePaymentHistory();
     const { data: purchaseHistoryData, isLoading: purchaseHistoryLoading, error: purchaseHistoryError } = usePurchaseHistory();
@@ -72,7 +72,6 @@ function ItemStorePage() {
               setPurchaseStatus('산거를 또 사려 하시네요? 어케했누')
             }
         }
-        
     };
 
     useEffect(() => {
@@ -110,6 +109,7 @@ function ItemStorePage() {
 
             setItems(processedItems);
             generateImagesFromNames(itemNames);
+
         }
     }, [itemsData]);
 
@@ -228,7 +228,7 @@ function ItemStorePage() {
                                             </div>
                                             <div>
                                                 <span className={styles.variantNumber}>
-                                                    {item.prices[variantIndex]}원
+                                                    {item.prices[variantIndex]}pt
                                                 </span>
                                             </div>
                                             {isItemPurchased(item.name, variantIndex) && (
