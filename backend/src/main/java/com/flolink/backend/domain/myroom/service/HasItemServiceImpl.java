@@ -33,10 +33,10 @@ public class HasItemServiceImpl implements HasItemService {
 	@Override
 	@Transactional
 	public HasItem saveHasItem(final User user, final Item item) {
-		if (hasItemRepository.existsByItem_itemId(item.getItemId())) {
+		if (hasItemRepository.existsByItemItemIdAndMyRoom(item.getItemId(), user.getMyRoom())) {
 			throw new BadRequestException(ResponseCode.ITEM_ALREADY_PURCHASE);
 		}
-		
+
 		return hasItemRepository.save(HasItem.of(user.getMyRoom(), item));
 	}
 
