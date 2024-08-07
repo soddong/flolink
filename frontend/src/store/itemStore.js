@@ -77,9 +77,13 @@ const useItemStore = create((set) => ({
             isPurchase : true,
         }));
 
-        const updatedHistory = [...state.histories, ...processedHistory];
+        const uniqueMap = new Map();
 
-        updatedHistory.sort((a,b) => b.date - a.date)
+        [...state.histories, ...processedHistory].forEach(item => {
+            uniqueMap.set(item.transactionAt, item);
+        });
+
+        const updatedHistory = Array.from(uniqueMap.values());
 
         return {
             histories: updatedHistory,
@@ -92,9 +96,13 @@ const useItemStore = create((set) => ({
             isPurchase : false,
         }));
 
-        const updatedHistory = [...state.histories, ...processedHistory];
+        const uniqueMap = new Map();
 
-        updatedHistory.sort((a,b) => b.date - a.date)
+        [...state.histories, ...processedHistory].forEach(item => {
+            uniqueMap.set(item.paymentAt, item);
+        });
+
+        const updatedHistory = Array.from(uniqueMap.values());
 
         return {
             histories: updatedHistory,
