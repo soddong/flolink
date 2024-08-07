@@ -4,12 +4,16 @@ import logo from '../../assets/logo/logo.png';
 import FeedList from '../../components/feed/FeedList';
 import NavBar from '../../components/common/nav_bar/NavBar';
 import '../../css/feed/feedStyles.module.css';
+import { sendAuthNum } from '../../service/auth/auth';
 
 const FeedListPage = () => {
   const navigate = useNavigate();
   const currentUser = 'user1';
 
   const [feeds, setFeeds] = useState([
+    // const feedList = sendAuthNum(tel);
+    // setFeeds(feedList)
+    // feeds.feedId
     {
       feedId: 1,
       images: [

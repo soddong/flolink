@@ -64,7 +64,12 @@ export const findpw = async (loginId, userName, tel, token) => {
     return data;
 }
 
-
+// 로그아웃
+export const logout = async () => {
+    const {data} = await axiosCommonInstance.post("/logout", {
+    });
+    return data;
+}
 
 // 비밀번호 재설정 (여기서 authNum은 문자발송 후 받은 인증번호다.)
 export const resetPw = async (loginId, userName, tel, authNum) => {
