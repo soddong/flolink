@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-
+import { addFeed } from '../../service/Feed/feedApi';
 const FeedForm = ({feed}) => {
   const [content, setContent] = useState('');
   const [images, setImages] = useState([]);
@@ -40,6 +40,14 @@ const FeedForm = ({feed}) => {
     // 피드 제출 로직 추가
     console.log('내용:', content);
     console.log('이미지들:', images);
+    const feedcontent = {
+      roomId: roomId,
+      content: content,
+      images: images
+    }
+    addFeed(feedcontent).then(()=>{
+      Navigate('/feedlist');
+    })
   };
 
   return (
