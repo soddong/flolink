@@ -1,12 +1,12 @@
 package com.flolink.backend.domain.calendar.service;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.calendar.dto.request.CalendarRequest;
+import com.flolink.backend.domain.calendar.dto.request.DateCalendarRequest;
 import com.flolink.backend.domain.calendar.dto.request.DeleteCalendarRequest;
 import com.flolink.backend.domain.calendar.dto.request.UpdateCalendarRequest;
 import com.flolink.backend.domain.calendar.dto.response.CalendarResponse;
@@ -16,8 +16,10 @@ import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.repository.RoomRepository;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
+import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
+import com.flolink.backend.global.common.exception.UnAuthorizedException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +34,14 @@ public class CalendarServiceImpl implements CalendarService {
 	private final RoomRepository roomRepository;
 
 	@Override
-	public List<CalendarResponse> getList(Date date, int roomId, int userId) {
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, roomId);
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+	public List<CalendarResponse> getList(DateCalendarRequest dateCalendarRequest, Integer roomId,
+		CustomUserDetails customUserDetails) {
+		if (dateCalendarRequest.getRoomId() != roomId) {
+			throw new UnAuthorizedException(ResponseCode.UNAUTHORIZED_USER);
 		}
-		List<Calendar> list = calendarRepository.findByDateAndRoomId(date, roomId);
+
+		List<Calendar> list = calendarRepository.findByYearAndMonthAndRoomId(dateCalendarRequest.getYear(),
+			dateCalendarRequest.getMonth(), roomId);
 
 		return list.stream()
 			.map(Calendar::toEntity)
@@ -52,7 +56,7 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
-	public void removeCalendar(DeleteCalendarRequest deleteCalendarRequest, int userId) {
+	public void removeCalendar(DeleteCalendarRequest deleteCalendarRequest, Integer userId) {
 		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, deleteCalendarRequest.getRoomId());
 
 		// userRoom에 메핑되어있지 않은 인원이라면 가족구성원 아님
@@ -69,7 +73,7 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
-	public void modifyCalendar(UpdateCalendarRequest updateCalendarRequest, int userId) {
+	public void modifyCalendar(UpdateCalendarRequest updateCalendarRequest, Integer userId) {
 		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, updateCalendarRequest.getRoomId());
 
 		// userRoom에 메핑되어있지 않은 인원이라면 가족구성원 아님
