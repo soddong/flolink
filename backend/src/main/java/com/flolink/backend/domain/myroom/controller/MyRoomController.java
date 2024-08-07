@@ -45,7 +45,7 @@ public class MyRoomController {
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, inventory));
 	}
 
-	@PatchMapping("/equip")
+	@PostMapping("/equip")
 	@Operation(summary = "마이룸에 아이템 장착")
 	public ResponseEntity<CommonResponse> equipItem(@RequestParam final Integer hasItemId,
 		Authentication authentication) {
@@ -54,7 +54,7 @@ public class MyRoomController {
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, response));
 	}
 
-	@PatchMapping("/unequip")
+	@PostMapping("/unequip")
 	@Operation(summary = "마이룸에 아이템 장착 해제")
 	public ResponseEntity<CommonResponse> unequipItem(@RequestParam final ItemType itemType,
 		Authentication authentication) {
