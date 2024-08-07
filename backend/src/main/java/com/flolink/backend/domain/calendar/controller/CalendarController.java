@@ -36,14 +36,14 @@ public class CalendarController {
 
 	private final CalendarService calendarService;
 
-	@Operation(summary = "일정 반환", description = "선택한 날짜에 따른 일정을 반환한다.")
+	@Operation(summary = "일정 반환", description = "선택한 년도, 월에 따른 일정을 반환한다.")
 	@GetMapping("/list")
 	public ResponseEntity<?> getCalendarList(@RequestBody DateCalendarRequest dateCalendarRequest,
 		Authentication authentication) {
 		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
 		log.info("===캘린더 일정 반환 START===");
-		List<CalendarResponse> list = calendarService.getList(dateCalendarRequest.getDate(),
-			dateCalendarRequest.getRoomId(), customUserDetails.getUserId());
+		List<CalendarResponse> list = calendarService.getList(dateCalendarRequest,
+			dateCalendarRequest.getRoomId(), customUserDetails);
 		log.info("===캘린더 일정 반환 START===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, list));
 	}
