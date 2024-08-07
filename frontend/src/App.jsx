@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     </UserCertPage>
   },
   {
-    path : "/test",
+    path : "/channelselect",
     element : <ChannelSelectPage/>
   },
   {
