@@ -60,6 +60,8 @@ function ItemStorePage() {
             const result =  await purchaseItem(selectedItem);
             setPurchaseStatus('결제가 완료되었습니다.' );
 
+            queryClient.invalidateQueries('purchasehistory')
+            queryClient.invalidateQueries('paymenthistory')
             queryClient.invalidateQueries('inventory'); 
             queryClient.invalidateQueries('items');   
         } catch(error) {
