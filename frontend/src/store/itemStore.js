@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 import rug1 from '../assets/myroom/items/rug1.png';
 import rug2 from '../assets/myroom/items/rug2.png';
 import shelf1 from '../assets/myroom/items/shelf1.png';
@@ -34,41 +34,31 @@ const useItemStore = create((set) => ({
     histories : [],
     coins : [coin1, coin2, coin3, coin4],
     userInventory : {},
-    selectedItems : {
-        rug: 1,
-        shelf: 1,
-        stand: 1,
-        bed: 1,
-        minitable: 1,
-        vase: 1,
-        bigtable: 1
-    },
-    setSelectedItems: (itemName, variantIndex) => set((state) => ({
+    hasitemids : {},
+    selectedItems : {},
+    setSelectedItems : (itemName, variantIndex) => set((state) => ({
         selectedItems: {
-            ...state.selectedItems,
-            [itemName]: variantIndex,
+          ...state.selectedItems,
+          [itemName]: variantIndex,
         },
     })),
     addToInventory: (itemName, variantIndex) => set((state) => ({
         userInventory: {
-            ...state.userInventory,
-            [itemName]: [...(state.userInventory[itemName] || []), variantIndex],
+          ...state.userInventory,
+          [itemName]: [...(state.userInventory[itemName] || []), variantIndex],
         },
     })),
     setItems: (newItems) => set((state) => ({
         items: newItems,
     })),
-    setImages: (newImages) => set((state) => ({
-        images: newImages,
-    })),
     setPrices: (newPrices) => set((state) => ({
         prices: newPrices,
     })),
-    generateImagesFromNames: (itemNames) => {
+    generateImagesFromNames: (itemNames) => set((state) => {
         const processedImages = {};
-
+    
         itemNames.forEach((itemName) => {
-            const baseName = itemName.replace(/[0-9]/g, '');
+            const baseName = itemName.replace(/[0-9]/g, ''); 
             if (imageMap[baseName]) {
                 const variantIndex = parseInt(itemName.replace(/\D/g, '')) - 1;
                 if (!processedImages[baseName]) {
@@ -77,19 +67,19 @@ const useItemStore = create((set) => ({
                 processedImages[baseName][variantIndex] = imageMap[baseName][variantIndex];
             }
         });
-
-        return processedImages;
-    },
+    
+        return { images: processedImages };
+    }),
     setPurchaseHistory: (purchaseHistory) => set((state) => {
         const processedHistory = purchaseHistory.map(event => ({
             ...event,
             date: new Date(event.transactionAt),
-            isPurchase: true,
+            isPurchase : true,
         }));
 
         const updatedHistory = [...state.histories, ...processedHistory];
 
-        updatedHistory.sort((a, b) => b.date - a.date)
+        updatedHistory.sort((a,b) => b.date - a.date)
 
         return {
             histories: updatedHistory,
@@ -99,12 +89,12 @@ const useItemStore = create((set) => ({
         const processedHistory = paymentHistory.map(event => ({
             ...event,
             date: new Date(event.paymentAt),
-            isPurchase: false,
+            isPurchase : false,
         }));
 
         const updatedHistory = [...state.histories, ...processedHistory];
 
-        updatedHistory.sort((a, b) => b.date - a.date)
+        updatedHistory.sort((a,b) => b.date - a.date)
 
         return {
             histories: updatedHistory,
@@ -112,27 +102,35 @@ const useItemStore = create((set) => ({
     }),
     setUserInventory: (inventory) => set((state) => {
         const newUserInventory = {};
+        const newSelectedItems = {};
+        const newhasitemids = {};
 
-        inventory.forEach((item) => {
+        inventory?.forEach((item) => {
            
             const baseName = item.itemName.replace(/[0-9]/g, '');  
             const variantIndex = parseInt(item.itemName.replace(/\D/g, '')); 
-
     
             if (newUserInventory[baseName]) {
                 newUserInventory[baseName].push(variantIndex);
+                newUserInventory[baseName].sort((a,b) => (a - b))
             } else {
                 newUserInventory[baseName] = [variantIndex];
             }
+
+            newhasitemids[item.itemName] = item.hasItemId
+
+            if (item.equippedYn) {
+                newSelectedItems[baseName]  = variantIndex;
+            }
         });
 
-  
-        return {
-            userInventory: {
-                ...newUserInventory,  
-            }
-        };
-        }),
+        return { userInventory: newUserInventory,
+            selectedItems: newSelectedItems,
+            hasitemids: newhasitemids
+         };
+
+    }),
+
 }))
 
 export default useItemStore;

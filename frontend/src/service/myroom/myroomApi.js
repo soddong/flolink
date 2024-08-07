@@ -1,11 +1,6 @@
 import { axiosCommonInstance } from '../../apis/axiosInstance';
 
-export const myInventory = async () => {
-    const { data } = await axiosCommonInstance.get('/myroom/inventory');
-    return data;
-}
-
-export const mycurRoom = async () => {
-    const { data } = await axiosCommonInstance.get('/myroom');
+export const yourMyroom = async (userRoomId) => {
+    const { data } = await axiosCommonInstance.post('/myroom', { userRoomId });
     return data;
 }
