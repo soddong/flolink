@@ -3,18 +3,24 @@ package com.flolink.backend.domain.myroom.controller;
 import static com.flolink.backend.global.common.ResponseCode.*;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.domain.myroom.dto.response.HasItemInfoResponse;
 import com.flolink.backend.domain.myroom.dto.response.MyRoomResponse;
+import com.flolink.backend.domain.myroom.dto.response.MyRoomUserIdInfoRequest;
 import com.flolink.backend.domain.myroom.service.HasItemService;
 import com.flolink.backend.domain.myroom.service.MyRoomService;
+import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.CommonResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,35 +38,36 @@ public class MyRoomController {
 	private final HasItemService hasItemService;
 	private final MyRoomService myRoomService;
 
-	@GetMapping
+	@PostMapping
 	@Operation(summary = "마이룸 정보 조회")
-	public ResponseEntity<CommonResponse> getMyRoom() {
-		Integer userId = 1;
-		MyRoomResponse inventory = myRoomService.getMyRoom(userId);
+	public ResponseEntity<CommonResponse> getMyRoom(@RequestBody final MyRoomUserIdInfoRequest userIdInfoRequest) {
+		MyRoomResponse inventory = myRoomService.getMyRoom(userIdInfoRequest.getUserId());
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, inventory));
 	}
 
 	@PatchMapping("/equip")
 	@Operation(summary = "마이룸에 아이템 장착")
-	public ResponseEntity<CommonResponse> equipItem(@RequestParam final Integer hasItemId) {
-		Integer userId = 1;
-		MyRoomResponse response = myRoomService.equipItem(userId, hasItemId);
+	public ResponseEntity<CommonResponse> equipItem(@RequestParam final Integer hasItemId,
+		Authentication authentication) {
+		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+		MyRoomResponse response = myRoomService.equipItem(customUserDetails.getUserId(), hasItemId);
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, response));
 	}
 
 	@PatchMapping("/unequip")
 	@Operation(summary = "마이룸에 아이템 장착 해제")
-	public ResponseEntity<CommonResponse> unequipItem(@RequestParam final Integer hasItemId) {
-		Integer userId = 1;
-		MyRoomResponse response = myRoomService.unequipItem(userId, hasItemId);
+	public ResponseEntity<CommonResponse> unequipItem(@RequestParam final Integer hasItemId,
+		Authentication authentication) {
+		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+		MyRoomResponse response = myRoomService.unequipItem(customUserDetails.getUserId(), hasItemId);
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, response));
 	}
 
 	@GetMapping("/inventory")
 	@Operation(summary = "인벤토리 조회")
-	public ResponseEntity<CommonResponse> getInventory() {
-		Integer userId = 1;
-		List<HasItemInfoResponse> inventory = hasItemService.getHasItems(userId);
+	public ResponseEntity<CommonResponse> getInventory(Authentication authentication) {
+			CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+		List<HasItemInfoResponse> inventory = hasItemService.getHasItems(customUserDetails.getUserId());
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, inventory));
 	}
 
