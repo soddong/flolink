@@ -13,6 +13,7 @@ import com.flolink.backend.domain.myroom.repository.HasItemRepository;
 import com.flolink.backend.domain.myroom.repository.MyRoomRepository;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
+import com.flolink.backend.domain.store.entity.ItemType;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.common.ResponseCode;
@@ -95,24 +96,23 @@ public class MyRoomServiceImpl implements MyRoomService {
 	 *  1. 마이룸에 해당 타입 해제 (null)
 	 * 	2. 인벤토리에 장착해제 표시 (false)
 	 * @param userId 유저 ID
-	 * @param hasItemId 인벤토리에서 장착 해제할 아이템 ID
+	 * @param itemType 인벤토리에서 장착 해제할 아이템 타입
 	 * @return MyRoomResponse 업데이트 후 마이룸 정보
 	 */
 	@Override
 	@Transactional
-	public MyRoomResponse unequipItem(Integer userId, Integer hasItemId) {
+	public MyRoomResponse unequipItem(Integer userId, ItemType itemType) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
 		MyRoom myRoom = user.getMyRoom();
 
-		HasItem hasItem = hasItemRepository.findById(hasItemId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.INVENTORY_NOT_FOUND));
-
-		myRoom.unequipItem(hasItem);
+		// 해당 타입의 아이템들을 모두 unequip 처리
+		List<HasItem> hasItems = hasItemRepository.findByMyRoom(myRoom);
+		hasItems.forEach(myRoom::unequipItem);
 
 		List<HasItemInfoResponse> hasItemInfoResponses = myRoom.getItems().stream()
-			.filter(HasItem::getEquippedYn)
+			.filter(item -> !item.getEquippedYn()) // unequipped 된 아이템 필터링
 			.map(HasItemInfoResponse::fromEntity)
 			.toList();
 

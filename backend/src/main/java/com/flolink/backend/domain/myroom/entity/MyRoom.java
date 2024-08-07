@@ -8,6 +8,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.flolink.backend.domain.store.entity.Item;
+import com.flolink.backend.domain.store.entity.ItemType;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -77,84 +78,71 @@ public class MyRoom {
 			.build();
 	}
 
+	/**
+	 * 1. 기존 아이템 장착해제
+	 * 2. 새로운 아이템 장착
+	 * @param hasItem
+	 */
 	public void unequipPreItemAndEquipItem(HasItem hasItem) {
 		Item item = hasItem.getItem();
-		switch (item.getType()) {
-			case RUG:
-				if (this.itemRug != null) {
-					unequipItem(findById(this.itemRug));
-				}
-				this.itemRug = hasItem.getHasItemId();
-				break;
-			case SHELF:
-				if (this.itemShelf != null) {
-					unequipItem(findById(this.itemShelf));
-				}
-				this.itemShelf = hasItem.getHasItemId();
-				break;
-			case STAND:
-				if (this.itemStand != null) {
-					unequipItem(findById(this.itemStand));
-				}
-				this.itemStand = hasItem.getHasItemId();
-				break;
-			case BED:
-				if (this.itemBed != null) {
-					unequipItem(findById(this.itemBed));
-				}
-				this.itemBed = hasItem.getHasItemId();
-				break;
-			case MINITABLE:
-				if (this.itemMinitable != null) {
-					unequipItem(findById(this.itemMinitable));
-				}
-				this.itemMinitable = hasItem.getHasItemId();
-				break;
-			case BIGTABLE:
-				if (this.itemBigtable != null) {
-					unequipItem(findById(this.itemBigtable));
-				}
-				this.itemBigtable = hasItem.getHasItemId();
-				break;
-			case VASE:
-				if (this.itemVase != null) {
-					unequipItem(findById(this.itemVase));
-				}
-				this.itemVase = hasItem.getHasItemId();
-				break;
-			default:
-				throw new BadRequestException(ResponseCode.INVALID_ITEM_TYPE);
-		}
-		hasItem.equip();
+		unequipPreItem(item.getType());
+		equipNewItem(item.getType(), hasItem.getHasItemId());
+		hasItem.displayEquip();
 	}
 
+	/**
+	 * 장착 해제
+	 * @param hasItem
+	 */
 	public void unequipItem(HasItem hasItem) {
 		Item item = hasItem.getItem();
-		switch (item.getType()) {
-			case RUG:
-				this.itemRug = null;
-				break;
-			case SHELF:
-				this.itemShelf = null;
-				break;
-			case STAND:
-				this.itemStand = null;
-			case BED:
-				this.itemBed = null;
-				break;
-			case MINITABLE:
-				this.itemMinitable = null;
-				break;
-			case BIGTABLE:
-				this.itemBigtable = null;
-				break;
-			case VASE:
-				this.itemVase = null;
-				break;
-			default:
-				throw new BadRequestException(ResponseCode.INVALID_ITEM_TYPE);
+		unequipMyRoom(item.getType());
+		hasItem.displayUnequip();
+	}
+
+	private void unequipPreItem(ItemType itemType) {
+		Integer currentItem = getCurrentItemId(itemType);
+		if (currentItem != null) {
+			unequipItem(findById(currentItem));
 		}
-		hasItem.unequip();
+	}
+
+	private void equipNewItem(ItemType itemType, Integer hasItemId) {
+		switch (itemType) {
+			case RUG -> this.itemRug = hasItemId;
+			case SHELF -> this.itemShelf = hasItemId;
+			case STAND -> this.itemStand = hasItemId;
+			case BED -> this.itemBed = hasItemId;
+			case MINITABLE -> this.itemMinitable = hasItemId;
+			case BIGTABLE -> this.itemBigtable = hasItemId;
+			case VASE -> this.itemVase = hasItemId;
+			default -> throw new BadRequestException(ResponseCode.INVALID_ITEM_TYPE);
+		}
+	}
+
+	private void unequipMyRoom(ItemType itemType) {
+		switch (itemType) {
+			case RUG -> this.itemRug = null;
+			case SHELF -> this.itemShelf = null;
+			case STAND -> this.itemStand = null;
+			case BED -> this.itemBed = null;
+			case MINITABLE -> this.itemMinitable = null;
+			case BIGTABLE -> this.itemBigtable = null;
+			case VASE -> this.itemVase = null;
+			default -> throw new BadRequestException(ResponseCode.INVALID_ITEM_TYPE);
+		}
+	}
+
+	private Integer getCurrentItemId(ItemType itemType) {
+		return switch (itemType) {
+			case RUG -> this.itemRug;
+			case SHELF -> this.itemShelf;
+			case STAND -> this.itemStand;
+			case BED -> this.itemBed;
+			case MINITABLE -> this.itemMinitable;
+			case BIGTABLE -> this.itemBigtable;
+			case VASE -> this.itemVase;
+		};
 	}
 
 	private HasItem findById(Integer hasItemId) {
