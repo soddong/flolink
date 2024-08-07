@@ -6,6 +6,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const axiosRequestConfig = {
   baseURL: BASE_URL,
+  
 };
 
 const axiosWithCredentialConfig = {
@@ -21,7 +22,15 @@ export const axiosCommonInstance = axios.create(axiosRequestConfig);
 export const axiosWithCredentialInstance = axios.create(axiosWithCredentialConfig);
 
 // // 요청 인터셉터 설정
-// axiosCommonInstance.interceptors.request.use(setAuthorization);
+axiosCommonInstance.interceptors.request.use(
+  (config)=>{
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    if(token){
+      config.headers.Authorization = localStorage.getItem("ACCESS_TOKEN");
+    }
+    return config;
+  }
+);
 // axiosWithCredentialInstance.interceptors.request.use(setAuthorization);
 
 // // 응답 인터셉터 설정 (토큰 갱신)

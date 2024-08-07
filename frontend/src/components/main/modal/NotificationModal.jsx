@@ -3,7 +3,7 @@ import { useState } from "react"
 
 function NotificationModal (props) {
   const [inputValue, setInputValue] = useState(props.content);
-
+  
   function handleInputChange (event) {
     setInputValue(event.target.value)
     if (event.target.value.length > 100) {
@@ -13,6 +13,7 @@ function NotificationModal (props) {
   
   function submitSuccess (event) {
     window.alert('공지가 수정되었습니다.')
+    console.log(inputValue);
     event.preventDefault()
     props.handleNoti(inputValue)
     console.log(event)
