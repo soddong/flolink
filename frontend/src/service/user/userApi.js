@@ -31,18 +31,14 @@ export const changeStatusMessage = async (statusMessage) => {
     return data;
 }
 
-// 프로필 사진 변경
-export const changeProfile = async (statusMessage) => {
-    const { data } = await axiosCommonInstance.put('/users/myInfo/message', {
-        statusMessage: statusMessage
-    });
-    return data;
-}
-
-// 기분상태 변경
-export const changeEmotion = async (emotion) => {
-    const { data } = await axiosCommonInstance.put('/users/myInfo/emotion', {
-        emotion: emotion
+// 프로필 사진 및 기분상태 변경
+export const changeProfileAndEmotion = async (profile, emotion) => {
+    const upperCaseProfile = profile.toUpperCase();
+    const upperCaseEmotion = emotion.toUpperCase();
+    
+    const { data } = await axiosCommonInstance.put('/users/myInfo/profile/emotion', {
+        profile: upperCaseProfile,
+        emotion: upperCaseEmotion
     });
     return data;
 }
