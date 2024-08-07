@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NicknameUpdateRequest {
-	String target_nickname;
-	Integer target_user_room_id;
-	Integer user_room_id;
+	Integer roomId;
+	String targetNickname;
+	Integer targetUserRoomId;
 }
