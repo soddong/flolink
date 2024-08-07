@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.plant.entity.ActivityPoint;
 import com.flolink.backend.domain.plant.service.PlantService;
+import com.flolink.backend.domain.room.dto.request.NicknameUpdateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomParticipateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
@@ -213,6 +214,20 @@ public class RoomServiceImpl implements RoomService {
 			plantService.updateExp(userRoom, ActivityPoint.ATTENDANCE);
 		}
 		userRoom.updateLoginTime();
+	}
+
+	@Override
+	public String updateRoomMemberNickname(final Integer userId, final NicknameUpdateRequest nicknameUpdateRequest) {
+		UserRoom userRoom = userRoomRepository.findUserRoomByUserRoomId(nicknameUpdateRequest.getUser_room_id());
+		if (userRoom.getUser().getUserId().equals(userId)) {
+			userRoom.getNickNameList().forEach((nickname) -> {
+				if (nickname.getTargetUserRoomId().equals(nicknameUpdateRequest.getTarget_user_room_id())) {
+					nickname.setTargetNickname(nicknameUpdateRequest.getTarget_nickname());
+				}
+			});
+		}
+		userRoomRepository.save(userRoom);
+		return "success";
 	}
 
 	private User findUserById(final Integer userId) {

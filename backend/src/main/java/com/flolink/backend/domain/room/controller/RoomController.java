@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.domain.plant.service.PlantService;
+import com.flolink.backend.domain.room.dto.request.NicknameUpdateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomParticipateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
@@ -136,6 +138,18 @@ public class RoomController {
 		Integer userId = userDetails.getUserId();
 		String done = roomService.exitRoom(userId, roomId);
 		log.info("===가족 방 나가기 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, done));
+	}
+
+	@PutMapping("/nickname/update")
+	@Operation(summary = "구성원 닉네임 바꾸기")
+	public ResponseEntity<?> updateRoomMemberNickname(Authentication authentication, @RequestBody final
+	NicknameUpdateRequest nicknameUpdateRequest) {
+		log.info("===구성원 닉네임 바꾸기 START===");
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
+		String done = roomService.updateRoomMemberNickname(userId, nicknameUpdateRequest);
+		log.info("===구성원 닉네임 바꾸기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, done));
 	}
 
