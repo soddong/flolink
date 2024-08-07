@@ -2,6 +2,7 @@ package com.flolink.backend.domain.room.service;
 
 import java.util.List;
 
+import com.flolink.backend.domain.room.dto.request.NicknameUpdateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomParticipateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
@@ -32,5 +33,7 @@ public interface RoomService {
 
 	String kickRoomMember(final Integer userId, final Integer roomId, final Integer targetUserRoomId);
 
-	void enterRoom(Integer userId, Integer roomId);
+	void enterRoom(final Integer userId, final Integer roomId);
+
+	String updateRoomMemberNickname(final Integer userId, final NicknameUpdateRequest nicknameUpdateRequest);
 }
