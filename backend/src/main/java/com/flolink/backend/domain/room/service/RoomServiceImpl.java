@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,13 +62,9 @@ public class RoomServiceImpl implements RoomService {
 	public RoomSummarizeResponse createRoom(final Integer userId, final RoomCreateRequest roomCreateRequest) {
 		User user = findUserById(userId);
 
-		Room room = roomRepository.save(
-			roomCreateRequest.toEntity()
-		);
+		Room room = roomRepository.save(roomCreateRequest.toEntity());
 
-		UserRoom userRoom = userRoomRepository.save(
-			UserRoom.of(user, room)
-		);
+		UserRoom userRoom = userRoomRepository.save(UserRoom.of(user, room));
 		userRoom.setRole("admin");
 
 		plantService.createPlant(userRoom, room);
@@ -87,7 +84,7 @@ public class RoomServiceImpl implements RoomService {
 			}
 		}
 		if (!room.getRoomParticipatePassword().equals(roomParticipateRequest.getRoomParticipatePassword())) {
-			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
+			throw new UnAuthorizedException(ResponseCode.WRONG_PARTICIPATION_PASSWORD);
 		}
 		userRoomRepository.save(UserRoom.of(user, room));
 		return RoomSummarizeResponse.fromEntity(room);
@@ -126,50 +123,6 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	@Transactional
-	public RoomSummarizeResponse updateRoomName(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
-		User user = findUserById(userId);
-		Room room = findRoomById(roomUpdateRequest.getRoomId());
-		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
-
-		if (userRoom.getRole().equalsIgnoreCase("admin")) {
-			room.setRoomName(roomUpdateRequest.getRoomName());
-		}
-		roomRepository.save(room);
-		return RoomSummarizeResponse.fromEntity(room);
-	}
-
-	@Override
-	@Transactional
-	public RoomSummarizeResponse updateParticipatePassword(final Integer userId,
-		final RoomUpdateRequest roomUpdateRequest) {
-		User user = findUserById(userId);
-		Room room = findRoomById(roomUpdateRequest.getRoomId());
-		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
-
-		if (userRoom.getRole().equalsIgnoreCase("admin")) { //validate는 controller에서
-			room.setRoomParticipatePassword(roomUpdateRequest.getRoomParticipatePassword());
-		}
-		roomRepository.save(room);
-		return RoomSummarizeResponse.fromEntity(room);
-	}
-
-	@Override
-	@Transactional
-	public RoomSummarizeResponse updateNotice(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
-		User user = findUserById(userId);
-		Room room = findRoomById(roomUpdateRequest.getRoomId());
-		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
-
-		if (userRoom != null) {
-			room.setNotice(roomUpdateRequest.getNotice());
-		}
-		System.out.println(roomUpdateRequest.getNotice());
-		roomRepository.save(room);
-		return RoomSummarizeResponse.fromEntity(room);
-	}
-
-	@Override
-	@Transactional
 	public String exitRoom(final Integer userId, final Integer roomId) {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomId);
@@ -198,11 +151,12 @@ public class RoomServiceImpl implements RoomService {
 	@Transactional
 	public String kickRoomMember(final Integer userId, final Integer roomId, final Integer targetUserRoomId) {
 		String myRole = getMyRole(userId, roomId);
+
 		if (!myRole.equalsIgnoreCase("admin")) {
 			return "failed";
 		}
 
-		UserRoom userRoom = userRoomRepository.findUserRoomByUserRoomId(targetUserRoomId);
+		UserRoom userRoom = findUserRoomByUserRoomId(targetUserRoomId);
 
 		userRoomRepository.delete(userRoom);
 		return "success";
@@ -214,43 +168,89 @@ public class RoomServiceImpl implements RoomService {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomId);
 		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+
 		if (isFirstAttendanceOfToday(userRoom.getLastLoginTime())) {
 			plantService.updateExp(userRoom, ActivityPoint.ATTENDANCE);
 		}
+
 		userRoom.updateLoginTime();
 	}
 
 	@Override
+	@Transactional
 	public String updateRoomMemberNickname(final Integer userId, final NicknameUpdateRequest nicknameUpdateRequest) {
 
-		System.out.println("here 1");
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, nicknameUpdateRequest.getRoomId());
-		Nickname nickname = nicknameRepository.findByUserRoomUserRoomIdAndTargetUserRoomId(userRoom.getUserRoomId(),
-			nicknameUpdateRequest.getTargetUserRoomId());
-		if (nickname == null) {
+		UserRoom userRoom = findUserRoomByUserIdAndRoomId(userId, nicknameUpdateRequest.getRoomId());
+		Optional<Nickname> optionalNickname = nicknameRepository.findByUserRoomUserRoomIdAndTargetUserRoomId(
+			userRoom.getUserRoomId(), nicknameUpdateRequest.getTargetUserRoomId());
+
+		Nickname nickname = null;
+
+		if (optionalNickname.isPresent()) {
+			nickname = optionalNickname.get();
+			nickname.setTargetNickname(nicknameUpdateRequest.getTargetNickname());
+			nicknameRepository.save(nickname);
+		} else {
 			nickname = Nickname.builder()
 				.userRoom(userRoom)
 				.targetUserRoomId(nicknameUpdateRequest.getTargetUserRoomId())
 				.targetNickname(nicknameUpdateRequest.getTargetNickname())
 				.build();
 			nicknameRepository.save(nickname);
-		} else {
-			nickname.setTargetNickname(nicknameUpdateRequest.getTargetNickname());
-			nicknameRepository.save(nickname);
 		}
 		return "success";
 	}
 
-	private User findUserById(final Integer userId) {
+	@Override
+	@Transactional
+	public RoomSummarizeResponse updateRoomDetail(final Integer userId, final RoomUpdateRequest roomUpdateRequest) {
+		User user = findUserById(userId);
+		Room room = findRoomById(roomUpdateRequest.getRoomId());
+		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
+		if (userRoom == null) {
+			throw new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND);
+		}
+
+		if (roomUpdateRequest.getRoomParticipatePassword() != null) {
+			if (!userRoom.getRole().equalsIgnoreCase("admin")) {
+				throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
+			}
+			room.setRoomParticipatePassword(roomUpdateRequest.getRoomParticipatePassword());
+		}
+		if (roomUpdateRequest.getRoomName() != null) {
+			if (!userRoom.getRole().equalsIgnoreCase("admin")) {
+				throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
+			}
+			room.setRoomName(roomUpdateRequest.getRoomName());
+		}
+		if (roomUpdateRequest.getNotice() != null) {
+			room.setNotice(roomUpdateRequest.getNotice());
+		}
+		roomRepository.save(room);
+		return RoomSummarizeResponse.fromEntity(room);
+	}
+
+	public User findUserById(final Integer userId) {
 		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 	}
 
-	private Room findRoomById(final Integer roomId) {
+	public Room findRoomById(final Integer roomId) {
 		return roomRepository.findById(roomId).orElseThrow(() -> new NotFoundException(ResponseCode.ROOM_NOT_FOUND));
 	}
 
-	private UserRoom findUserRoomByUserAndRoom(final User user, final Room room) {
+	public UserRoom findUserRoomByUserAndRoom(final User user, final Room room) {
 		return userRoomRepository.findByUserAndRoom(user, room)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND));
+	}
+
+	public UserRoom findUserRoomByUserIdAndRoomId(final Integer userId, final Integer roomId) {
+		return userRoomRepository.findByUserUserIdAndRoomRoomId(userId, roomId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND));
+
+	}
+
+	public UserRoom findUserRoomByUserRoomId(final Integer userRoomId) {
+		return userRoomRepository.findUserRoomByUserRoomId(userRoomId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND));
 	}
 
@@ -260,9 +260,6 @@ public class RoomServiceImpl implements RoomService {
 		}
 		LocalDate today = LocalDate.now();
 		LocalDate plantUpdateDate = lastLoginTime.toLocalDate();
-		System.out.println(today);
-		System.out.println(plantUpdateDate);
-		System.out.println(plantUpdateDate.isBefore(today));
 		return plantUpdateDate.isBefore(today);
 	}
 }
