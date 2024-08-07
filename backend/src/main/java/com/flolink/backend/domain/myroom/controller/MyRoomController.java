@@ -19,6 +19,7 @@ import com.flolink.backend.domain.myroom.dto.response.HasItemInfoResponse;
 import com.flolink.backend.domain.myroom.dto.response.MyRoomResponse;
 import com.flolink.backend.domain.myroom.service.HasItemService;
 import com.flolink.backend.domain.myroom.service.MyRoomService;
+import com.flolink.backend.domain.store.entity.ItemType;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.CommonResponse;
 
@@ -55,10 +56,10 @@ public class MyRoomController {
 
 	@PatchMapping("/unequip")
 	@Operation(summary = "마이룸에 아이템 장착 해제")
-	public ResponseEntity<CommonResponse> unequipItem(@RequestParam final Integer hasItemId,
+	public ResponseEntity<CommonResponse> unequipItem(@RequestParam final ItemType itemType,
 		Authentication authentication) {
 		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
-		MyRoomResponse response = myRoomService.unequipItem(customUserDetails.getUserId(), hasItemId);
+		MyRoomResponse response = myRoomService.unequipItem(customUserDetails.getUserId(), itemType);
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, response));
 	}
 
