@@ -22,8 +22,6 @@ public interface RoomService {
 
 	List<RoomMemberInfoResponse> getRoomMemberInfos(final Integer userId, final Integer roomId);
 
-	RoomSummarizeResponse updateEmotion(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
-
 	RoomSummarizeResponse updateRoomName(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
 
 	RoomSummarizeResponse updateParticipatePassword(final Integer userId, final RoomUpdateRequest roomUpdateRequest);

@@ -3,6 +3,7 @@ package com.flolink.backend.domain.room.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +20,7 @@ import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
 import com.flolink.backend.domain.room.dto.response.RoomDetailResponse;
 import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
 import com.flolink.backend.domain.room.service.RoomService;
+import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
 
@@ -39,9 +41,10 @@ public class RoomController {
 
 	@GetMapping("")
 	@Operation(summary = "모든 방 정보 불러오기")
-	public ResponseEntity<?> getAllRooms() {
+	public ResponseEntity<?> getAllRooms(Authentication authentication) {
 		log.info("===모든 방 정보 불러오기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		List<RoomSummarizeResponse> roomSummarizeResponses = roomService.getAllRooms(userId);
 		log.info("===모든 방 정보 불러오기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomSummarizeResponses));
@@ -49,9 +52,12 @@ public class RoomController {
 
 	@PostMapping("")
 	@Operation(summary = "새로운 방 생성하기")
-	public ResponseEntity<?> createRoom(@RequestBody final RoomCreateRequest roomCreateRequest) {
+	public ResponseEntity<?> createRoom(Authentication authentication,
+		@RequestBody final RoomCreateRequest roomCreateRequest) {
 		log.info("===새로운 방 생성 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
+
 		RoomSummarizeResponse roomSummarizeResponse = roomService.createRoom(userId, roomCreateRequest);
 		log.info("===새로운 방 생성 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomSummarizeResponse));
@@ -59,9 +65,11 @@ public class RoomController {
 
 	@PostMapping("/register")
 	@Operation(summary = "기존 가족 방에 가입하기")
-	public ResponseEntity<?> registerRoom(@RequestBody final RoomParticipateRequest roomParticipateRequest) {
+	public ResponseEntity<?> registerRoom(Authentication authentication,
+		@RequestBody final RoomParticipateRequest roomParticipateRequest) {
 		log.info("===기존 가족 방에 가입하기 START===");
-		Integer userId = 2;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		RoomSummarizeResponse roomSummarizeResponse = roomService.registerRoom(userId, roomParticipateRequest);
 		log.info("===기존 가족 방에 가입하기 END===");
 		return roomSummarizeResponse == null ? ResponseEntity.ok(CommonResponse.of(ResponseCode.ROOM_ALREADY_ENTERED)) :
@@ -70,9 +78,10 @@ public class RoomController {
 
 	@GetMapping("/{roomId}/me/role")
 	@Operation(summary = "가족 방에서의 나의 권한 불러오기", description = "렌더링 용이며, 다른 api 요청 시에 포함할 필요는 없음")
-	public ResponseEntity<?> getRoom(@PathVariable final Integer roomId) {
+	public ResponseEntity<?> getRoom(Authentication authentication, @PathVariable final Integer roomId) {
 		log.info("===가족 방에서의 나의 권한 불러오기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		String myRole = roomService.getMyRole(userId, roomId);
 		log.info("===가족 방에서의 나의 권한 불러오기 END===");
 		return (myRole == null || myRole.isBlank()) ?
@@ -82,9 +91,10 @@ public class RoomController {
 
 	@GetMapping("/{roomId}")
 	@Operation(summary = "가족 방 정보 (구성원, 식물) 불러오기", description = "가족방의 구성원들의 정보와 식물 정보를 반환.")
-	public ResponseEntity<?> getRoomMemberInfos(@PathVariable final Integer roomId) {
+	public ResponseEntity<?> getRoomMemberInfos(Authentication authentication, @PathVariable final Integer roomId) {
 		log.info("===가족 방 정보 (구성원, 식물) 불러오기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		roomService.enterRoom(userId, roomId);
 		RoomDetailResponse roomDetailResponse = RoomDetailResponse.of(
 			roomService.getRoomById(roomId),
@@ -97,9 +107,11 @@ public class RoomController {
 
 	@PatchMapping("/{roomId}")
 	@Operation(summary = "가족 방 상세 정보 수정하기")
-	public ResponseEntity<?> updateRoomDetail(@RequestBody final RoomUpdateRequest roomUpdateRequest) {
+	public ResponseEntity<?> updateRoomDetail(Authentication authentication,
+		@RequestBody final RoomUpdateRequest roomUpdateRequest) {
 		log.info("===가족 방 상세 정보 수정하기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		//TODO: validation
 		RoomSummarizeResponse roomSummarizeResponse = null;
 		if (roomUpdateRequest.getRoomParticipatePassword() != null) {
@@ -111,9 +123,6 @@ public class RoomController {
 		if (roomUpdateRequest.getNotice() != null) {
 			roomSummarizeResponse = roomService.updateNotice(userId, roomUpdateRequest);
 		}
-		if (roomUpdateRequest.getMessage() != null) {
-			roomSummarizeResponse = roomService.updateEmotion(userId, roomUpdateRequest);
-		}
 		log.info("===가족 방 상세 정보 수정하기 END===");
 		return roomSummarizeResponse == null ? ResponseEntity.ok(CommonResponse.of(ResponseCode.NOT_FOUND_ERROR)) :
 			ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, roomSummarizeResponse));
@@ -121,9 +130,10 @@ public class RoomController {
 
 	@DeleteMapping("/{roomId}")
 	@Operation(summary = "가족 방 나가기")
-	public ResponseEntity<?> exitRoom(@PathVariable final Integer roomId) {
+	public ResponseEntity<?> exitRoom(Authentication authentication, @PathVariable final Integer roomId) {
 		log.info("===가족 방 나가기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		String done = roomService.exitRoom(userId, roomId);
 		log.info("===가족 방 나가기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, done));
@@ -131,10 +141,11 @@ public class RoomController {
 
 	@DeleteMapping("/{roomId}/kick/{targetUserRoomId}")
 	@Operation(summary = "가족 방 구성원 추방하기")
-	public ResponseEntity<?> kickRoomMember(@PathVariable final Integer roomId,
+	public ResponseEntity<?> kickRoomMember(Authentication authentication, @PathVariable final Integer roomId,
 		@PathVariable final Integer targetUserRoomId) {
 		log.info("===가족 방 추방하기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		String done = roomService.kickRoomMember(userId, roomId, targetUserRoomId);
 		log.info("===가족 방 추방하기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, done));
