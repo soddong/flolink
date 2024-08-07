@@ -9,7 +9,14 @@ public class ExpUtil {
 		return Math.min(level, 4);
 	}
 
-	public static int calculateNowExp(int exp, int memberSize) {
-		return exp % (GlobalConstant.LEVEL_EXP_BASE_UNIT * memberSize);
+	/**
+	 * 프론트에 시각적으로 경험치 비율을 보여주기 위해
+	 * 총경험치 100대비 현재 경험치를 계산
+	 * @param exp
+	 * @param memberSize
+	 * @return
+	 */
+	public static int calculateDisplayNowExp(int exp, int memberSize) {
+		return (exp % (GlobalConstant.LEVEL_EXP_BASE_UNIT * memberSize)) / (4 * memberSize);
 	}
 }
