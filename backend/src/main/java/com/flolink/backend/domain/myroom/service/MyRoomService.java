@@ -6,7 +6,7 @@ import com.flolink.backend.domain.myroom.entity.MyRoom;
 public interface MyRoomService {
 	MyRoom createMyRoom();
 
-	MyRoomResponse getMyRoom(Integer userId);
+	MyRoomResponse getMyRoom(Integer userRoomId);
 
 	MyRoomResponse equipItem(Integer userId, Integer hasItemId);
 

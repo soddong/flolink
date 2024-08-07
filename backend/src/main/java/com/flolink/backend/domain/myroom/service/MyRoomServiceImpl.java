@@ -11,6 +11,8 @@ import com.flolink.backend.domain.myroom.entity.HasItem;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.myroom.repository.HasItemRepository;
 import com.flolink.backend.domain.myroom.repository.MyRoomRepository;
+import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.common.ResponseCode;
@@ -25,6 +27,7 @@ public class MyRoomServiceImpl implements MyRoomService {
 	private final MyRoomRepository myRoomRepository;
 	private final UserRepository userRepository;
 	private final HasItemRepository hasItemRepository;
+	private final UserRoomRepository userRoomRepository;
 
 	/**
 	 * 유저가 생성될때 빈 마이룸이 생성 - User Controller Layer 에서 사용
@@ -37,17 +40,16 @@ public class MyRoomServiceImpl implements MyRoomService {
 	}
 
 	/**
-	 * 마이룸 정보 반환
-	 * @param userId 사용자 ID
+	 * userRoomId에 해당되는 마이룸 정보 반환
+	 * @param userRoomId 유저룸 ID
 	 * @return MyRoomResponse 마이룸 정보
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public MyRoomResponse getMyRoom(Integer userId) {
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
-
-		MyRoom myRoom = user.getMyRoom();
+	public MyRoomResponse getMyRoom(Integer userRoomId) {
+		UserRoom userRoom = userRoomRepository.findById(userRoomId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND));
+		MyRoom myRoom = userRoom.getUser().getMyRoom();
 
 		List<HasItemInfoResponse> hasItemInfoResponses = myRoom.getItems().stream()
 			.filter(HasItem::getEquippedYn)
