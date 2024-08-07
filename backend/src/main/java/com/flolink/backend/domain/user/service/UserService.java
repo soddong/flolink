@@ -16,13 +16,15 @@ public interface UserService {
 
 	void forgotPasswordChange(ForgotPasswordChangeRequest forgotPasswordChangeRequest);
 
-	void passwordChange(ChangePasswordRequest changePasswordRequest, int userId);
+	void passwordChange(ChangePasswordRequest changePasswordRequest, Integer userId);
 
-	UserInfoResponse getUserInfo(int userId);
+	UserInfoResponse getUserInfo(Integer userId);
 
-	void deleteUserInfo(int userId);
+	void deleteUserInfo(Integer userId);
 
-	void modifyNickname(String nickname, int userId);
+	void modifyNickname(String nickname, Integer userId);
 
-    void modifyMessage(StatusMessageRequest statusMessageRequest, int userId);
+	void modifyMessage(StatusMessageRequest statusMessageRequest, Integer userId);
+	
+	void modifyProfileAndEmotion(ProfileAndEmotionRequest profileAndEmotionRequest, Integer userId);
 }

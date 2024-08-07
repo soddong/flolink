@@ -125,11 +125,22 @@ public class UserController {
 	@Operation(summary = "상태메세지 변경", description = "상태메세지를 수정한다.")
 	@PutMapping("/myInfo/message")
 	public ResponseEntity<?> updateMessage(@RequestBody StatusMessageRequest statusMessageRequest,
-										   Authentication authentication) {
+		Authentication authentication) {
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 		log.info("===상태 메세지 변경 START===");
 		userService.modifyMessage(statusMessageRequest, userDetails.getUserId());
 		log.info("===상태 메세지 변경 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
+
+	@Operation(summary = "프로필 사진 및 기분 상태 변경", description = "사전에 정의된 프로필사진 및 기분상태를 변경한다.")
+	@PutMapping("/myInfo/profile/emotion")
+	public ResponseEntity<?> updateProfileAndEmotion(@RequestBody ProfileAndEmotionRequest profileAndEmotionRequest,
+													 Authentication authentication) {
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		log.info("===프로필 및 기분 변경 START===");
+		userService.modifyProfileAndEmotion(profileAndEmotionRequest, userDetails.getUserId());
+		log.info("===프로필 및 기분 변경 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 

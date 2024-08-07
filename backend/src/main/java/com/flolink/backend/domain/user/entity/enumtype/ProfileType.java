@@ -1,5 +1,10 @@
 package com.flolink.backend.domain.user.entity.enumtype;
 
 public enum ProfileType {
-	HONEYBEE;
+	COW,
+	RABBIT,
+	DOG,
+	SNAKE,
+	TIGER,
+	MOUSE
 }

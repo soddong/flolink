@@ -84,12 +84,12 @@ public class User {
 	@Builder.Default
 	@Column(name = "profile", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private ProfileType profile = ProfileType.HONEYBEE;
+	private ProfileType profile = ProfileType.COW;
 
 	@Builder.Default
 	@Column(name = "emotion", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private EmotionType emotion = EmotionType.NORMAL;
+	private EmotionType emotion = EmotionType.HAPPY;
 
 	@Column(name = "status_message")
 	private String statusMessage;
@@ -114,8 +114,8 @@ public class User {
 				.createdAt(LocalDateTime.now())
 				.useYn(true)
 				.role(role)
-				.profile(ProfileType.HONEYBEE)
-				.emotion(EmotionType.NORMAL)
+				.profile(ProfileType.COW)
+				.emotion(EmotionType.HAPPY)
 				.build();
 	}
 }
