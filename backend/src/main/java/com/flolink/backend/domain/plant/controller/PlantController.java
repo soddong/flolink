@@ -3,6 +3,7 @@ package com.flolink.backend.domain.plant.controller;
 import java.time.Year;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import com.flolink.backend.domain.plant.dto.response.PlantHistoryDetailResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantHistorySummaryResponse;
 import com.flolink.backend.domain.plant.service.PlantHistoryService;
 import com.flolink.backend.domain.plant.service.PlantUserServiceImpl;
+import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
 
@@ -45,10 +47,12 @@ public class PlantController {
 	@GetMapping("/{plantId}/historys/{historyId}")
 	@Operation(summary = "기억정원 추억 불러오기", description = "특정달의 추억 조회")
 	public ResponseEntity<?> getPlantHistoryDetail(@PathVariable("plantId") final Integer plantId,
-		@PathVariable("historyId") final Integer historyId) {
+		@PathVariable("historyId") final Integer historyId, Authentication authentication) {
 		log.info("===기억정원 추억 불러오기 START===");
-		Integer userId = 1;
-		PlantHistoryDetailResponse historyDetailResponse = userExpService.getUserExpHistoryDetail(userId, historyId);
+		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+		PlantHistoryDetailResponse historyDetailResponse = userExpService.getUserExpHistoryDetail(
+			customUserDetails.getUserId(), historyId
+		);
 		log.info("===기억정원 추억 불러오기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, historyDetailResponse));
 	}

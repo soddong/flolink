@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.myroom.service.HasItemService;
 import com.flolink.backend.domain.store.dto.response.ItemCommonResponse;
+import com.flolink.backend.domain.store.dto.response.ItemPurchaseHistoryResponse;
 import com.flolink.backend.domain.store.dto.response.ItemPurchaseResponse;
 import com.flolink.backend.domain.store.entity.Item;
 import com.flolink.backend.domain.store.entity.ItemPurchaseHistory;
@@ -114,10 +115,10 @@ public class ItemServiceImpl implements ItemService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<ItemPurchaseResponse> getPurchaseHistory(final Integer userId) {
+	public List<ItemPurchaseHistoryResponse> getPurchaseHistory(final Integer userId) {
 		return itemPurchaseRepository.findByUserIdOrderByPurchaseAtDesc(userId)
 			.stream()
-			.map(ItemPurchaseResponse::fromEntity)
+			.map(ItemPurchaseHistoryResponse::fromEntity)
 			.toList();
 	}
 
