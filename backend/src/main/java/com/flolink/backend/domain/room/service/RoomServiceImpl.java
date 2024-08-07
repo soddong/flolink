@@ -20,6 +20,7 @@ import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
 import com.flolink.backend.domain.room.entity.Nickname;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.room.repository.NicknameRepository;
 import com.flolink.backend.domain.room.repository.RoomRepository;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.domain.user.entity.User;
@@ -39,6 +40,7 @@ public class RoomServiceImpl implements RoomService {
 	private final RoomRepository roomRepository;
 	private final UserRepository userRepository;
 	private final UserRoomRepository userRoomRepository;
+	private final NicknameRepository nicknameRepository;
 
 	@Override
 	public List<RoomSummarizeResponse> getAllRooms(final Integer userId) {
@@ -66,6 +68,7 @@ public class RoomServiceImpl implements RoomService {
 		UserRoom userRoom = userRoomRepository.save(
 			UserRoom.of(user, room)
 		);
+		userRoom.setRole("admin");
 
 		plantService.createPlant(userRoom, room);
 		return RoomSummarizeResponse.fromEntity(room);
@@ -182,8 +185,9 @@ public class RoomServiceImpl implements RoomService {
 				}
 			}
 		}
-		userRoomRepository.delete(userRoom);
 
+		userRoomRepository.delete(userRoom);
+		room.getUserRoomList().remove(userRoom);
 		if (room.getUserRoomList().isEmpty()) {
 			roomRepository.delete(room);
 		}
@@ -218,15 +222,22 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	public String updateRoomMemberNickname(final Integer userId, final NicknameUpdateRequest nicknameUpdateRequest) {
-		UserRoom userRoom = userRoomRepository.findUserRoomByUserRoomId(nicknameUpdateRequest.getUser_room_id());
-		if (userRoom.getUser().getUserId().equals(userId)) {
-			userRoom.getNickNameList().forEach((nickname) -> {
-				if (nickname.getTargetUserRoomId().equals(nicknameUpdateRequest.getTarget_user_room_id())) {
-					nickname.setTargetNickname(nicknameUpdateRequest.getTarget_nickname());
-				}
-			});
+
+		System.out.println("here 1");
+		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, nicknameUpdateRequest.getRoomId());
+		Nickname nickname = nicknameRepository.findByUserRoomUserRoomIdAndTargetUserRoomId(userRoom.getUserRoomId(),
+			nicknameUpdateRequest.getTargetUserRoomId());
+		if (nickname == null) {
+			nickname = Nickname.builder()
+				.userRoom(userRoom)
+				.targetUserRoomId(nicknameUpdateRequest.getTargetUserRoomId())
+				.targetNickname(nicknameUpdateRequest.getTargetNickname())
+				.build();
+			nicknameRepository.save(nickname);
+		} else {
+			nickname.setTargetNickname(nicknameUpdateRequest.getTargetNickname());
+			nicknameRepository.save(nickname);
 		}
-		userRoomRepository.save(userRoom);
 		return "success";
 	}
 
