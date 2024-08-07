@@ -21,6 +21,7 @@ import LocationPage from './pages/location/LocationPage';
 import UserCertPage from './pages/certificate/UserCertPage';
 import LoginRedirectPage from './pages/login/LoginRedirectPage';
 import FeedEditPage from './pages/feed/FeedEditPage';
+import MainLayout from './pages/main/MainLayout';
 
 const router = createBrowserRouter([  
   {
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/main",
-    element : <MainPage />
+    element : <MainLayout />
   },
   {
     path : "/FindAccount",

@@ -5,28 +5,40 @@ import { useNavigate } from 'react-router-dom';
 import soldoutImage from '../../assets/itemstore/soldout.png';
 import useItemStore from '../../store/itemStore';
 import { useItems, usePaymentHistory, usePurchaseHistory } from '../../hook/itemstore/itemstoreHook.js'
+import { useInventory } from '../../hook/user/userHook.js';
 import ItemStoreModal from './itemStoreModal.jsx';
+import { purchaseItem } from '../../service/itemstore/itemstoreApi.js';
+import { useQueryClient } from 'react-query';
 
-function ItemStorePage(props) {
+function ItemStorePage() {
     const [activeTab, setActiveTab] = useState('itemlist');
     const [expandedItem, setExpandedItem] = useState(null);
-    const { userInventory, items, images, setItems, setImages, generateImagesFromNames, setPurchaseHistory, setPaymentHistory, histories, coins } = useItemStore();
+    const { userInventory, setUserInventory, items, images, setItems, setImages, generateImagesFromNames, setPurchaseHistory, setPaymentHistory, histories, coins } = useItemStore();
     const { data: itemsData, isLoading: itemsLoading, error: itemsError } = useItems();
     const { data: paymentHistoryData, isLoading: paymentHistoryLoading, error: paymentHistoryError } = usePaymentHistory();
     const { data: purchaseHistoryData, isLoading: purchaseHistoryLoading, error: purchaseHistoryError } = usePurchaseHistory();
+    const { data: inventory, isLoading: inventoryLoading, error: inventoryError } = useInventory();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const [purchaseStatus, setPurchaseStatus] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(false)
+    const [selectedItem, setSelectedItem] = useState(false);
+    const [imgSrc, setImgSrc] = useState(null);
 
     const isItemPurchased = (itemName, variantIndex) => {
         return userInventory[itemName] && userInventory[itemName].includes(variantIndex + 1);
     };
 
-    const openModal = (variant) => {
+    const openModal = (variant, imageSrc) => {
         if (!isModalOpen) {
-            setSelectedItem(variant)
+            setImgSrc(imageSrc)
             setIsModalOpen(true);
+
+            itemsData.data.map((item) => {
+                if (variant === item.itemName) {
+                    setSelectedItem(item.itemId);
+                    return;
+                }
+            })
         }
     };
 
@@ -37,21 +49,30 @@ function ItemStorePage(props) {
             setIsClosing(false);
             setPurchaseStatus(null);
             setSelectedItem(null);
+            setImgSrc(null);
         }, 300);
     };
 
-    const handlePurchase = async () => {
-        // 여기에 나중에 결제 처리 할것
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(Math.random() > 0.5);
-            }, 1000);
-        });
-    };
+    const queryClient = useQueryClient();
 
     const processPurchase = async () => {
-        const result = await handlePurchase();
-        setPurchaseStatus(result ? '결제가 완료되었습니다.' : '결제가 취소되었습니다.');
+        try {
+            const result =  await purchaseItem(selectedItem);
+            setPurchaseStatus('결제가 완료되었습니다.' );
+
+            queryClient.invalidateQueries('inventory'); 
+            queryClient.invalidateQueries('items');   
+        } catch(error) {
+           
+            if (error.response && error.response.data.code === 'ITEM_INSUFFICIENT_FUNDS_ERROR') {
+                console.log('에러1')
+                setPurchaseStatus('포인트가 부족합니다.');
+            } else if (error.response && error.response.data.code === 'ITEM_ALREADY_PURCHASE_ERROR') {
+              console.log('에러2')
+              setPurchaseStatus('산거를 또 사려 하시네요? 어케했누')
+            }
+        }
+        
     };
 
     useEffect(() => {
@@ -75,11 +96,12 @@ function ItemStorePage(props) {
                 const baseName = item.itemName.replace(/[0-9]/g, '');
 
                 if (!processedItems.some(el => el.name === baseName)) {
-                    processedItems.push({ name: baseName, variants: [] });
+                    processedItems.push({ name: baseName, variants: [], prices: [] });
                 }
 
                 const itemIndex = processedItems.findIndex(el => el.name === baseName);
                 processedItems[itemIndex].variants.push(item.itemName);
+                processedItems[itemIndex].prices.push(item.price);
 
                 if (!itemNames.includes(item.itemName)) {
                     itemNames.push(item.itemName);
@@ -93,21 +115,28 @@ function ItemStorePage(props) {
 
     useEffect(() => {
         if (paymentHistoryData && paymentHistoryData.data) {
-
+            // console.log(paymentHistoryData.data)
             setPaymentHistory(paymentHistoryData.data)
         }
     }, [paymentHistoryData])
 
     useEffect(() => {
         if (purchaseHistoryData && purchaseHistoryData.data) {
+            // console.log(purchaseHistoryData.data)
             setPurchaseHistory(purchaseHistoryData.data)
         }
     }, [purchaseHistoryData])
 
+    useEffect(() => {
+        if (inventory && inventory.data) {
+            // console.log(inventory.data)
+            setUserInventory(inventory.data);
+        }
+    }, [inventory])
+
     const navigate = useNavigate();
 
     const toggleItem = (itemName) => {
-        console.log(histories)
         setExpandedItem(expandedItem === itemName ? null : itemName);
     };
 
@@ -119,7 +148,7 @@ function ItemStorePage(props) {
                 onClose={closeModal}
                 processPurchase={processPurchase}
                 purchaseStatus={purchaseStatus}
-                selectedItem={selectedItem}
+                imgSrc = {imgSrc}
             />
             <div className={styles.header}>
                 <div>
@@ -185,16 +214,23 @@ function ItemStorePage(props) {
                                             onClick={(e) => {
                                                 if (!isItemPurchased(item.name, variantIndex)) {
                                                     e.stopPropagation();
-                                                    openModal(variant);
+                                                    openModal(variant, images[item.name][variantIndex]);
                                                 }
                                             }}
                                           >
-                                            <img 
-                                                src={images[item.name][variantIndex]} 
-                                                alt={`${item.name} variant ${variantIndex + 1}`} 
-                                                className={styles.variantImage}
-                                            />
-                                            <span className={styles.variantNumber}>{item.name} {variantIndex + 1}</span>
+                                            <div className={styles.iteminfos}>
+                                                <img 
+                                                    src={images[item.name][variantIndex]} 
+                                                    alt={`${item.name} variant ${variantIndex + 1}`} 
+                                                    className={styles.variantImage}
+                                                />
+                                                <span className={styles.variantNumber}>{item.name} {variantIndex + 1}</span>
+                                            </div>
+                                            <div>
+                                                <span className={styles.variantNumber}>
+                                                    {item.prices[variantIndex]}원
+                                                </span>
+                                            </div>
                                             {isItemPurchased(item.name, variantIndex) && (
                                                 <img 
                                                     src={soldoutImage} 

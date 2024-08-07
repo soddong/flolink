@@ -2,7 +2,8 @@ import React from 'react';
 import styles from '../../css/payment/payment.module.css';
 import {useEffect,useRef} from 'react';
 
-function ItemStoreModal({ isOpen, isClosing, onClose, processPurchase, purchaseStatus }) {
+
+function ItemStoreModal({ isOpen, isClosing, onClose, processPurchase, purchaseStatus, imgSrc }) {
     
     const modalRef = useRef(null);
 
@@ -24,7 +25,6 @@ function ItemStoreModal({ isOpen, isClosing, onClose, processPurchase, purchaseS
 
     if (!isOpen) return null;
 
-
     return (
         <div 
             className={`${styles.modal} ${styles.modalOpen} ${isClosing ? styles.modalClosing : ''}`}
@@ -33,11 +33,13 @@ function ItemStoreModal({ isOpen, isClosing, onClose, processPurchase, purchaseS
         >
                 {purchaseStatus ? (
                     <div className={`${styles.modalContent} ${isClosing ? styles.modalContentClosing : ''}`}> 
+                        <p>{purchaseStatus}</p>
                         <button onClick={onClose}>닫기</button>
                     </div>
                 ) : (
                     <div className={`${styles.modalContent} ${isClosing ? styles.modalContentClosing : ''}`}>
-                        {/* <img src={selectedItem?.image} alt={`${selectedItem?.points} points`} className={styles.modalImg}/> */}
+                       
+                        <img src={imgSrc} className={styles.modalImg}/>
                         <p>정말 결제하시겠습니까?</p>
                         <p>
                             <button onClick={processPurchase}>결제</button>

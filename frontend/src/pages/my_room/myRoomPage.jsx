@@ -7,39 +7,16 @@ import room from '../../assets/myroom/bg_myroom.png';
 import { useState, useEffect,useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useItemStore from '../../store/itemStore';
+import { useInventory, useMyroom } from '../../hook/user/userHook.js';
+
 
 function MyRoomPage() {
-    const { items, images, selectedItems, userInventory, setSelectedItems } = useItemStore();
+    const { items, images, selectedItems, userInventory, setSelectedItems, setUserInventory } = useItemStore();
     const [isInventoryOpen, setIsInventoryOpen] = useState(false);
     const [selectedItemType, setSelectedItemType] = useState(null);
     const [isClosing, setIsClosing] = useState(false);
-    
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-
-                const [inventoryResponse, roomResponse] = await Promise.all([
-                    fetch('/api/v1/myroom/inventory'),
-                    fetch('/api/v1/myroom')
-                ]);
-
-                if (!inventoryResponse.ok || !roomResponse.ok) {
-                    throw new Error('API 요청에 실패했습니다.');
-                }
-
-                const inventoryData = await inventoryResponse.json();
-                const roomData = await roomResponse.json();
-
-
-                setUserInventory(inventoryData);
-                setSelectedItems(roomData);
-            } catch (error) {
-                console.error('데이터 가져오기 실패:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
+    const { data: inventory, isLoading: inventoryLoading, error: inventoryError } = useInventory();
+    const { data: myroom, isLoading: myroomLoading, error: myroomError } = useMyroom();
 
     useEffect(() => {
         if (isInventoryOpen) {
@@ -55,6 +32,12 @@ function MyRoomPage() {
             document.body.style.overflow = 'unset';
         };
     }, [isInventoryOpen]);
+
+    // useEffect(() => {
+    //     if (inventory && inventory.data) {
+    //         setUserInventory(inventory.data);
+    //     }
+    // }, [inventory])
 
     const inventoryRef = useRef(null);
 
@@ -163,7 +146,6 @@ function MyRoomPage() {
                     )
                 ))}
             </div>
-            <NavBar/>
             {isInventoryOpen && (
                 <div 
                     className={`${styles.inventoryToast} ${styles.inventoryToastOpen} ${isClosing ? styles.inventoryToastClosing : ''}`}
