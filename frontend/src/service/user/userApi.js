@@ -1,5 +1,10 @@
 import { axiosCommonInstance } from '../../apis/axiosInstance';
 
+export const fetchInventory = async () => {
+    const { data } = await axiosCommonInstance.get('/myroom/inventory');
+    return data;
+}
+
 // 비밀번호 변경
 export const changePassword = async (loginId, newPassword, newPasswordConfirm) => {
     const { data } = await axiosCommonInstance.put('/users/reset/pw', {
@@ -12,7 +17,7 @@ export const changePassword = async (loginId, newPassword, newPasswordConfirm) =
 
 // 닉네임 변경
 export const changeNickname = async (nickname) => {
-    const { data } = await axiosCommonInstance.put('/users/myinfo/nickname', {
+    const { data } = await axiosCommonInstance.put('/users/myInfo/nickname', {
         nickname: nickname
     });
     return data;
@@ -41,4 +46,5 @@ export const changeEmotion = async (emotion) => {
     });
     return data;
 }
+
 

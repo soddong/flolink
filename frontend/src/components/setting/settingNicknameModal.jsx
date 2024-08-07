@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../../css/setting/settingmodal.module.css';
+import {changeNickname} from '../../service/user/userApi.js';
 
-function SettingNicknameModal({nickname, setShowNicknameModal, changeNickname}) {
+
+function SettingNicknameModal({nickname, setShowNicknameModal, setNickname}) {
     const [inputNickname, setInputNickname] = useState('');
 
     const handleInputChange = (e) => {
@@ -12,10 +14,8 @@ function SettingNicknameModal({nickname, setShowNicknameModal, changeNickname}) 
     };
 
     const handleSave = () => {
-        if (inputNickname.trim()) {
-            changeNickname(inputNickname);
-            setShowNicknameModal(false);
-        }
+        changeNickname(inputNickname);
+        setShowNicknameModal(false);
     };
 
     return (

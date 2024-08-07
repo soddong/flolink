@@ -1,9 +1,15 @@
 import React from 'react';
 
-function IdField({ label, type = 'text', placeholder, setUsername, setUsernameMessage}) {
+function IdField({ label, type = 'text', placeholder, setUsername, setUsernameMessage }) {
     const handleUsernameChange = (e) => {    
-        setUsername(e.target.value);
-        setUsernameMessage('');
+        const value = e.target.value;
+        setUsername(value);
+
+        if (value.length < 7) {
+        setUsernameMessage('아이디는 7글자 이상');
+        } else {
+          setUsernameMessage('');
+        }
       };
   return (
     <div className="w-full">
