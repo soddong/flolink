@@ -1,14 +1,29 @@
 package com.flolink.backend.domain.user.service;
 
-import com.flolink.backend.global.auth.entity.SuccessToken;
-import com.flolink.backend.global.auth.repository.SuccessTokenRepository;
+import static com.flolink.backend.domain.user.entity.enumtype.RoleType.*;
+
+import java.time.LocalDateTime;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.flolink.backend.domain.myroom.entity.MyRoom;
-import com.flolink.backend.domain.user.dto.request.*;
+import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
+import com.flolink.backend.domain.user.dto.request.EmotionRequest;
+import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
+import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
+import com.flolink.backend.domain.user.dto.request.ProfileRequest;
+import com.flolink.backend.domain.user.dto.request.StatusMessageRequest;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.domain.user.util.LoginIdEditor;
+import com.flolink.backend.global.auth.entity.SuccessToken;
+import com.flolink.backend.global.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.DuplicateException;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -19,14 +34,6 @@ import com.flolink.backend.global.util.JwtUtil;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-
-import static com.flolink.backend.domain.user.entity.enumtype.RoleType.LOCAL;
 
 @Slf4j
 @Service
@@ -196,7 +203,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void passwordChange(ChangePasswordRequest changePasswordRequest, int userId) {
+	public void passwordChange(ChangePasswordRequest changePasswordRequest, Integer userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
@@ -217,7 +224,7 @@ public class UserServiceImpl implements UserService {
 	 * @return (닉네임, 보유포인트, 프로필사진) 반환
 	 */
 	@Override
-	public UserInfoResponse getUserInfo(int userId) {
+	public UserInfoResponse getUserInfo(Integer userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
@@ -234,7 +241,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	@Transactional
-	public void deleteUserInfo(int userId) {
+	public void deleteUserInfo(Integer userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
@@ -248,7 +255,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	@Transactional
-	public void modifyNickname(String nickname, int userId) {
+	public void modifyNickname(String nickname, Integer userId) {
 		if (nickname.isBlank()) {
 			throw new NotFoundException(ResponseCode.BLANK_NICKNAME);
 		}
@@ -259,11 +266,43 @@ public class UserServiceImpl implements UserService {
 		user.setNickname(nickname);
 	}
 
+	/**
+	 *
+	 * @param statusMessageRequest 변경할 메세지
+	 * @param userId 로그인한 유저 아이디
+	 */
 	@Override
-	public void modifyMessage(StatusMessageRequest statusMessageRequest, int userId) {
+	@Transactional
+	public void modifyMessage(StatusMessageRequest statusMessageRequest, Integer userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 		user.setStatusMessage(statusMessageRequest.getStatusMessage());
+	}
+
+	/**
+	 *
+	 * @param profileRequest 변경할 프로필사진
+	 * @param userId 로그인한 유저 아이디
+	 */
+	@Override
+	@Transactional
+	public void modifyProfile(ProfileRequest profileRequest, Integer userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+		user.setProfile(profileRequest.getProfile());
+	}
+
+	/**
+	 *
+	 * @param emotionRequest 변경할 기분 상태
+	 * @param userId 로그인한 유저 아이디
+	 */
+	@Override
+	@Transactional
+	public void modifyEmotion(EmotionRequest emotionRequest, Integer userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+		user.setEmotion(emotionRequest.getEmotion());
 	}
 
 }
