@@ -146,7 +146,6 @@ function MyRoomPage() {
                     )
                 ))}
             </div>
-            <NavBar/>
             {isInventoryOpen && (
                 <div 
                     className={`${styles.inventoryToast} ${styles.inventoryToastOpen} ${isClosing ? styles.inventoryToastClosing : ''}`}

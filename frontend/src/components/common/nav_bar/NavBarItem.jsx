@@ -1,6 +1,6 @@
 function NavBarItem (props) {
   return (
-    <div>
+    <div onClick={props.onClick}>
       <span className="material-symbols-outlined flex justify-center" style={{'fontVariationSettings': '"FILL" 0', 'fontSize': '35px', 'color': '#767676'}}>
         {props.span}
       </span>
