@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FeedForm from '../../components/feed/FeedForm';
 import logo from '../../assets/logo/logo.png';
-
+import userRoomStore from '../../store/userRoomStore';
 const FeedCreatePage = () => {
   const navigate = useNavigate();
-
+  const roomId = userRoomStore((state)=>state.roomId);
   return (
     <div className="min-h-screen bg-custom-gradient p-4">
       <header className="mb-4 flex justify-center items-center relative">
@@ -19,7 +19,7 @@ const FeedCreatePage = () => {
       </header>
       <h1 className="text-center text-sm font-bold mb-16">Write your own diary</h1>
       <div className="mt-4">
-        <FeedForm />
+        <FeedForm roomId={roomId} />
       </div>
     </div>
   );

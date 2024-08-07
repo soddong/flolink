@@ -78,13 +78,23 @@ const FeedList = ({ feeds: initialFeeds, currentUser }) => {
       ) : (
         <div className="text-center text-gray-600">
           <p>피드가 없습니다</p>
-          <p className="mt-2">피드를 작성해보세요!</p>
-          <button
+          <p className="mt-2">당신의 하루를 작성해보세요!</p>
+          {/* <button
             className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
             onClick={() => window.location.href = '/feedcreate'}
           >
-            피드 작성하기
-          </button>
+            작성하기
+          </button> */}
+          {/* <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"
+          onClick={() => window.location.href = '/feedcreate'}>
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+              작성하기
+              </span>
+              </button> */}
+              <button type="button" className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+              onClick={() => window.location.href = '/feedcreate'}>
+              작성하기
+              </button>
         </div>
       )}
     </div>
