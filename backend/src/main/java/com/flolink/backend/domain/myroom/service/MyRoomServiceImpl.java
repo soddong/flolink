@@ -1,8 +1,11 @@
 package com.flolink.backend.domain.myroom.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flolink.backend.domain.myroom.dto.response.HasItemInfoResponse;
 import com.flolink.backend.domain.myroom.dto.response.MyRoomResponse;
 import com.flolink.backend.domain.myroom.entity.HasItem;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
@@ -44,10 +47,14 @@ public class MyRoomServiceImpl implements MyRoomService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
-		MyRoom myRoom = myRoomRepository.findById(1)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.MY_ROOM_NOT_FOUND));
+		MyRoom myRoom = user.getMyRoom();
 
-		return MyRoomResponse.fromEntity(myRoom);
+		List<HasItemInfoResponse> hasItemInfoResponses = myRoom.getItems().stream()
+			.filter(HasItem::getEquippedYn)
+			.map(HasItemInfoResponse::fromEntity)
+			.toList();
+
+		return MyRoomResponse.fromEntity(myRoom, hasItemInfoResponses);
 	}
 
 	/**
@@ -72,7 +79,12 @@ public class MyRoomServiceImpl implements MyRoomService {
 
 		myRoom.unequipPreItemAndEquipItem(hasItem);
 
-		return MyRoomResponse.fromEntity(myRoom);
+		List<HasItemInfoResponse> hasItemInfoResponses = myRoom.getItems().stream()
+			.filter(HasItem::getEquippedYn)
+			.map(HasItemInfoResponse::fromEntity)
+			.toList();
+
+		return MyRoomResponse.fromEntity(myRoom, hasItemInfoResponses);
 	}
 
 	/**
@@ -96,6 +108,11 @@ public class MyRoomServiceImpl implements MyRoomService {
 
 		myRoom.unequipItem(hasItem);
 
-		return MyRoomResponse.fromEntity(myRoom);
+		List<HasItemInfoResponse> hasItemInfoResponses = myRoom.getItems().stream()
+			.filter(HasItem::getEquippedYn)
+			.map(HasItemInfoResponse::fromEntity)
+			.toList();
+
+		return MyRoomResponse.fromEntity(myRoom, hasItemInfoResponses);
 	}
 }
