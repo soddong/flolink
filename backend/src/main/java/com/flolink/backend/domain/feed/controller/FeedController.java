@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +22,7 @@ import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.feed.dto.response.FeedResponse;
 import com.flolink.backend.domain.feed.service.FeedService;
+import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
 
@@ -41,25 +43,24 @@ public class FeedController {
 	//최신 순 검색
 	@GetMapping("")
 	@Operation(summary = "피드 불러오기", description = "초기 localdatetime값 지정 필요. 20개 단위 조회")
-	public ResponseEntity<?> getFeeds(@RequestParam("roomId") final Integer roomId,
+	public ResponseEntity<?> getFeeds(Authentication authentication, @RequestParam("roomId") final Integer roomId,
 		@RequestParam(name = "lastFeedDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime lastFeedDate,
 		@RequestParam(defaultValue = "20") final Integer size) {
 		log.info("===피드 불러오기 START===");
-		System.out.println(lastFeedDate);
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		List<FeedResponse> feedResponseList = feedService.getFeeds(userId, roomId, lastFeedDate, size);
-		for (FeedResponse feedResponse : feedResponseList) {
-			System.out.println(feedResponse.getContent());
-		}
 		log.info("===피드 불러오기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, feedResponseList));
 	}
 
 	@PostMapping("")
 	@Operation(summary = "피드 생성하기")
-	public ResponseEntity<?> createFeed(@ModelAttribute final FeedCreateRequest feedCreateRequest) {
+	public ResponseEntity<?> createFeed(Authentication authentication,
+		@ModelAttribute final FeedCreateRequest feedCreateRequest) {
 		log.info("===피드 생성 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		FeedResponse feedResponse = feedService.createFeed(userId, feedCreateRequest);
 		log.info("===피드 생성 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, feedResponse));
@@ -67,10 +68,11 @@ public class FeedController {
 
 	@PatchMapping("/{feedId}")
 	@Operation(summary = "피드 수정하기")
-	public ResponseEntity<?> updateFeed(@PathVariable final Integer feedId,
+	public ResponseEntity<?> updateFeed(Authentication authentication, @PathVariable final Integer feedId,
 		@ModelAttribute final FeedUpdateRequest feedUpdateRequest) {
 		log.info("===피드 수정 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		FeedResponse feedResponse = feedService.updateFeed(userId, feedId, feedUpdateRequest);
 		log.info("===피드 수정 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, feedResponse));
@@ -78,9 +80,10 @@ public class FeedController {
 
 	@DeleteMapping("/{feedId}")
 	@Operation(summary = "피드 삭제하기")
-	public ResponseEntity<?> deleteFeed(@PathVariable final Integer feedId) {
+	public ResponseEntity<?> deleteFeed(Authentication authentication, @PathVariable final Integer feedId) {
 		log.info("===피드 삭제 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		String done = feedService.deleteFeed(userId, feedId);
 		log.info("===피드 삭제 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, done));
@@ -88,10 +91,11 @@ public class FeedController {
 
 	@PostMapping("/{feedId}/comments")
 	@Operation(summary = "피드 댓글 달기")
-	public ResponseEntity<?> createComment(@PathVariable final Integer feedId,
+	public ResponseEntity<?> createComment(Authentication authentication, @PathVariable final Integer feedId,
 		@RequestBody final FeedCommentRequest feedCommentRequest) {
 		log.info("===피드 댓글 달기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		feedService.createComment(userId, feedId, feedCommentRequest);
 		log.info("===피드 댓글 달기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
@@ -99,10 +103,11 @@ public class FeedController {
 
 	@PatchMapping("/{feedId}/comments/{commentId}")
 	@Operation(summary = "피드 댓글 수정하기")
-	public ResponseEntity<?> updateComment(@PathVariable final Integer feedId, @PathVariable final Integer commentId,
-		@RequestBody final FeedCommentRequest feedCommentRequest) {
+	public ResponseEntity<?> updateComment(Authentication authentication, @PathVariable final Integer feedId,
+		@PathVariable final Integer commentId, @RequestBody final FeedCommentRequest feedCommentRequest) {
 		log.info("===피드 댓글 수정하기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		feedService.updateComment(userId, feedId, commentId, feedCommentRequest);
 		log.info("===피드 댓글 수정하기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
@@ -110,20 +115,13 @@ public class FeedController {
 
 	@DeleteMapping("/{feedId}/comments/{commentId}")
 	@Operation(summary = "피드 댓글 삭제하기")
-	public ResponseEntity<?> deleteComment(@PathVariable final Integer feedId, @PathVariable final Integer commentId) {
+	public ResponseEntity<?> deleteComment(Authentication authentication, @PathVariable final Integer feedId,
+		@PathVariable final Integer commentId) {
 		log.info("===피드 댓글 삭제하기 START===");
-		Integer userId = 1;
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
 		feedService.deleteComment(userId, feedId, commentId);
 		log.info("===피드 댓글 삭제하기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
-
-	// @GetMapping("/images")
-	// @Operation(summary = "이미지 불러오기")
-	// public ResponseEntity<?> getImages(@RequestBody final FeedImageRequest feedImageRequest) {
-	// 	log.info("===이미지 불러오기 START===");
-	// 	List<FeedImageResponse> feedImageResponseList = feedService.getImages(feedImageRequest);
-	// 	log.info("===이미지 불러오기 END===");
-	// 	return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, feedImageResponseList));
-	// }
 }

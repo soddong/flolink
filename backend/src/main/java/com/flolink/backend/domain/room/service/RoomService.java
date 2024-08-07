@@ -8,6 +8,9 @@ import com.flolink.backend.domain.room.dto.request.RoomParticipateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
 import com.flolink.backend.domain.room.dto.response.RoomMemberInfoResponse;
 import com.flolink.backend.domain.room.dto.response.RoomSummarizeResponse;
+import com.flolink.backend.domain.room.entity.Room;
+import com.flolink.backend.domain.room.entity.UserRoom;
+import com.flolink.backend.domain.user.entity.User;
 
 public interface RoomService {
 
@@ -23,11 +26,7 @@ public interface RoomService {
 
 	List<RoomMemberInfoResponse> getRoomMemberInfos(final Integer userId, final Integer roomId);
 
-	RoomSummarizeResponse updateRoomName(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
-
-	RoomSummarizeResponse updateParticipatePassword(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
-
-	RoomSummarizeResponse updateNotice(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
+	RoomSummarizeResponse updateRoomDetail(final Integer userId, final RoomUpdateRequest roomUpdateRequest);
 
 	String exitRoom(final Integer userId, final Integer roomId);
 
@@ -36,4 +35,14 @@ public interface RoomService {
 	void enterRoom(final Integer userId, final Integer roomId);
 
 	String updateRoomMemberNickname(final Integer userId, final NicknameUpdateRequest nicknameUpdateRequest);
+
+	User findUserById(final Integer userId);
+
+	Room findRoomById(final Integer roomId);
+
+	UserRoom findUserRoomByUserAndRoom(final User user, final Room room);
+
+	UserRoom findUserRoomByUserIdAndRoomId(final Integer userId, final Integer roomId);
+
+	UserRoom findUserRoomByUserRoomId(final Integer userRoomId);
 }
