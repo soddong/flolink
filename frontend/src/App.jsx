@@ -22,6 +22,8 @@ import UserCertPage from './pages/certificate/UserCertPage';
 import LoginRedirectPage from './pages/login/LoginRedirectPage';
 import FeedEditPage from './pages/feed/FeedEditPage';
 import MainLayout from './pages/main/MainLayout';
+import YourRoomPage from './pages/my_room/yourRoomPage';
+import MobilePage from './pages/channel_select/MobilePage';
 
 const router = createBrowserRouter([  
   {
@@ -106,6 +108,14 @@ const router = createBrowserRouter([
   {
     path: "/feededit",
     element: <FeedEditPage />
+  },
+  {
+    path: "/yourroom",
+    element: <YourRoomPage />
+  },
+  {
+    path : "/mobile",
+    element: <MobilePage />
   }
 ])
 

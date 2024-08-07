@@ -59,7 +59,7 @@ function LoginPage() {
       <Button
           className={`${LoginPageStyle.snsButton} ${LoginPageStyle.kakaoButton}`}
           variant="contained"
-          href='http://172.30.1.83:8081/oauth2/authorization/kakao'
+          href='http://172.20.10.9:8081/oauth2/authorization/kakao'
           // href='http://localhost:8081/oauth2/authorization/kakao'
 
         >

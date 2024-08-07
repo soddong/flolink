@@ -5,7 +5,7 @@ export const fetchInventory = async () => {
     return data;
 }
 
-export const fetchMyroom = async () => {
-    const { data } = await axiosCommonInstance.get('/myroom');
-    return data;
-}
+// export const fetchMyroom = async () => {
+//     const { data } = await axiosCommonInstance.get('/myroom');
+//     return data;
+// }

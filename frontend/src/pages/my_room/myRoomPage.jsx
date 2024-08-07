@@ -1,22 +1,25 @@
 import styles from '../../css/my_room/myRoom.module.css';
 import Inventory from '@mui/icons-material/Inventory2';
 import ItemStore from '@mui/icons-material/StorefrontOutlined';
-import NavBar from '../../components/common/nav_bar/NavBar';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import room from '../../assets/myroom/bg_myroom.png';
-import { useState, useEffect,useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useItemStore from '../../store/itemStore';
-import { useInventory, useMyroom } from '../../hook/user/userHook.js';
+import { useInventory } from '../../hook/user/userHook.js';
+import { useItems } from '../../hook/itemstore/itemstoreHook.js'
+import { useEquip, useUnequip } from '../../hook/myroom/myroomHook.js';
 
 
 function MyRoomPage() {
-    const { items, images, selectedItems, userInventory, setSelectedItems, setUserInventory } = useItemStore();
+    const { items, images, selectedItems, userInventory, setSelectedItems, setUserInventory, setItems, generateImagesFromNames, hasitemids } = useItemStore();
     const [isInventoryOpen, setIsInventoryOpen] = useState(false);
     const [selectedItemType, setSelectedItemType] = useState(null);
     const [isClosing, setIsClosing] = useState(false);
     const { data: inventory, isLoading: inventoryLoading, error: inventoryError } = useInventory();
-    const { data: myroom, isLoading: myroomLoading, error: myroomError } = useMyroom();
+    const { data: itemsData, isLoading: itemsDataLoading, error: itemsDataError } = useItems();
+    const { mutate: equipItem, eisLoading, eisError, edata } = useEquip();
+    const { mutate: unequipItem, uisLoading, uisError, udata } = useUnequip();
 
     useEffect(() => {
         if (isInventoryOpen) {
@@ -33,15 +36,45 @@ function MyRoomPage() {
         };
     }, [isInventoryOpen]);
 
-    // useEffect(() => {
-    //     if (inventory && inventory.data) {
-    //         setUserInventory(inventory.data);
-    //     }
-    // }, [inventory])
+    useEffect(() => {
+        if (inventory && inventory.data) {
+            // console.log(inventory.data)
+            setUserInventory(inventory.data);
+        }
+    }, [inventory])
+
+    useEffect(() => {
+        if (itemsData && itemsData.data) {
+            const processedItems = [];
+            const itemNames = [];
+
+            itemsData.data.forEach(item => {
+                const baseName = item.itemName.replace(/[0-9]/g, '');
+
+                if (!processedItems.some(el => el.name === baseName)) {
+                    processedItems.push({ name: baseName, variants: [], prices: [] });
+                }
+
+                const itemIndex = processedItems.findIndex(el => el.name === baseName);
+                processedItems[itemIndex].variants.push(item.itemName);
+                processedItems[itemIndex].prices.push(item.price);
+
+                if (!itemNames.includes(item.itemName)) {
+                    itemNames.push(item.itemName);
+                }
+            });
+
+            setItems(processedItems);
+            generateImagesFromNames(itemNames);
+        }
+    }, [itemsData]);
 
     const inventoryRef = useRef(null);
 
-    const openInventory = () => setIsInventoryOpen(true);
+    const openInventory = () => {
+        // console.log(items)
+        setIsInventoryOpen(true);
+    }
     
     const closeInventory = () => {
         setIsClosing(true);
@@ -58,6 +91,17 @@ function MyRoomPage() {
     };
 
     const handleItemSelect = (itemType, variantIndex) => {
+        
+        const originalItemName = `${itemType}${variantIndex}`;
+        const curItemid = hasitemids[originalItemName]
+
+        if (variantIndex == null) {
+            unequipItem(itemType.toUpperCase())
+        }
+        else {
+            equipItem(curItemid)
+        }
+
         setSelectedItems(itemType, variantIndex);
         setSelectedItemType(null);
     };
@@ -108,7 +152,6 @@ function MyRoomPage() {
 
     const navigate = useNavigate();
 
-
     const gotoItemStore = () => {
         navigate('/itemstore');
     }
@@ -117,7 +160,7 @@ function MyRoomPage() {
         <div className={styles.myRoom}>
             <div className={styles.myRoomHeader}>
                 <div>
-                    <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
+                    
                 </div>
                 <div>
                     <span>OOO님의 마이룸</span>
@@ -135,16 +178,20 @@ function MyRoomPage() {
             </div>
             <div className={styles.myRoomItems}>
                 <img src={room} className={styles.roomImg} alt="Room"/>
-                {items.map(item => (
-                    selectedItems[item.name] && (
-                        <img 
-                            key={item.name}
-                            src={item.variants[selectedItems[item.name] - 1]} 
-                            className={`${styles[item.name]} ${styles.item}`}
-                            alt={item.name}
-                        />
-                    )
-                ))}
+                {items.map(item => {
+                    const selectedVariant = selectedItems[item.name];
+                    if (selectedVariant !== undefined && selectedVariant !== null) {
+                        return (
+                            <img 
+                                key={item.name}
+                                src={images[item.name][selectedVariant - 1]}
+                                alt={`${item.name} ${selectedVariant}`}
+                                className={styles[item.name]}
+                            />
+                        );
+                    }
+                    return null;
+                })}
             </div>
             {isInventoryOpen && (
                 <div 

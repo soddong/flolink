@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import Logo from "../../assets/logo/flolink_logo.png";
 import UserAvatar from "../../assets/profile/profile_dummy.jpg";
 import ModalforChannelSelect from "../../components/channel_select/ModalforChannelSelect";
-import { getMyUserRooms } from "../../service/userroom/userroomApi";
+import { getMyUserRooms, getMyInfoinChannelSelect } from "../../service/userroom/userroomApi";
 import { useNavigate } from "react-router-dom";
 
 function ChannelSelectPage() {
@@ -22,6 +22,14 @@ function ChannelSelectPage() {
     setIsDropdownOpen(!isDropdownOpen);
   };
   useEffect(() => {
+    getMyInfoinChannelSelect()
+      .then(({ data }) => {
+        console.log(data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+
     getMyUserRooms()
       .then(({ data }) => {
         data?.forEach((element) => {
@@ -39,6 +47,7 @@ function ChannelSelectPage() {
         console.log(e);
       });
   }, []);
+
   useEffect(() => {
     if (isDropdownOpen) {
       dropdownRef.current.style.maxHeight = `${dropdownRef.current.scrollHeight}px`;
