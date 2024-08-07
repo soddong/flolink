@@ -9,12 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flolink.backend.domain.myroom.dto.request.MyRoomDetailRequest;
 import com.flolink.backend.domain.myroom.dto.response.HasItemInfoResponse;
 import com.flolink.backend.domain.myroom.dto.response.MyRoomResponse;
 import com.flolink.backend.domain.myroom.service.HasItemService;
@@ -39,8 +37,8 @@ public class MyRoomController {
 
 	@PostMapping
 	@Operation(summary = "마이룸 정보 조회")
-	public ResponseEntity<CommonResponse> getMyRoom(@RequestBody final MyRoomDetailRequest myRoomDetailRequest) {
-		MyRoomResponse inventory = myRoomService.getMyRoom(myRoomDetailRequest.getUserRoomId());
+	public ResponseEntity<CommonResponse> getMyRoom(@RequestParam final Integer userRoomIdToEnter) {
+		MyRoomResponse inventory = myRoomService.getMyRoom(userRoomIdToEnter);
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, inventory));
 	}
 

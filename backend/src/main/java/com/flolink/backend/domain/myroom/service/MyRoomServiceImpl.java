@@ -41,16 +41,17 @@ public class MyRoomServiceImpl implements MyRoomService {
 
 	/**
 	 * userRoomId에 해당되는 마이룸 정보 반환
-	 * @param userRoomId 유저룸 ID
+	 * @param userRoomIdToEnter 입장하고자 하는 유저의 유저룸 ID
 	 * @return MyRoomResponse 마이룸 정보
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public MyRoomResponse getMyRoom(Integer userRoomId) {
-		UserRoom userRoom = userRoomRepository.findById(userRoomId)
+	public MyRoomResponse getMyRoom(Integer userRoomIdToEnter) {
+		UserRoom userRoom = userRoomRepository.findById(userRoomIdToEnter)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND));
-		MyRoom myRoom = userRoom.getUser().getMyRoom();
-
+		User user = userRepository.findById(userRoom.getUser().getUserId())
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
+		MyRoom myRoom = user.getMyRoom();
 		List<HasItemInfoResponse> hasItemInfoResponses = myRoom.getItems().stream()
 			.filter(HasItem::getEquippedYn)
 			.map(HasItemInfoResponse::fromEntity)
