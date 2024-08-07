@@ -8,7 +8,6 @@ import lombok.Getter;
 public enum ResponseCode {
 
 	COMMON_SUCCESS(200, "", "SUCCESS"),
-	ROOM_ALREADY_ENTERED(200, "Room already entered", "SUCCESS"),
 
 	// Common
 	NOT_FOUND_ERROR(404, "Not Found", "NOT_FOUND_ERROR"),
@@ -20,19 +19,26 @@ public enum ResponseCode {
 	UNAUTHORIZED_USER(401, "Unauthorized_User", "UNAUTHORIZED_USER"),
 
 	// Room
+	ROOM_ALREADY_ENTERED(200, "Room already entered", "SUCCESS"),
 	USER_ROOM_NOT_FOUND(404, "UserRoom not found", "NOT_FOUND_ERROR"),
 	BLANK_ROOM_NAME(400, "Blank room name", "BAD_REQUEST_ERROR"),
 	USER_ROLE_NOT_FOUND(404, "User role not found", "NOT_FOUND_ERROR"),
+	WRONG_PARTICIPATION_PASSWORD(401, "Wrong participation password", "NOT_AUTHORIZED"),
 	NOT_AUTHORIZED(401, "Not authorized", "NOT_AUTHORIZED"),
 	ROOM_NOT_FOUND(404, "Room not found", "NOT_FOUND_ERROR"),
+	BLANK_ROOM_UPDATE_REQUEST(404, "Blank room update request", "BLANK_ROOM_UPDATE_REQUEST"),
 
+	// Feed
+	FEED_UPLOAD_FAILED(500, "Feed upload failed", "FEED_UPLOAD_FAILED"),
+	COMMENT_NOT_FOUND(404, "Comment not found", "COMMENT_NOT_FOUND"),
+	FEED_COMMENT_BAD_REQUEST(400, "Feed comment bad request", "FEEDCOMMENT_BAD_REQUEST"),
 	// Plant
 	PLANT_NOT_FOUND(404, "Plant not found", "NOT_FOUND_ERROR"),
 	DAILY_LIMIT_EXCEEDED(400, "Daily limit exceed", "BAD_REQUEST_ERROR"),
 	USER_EXP_NOT_FOUND(404, "User exp not found", "NOT_FOUND_ERROR"),
 	PLANT_ALREADY_COMPLETED(400, "Plant already completed", "BAD_REQUEST_ERROR"),
 	PLANT_HISTORY_NOT_FOUND(404, "Plant history not found", "NOT_FOUND_ERROR"),
-	
+
 	//Auth
 	TIME_OUT_EXCEPTION(401, "Auth Time Out", "TIME_OUT_ERROR"),
 	DUPLICATE_LOGIN_ID(401, "Duplicate login id", "DUPLICATE_LOGIN_ID"),

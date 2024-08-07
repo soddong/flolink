@@ -3,7 +3,6 @@ package com.flolink.backend.domain.feed.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +22,12 @@ import com.flolink.backend.domain.feed.repository.FeedRepository;
 import com.flolink.backend.domain.plant.entity.ActivityPoint;
 import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.entity.UserRoom;
-import com.flolink.backend.domain.room.repository.RoomRepository;
-import com.flolink.backend.domain.room.repository.UserRoomRepository;
+import com.flolink.backend.domain.room.service.RoomService;
 import com.flolink.backend.global.common.ResponseCode;
+import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
+import com.flolink.backend.global.util.RandomUtil;
 import com.flolink.backend.global.util.S3Util;
 
 import lombok.RequiredArgsConstructor;
@@ -37,21 +37,18 @@ import lombok.RequiredArgsConstructor;
 public class FeedServiceImpl implements FeedService {
 
 	private final PlantService plantService;
+	private final RoomService roomService;
 
 	private final FeedRepository feedRepository;
 	private final FeedCommentRepository feedCommentRepository;
 	private final FeedImageRepository feedImageRepository;
-	private final UserRoomRepository userRoomRepository;
-	private final RoomRepository roomRepository;
+	
 	private final S3Util s3Util;
 
 	@Override
 	public List<FeedResponse> getFeeds(final Integer userId, final Integer roomId, final LocalDateTime lastFeedDate,
 		final Integer size) {
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, roomId);
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-		}
+		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, roomId);
 		return feedRepository.findByDateLessThanOrderByCreateAtDesc(lastFeedDate, roomId, size)
 			.stream()
 			.map((feed) -> FeedResponse.fromEntity(userRoom, feed))
@@ -61,17 +58,12 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	@Transactional
 	public FeedResponse createFeed(final Integer userId, final FeedCreateRequest feedCreateRequest) {
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId,
-			feedCreateRequest.getRoomId());
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-		}
-
+		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, feedCreateRequest.getRoomId());
 		Feed feed = feedRepository.save(feedCreateRequest.toEntityUsingUserRoom(userRoom));
 
 		int imgOrder = 1;
 		for (MultipartFile multipartFile : feedCreateRequest.getImages()) {
-			String uuid = UUID.randomUUID().toString();
+			String uuid = RandomUtil.generateRandomUUID();
 			String keyName = "image_" + uuid + ".jpg";
 			try {
 				s3Util.uploadImg(keyName, multipartFile.getInputStream(), multipartFile.getSize());
@@ -85,7 +77,7 @@ public class FeedServiceImpl implements FeedService {
 				feedImageRepository.save(feedImage);
 				feed.getFeedImageList().add(feedImage);
 			} catch (IOException e) {
-				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+				throw new NotFoundException(ResponseCode.FEED_UPLOAD_FAILED);
 			}
 		}
 		plantService.updateExp(userRoom, ActivityPoint.FEED);
@@ -96,14 +88,11 @@ public class FeedServiceImpl implements FeedService {
 	@Transactional
 	public FeedResponse updateFeed(final Integer userId, final Integer feedId,
 		final FeedUpdateRequest feedUpdateRequest) {
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId,
-			feedUpdateRequest.getRoomId());
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-		}
+		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, feedUpdateRequest.getRoomId());
 		Feed feed = findFeedById(feedId);
+
 		if (!feed.getUserRoom().getUserRoomId().equals(userRoom.getUserRoomId())) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+			throw new NotFoundException(ResponseCode.NOT_AUTHORIZED);
 		}
 
 		List<FeedImage> images = feed.getFeedImageList();
@@ -121,7 +110,7 @@ public class FeedServiceImpl implements FeedService {
 				}
 			}
 			if (!isIn) {
-				String uuid = UUID.randomUUID().toString();
+				String uuid = RandomUtil.generateRandomUUID();
 				String keyName = "image_" + uuid + ".jpg";
 				try {
 					s3Util.uploadImg(keyName, multipartFile.getInputStream(), multipartFile.getSize());
@@ -135,7 +124,7 @@ public class FeedServiceImpl implements FeedService {
 					feedImageRepository.save(feedImage);
 					feed.getFeedImageList().add(feedImage);
 				} catch (IOException e) {
-					throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+					throw new NotFoundException(ResponseCode.FEED_UPLOAD_FAILED);
 				}
 			}
 		}
@@ -164,10 +153,7 @@ public class FeedServiceImpl implements FeedService {
 	@Transactional
 	public void createComment(final Integer userId, final Integer feedId, final FeedCommentRequest feedCommentRequest) {
 		Feed feed = findFeedById(feedId);
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, feedCommentRequest.getRoomId());
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-		}
+		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, feedCommentRequest.getRoomId());
 		if (!feed.getUserRoom().getRoom().getRoomId().equals(userRoom.getRoom().getRoomId())) {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
@@ -179,20 +165,15 @@ public class FeedServiceImpl implements FeedService {
 	@Transactional
 	public void updateComment(final Integer userId, final Integer feedId, final Integer commentId,
 		final FeedCommentRequest feedCommentRequest) {
-
 		Feed feed = findFeedById(feedId);
+		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, feedCommentRequest.getRoomId());
+		FeedComment feedComment = findFeedCommentByCommentId(commentId);
 
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, feedCommentRequest.getRoomId());
-		FeedComment feedComment = feedCommentRepository.findById(commentId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-		}
 		if (!feed.getUserRoom().getRoom().getRoomId().equals(userRoom.getRoom().getRoomId())) {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
 		if (!feed.getFeedId().equals(feedComment.getFeed().getFeedId())) {
-			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
+			throw new BadRequestException(ResponseCode.FEED_COMMENT_BAD_REQUEST);
 		}
 		feedComment.setContent(feedCommentRequest.getContent());
 		feedCommentRepository.save(feedComment);
@@ -202,9 +183,8 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	@Transactional
 	public void deleteComment(final Integer userId, final Integer feedId, final Integer commentId) {
+		FeedComment feedComment = findFeedCommentByCommentId(commentId);
 
-		FeedComment feedComment = feedCommentRepository.findById(commentId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 		if (!feedComment.getFeed().getFeedId().equals(feedId)) {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
@@ -225,6 +205,11 @@ public class FeedServiceImpl implements FeedService {
 	private Feed findFeedById(final Integer feedId) {
 		return feedRepository.findById(feedId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+	}
+
+	private FeedComment findFeedCommentByCommentId(final Integer commentId) {
+		return feedCommentRepository.findById(commentId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.COMMENT_NOT_FOUND));
 	}
 
 }
