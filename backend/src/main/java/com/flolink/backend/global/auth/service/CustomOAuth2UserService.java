@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.myroom.entity.MyRoom;
+import com.flolink.backend.domain.myroom.repository.MyRoomRepository;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import com.flolink.backend.domain.user.repository.UserRepository;
@@ -19,7 +20,6 @@ import com.flolink.backend.global.auth.dto.response.OAuth.UserDTO;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
 
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	private final UserRepository userRepository;
-	private final EntityManager em;
+	private final MyRoomRepository myRoomRepository;
 
 	@Override
 	@Transactional
@@ -59,8 +59,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 			MyRoom myRoom = MyRoom.createMyRoom();
 
-			em.persist(myRoom);
-			em.flush();
+			myRoomRepository.saveAndFlush(myRoom);
 
 			User user = User.builder()
 				.myRoom(myRoom)
@@ -72,9 +71,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 				.build();
 
 			userRepository.save(user);
-
-			em.persist(user);
-			em.flush();
 
 			UserDTO userDTO = UserDTO.from(user);
 
