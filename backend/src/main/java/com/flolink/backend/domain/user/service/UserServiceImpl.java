@@ -4,12 +4,18 @@ import static com.flolink.backend.domain.user.entity.enumtype.RoleType.*;
 
 import java.time.LocalDateTime;
 
-import com.flolink.backend.domain.user.dto.request.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.myroom.entity.MyRoom;
+import com.flolink.backend.domain.user.dto.request.ChangePasswordRequest;
+import com.flolink.backend.domain.user.dto.request.FindUserIdRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordAuthRequest;
+import com.flolink.backend.domain.user.dto.request.ForgotPasswordChangeRequest;
+import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
+import com.flolink.backend.domain.user.dto.request.ProfileAndEmotionRequest;
+import com.flolink.backend.domain.user.dto.request.StatusMessageRequest;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 import com.flolink.backend.domain.user.entity.User;
@@ -92,7 +98,7 @@ public class UserServiceImpl implements UserService {
 	public boolean isExistLoginId(String loginId) {
 		boolean isExistId = userRepository.existsByLoginId(loginId);
 		if (!isExistId) {
-			 throw new DuplicateException(ResponseCode.DUPLICATE_LOGIN_ID);
+			throw new DuplicateException(ResponseCode.DUPLICATE_LOGIN_ID);
 		}
 		return true;
 	}
@@ -220,11 +226,7 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 
-		return UserInfoResponse.builder()
-			.nickname(user.getNickname())
-			.point(user.getPoint())
-			.profile(user.getProfile())
-			.build();
+		return UserInfoResponse.fromEntity(user);
 	}
 
 	/**
@@ -267,7 +269,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void modifyMessage(StatusMessageRequest statusMessageRequest, Integer userId) {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 		user.setStatusMessage(statusMessageRequest.getStatusMessage());
 	}
 
@@ -279,7 +281,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void modifyProfileAndEmotion(ProfileAndEmotionRequest profileAndEmotionRequest, Integer userId) {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 		user.setProfile(profileAndEmotionRequest.getProfile());
 		user.setEmotion(profileAndEmotionRequest.getEmotion());
 	}
