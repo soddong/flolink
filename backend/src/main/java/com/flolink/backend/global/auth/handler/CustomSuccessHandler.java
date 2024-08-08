@@ -7,7 +7,9 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -43,6 +45,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 		log.info("===Oauth2 Login 성공===");
 		//OAuth2User
 		CustomOAuth2UserResponse customUserDetails = (CustomOAuth2UserResponse)authentication.getPrincipal();
+		System.out.println(customUserDetails.getUseYn());
+		if (!customUserDetails.getUseYn()) {
+			unsuccessfulAuthentication(request, response, new DisabledException("User account is disabled"));
+			return;
+		}
 
 		int userId = customUserDetails.getUserId();
 		RoleType role = customUserDetails.getRoleType();
@@ -68,5 +75,10 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 		response.addCookie(jwtUtil.createCookies("refresh", refresh));
 		response.setStatus(HttpStatus.OK.value());
 		response.sendRedirect(targetUrl + "?accessToken=Bearer " + access);
+	}
+
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+		AuthenticationException failed) throws IOException, ServletException {
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 	}
 }

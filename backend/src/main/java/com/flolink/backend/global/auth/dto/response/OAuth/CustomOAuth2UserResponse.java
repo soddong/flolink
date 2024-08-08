@@ -34,6 +34,10 @@ public class CustomOAuth2UserResponse implements OAuth2User {
 		return userDTO.getUsername();
 	}
 
+	public boolean getUseYn() {
+		return userDTO.isUseYn();
+	}
+
 	public RoleType getRoleType() {
 		return userDTO.getRole();
 	}
