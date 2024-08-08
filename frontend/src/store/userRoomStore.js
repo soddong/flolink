@@ -1,16 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import {
-    getMyRoomRole,
-    getRoomMemberInfos,
-  } from "../service/userroom/userroomApi.js"
+import {getRoomMemberInfos} from "../service/userroom/userroomApi.js"
+import { getMyInfo } from '../service/user/userApi.js';
 
 const userRoomStore = create(
     persist(
         (set, get) => ({
             roomId: null,
             roomDetail: null,
-            myRole: null,
+            myInfo: null,
             getRoomDetail: () => get().roomDetail,
             getRoomId: () => get().roomId,
             setRoomId: (roomId) => set({ roomId }),
@@ -19,8 +17,8 @@ const userRoomStore = create(
                 console.log(roomId)
                 set({ roomDetail });
             },
-            setMyRole: async(roomId) => {
-                const myRole = await getMyRoomRole(roomId);
+            setMyInfo: async(roomId) => {
+                const myRole = await getMyInfo(roomId);
                 set({ myRole })
             }
         }),
