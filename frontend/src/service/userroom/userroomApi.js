@@ -40,4 +40,5 @@ export const kickRoomMember = async (roomId, targetUserRoomId) => {
 }
 export const updateRoomMemberNickname= async(nicknameUpdateRequest)=>{
     const {data} = await axiosCommonInstance.put(`/rooms/nickname/update`,nicknameUpdateRequest);
+    return data;
 }

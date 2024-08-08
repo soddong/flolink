@@ -1,17 +1,10 @@
 import style from "../../../css/main/main_modals.module.css"
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { updateRoomMemberNickname } from "../../../service/userroom/userroomApi";
-import userRoomStore from "../../../store/userRoomStore";
 
-function UserStatusModal({ name, photo, status, targetUserRoomId, manager, username, setUsername }) {
+function UserStatusModal({ name, photo, status, targetUserRoomId, manager, username, handleUsername }) {
   const [isModify, setIsModify] = useState(false)
-  const {roomId, roomDetail, setRoomDetail} = userRoomStore((state) => ({
-    roomId: state.roomId,
-    roomDetail: state.roomDetail,
-    setRoomDetail: state.setRoomDetail
-  }));
-  const [inputname, setInputname] = useState(name)
+  const [inputname, setInputname] = useState(username)
 
   function handleIsModify() {
     setIsModify(!isModify)
@@ -26,14 +19,10 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, usern
 
   function submitUsername(event) {
     event.preventDefault()
-    updateRoomMemberNickname({
-      targetNickname : inputname,
-      roomId,
-      targetUserRoomId
-    })
     console.log(targetUserRoomId);
-    window.alert('변경변경?')
-    setUsername(inputname)
+    console.log("name:" ,inputname)
+    window.alert('변경하시겠습니까?')
+    handleUsername(inputname)
     handleIsModify()
   }
 
@@ -50,13 +39,13 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, usern
         {isModify ?
         <form action="" onSubmit={submitUsername}>
           <input type="text" onChange={handleInputname}
-            maxLength={10} value={inputname} placeholder={username}
+            maxLength={10} value={inputname} placeholder={name}
             className="border-0 ring-1 ring-inset ring-gray-300 mx-1 w-24" />
           <input type="submit" value="변경" />
         </form>
            :
           <>
-            <p className='font-bold text-center leading-3 mx-2'>{username}</p>
+            <p className='font-bold text-center leading-3 mx-2'>{inputname}</p>
             <span className="material-symbols-outlined text-xl"
               onClick={handleIsModify}>
               edit

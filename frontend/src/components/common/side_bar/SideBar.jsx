@@ -17,7 +17,7 @@ function Sidebar({ width = 150 }) {
     roomId: state.roomId,
     myInfo: state.myInfo,
     fetchUserInfo: state.fetchUserInfo,
-    roomDetail: state.roomDetail.data
+    roomDetail: state.roomDetail?.data
   }));
   const [roomInfomodal, setRoomInfoModal] = useState(null)
   function toggleMenu() {
