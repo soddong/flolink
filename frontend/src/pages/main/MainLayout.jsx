@@ -9,9 +9,13 @@ import FeedListPage from '../feed/FeedListPage';
 import FamilyGardenPage from '../garden/FamilyGardenPage';
 import Question from '../../components/main/today_question/Question';
 import userRoomStore from "../../store/userRoomStore";
+import FeedCreatePage from '../feed/FeedCreatePage.jsx';
+import FeedEditPage from '../feed/FeedEditPage.jsx';
+import mainStore from '../../store/mainStore.js';
 
 function MainLayout() {
-  const [currentPage, setCurrentPage] = useState('home');
+  // const [currentPage, setCurrentPage] = useState('home');
+  const [currentData, setCurrentData] = useState(null);
 
   // useEffect(() => {
   //   getMyRoomRole(roomId)
@@ -31,6 +35,8 @@ function MainLayout() {
   //     });
   // }, []);
 
+  const currentPage = mainStore((state) => state.currentPage);
+  const setCurrentPage = mainStore((state) => state.setCurrentPage);
 
   const renderPage = () => {
     switch(currentPage) {
@@ -41,9 +47,13 @@ function MainLayout() {
       case 'schedule':
         return <SchedulePage />;
       case 'diary':
-        return <FeedListPage />;
+        return <FeedListPage setCurrentPage= {setCurrentPage} setCurrentData={setCurrentData}/>;
       case 'garden':
         return <FamilyGardenPage />;
+      case 'feededit':
+        return <FeedEditPage feed={currentData} />
+      case 'feedcreate':
+        return <FeedCreatePage />
       default:
         return <MainPage />;
     }

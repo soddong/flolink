@@ -7,7 +7,7 @@ import "../../css/feed/feedStyles.module.css";
 import { feedList } from "../../service/Feed/feedApi";
 import userRoomStore from "../../store/userRoomStore";
 
-const FeedListPage = () => {
+const FeedListPage = ({ setCurrentPage, setCurrentData }) => {
   const navigate = useNavigate();
   const currentUser = "user1";
   const roomId = userRoomStore((state) => state.roomId);
@@ -48,7 +48,7 @@ const FeedListPage = () => {
       <div className="w-full min-h-screen bg-custom-gradient flex flex-col items-center justify-center">
         <img src={logo} alt="Logo" className="mx-auto h-20" />
         <div className="p-4 overflow-auto">
-          <FeedList feeds={feeds} />
+          <FeedList feeds={feeds} setCurrentPage={setCurrentPage} setCurrentData={setCurrentData}/>
         </div>
       </div>
     );
@@ -66,12 +66,12 @@ const FeedListPage = () => {
         </header>
         <div className="flex flex-col h-4/5 pt-0 pr-0 pl-0 pb-9">
           <div className="flex-1 overflow-auto hide-scrollbar">
-            <FeedList feeds={feeds} currentUser={currentUser} />
+            <FeedList feeds={feeds} currentUser={currentUser} setCurrentPage={setCurrentPage} setCurrentData={setCurrentData}/>
           </div>
         </div>
         <button
           className="bg-white border border-black text-black rounded-full w-12 h-12 flex items-center justify-center text-2xl absolute"
-          onClick={() => navigate("/feedcreate")}
+          onClick={() => setCurrentPage('feededit')}
           style={{ bottom: "6rem", right: "3rem", opacity: 0.3 }}
         >
           +
