@@ -13,7 +13,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const handleLogin = async () => {
     try {
       const { headers } = await login(username, password); // await으로 로그인 요청 처리
@@ -59,16 +59,14 @@ function LoginPage() {
       <Button
           className={`${LoginPageStyle.snsButton} ${LoginPageStyle.kakaoButton}`}
           variant="contained"
-          href='http://192.168.0.3:8081/oauth2/authorization/kakao'
-          // href='http://localhost:8081/oauth2/authorization/kakao'
+          href={`${BASE_URL}/oauth2/authorization/kakao`}
         >
           <img src={kakaoLogo} alt="Kakao" className={LoginPageStyle.snsLogo} /> 카카오로 계속
         </Button>
         <Button
           className={`${LoginPageStyle.snsButton} ${LoginPageStyle.googleButton}`}
           variant="contained"
-          href='http://192.168.0.3:8081/oauth2/authorization/google'
-          // href='http://localhost:8081/oauth2/authorization/google'
+          href={`${BASE_URL}/oauth2/authorization/google`}
         >
           <img src={googleLogo} alt="Google" className={LoginPageStyle.snsLogo} /> 구글로 계속
         </Button>
