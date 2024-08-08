@@ -12,15 +12,12 @@ import userRoomStore from "../../store/userRoomStore";
 
 function MainLayout() {
   const [currentPage, setCurrentPage] = useState('home');
-  const roomId = userRoomStore((state) => state.roomId);
-  const roomDetail = userRoomStore((state) => state.roomDetail);
-  const myRole = userRoomStore((state) => state.myRole);
-  // const [myRole, setMyRole] = useState("member");
-  const [roomData, setRoomData] = useState({
-    memberInfoResponse: null,
-    plantSummaryResponse: null,
-    roomSummarizeResponse: null,
-  });
+  const { roomId, roomDetail, setRoomDetail, myInfo }  = userRoomStore((state) => ({
+    roomId: state.roomId,
+    roomDetail: state.roomDetail?.data,
+    myInfo: state.myInfo,
+    setRoomDetail: state.setRoomDetail
+  }));
 
   // useEffect(() => {
   //   getMyRoomRole(roomId)
@@ -44,7 +41,7 @@ function MainLayout() {
   const renderPage = () => {
     switch(currentPage) {
       case 'home':
-        return <MainPage myRole={myRole} roomData={roomDetail} setRoomData={setRoomData} />;
+        return <MainPage />;
       case 'myroom':
         return <MyRoomPage />;
       case 'schedule':
@@ -60,7 +57,7 @@ function MainLayout() {
 
   return (
     <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
-      <SideBar myRole={myRole} roomDetail={roomDetail} />
+      <SideBar />
         {renderPage()}
       <NavBar setCurrentPage={setCurrentPage} currentPage={currentPage} />
       

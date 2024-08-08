@@ -17,10 +17,10 @@ import userRoomStore from "../../store/userRoomStore";
 function MainPage() {
   const [status, setStatus] = useState({ level: 0, exp: 60 });
   const Message = "오늘은 어떤 일이 있었나요?";
-  const { roomId, roomDetail, setRoomDetail, myRole }  = userRoomStore((state) => ({
+  const { roomId, roomDetail, setRoomDetail, myInfo }  = userRoomStore((state) => ({
     roomId: state.roomId,
     roomDetail: state.roomDetail?.data,
-    myRole: state.myRole,
+    myInfo: state.myInfo,
     setRoomDetail: state.setRoomDetail
   }));
   const [petstatus, setPetstatus] = useState(null)
@@ -46,10 +46,11 @@ function MainPage() {
         setPetstatus(Pet4)
       }
     }
+    console.log(status)
   }, []);
   return (
     <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
-      <Sidebar myRole={myRole} roomId={roomId} roomDetail={roomDetail} />
+      <Sidebar myInfo={myInfo} roomId={roomId} roomDetail={roomDetail} />
       <div className="py-7 w-5/6">
         <header className="flex justify-between">
           <h1 className="m-0 font-bold text-2xl text-rose-500">
