@@ -16,6 +16,7 @@ import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.repository.RoomRepository;
 import com.flolink.backend.domain.room.repository.UserRoomRepository;
+import com.flolink.backend.domain.room.service.RoomService;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -29,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CalendarServiceImpl implements CalendarService {
 
+	private final RoomService roomService;
 	private final UserRoomRepository userRoomRepository;
 	private final CalendarRepository calendarRepository;
 	private final RoomRepository roomRepository;
@@ -51,19 +53,16 @@ public class CalendarServiceImpl implements CalendarService {
 	@Override
 	public void addCalendar(CalendarRequest calendarRequest) {
 		Room room = roomRepository.findById(calendarRequest.getRoomId())
-				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_MATCH_ROOMID));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_MATCH_ROOMID));
 
 		calendarRepository.save(Calendar.of(calendarRequest, room));
 	}
 
 	@Override
 	public void removeCalendar(DeleteCalendarRequest deleteCalendarRequest, Integer userId) {
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, deleteCalendarRequest.getRoomId());
 
-		// userRoom에 메핑되어있지 않은 인원이라면 가족구성원 아님
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-		}
+		//TODO 나중에 exist로 변경
+		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, deleteCalendarRequest.getRoomId());
 
 		// 해당 캘린더 가져와서
 		Calendar calendar = calendarRepository.findById(deleteCalendarRequest.getCalendarId())
@@ -75,13 +74,9 @@ public class CalendarServiceImpl implements CalendarService {
 
 	@Override
 	public void modifyCalendar(UpdateCalendarRequest updateCalendarRequest, Integer userId) {
-		UserRoom userRoom = userRoomRepository.findByUserUserIdAndRoomRoomId(userId, updateCalendarRequest.getRoomId());
 
-		// userRoom에 메핑되어있지 않은 인원이라면 가족구성원 아님
-		if (userRoom == null) {
-			throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
-		}
-
+		//TODO 나중에 exist로 변경
+		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, updateCalendarRequest.getRoomId());
 		// 해당 캘린더 가져와서
 		Calendar calendar = calendarRepository.findById(updateCalendarRequest.getCalendarId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.CALENDAR_NOT_FOUND));
