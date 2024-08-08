@@ -13,19 +13,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.flolink.backend.global.auth.handler.CustomSuccessHandler;
 import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.global.auth.service.ReissueService;
-import com.flolink.backend.global.filter.CustomLogoutFilter;
 import com.flolink.backend.global.filter.JwtFilter;
 import com.flolink.backend.global.filter.LoginFilter;
 import com.flolink.backend.global.util.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -113,7 +112,23 @@ public class SecurityConfig {
 
 		// 로그아웃 필터
 		http
-			.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+			// 로그아웃 설정
+			.logout(logout -> logout
+				// 로그아웃 요청을 처리할 URL 설정
+				.logoutUrl("/logout")
+				// 로그아웃 성공 시 리다이렉트할 URL 설정
+				.logoutSuccessUrl("/login")
+				// 로그아웃 핸들러 추가 (세션 무효화 처리)
+				.addLogoutHandler((request, response, authentication) -> {
+					HttpSession session = request.getSession();
+					session.invalidate();
+				})
+				// 로그아웃 성공 핸들러 추가 (리다이렉션 처리)
+				.logoutSuccessHandler((request, response, authentication) ->
+					response.sendRedirect("/login"))
+				// 로그아웃 시 쿠키 삭제 설정 (예: "remember-me" 쿠키 삭제)
+				.deleteCookies("refresh")
+			);
 
 		// 로그인 필터
 		http
