@@ -43,3 +43,7 @@ export const changeProfileAndEmotion = async (profile, emotion) => {
     return data;
 }
 
+export const getMyInfo = async () => {
+    const { data } = await axiosCommonInstance.get('/users/myInfo');
+    return data;
+}
