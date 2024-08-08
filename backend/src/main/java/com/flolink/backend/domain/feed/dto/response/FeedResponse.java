@@ -17,6 +17,7 @@ import lombok.Setter;
 @Builder
 public class FeedResponse {
 	private Integer feedId;
+	private Integer authorUserRoomId;
 	private String content;
 	private LocalDateTime date;
 	private String author;
@@ -33,6 +34,7 @@ public class FeedResponse {
 			}
 		}
 		return FeedResponse.builder()
+			.authorUserRoomId(feed.getUserRoom().getUserRoomId())
 			.feedId(feed.getFeedId())
 			.content(feed.getContent())
 			.date(feed.getCreateAt())

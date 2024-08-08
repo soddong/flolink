@@ -4,8 +4,6 @@ spring:
     username: ssafy
     password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
-  login:
-    target-uri: "http://localhost:5173/auth/fetch"
   jpa:
     hibernate:
       ddl-auto: update

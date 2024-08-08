@@ -91,6 +91,19 @@ public class RoomController {
 			ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, myRole));
 	}
 
+	@GetMapping("/{roomId}/me/userRoomId")
+	@Operation(summary = "내 userRoomId 가져오기")
+	public ResponseEntity<?> getUserRoomId(Authentication authentication, @PathVariable final Integer roomId) {
+		log.info("===내 userRoomId 가져오기 START===");
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
+		Integer userRoomId = roomService.getMyUserRoomId(userId, roomId);
+		log.info("===내 userRoomId 가져오기 START===");
+		return userRoomId == null ? ResponseEntity.ok(CommonResponse.of(ResponseCode.USER_ROOM_NOT_FOUND)) :
+			ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, userRoomId));
+
+	}
+
 	@GetMapping("/{roomId}")
 	@Operation(summary = "가족 방 정보 (구성원, 식물) 불러오기", description = "가족방의 구성원들의 정보와 식물 정보를 반환.")
 	public ResponseEntity<?> getRoomMemberInfos(Authentication authentication, @PathVariable final Integer roomId) {

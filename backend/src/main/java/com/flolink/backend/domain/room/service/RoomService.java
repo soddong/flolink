@@ -45,4 +45,6 @@ public interface RoomService {
 	UserRoom findUserRoomByUserIdAndRoomId(final Integer userId, final Integer roomId);
 
 	UserRoom findUserRoomByUserRoomId(final Integer userRoomId);
+
+	Integer getMyUserRoomId(final Integer userId, final Integer roomId);
 }
