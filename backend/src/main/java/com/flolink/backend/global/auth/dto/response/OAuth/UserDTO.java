@@ -22,6 +22,7 @@ public class UserDTO {
 	private RoleType role;
 	private ProfileType profile;
 	private EmotionType emotion;
+	private boolean useYn;
 
 	public static UserDTO from(User user) {
 		return UserDTO.builder()
@@ -33,6 +34,7 @@ public class UserDTO {
 			.role(user.getRole())
 			.profile(user.getProfile())
 			.emotion(user.getEmotion())
+			.useYn(user.isUseYn())
 			.build();
 	}
 
