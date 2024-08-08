@@ -17,7 +17,7 @@ function SettingPage() {
     const [animal, setAnimal] = useState(null);
     const [nickname, setNickname] = useState('닉네임');
     const [curpoint, setCurpoint ] = useState(123143);
-    const [status, setStatus] = useState('여기는 상메입니여기는 상메입니여기는 상메입니여기는 상메입니');
+    const [status, setStatus] = useState('여기는 상메입니다');
     const [showModal, setShowModal] = useState(false);
     const [showNicknameModal, setShowNicknameModal] = useState(false);
     const [showMessageModal, setShowMessageModal] = useState(false);
@@ -48,7 +48,7 @@ function SettingPage() {
                     </div>
                     <div className={styles.username}>
                         <span className={styles.name}>{nickname}<EditIcon color="action" className={styles.editicon} onClick={()=>setShowNicknameModal(true)}/></span>
-                        <span className={styles.point}>보유포인트 : {curpoint}pt<AddCircleOutlineIcon color="action" className={styles.addpoint}/></span>
+                        <span className={styles.point}>보유포인트 : {curpoint}pt<AddCircleOutlineIcon color="action" className={styles.addpoint} onClick={() => {navigate('/payment')}}/></span>
                     </div>
                 </div>
                 <div className={styles.message}>
