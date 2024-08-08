@@ -19,8 +19,10 @@ function MainPage() {
   const Message = "오늘은 어떤 일이 있었나요?";
   const { roomId, roomDetail, setRoomDetail, myInfo } = userRoomStore((state) => ({
     roomId: state.roomId,
+    userRoomId: state.userRoomId,
     roomDetail: state.roomDetail?.data,
     myInfo: state.myInfo,
+    setUserRoomId: state.setUserRoomId,
     setRoomDetail: state.setRoomDetail
   }));
   const [petstatus, setPetstatus] = useState(null)

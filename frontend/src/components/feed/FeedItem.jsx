@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
+import userRoomStore from '../../store/userRoomStore';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment, onAddComment, onEditFeed, onDeleteFeed }) => { 
+const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment, onAddComment, onEditFeed, onDeleteFeed }) => {
   const [showAllComments, setShowAllComments] = useState(false);
   const [newComment, setNewComment] = useState('');
-
+  const  myUserRoomId  = userRoomStore((state) => ( state.userRoomId.data ));
+  
   const handleAddComment = (e) => {
     e.preventDefault();
     if (newComment.trim()) {
@@ -27,14 +29,12 @@ const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment, onAddComm
         >
           {feed.images.map((src, index) => (
             <div key={index} className='relative w-full h-64'>
-              <img src={src} alt={`feed-${index}`} className="absolute inset-0 w-full h-full object-cover rounded-md" />
+              <img src={`https://flolink-s3.s3.ap-northeast-2.amazonaws.com/${feed?.images[index]?.imageUrl}`} alt={`feed-${index}`} className="absolute inset-0 w-full h-full object-cover rounded-md" />
             </div>
           ))}
         </Carousel>
       ) : (
-        <div className="relative w-full h-64">
-          <img src={feed.images} alt="Feed" className="absolute inset-0 w-full h-full object-cover rounded-md" />
-        </div>
+        <template></template>
       )}
       <div className="mt-4">
         <p>{feed.content}</p>
@@ -46,14 +46,14 @@ const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment, onAddComm
         <span>댓글 {feed.comments.length}</span>
       </div>
 
-      {feed.author === currentUser && (
+      {feed.authorUserRoomId === myUserRoomId && (
         <div className="mt-4 flex justify-end space-x-2">
           <button className="bg-transparent text-blue-500 font-semibold py-2 px-4 border border-yellow-500 rounded"
-          onClick={() => onEditFeed(feed.feedId)}>
+            onClick={() => onEditFeed(feed.feedId)}>
             ✏️
           </button>
           <button className="bg-transparent text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded"
-          onClick={() => onDeleteFeed(feed.feedId)}>
+            onClick={() => onDeleteFeed(feed.feedId)}>
             🗑️
           </button>
         </div>
@@ -66,7 +66,7 @@ const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment, onAddComm
               <strong>{comment.author}:</strong> {comment.content}
             </div>
 
-            {comment.author === currentUser && (
+            {comment.userRoomId === myUserRoomId && (
               <div className="flex space-x-2">
                 <button
                   className="text-blue-500 hover:underline"

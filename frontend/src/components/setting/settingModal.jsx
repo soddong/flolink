@@ -43,15 +43,12 @@ function SettingModal({ setShowModal, setAnimal }) {
     };
 
     const handleSave = async () => {
-        await changeProfileAndEmotion(selectedAnimal, selectedEmotion);
-        console.log(selectedAnimal)
-        console.log(selectedEmotion)
-        setShowModal(false);
-
-        // if (selectedAnimal && selectedEmotion) {
-        //     setAnimal(animals[selectedAnimal][selectedEmotion]);
-        //     setShowModal(false);
-        // }
+        
+        if (selectedAnimal && selectedEmotion) {
+            await changeProfileAndEmotion(selectedAnimal, selectedEmotion);
+            setAnimal(animals[selectedAnimal][selectedEmotion]);
+            setShowModal(false);
+        }
     };
 
     return (

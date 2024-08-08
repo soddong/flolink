@@ -47,3 +47,14 @@ export const getMyInfo = async () => {
     const { data } = await axiosCommonInstance.get('/users/myInfo');
     return data;
 }
+
+//회원 탈퇴
+export const deleteUser = async () => {
+    const { data } = await axiosCommonInstance.delete('/users/myInfo');
+    return data;
+}
+
+export const logout = async () => {
+    const { data } = await axiosCommonInstance.post('/logout');
+    return data;
+}

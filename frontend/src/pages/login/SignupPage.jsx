@@ -33,13 +33,13 @@ function SignupPage() {
     }
   }, [isFormValid]);
 
-  const checkUsernameAvailability = async (username) => {
+  const checkUsernameAvailability = async (e) => {
     e.preventDefault();
     try {
       const response = checkDuplicateUsername(username);
       console.log(response);
       // 응답이 성공적으로 왔을 때
-      if (response.data) {
+      if (response.data.exists) {
         // 중복된 아이디가 있는 경우
         setUsernameMessage('이미 사용 중인 아이디입니다.');
       } else {

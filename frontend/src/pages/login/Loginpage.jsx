@@ -13,7 +13,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const handleLogin = async () => {
     try {
       const { headers } = await login(username, password); // await으로 로그인 요청 처리
