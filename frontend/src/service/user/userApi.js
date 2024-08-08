@@ -53,3 +53,8 @@ export const deleteUser = async () => {
     const { data } = await axiosCommonInstance.delete('/users/myInfo');
     return data;
 }
+
+export const logout = async () => {
+    const { data } = await axiosCommonInstance.post('/logout');
+    return data;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Router, useNavigate } from 'react-router-dom';
 import FeedItem from './FeedItem';
-
+import { feedDelete } from '../../service/Feed/feedApi';
 
 const FeedList = ({ feeds: initialFeeds, currentUser }) => {
   const [feeds, setFeeds] = useState(initialFeeds);
