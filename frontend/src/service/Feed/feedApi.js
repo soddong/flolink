@@ -2,14 +2,19 @@ import { axiosCommonInstance } from '../../apis/axiosInstance';
 
 // 피드 추가
 export const addFeed = async (roomId, images, content) => {
-    console.log(roomId)
-    const { data } = await axiosCommonInstance.post('/feeds', 
-        {
-        roomId: roomId,
-        images: images,
-        content: content
+    const formData = new FormData();
+    formData.append('roomId', roomId);
+    formData.append('content', content);
+    images.forEach((image, index) => {
+        formData.append(`images[${index}]`, image);
+    });
+
+    const { data } = await axiosCommonInstance.post('/feeds', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
         }
-    );
+    });
+
     return data;
 };
 
