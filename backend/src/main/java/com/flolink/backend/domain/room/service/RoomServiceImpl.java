@@ -96,7 +96,7 @@ public class RoomServiceImpl implements RoomService {
 		}
 		UserRoom userRoom = userRoomRepository.save(UserRoom.of(user, room));
 		Plant plant = plantRepository.findByRoomRoomId(room.getRoomId())
-				.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
 
 		if (!userExpRepository.existsByPlantIdAndUserId(userId, plant.getPlantId())) {
 			userExpRepository.save(UserExp.of(userRoom.getUser().getUserId(), plant));
@@ -267,6 +267,14 @@ public class RoomServiceImpl implements RoomService {
 	public UserRoom findUserRoomByUserRoomId(final Integer userRoomId) {
 		return userRoomRepository.findUserRoomByUserRoomId(userRoomId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND));
+	}
+
+	@Override
+	public Integer getMyUserRoomId(final Integer userId, final Integer roomId) {
+		Integer userRoomId = null;
+		UserRoom userRoom = findUserRoomByUserIdAndRoomId(userId, roomId);
+		userRoomId = userRoom.getUserRoomId();
+		return userRoomId;
 	}
 
 	private boolean isFirstAttendanceOfToday(LocalDateTime lastLoginTime) {
