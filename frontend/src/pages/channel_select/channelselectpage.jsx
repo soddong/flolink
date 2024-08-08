@@ -22,14 +22,7 @@ function ChannelSelectPage() {
     setIsDropdownOpen(!isDropdownOpen);
   };
   useEffect(() => {
-    getMyInfoinChannelSelect()
-      .then(({ data }) => {
-        console.log(data)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-
+    setFamily([]);
     getMyUserRooms()
       .then(({ data }) => {
         data?.forEach((element) => {
