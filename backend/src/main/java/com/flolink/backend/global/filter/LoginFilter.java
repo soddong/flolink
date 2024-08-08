@@ -8,17 +8,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flolink.backend.global.auth.entity.Refresh;
-import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.domain.user.dto.request.LoginUserRequest;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+import com.flolink.backend.global.auth.entity.Refresh;
+import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.global.util.JwtUtil;
 
 import jakarta.servlet.FilterChain;
@@ -63,6 +64,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		Date now = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(date);
 
 		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+
+		if (!customUserDetails.getUseYn()) {
+			unsuccessfulAuthentication(request, response, new DisabledException("User account is disabled"));
+			return;
+		}
 
 		int userId = customUserDetails.getUserId();
 		RoleType roleType = customUserDetails.getRoleType();
