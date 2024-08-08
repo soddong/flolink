@@ -12,7 +12,7 @@ public interface PaymentService {
 
 	PaymentPrepareResponse preparePayment(Integer userId, Map<String, Long> request);
 
-	void completePayment(PortOnePayment portOne);
+	void completePayment(Integer userId, PortOnePayment portOne);
 
 	List<PaymentHistoryResponse> getPaymentHistory(Integer userId);
 }

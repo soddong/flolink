@@ -102,6 +102,11 @@ public class User {
 		this.point = newPoint;
 	}
 
+	public void addPoint(BigDecimal point) {
+		BigDecimal newPoint = this.point.add(point);
+		this.point = newPoint;
+	}
+
 	public static User toEntity(String loginId, String password, MyRoom myRoom, JoinUserRequest joinUserRequest, RoleType role){
 		return User.builder()
 				.loginId(loginId)

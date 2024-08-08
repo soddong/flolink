@@ -1,5 +1,7 @@
 package com.flolink.backend.domain.user.service;
 
+import java.math.BigDecimal;
+
 import com.flolink.backend.domain.user.dto.request.*;
 import com.flolink.backend.domain.user.dto.response.FindUserIdResponse;
 import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
@@ -27,4 +29,6 @@ public interface UserService {
 	void modifyMessage(StatusMessageRequest statusMessageRequest, Integer userId);
 	
 	void modifyProfileAndEmotion(ProfileAndEmotionRequest profileAndEmotionRequest, Integer userId);
+
+	void purchasePoint(Integer userId, BigDecimal point);
 }
