@@ -5,29 +5,26 @@ import Photo from "../../../assets/profile/profile_dummy.jpg";
 import userRoomStore from "../../../store/userRoomStore";
 import { useNavigate } from "react-router-dom";
 import RoomInfoModal from "../../main/modal/RoomInfoModal.jsx";
-import { getMyInfo } from "../../../service/user/userApi.js";
-import { getMyRoomRole, getRoomMemberInfos, kickRoomMember, exitRoom } from "../../../service/userroom/userroomApi.js"
+import { getMyRoomRole, exitRoom } from "../../../service/userroom/userroomApi.js"
 
-function Sidebar({ width = 150, roomId, myRole, roomDetail }) {
+function Sidebar({ width = 150 }) {
   const [isOpen, setOpen] = useState(false);
   const [xPosition, setX] = useState(width);
-  const [username, setUsername] = useState(null)
   const side = useRef();
   const navigate = useNavigate();
+  const [myRole, setMyRole] = useState(null)
+  const { roomId, myInfo, roomDetail, fetchUserInfo } = userRoomStore((state) => ({
+    roomId: state.roomId,
+    myInfo: state.myInfo,
+    fetchUserInfo: state.fetchUserInfo,
+    roomDetail: state.roomDetail.data
+  }));
   const [roomInfomodal, setRoomInfoModal] = useState(null)
-  const sideItems = [
-    { id: 1, name: "상점", router: "/payment" },
-    { id: 2, name: "마이룸", router: "/myroom" },
-    { id: 3, name: "가족방 변경", router: "/test" },
-    { id: 4, name: "설정 페이지", router: "/setting" },
-    { id: 5, name: "로그아웃", router: "/login" },
-    { id: 6, name: "가족방 탈퇴", router: "/test" },
-  ];
-
   function toggleMenu() {
     if (xPosition > 0) {
       setX(0);
       setOpen(true);
+      console.log(myInfo)
     } else {
       setX(width);
       setOpen(false);
@@ -35,15 +32,12 @@ function Sidebar({ width = 150, roomId, myRole, roomDetail }) {
   }
 
   useEffect (() => {
-    getMyInfo()
-      .then(({ data }) => {
-        setUsername(data?.nickname)
-        console.log(data)
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [])
+    fetchUserInfo()
+    getMyRoomRole(roomId)
+    .then(({data}) => {
+      setMyRole(data)
+    })
+  }, [fetchUserInfo])
 
   function exitMyRoom () {
     window.alert('가족 방에서 탈퇴했습니다.')
@@ -79,7 +73,7 @@ function Sidebar({ width = 150, roomId, myRole, roomDetail }) {
         <div className={style.sidebarContent}>
           <img src={Photo} alt="Flolink" className="h-16 rounded-full" />
           <p className="text-center text-lg mb-5 text-white">
-            {username ? `${username}님` : 'loading...'}
+            {myInfo ? `${myInfo.data?.nickname}님` : 'loading...'}
           </p>
           <p className="my-1 text-white text-xl font-bold">MENU</p>
           <hr className="w-28 border-white mb-2" />
@@ -101,7 +95,7 @@ function Sidebar({ width = 150, roomId, myRole, roomDetail }) {
       <>
         <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
         onClick={(() => setRoomInfoModal(!roomInfomodal))}></div>
-        <RoomInfoModal roomDetail={roomDetail} />
+        <RoomInfoModal roomDetail={roomDetail} myRole={myRole} />
       </>
       }
     </div>

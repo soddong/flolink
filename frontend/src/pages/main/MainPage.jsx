@@ -15,9 +15,9 @@ import userRoomStore from "../../store/userRoomStore";
 
 
 function MainPage() {
-  const [status, setStatus] = useState({ level: 0, exp: 60 });
+  const [status, setStatus] = useState({ level: 0, exp: 0 });
   const Message = "오늘은 어떤 일이 있었나요?";
-  const { roomId, roomDetail, setRoomDetail, myInfo }  = userRoomStore((state) => ({
+  const { roomId, roomDetail, setRoomDetail, myInfo } = userRoomStore((state) => ({
     roomId: state.roomId,
     roomDetail: state.roomDetail?.data,
     myInfo: state.myInfo,
@@ -25,29 +25,42 @@ function MainPage() {
   }));
   const [petstatus, setPetstatus] = useState(null)
 
-  const updateLevel = (newLevel) => {
-    setStatus((prevStatus) => ({
-      ...prevStatus, 
-      level: newLevel
-    }));
-  };
-  
-  useEffect(() => {
-    setRoomDetail(roomId)
-    updateLevel(roomDetail.plantSummaryResponse?.nowLevel)
-    if (status) {
-      if (status.level === 1) {
+
+  function handlePetStatus (data) {
+    if (data) {
+      if (data === 1) {
         setPetstatus(Pet1)
-      } else if (status.level === 2) {
+      } else if (data === 2) {
         setPetstatus(Pet2)
-      } else if (status.level === 3) {
+      } else if (data === 3) {
         setPetstatus(Pet3)
       } else {
         setPetstatus(Pet4)
       }
     }
-    console.log(status)
+  }
+  
+  useEffect(() => {
+    setRoomDetail(roomId)
+    console.log(roomDetail)
   }, []);
+
+  useEffect(() => {
+    const updateLevel = async () => {
+      try {
+        setStatus((prevStatus) => ({
+        ...prevStatus, 
+        level: roomDetail.plantSummaryResponse?.nowLevel,
+        exp: roomDetail.plantSummaryResponse?.nowExp
+        }));
+        handlePetStatus(roomDetail.plantSummaryResponse?.nowLevel)
+      } catch(error) {
+        console.log(error)
+      }
+    } 
+    updateLevel()
+  }, [roomDetail])
+
   return (
     <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
       <Sidebar myInfo={myInfo} roomId={roomId} roomDetail={roomDetail} />
@@ -59,7 +72,7 @@ function MainPage() {
           <AlarmModal />
         </header>
         <Notification notice={roomDetail?.roomSummarizeResponse?.notice} />
-        <UserStatusList members={roomDetail?.memberInfoResponses} setRoomDetail={setRoomDetail} />
+        <UserStatusList />
         <PetStatusList pet={petstatus} status={status} />
       </div>
       <Question message={Message} />

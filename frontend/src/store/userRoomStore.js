@@ -11,15 +11,15 @@ const userRoomStore = create(
             myInfo: null,
             getRoomDetail: () => get().roomDetail,
             getRoomId: () => get().roomId,
+            getMyInfo: () => get().myInfo,
             setRoomId: (roomId) => set({ roomId }),
             setRoomDetail: async(roomId) => {
                 const roomDetail = await getRoomMemberInfos(roomId);
-                console.log(roomId)
                 set({ roomDetail });
             },
-            setMyInfo: async(roomId) => {
-                const myRole = await getMyInfo(roomId);
-                set({ myRole })
+            fetchUserInfo: async () => {
+                const myInfo = await getMyInfo();
+                set({ myInfo });
             }
         }),
         {

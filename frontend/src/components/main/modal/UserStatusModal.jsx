@@ -4,17 +4,21 @@ import { Link } from "react-router-dom";
 import { updateRoomMemberNickname } from "../../../service/userroom/userroomApi";
 import userRoomStore from "../../../store/userRoomStore";
 
-function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setRoomDetail }) {
+function UserStatusModal({ name, photo, status, targetUserRoomId, manager, username, setUsername }) {
   const [isModify, setIsModify] = useState(false)
-  const roomId = userRoomStore((state) => state.roomId);
-  const [username, setUsername] = useState(name)
+  const {roomId, roomDetail, setRoomDetail} = userRoomStore((state) => ({
+    roomId: state.roomId,
+    roomDetail: state.roomDetail,
+    setRoomDetail: state.setRoomDetail
+  }));
+  const [inputname, setInputname] = useState(name)
 
   function handleIsModify() {
     setIsModify(!isModify)
   }
 
-  function handleUsername (event) {
-    setUsername(event.target.value)
+  function handleInputname (event) {
+    setInputname(event.target.value)
     if (event.target.value.length > 10) {
       window.alert('10자까지 입력 가능합니다.')
     }
@@ -23,13 +27,13 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setRo
   function submitUsername(event) {
     event.preventDefault()
     updateRoomMemberNickname({
-      targetNickname : username,
+      targetNickname : inputname,
       roomId,
       targetUserRoomId
     })
     console.log(targetUserRoomId);
-    console.log(username);
     window.alert('변경변경?')
+    setUsername(inputname)
     handleIsModify()
   }
 
@@ -45,8 +49,8 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setRo
         }
         {isModify ?
         <form action="" onSubmit={submitUsername}>
-          <input type="text" onChange={handleUsername}
-            maxLength={10} value={username} placeholder={username}
+          <input type="text" onChange={handleInputname}
+            maxLength={10} value={inputname} placeholder={username}
             className="border-0 ring-1 ring-inset ring-gray-300 mx-1 w-24" />
           <input type="submit" value="변경" />
         </form>
