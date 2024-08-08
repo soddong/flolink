@@ -12,12 +12,6 @@ import userRoomStore from "../../store/userRoomStore";
 
 function MainLayout() {
   const [currentPage, setCurrentPage] = useState('home');
-  const { roomId, roomDetail, setRoomDetail, myInfo }  = userRoomStore((state) => ({
-    roomId: state.roomId,
-    roomDetail: state.roomDetail?.data,
-    myInfo: state.myInfo,
-    setRoomDetail: state.setRoomDetail
-  }));
 
   // useEffect(() => {
   //   getMyRoomRole(roomId)

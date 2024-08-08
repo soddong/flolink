@@ -1,21 +1,16 @@
 import ProfilePhoto from "./ProfilePhoto";
 import Photo from "../../../assets/profile/profile_dummy.jpg";
 import { useEffect, useState } from "react";
+import userRoomStore from "../../../store/userRoomStore";
 
-function UserStatusList({ members, setRoomDetail }) {
+function UserStatusList() {
   const [memberList, setMemberList] = useState([]);
+  const { roomDetail } = userRoomStore((state) => ({
+    roomDetail: state.roomDetail?.data,
+  }));
   useEffect(() => {
-    if (members) {
-      setMemberList(members);
-    }
-  }, [members]);
-  //   { userId: 1, targetNickname: "박동환", profile: "HONEYBEE",roomId:2,targetUserRoomId:2,emotion:"good"}
-  // const memberList = [
-  //   { id: 1, name: '엄마', photo: Photo, status: '화남', manager: 1},
-  //   { id: 2, name: '아빠', photo: Photo, status: '행복', manager: 0},
-  //   { id: 3, name: '첫째', photo: Photo, status: '행복', manager: 0},
-  //   { id: 4, name: '둘째', photo: Photo, status: '슬픔', manager: 0},
-  // ]
+    setMemberList(roomDetail?.memberInfoResponses);
+  }, [roomDetail]);
 
   return (
     <div className="border-box mt-3.5 h-24 py-1 px-5 bg-white/75 rounded-xl flex flex-col items-center">
@@ -35,7 +30,6 @@ function UserStatusList({ members, setRoomDetail }) {
               targetUserRoomId={member?.targetUserRoomId}
               key={member?.targetUserRoomId}
               manager={1}
-              setRoomDetail={setRoomDetail}
             />
           );
         })}

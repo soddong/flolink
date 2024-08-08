@@ -1,20 +1,19 @@
 import style from "../../../css/main/main_modals.module.css"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { updateRoomMemberNickname } from "../../../service/userroom/userroomApi";
-import userRoomStore from "../../../store/userRoomStore";
 
-function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setRoomDetail }) {
+function UserStatusModal({ name, photo, status, targetUserRoomId, manager, username, handleUsername }) {
   const [isModify, setIsModify] = useState(false)
-  const roomId = userRoomStore((state) => state.roomId);
-  const [username, setUsername] = useState(name)
+  const [inputname, setInputname] = useState(username)
+  const navigate = useNavigate();
 
   function handleIsModify() {
     setIsModify(!isModify)
   }
 
-  function handleUsername (event) {
-    setUsername(event.target.value)
+  function handleInputname (event) {
+    setInputname(event.target.value)
     if (event.target.value.length > 10) {
       window.alert('10자까지 입력 가능합니다.')
     }
@@ -22,14 +21,10 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setRo
 
   function submitUsername(event) {
     event.preventDefault()
-    updateRoomMemberNickname({
-      targetNickname : username,
-      roomId,
-      targetUserRoomId
-    })
     console.log(targetUserRoomId);
-    console.log(username);
-    window.alert('변경변경?')
+    console.log("name:" ,inputname)
+    window.alert('변경하시겠습니까?')
+    handleUsername(inputname)
     handleIsModify()
   }
 
@@ -45,14 +40,14 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, setRo
         }
         {isModify ?
         <form action="" onSubmit={submitUsername}>
-          <input type="text" onChange={handleUsername}
-            maxLength={10} value={username} placeholder={username}
+          <input type="text" onChange={handleInputname}
+            maxLength={10} value={inputname} placeholder={name}
             className="border-0 ring-1 ring-inset ring-gray-300 mx-1 w-24" />
           <input type="submit" value="변경" />
         </form>
            :
           <>
-            <p className='font-bold text-center leading-3 mx-2'>{username}</p>
+            <p className='font-bold text-center leading-3 mx-2'>{inputname}</p>
             <span className="material-symbols-outlined text-xl"
               onClick={handleIsModify}>
               edit
