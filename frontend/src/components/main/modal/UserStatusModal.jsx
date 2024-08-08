@@ -1,10 +1,12 @@
 import style from "../../../css/main/main_modals.module.css"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function UserStatusModal({ name, photo, status, targetUserRoomId, manager, username, handleUsername }) {
   const [isModify, setIsModify] = useState(false)
   const [inputname, setInputname] = useState(username)
+  const navigate = useNavigate();
 
   function handleIsModify() {
     setIsModify(!isModify)
