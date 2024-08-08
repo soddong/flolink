@@ -1,0 +1,266 @@
+.myRoom {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* background-image: url('../../assets/myroom/bg_myroom.png');
+    background-size: contain;
+    background-repeat: no-repeat; 
+    background-position: center center; */
+}
+
+.myRoomHeader {
+    width: 100%;
+    height: 7%;
+    z-index: 11;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5%;
+    left: 0;
+    background-color: white;
+    position : relative;
+}
+
+.myRoomHeader > div:first-child {
+    z-index: 12;
+  }
+  
+.myRoomHeader > div:nth-child(2) {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.myRoomIcons {
+    width : 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    z-index : 12;
+}
+
+.myRoomInventory {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    
+}
+
+.myRoomItemStore {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.myRoomInventory svg {
+    font-size: 1.5rem;
+}
+
+.myRoomItemStore svg {
+    font-size: 1.5rem;
+}
+
+.myRoomInventory span {
+    font-size: 0.7rem;
+    font-weight: 700; 
+    text-align: center;
+    color: #333; 
+}
+
+.myRoomItemStore span {
+    font-size: 0.7rem;
+    font-weight: 700; 
+    text-align: center;
+    color: #333; 
+}
+
+.myRoomItems {
+    position: relative;
+    width: 100%;
+    height : 93%;
+}
+
+.roomImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.rug {
+    position: absolute;
+    width: 75%; 
+    left: 10%; 
+    top : 42%;
+    z-index: 5;
+}
+
+.shelf {
+    position : absolute;
+    z-index : 6;
+    width : 55%;
+    left : 30%;
+    top : 32%;
+}
+
+.stand {
+    position : absolute;
+    z-index: 7;
+    width : 30%;
+    top : 44%;
+    left : 57%;
+}
+
+.bed {
+    position : absolute;
+    z-index : 8;
+    width : 50%;
+    top : 49%;
+    left : 50%;
+}
+
+.minitable {
+    position : absolute;
+    z-index : 7;
+    width : 30%;
+    top : 51%;
+    left : 0.5%;
+}
+
+.vase {
+    position : absolute;
+    z-index : 8;
+    width : 27%;
+    top : 55%;
+    left : 15%;
+}
+
+.bigtable {
+    position : absolute;
+    z-index : 9;
+    width : 35%;
+    top : 58%;
+    left : 32%;
+}
+
+.inventoryToast {
+    position: fixed;
+    top : 7%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    z-index : 1000;
+}
+
+.inventoryToastOpen {
+    opacity: 1;
+}
+
+.inventoryToastClosing {
+    opacity: 0;
+}
+
+.inventoryContentClosing {
+    animation: slideDown 0.3s forwards;
+}
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(50%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+.inventoryContent {
+    background-color: white;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 5%;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-out;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s forwards;
+    width : 100%;
+    overflow-y: auto;
+}
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(-50%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+.inventoryContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+.inventoryContent::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+
+  .itemTypeButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3%;
+  }
+  
+  .itemTypeButton {
+    padding: 10%;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .itemTypeButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .itemVariantButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3%;
+  }
+  
+  .itemVariantButton {
+    padding : 10%;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display : flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .itemImage {
+    width : 50%;
+  }
+  
+  .itemVariantButton:hover {
+    background-color: #d0d0d0;
+  }

@@ -1,0 +1,258 @@
+.settingpage {
+    width : 100%;
+    height : 100%;
+}
+
+.header {
+    width : 100%;
+    height : 7%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    position : relative;
+    align-items: center;
+    padding : 5%;
+    box-sizing: border-box;
+}
+
+.title {
+    position : absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.mycardcontainer {
+    width : 100%;
+    height : 30%;
+    background-color: pink;
+    display : flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mycard {
+    width : 90%;
+    height : 90%;
+    border-radius: 10px;
+    background-color: white;
+    box-sizing : border-box;
+    padding : 20px;
+}
+
+.mycardhead {
+    width : 100%;
+    height : 20%;
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mycardpoint {
+    width : 100%;
+    height : 80%;
+    border-radius: 10px;
+    background-color: blue;
+    box-sizing: border-box;
+    padding : 15px;
+}
+
+.mycardpointhead {
+    width : 100%;
+    height : 20%;
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding-bottom : 10px;
+}
+
+.mypoint {
+    width : 100%;
+    height : 80%;
+    border-radius: 10px;
+    background-color: aquamarine;
+    box-sizing: border-box;
+    display : flex;
+    align-items: center;
+}
+
+.settinglist {
+    width: 100%;
+    height: 63%;
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    border-bottom: 2px solid #007bff;
+    color: #007bff;
+}
+
+.tabContent {
+    background-color: white;
+    border-radius: 10px;
+    padding: 5%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    overflow-y: auto;
+    height : 80%;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    width : 100%;
+    height : 100%;
+}
+
+.list li:last-child {
+    border-bottom: none;
+}
+
+.list li:hover {
+    background-color: #f8f8f8;
+}
+
+.itemListItem {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+    width : 100%;
+}
+
+.itemInfo {
+    display: flex;
+    align-items: center;
+    padding: 5%;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+.itemImage {
+    width: 15%;
+    height: 15%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.itemName {
+    font-weight: bold;
+}
+
+.itemVariants {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: #fff;
+}
+
+.itemVariants.expanded {
+    max-height: 500px; /* 적절한 높이로 조정 */
+    transition: max-height 0.5s ease-in;
+}
+
+.variantItem {
+    display: flex;
+    align-items: center;
+    padding: 5%;
+    border-top: 1px solid #eee;
+    position : relative;
+    display : flex;
+    justify-content: space-between;
+}
+
+.variantImage {
+    width: 12%;
+    height: 12%;
+    object-fit: cover;
+    margin-right: 4%;
+}
+
+.variantNumber {
+    font-size: 14px;
+    color: #666;
+}
+
+.historyListItem {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+    width : 100%;
+    height : 20%;
+}
+
+.purchasedItem {
+    padding : 3%;
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+    width : 100%;
+    height : 100%;
+}
+
+.purchasedItem img {
+    width : 15%;
+    object-fit: cover;
+    margin-right : 3%;
+}
+
+.purchaseInfo {
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+    height : 100%;
+    width : 80%;
+}
+
+.purchaseinfoforname {
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.purchaseDate {
+    right : 0;
+}
+
+.iteminfos {
+    width : 50%;
+    display : flex;
+    flex-direction: row;
+}
+
+.soldout {
+    pointer-events: none;
+}
+
+.soldoutImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    object-fit: contain;
+    pointer-events: none;
+}
