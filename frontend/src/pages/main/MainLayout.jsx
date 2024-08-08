@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SideBar from '../../components/common/side_bar/SideBar.jsx'
 import NavBar from '../../components/common/nav_bar/NavBar.jsx';
 import BackgroundPhoto from '../../assets/main/background_photo.png'
@@ -8,15 +8,43 @@ import SchedulePage from '../schedule/SchedulePage';
 import FeedListPage from '../feed/FeedListPage';
 import FamilyGardenPage from '../garden/FamilyGardenPage';
 import Question from '../../components/main/today_question/Question';
+import userRoomStore from "../../store/userRoomStore";
 
 function MainLayout() {
   const [currentPage, setCurrentPage] = useState('home');
+  const roomId = userRoomStore((state) => state.roomId);
+  const roomDetail = userRoomStore((state) => state.roomDetail);
+  const myRole = userRoomStore((state) => state.myRole);
+  // const [myRole, setMyRole] = useState("member");
+  const [roomData, setRoomData] = useState({
+    memberInfoResponse: null,
+    plantSummaryResponse: null,
+    roomSummarizeResponse: null,
+  });
+
+  // useEffect(() => {
+  //   getMyRoomRole(roomId)
+  //     .then(({ data }) => {
+  //       setMyRole(data);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  //   getRoomMemberInfos(roomId)
+  //     .then(({ data }) => {
+  //       setRoomData(data);
+  //     })
+  //     .then((data) => console.log(roomData))
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }, []);
 
 
   const renderPage = () => {
     switch(currentPage) {
       case 'home':
-        return <MainPage />;
+        return <MainPage myRole={myRole} roomData={roomDetail} setRoomData={setRoomData} />;
       case 'myroom':
         return <MyRoomPage />;
       case 'schedule':
@@ -32,7 +60,7 @@ function MainLayout() {
 
   return (
     <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
-      <SideBar />
+      <SideBar myRole={myRole} roomDetail={roomDetail} />
         {renderPage()}
       <NavBar setCurrentPage={setCurrentPage} currentPage={currentPage} />
       

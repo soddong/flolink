@@ -31,11 +31,13 @@ export const updateRoomDetail = async (roomId, roomUpdateRequest) => {
     return data;
 }
 export const exitRoom = async (roomId) => {
-    const { data } = await axiosCommonInstance.post(`/rooms/${roomId}`,);
+    const { data } = await axiosCommonInstance.delete(`/rooms/${roomId}`,);
     return data;
 }
 export const kickRoomMember = async (roomId, targetUserRoomId) => {
-    const { data } = await axiosCommonInstance.post(`/rooms/${roomId}/kick/${targetUserRoomId}`,);
+    const { data } = await axiosCommonInstance.delete(`/rooms/${roomId}/kick/${targetUserRoomId}`,);
     return data;
 }
-
+export const updateRoomMemberNickname= async(nicknameUpdateRequest)=>{
+    const {data} = await axiosCommonInstance.put(`/rooms/nickname/update`,nicknameUpdateRequest);
+}

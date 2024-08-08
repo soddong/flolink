@@ -60,7 +60,6 @@ function LoginPage() {
           className={`${LoginPageStyle.snsButton} ${LoginPageStyle.kakaoButton}`}
           variant="contained"
           href='http://192.168.0.6:8081/oauth2/authorization/kakao'
-          // href='http://localhost:8081/oauth2/authorization/kakao'
         >
           <img src={kakaoLogo} alt="Kakao" className={LoginPageStyle.snsLogo} /> 카카오로 계속
         </Button>
@@ -68,7 +67,6 @@ function LoginPage() {
           className={`${LoginPageStyle.snsButton} ${LoginPageStyle.googleButton}`}
           variant="contained"
           href='http://192.168.0.6:8081/oauth2/authorization/google'
-          // href='http://localhost:8081/oauth2/authorization/google'
         >
           <img src={googleLogo} alt="Google" className={LoginPageStyle.snsLogo} /> 구글로 계속
         </Button>

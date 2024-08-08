@@ -1,9 +1,10 @@
 import style from '../../css/main/main_modals.module.css'
 import movieFrame from '../../assets/garden/movie_frame.png'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import FamilyRank from './FamilyRank';
+import { getHistoryData } from '../../hook/garden/gardenHook.js'
 
 const imageData = [1, 2, 3, 4, 5]
 const family = [
@@ -14,15 +15,30 @@ const family = [
 ]
 
 function FlowerModal ({ month, flower, setFlowerModal }) {
+  const [plantId, setPlantId] = useState(1)
+  const [historyId, setHistoryId] = useState(5)
+  const { data: historyData, isLoading: historyLoading, error: historyError } = getHistoryData(plantId, historyId);
+  const [history, setHistory] = useState(null)
+  const [rank, setRank] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0);
-  const feedslides = imageData.map((image, index) => (
-    <div className='w-full h-full bg-center bg-contain bg-no-repeat flex justify-center items-center'
-      style={{'backgroundImage': `url(${movieFrame})`, 'backgroundSize': '100% 100%'}}
-      key={index}>
-        <img src={flower} alt="dummy_photo"
-        style={{'height': '72%', 'width': '93%'}} />
-    </div>
-  ));
+
+  useEffect(() => {
+    if (historyData && historyData.data) {
+      setRank(Array.from(historyData.data["plantUserHistoryRespons"]).sort((a, b) => a.rank - b.rank))
+      setHistory(historyData.data["feedImageResponses"].map((image, index) => (
+        <div className='w-full h-full bg-center bg-contain bg-no-repeat flex justify-center items-center'
+          style={{'backgroundImage': `url(${movieFrame})`, 'backgroundSize': '100% 100%'}}
+          key={index}>
+            <img src={image["imageUrl"]} alt="dummy_photo"
+            style={{'height': '72%', 'width': '93%'}} />
+        </div>
+      )))
+
+      console.log(history, rank)
+    } else {
+      console.log(historyError)
+    }
+  }, [historyData, historyLoading, historyError])
 
   function handleChange(index) {
     setCurrentIndex(index);
@@ -31,9 +47,6 @@ function FlowerModal ({ month, flower, setFlowerModal }) {
   function closeModal () {
     setFlowerModal()
   }
-
-  const copyOfFamily = Array.from(family)
-  const sortedFamily = copyOfFamily.sort((a, b) => a.rank - b.rank)
 
   return (
     <div className={`w-3/4 h-3/4 p-2 ${style.mainModal}`}>
@@ -53,13 +66,17 @@ function FlowerModal ({ month, flower, setFlowerModal }) {
           centerMode={true}
           onChange={handleChange}
           className='w-full h-full' >
-          {feedslides}
+          {history}
         </Carousel>
       </div>
       <div className='w-full h-full'>
-        {sortedFamily.map((member) => (
-          <FamilyRank key={member.id} name={member.name} rank={member.rank} point={member.point} />
-        ))}
+        {rank ? 
+          rank.map((member, index) => (
+            <FamilyRank key={index} name={member["nickname"]} rank={member["monthlyRank"]} point={member["contributeExp"]} />
+          )) : (
+            <p>Loading..</p>
+          )
+        }
       </div>
     </div>
   )
