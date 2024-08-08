@@ -1,12 +1,12 @@
 import React from 'react'
-import { requestPermission, onMessageListener } from '../service/notification/messaging'
+// import { requestPermission, onMessageListener } from '../service/notification/messaging'
 
 function PushNotificationSubscriber() {
   const subscribeToPushNotifications = async () => {
 
     try {
-      requestPermission();
-      onMessageListener();
+      // requestPermission();
+      // onMessageListener();
     }
     catch(error) {
       console.log(error)
