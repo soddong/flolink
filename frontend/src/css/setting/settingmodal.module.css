@@ -159,3 +159,15 @@
     background: #ccc;
     cursor: not-allowed;
 }
+
+.userDeletetitle {
+    display : flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons {
+    display : flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

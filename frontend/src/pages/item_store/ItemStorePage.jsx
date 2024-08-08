@@ -168,6 +168,7 @@ function ItemStorePage() {
                     <div className={styles.mycardpoint}>
                         <div className={styles.mycardpointhead}>
                             <span>내 포인트</span>
+                            <span onClick={()=>{navigate('/payment')}}>충전하기</span>
                         </div>
                         <div className={styles.mypoint}>
                             <span>281 point</span>
