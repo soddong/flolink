@@ -17,6 +17,7 @@ import com.flolink.backend.domain.payment.repository.PaymentItemRepository;
 import com.flolink.backend.domain.payment.repository.PaymentRepository;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
+import com.flolink.backend.domain.user.service.UserService;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -29,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
+
+	private final UserService userService;
 
 	private final PaymentItemRepository paymentItemRepository;
 	private final PaymentRepository paymentRepository;
@@ -52,10 +55,10 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Override
 	@Transactional
-	public void completePayment(final PortOnePayment portOne) {
+	public void completePayment(final Integer userId, final PortOnePayment portOne) {
 		PaymentHistory paymentHistory = paymentRepository.findByOrderId(portOne.getOrderId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PAYMENT_NOT_FOUND));
-
+		userService.purchasePoint(userId, paymentHistory.getPaymentItem().getPrice());
 		paymentHistory.completePayment(portOne);
 	}
 
