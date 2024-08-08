@@ -1,4 +1,5 @@
 import { axiosCommonInstance } from '../../apis/axiosInstance';
+import userRoomStore from '../../store/userRoomStore';
 
 // 피드 추가
 export const addFeed = async (roomId, images, content) => {
