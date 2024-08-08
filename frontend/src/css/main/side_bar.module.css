@@ -1,11 +1,10 @@
 .sideBarButton {
   position: relative;
   left: 150px;
-  top: 50%;
+  top: 30%;
   margin-top: -50px;
   border-radius: 0px 10px 10px 0px;
   overflow: hidden;
-  background-color: white;
   width: 30px;
   height: 95px;
   display: flex;

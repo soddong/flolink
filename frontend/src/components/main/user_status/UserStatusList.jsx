@@ -2,7 +2,7 @@ import ProfilePhoto from "./ProfilePhoto";
 import Photo from "../../../assets/profile/profile_dummy.jpg";
 import { useEffect, useState } from "react";
 
-function UserStatusList({ members }) {
+function UserStatusList({ members, setRoomDetail }) {
   const [memberList, setMemberList] = useState([]);
   useEffect(() => {
     if (members) {
@@ -32,8 +32,10 @@ function UserStatusList({ members }) {
               name={member?.targetNickname}
               photo={Photo} //{"dog.png"}
               status={"화남"}
+              targetUserRoomId={member?.targetUserRoomId}
               key={member?.targetUserRoomId}
               manager={1}
+              setRoomDetail={setRoomDetail}
             />
           );
         })}
