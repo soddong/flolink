@@ -6,10 +6,11 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 const FeedItem = ({ feed, currentUser, onEditComment, onDeleteComment, onAddComment, onEditFeed, onDeleteFeed }) => {
   const [showAllComments, setShowAllComments] = useState(false);
   const [newComment, setNewComment] = useState('');
-  const  myUserRoomId  = userRoomStore((state) => ( state.userRoomId.data ));
+  const  myUserRoomId  = userRoomStore((state) =>  state.userRoomId );
   
   const handleAddComment = (e) => {
     e.preventDefault();
+    console.log(feed)
     if (newComment.trim()) {
       onAddComment(feed.feedId, newComment); // onAddComment를 호출하여 부모 컴포넌트에 새로운 댓글 추가 요청
       setNewComment('');
