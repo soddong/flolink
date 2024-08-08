@@ -2,7 +2,9 @@ package com.flolink.backend.domain.feed.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +44,7 @@ public class FeedServiceImpl implements FeedService {
 	private final FeedRepository feedRepository;
 	private final FeedCommentRepository feedCommentRepository;
 	private final FeedImageRepository feedImageRepository;
-	
+
 	private final S3Util s3Util;
 
 	@Override
@@ -62,7 +64,8 @@ public class FeedServiceImpl implements FeedService {
 		Feed feed = feedRepository.save(feedCreateRequest.toEntityUsingUserRoom(userRoom));
 
 		int imgOrder = 1;
-		for (MultipartFile multipartFile : feedCreateRequest.getImages()) {
+		for (MultipartFile multipartFile : Optional.ofNullable(feedCreateRequest.getImages())
+			.orElse(Collections.emptyList())) {
 			String uuid = RandomUtil.generateRandomUUID();
 			String keyName = "image_" + uuid + ".jpg";
 			try {
@@ -101,7 +104,8 @@ public class FeedServiceImpl implements FeedService {
 			imgOrder = Math.max(image.getImageOrder() + 1, imgOrder);
 			image.setUseYn(false);
 		}
-		for (MultipartFile multipartFile : feedUpdateRequest.getImages()) {
+		for (MultipartFile multipartFile : Optional.ofNullable(feedUpdateRequest.getImages())
+			.orElse(Collections.emptyList())) {
 			boolean isIn = false;
 			for (FeedImage image : images) {
 				if (image.getImageUrl().equals(multipartFile.getOriginalFilename())) {
