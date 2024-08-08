@@ -1,19 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import style from "../../../css/main/side_bar.module.css";
 import SideBarItem from "./SideBarItem";
 import Photo from "../../../assets/profile/profile_dummy.jpg";
 import userRoomStore from "../../../store/userRoomStore";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import RoomInfoModal from "../../main/modal/RoomInfoModal.jsx";
 import { getMyInfo } from "../../../service/user/userApi.js";
 import { getMyRoomRole, getRoomMemberInfos, kickRoomMember, exitRoom } from "../../../service/userroom/userroomApi.js"
 
-function Sidebar({ width = 150, roomId, myRole }) {
+function Sidebar({ width = 150, roomId, myRole, roomDetail }) {
   const [isOpen, setOpen] = useState(false);
   const [xPosition, setX] = useState(width);
   const [username, setUsername] = useState(null)
   const side = useRef();
   const navigate = useNavigate();
+  const [roomInfomodal, setRoomInfoModal] = useState(null)
   const sideItems = [
     { id: 1, name: "상점", router: "/payment" },
     { id: 2, name: "마이룸", router: "/myroom" },
@@ -86,21 +87,23 @@ function Sidebar({ width = 150, roomId, myRole }) {
             <li className="py-3" onClick={(() => navigate("/itemstore"))}>상점</li>
             <li className="py-3" onClick={(() => navigate("/channelselect"))}>가족방 변경</li>
             <li className="py-3" onClick={(() => navigate("/setting"))}>내 정보 설정</li>
-            {myRole === "admin" && (
-              <li className="py-3">가족방 정보 수정</li>
-            )}
+            <li className="py-3" onClick={(() => setRoomInfoModal(!roomInfomodal))}>가족방 정보</li>
           </ul>
           <div className="absolute bottom-4 text-center text-xl text-white/70">
             <ul>
               <li className="py-2">로그아웃</li>
               <li className="py-2" onClick={exitMyRoom}>가족방 탈퇴</li>
-              {myRole === "admin" && (
-                <li className="py-2">멤버 강퇴하기</li>
-              )}
             </ul>
           </div>
         </div>
       </div>
+      {roomInfomodal && 
+      <>
+        <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
+        onClick={(() => setRoomInfoModal(!roomInfomodal))}></div>
+        <RoomInfoModal roomDetail={roomDetail} />
+      </>
+      }
     </div>
   );
 }

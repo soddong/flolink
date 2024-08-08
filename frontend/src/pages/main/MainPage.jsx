@@ -12,55 +12,44 @@ import BackgroundPhoto from "../../assets/main/background_photo.png";
 import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../../components/common/side_bar/SideBar";
 import userRoomStore from "../../store/userRoomStore";
-import {
-  getMyRoomRole,
-  getRoomMemberInfos,
-} from "../../service/userroom/userroomApi";
+
 
 function MainPage() {
   const [status, setStatus] = useState({ level: 0, exp: 60 });
   const Message = "오늘은 어떤 일이 있었나요?";
-  const roomId = userRoomStore((state) => state.roomId);
-  const [myRole, setMyRole] = useState("member");
+  const { roomId, roomDetail, setRoomDetail, myRole }  = userRoomStore((state) => ({
+    roomId: state.roomId,
+    roomDetail: state.roomDetail?.data,
+    myRole: state.myRole,
+    setRoomDetail: state.setRoomDetail
+  }));
   const [petstatus, setPetstatus] = useState(null)
-  const [roomDetail, setRoomDetail] = useState({
-    memberInfoResponse: null,
-    plantSummaryResponse: null,
-    roomSummarizeResponse: null,
-  });
+
+  const updateLevel = (newLevel) => {
+    setStatus((prevStatus) => ({
+      ...prevStatus, 
+      level: newLevel
+    }));
+  };
+  
   useEffect(() => {
-    getMyRoomRole(roomId)
-      .then(({ data }) => {
-        setMyRole(data);
-        console.log(data)
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    getRoomMemberInfos(roomId)
-      .then(({ data }) => {
-        setRoomDetail(data);
-        if (data.plantSummaryResponse?.nowLevel === 1) {
-          setPetstatus(Pet1)
-        } else if (data.plantSummaryResponse?.nowLevel === 2) {
-          setPetstatus(Pet2)
-        } else if (data.plantSummaryResponse?.nowLevel === 3) {
-          setPetstatus(Pet3)
-        } else {
-          setPetstatus(Pet4)
-        }
-        // console.log(petstatus)
-        // console.log(roomDetail.roomSummarizeResponse?.roomName)
-        return data;
-      })
-      .then((data) => console.log(data))
-      .catch((e) => {
-        console.log(e);
-      });
+    setRoomDetail(roomId)
+    updateLevel(roomDetail.plantSummaryResponse?.nowLevel)
+    if (status) {
+      if (status.level === 1) {
+        setPetstatus(Pet1)
+      } else if (status.level === 2) {
+        setPetstatus(Pet2)
+      } else if (status.level === 3) {
+        setPetstatus(Pet3)
+      } else {
+        setPetstatus(Pet4)
+      }
+    }
   }, []);
   return (
     <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
-      <Sidebar myRole={myRole} roomId={roomId} />
+      <Sidebar myRole={myRole} roomId={roomId} roomDetail={roomDetail} />
       <div className="py-7 w-5/6">
         <header className="flex justify-between">
           <h1 className="m-0 font-bold text-2xl text-rose-500">
