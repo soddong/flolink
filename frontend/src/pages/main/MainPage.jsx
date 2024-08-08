@@ -17,23 +17,27 @@ import userRoomStore from "../../store/userRoomStore";
 function MainPage() {
   const [status, setStatus] = useState({ level: 0, exp: 60 });
   const Message = "오늘은 어떤 일이 있었나요?";
-  const { roomId, roomDetail, setRoomDetail, myInfo }  = userRoomStore((state) => ({
+  const { roomId, roomDetail, userRoomId, setUserRoomId, setRoomDetail, myInfo } = userRoomStore((state) => ({
     roomId: state.roomId,
+    userRoomId: state.userRoomId,
     roomDetail: state.roomDetail?.data,
     myInfo: state.myInfo,
+    setUserRoomId: state.setUserRoomId,
     setRoomDetail: state.setRoomDetail
   }));
   const [petstatus, setPetstatus] = useState(null)
 
   const updateLevel = (newLevel) => {
     setStatus((prevStatus) => ({
-      ...prevStatus, 
+      ...prevStatus,
       level: newLevel
     }));
   };
-  
+
   useEffect(() => {
+    setUserRoomId(roomId)
     setRoomDetail(roomId)
+    console.log(userRoomId.data);
     updateLevel(roomDetail.plantSummaryResponse?.nowLevel)
     if (status) {
       if (status.level === 1) {

@@ -38,10 +38,10 @@ function Sidebar({ width = 150, roomId, myRole, roomDetail }) {
     getMyInfo()
       .then(({ data }) => {
         setUsername(data?.nickname)
-        console.log(data)
+        // console.log(data)
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
       });
   }, [])
 
