@@ -68,7 +68,7 @@ function ChannelSelectPage() {
   };
 
   return (
-    <div className={styles.startforselect}>
+    <div className={`${styles.startforselect} bg-custom-gradient`}>
       <div className={styles.headerforselect}>
         <div className={`${styles.cardforuserinfo}`}>
           <div
