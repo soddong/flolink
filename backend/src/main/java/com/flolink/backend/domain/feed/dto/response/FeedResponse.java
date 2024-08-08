@@ -18,10 +18,10 @@ import lombok.Setter;
 public class FeedResponse {
 	private Integer feedId;
 	private String content;
-	private LocalDateTime createdDate;
+	private LocalDateTime date;
 	private String author;
-	private List<FeedCommentResponse> feedCommentList;
-	private List<FeedImageResponse> feedImages;
+	private List<FeedCommentResponse> comments;
+	private List<FeedImageResponse> images;
 
 	public static FeedResponse fromEntity(UserRoom userRoom, Feed feed) {
 		String nickName = feed.getUserRoom().getUser().getNickname();
@@ -35,19 +35,20 @@ public class FeedResponse {
 		return FeedResponse.builder()
 			.feedId(feed.getFeedId())
 			.content(feed.getContent())
-			.createdDate(feed.getCreateAt())
+			.date(feed.getCreateAt())
 			.author(nickName)
-			.feedCommentList(
+			.comments(
 				feed.getFeedCommentList().stream().map((FeedCommentResponse::fromEntity)).toList().reversed()
 			)
-			.feedImages(
-				feed.getFeedImageList()
-					.stream()
-					.map((FeedImageResponse::fromEntity))
-					.toList()
-					.stream()
-					.sorted(Comparator.comparingInt(FeedImageResponse::getImageOrder)).toList()
-			)
+			.images
+				(
+					feed.getFeedImageList()
+						.stream()
+						.map((FeedImageResponse::fromEntity))
+						.toList()
+						.stream()
+						.sorted(Comparator.comparingInt(FeedImageResponse::getImageOrder)).toList()
+				)
 			.build();
 	}
 }
