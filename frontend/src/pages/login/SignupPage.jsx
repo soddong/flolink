@@ -33,7 +33,7 @@ function SignupPage() {
     }
   }, [isFormValid]);
 
-  const checkUsernameAvailability = async (e) => {
+  const checkUsernameAvailability = async (username) => {
     e.preventDefault();
     try {
       const response = checkDuplicateUsername(username);
@@ -87,7 +87,6 @@ function SignupPage() {
       setNicknameError('');
     }
   };
-
   const handleRegist = () => {
     console.log("1234");
     const userinfo={

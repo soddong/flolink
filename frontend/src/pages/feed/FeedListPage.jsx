@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo/logo.png';
 import FeedList from '../../components/feed/FeedList';
 import NavBar from '../../components/common/nav_bar/NavBar';
 import '../../css/feed/feedStyles.module.css';
+import { feedList } from '../../service/Feed/feedApi';
+import userRoomStore from '../../store/userRoomStore';
 
 const FeedListPage = () => {
   const navigate = useNavigate();
   const currentUser = 'user1';
-
+  const roomId = userRoomStore((state) => state.roomId);
+  useEffect(() => {
+    const lastFeedDate = new Date().toISOString();
+    console.log(lastFeedDate)
+    feedList(roomId, lastFeedDate)
+      .then(({ data }) => setFeeds(data));
+  }, []);
   const [feeds, setFeeds] = useState([
+    // const feedList = feedList(tel);
+    // feedList(feedList)
+    // feeds.feedId
     {
       feedId: 1,
       images: [
@@ -68,7 +80,7 @@ const FeedListPage = () => {
             <FeedList
               feeds={feeds}
               currentUser={currentUser}
-              
+
             />
           </div>
         </div>

@@ -1,5 +1,10 @@
 import { axiosCommonInstance } from '../../apis/axiosInstance';
 
+export const getMyInfoinChannelSelect = async () => {
+    const { data } = await axiosCommonInstance.get('/users/myInfo')
+    return data;
+}
+
 export const getMyUserRooms = async () => {
     const { data } = await axiosCommonInstance.get(`/rooms`)
     return data;

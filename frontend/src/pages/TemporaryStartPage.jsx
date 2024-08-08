@@ -6,7 +6,7 @@ function TemporaryStartPage() {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', padding: '20px' }}>
             <h1>Temporary Start Page</h1>
-            <Link to="/test"><button>Channel Select Page</button></Link>
+            <Link to="/channelselect"><button>Channel Select Page</button></Link>
             <Link to="/login"><button>Login Page</button></Link>
             <Link to="/main"><button>Main Page</button></Link>
             <Link to="/FindAccount"><button>Find Account Page</button></Link>
@@ -22,6 +22,7 @@ function TemporaryStartPage() {
             <Link to="/payment"><button>Payment Page</button></Link>
             <Link to="/setting"><button>Setting Page</button></Link>
             <Link to="/location"><button>Location Page</button></Link>
+            <Link to="/mobile"><button>Mobile Page</button></Link>
             <PushNotificationSubscriber />
         </div>
     )
