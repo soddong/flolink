@@ -21,6 +21,7 @@ import com.flolink.backend.domain.payment.dto.response.PaymentPrepareResponse;
 import com.flolink.backend.domain.payment.service.PaymentItemService;
 import com.flolink.backend.domain.payment.service.PaymentService;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
+import com.flolink.backend.domain.user.service.UserService;
 import com.flolink.backend.global.common.CommonResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,9 +62,11 @@ public class PaymentController {
 
 	@PostMapping("/complete")
 	@Operation(summary = "결제 완료")
-	public ResponseEntity<CommonResponse> completePayment(@RequestBody final PortOnePayment portOne) {
+	public ResponseEntity<CommonResponse> completePayment(@RequestBody final PortOnePayment portOne,
+		Authentication authentication) {
 		log.info("===결제 완료 START===");
-		paymentService.completePayment(portOne);
+		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+		paymentService.completePayment(customUserDetails.getUserId(), portOne);
 		log.info("===결제 완료 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS));
 	}

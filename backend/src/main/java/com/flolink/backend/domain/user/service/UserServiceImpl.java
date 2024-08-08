@@ -2,6 +2,7 @@ package com.flolink.backend.domain.user.service;
 
 import static com.flolink.backend.domain.user.entity.enumtype.RoleType.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -284,6 +285,18 @@ public class UserServiceImpl implements UserService {
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 		user.setProfile(profileAndEmotionRequest.getProfile());
 		user.setEmotion(profileAndEmotionRequest.getEmotion());
+	}
+
+	/**
+	 * 포인트 구매
+	 * @param userId 유저 ID
+	 */
+	@Override
+	@Transactional
+	public void purchasePoint(Integer userId, BigDecimal point) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
+		user.addPoint(point);
 	}
 
 }
