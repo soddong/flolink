@@ -1,9 +1,24 @@
 import styles from '../../css/setting/settingmodal.module.css';
+import { changeStatusMessage } from '../../service/user/userApi';
 
 function SettingMessageModal ({setShowMessageModal, setStatus, status}) {
     
     const handleContent = (e) => {
         setStatus(e.target.value)
+    }
+
+    const handleSaveStatus = async () => {
+        try {
+            console.log('여기')
+            await changeStatusMessage(status);
+            console.log(response)
+        }
+        catch(error) {
+            console.log(error)
+        }
+        finally {
+            setShowMessageModal(false)
+        }
     }
     
     return (
@@ -19,7 +34,7 @@ function SettingMessageModal ({setShowMessageModal, setStatus, status}) {
                         </input>
 
                     </div>
-                    <button className={styles.saveButtonnick}>수정</button>
+                    <button className={styles.saveButtonnick} onClick={handleSaveStatus}>수정</button>
 
                 </div>
             </div>

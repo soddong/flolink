@@ -12,6 +12,7 @@ import SettingMessageModal from '../../components/setting/settingMessageModal';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SettingUserDeleteModal from '../../components/setting/settingUserDeleteModal';
 
 function SettingPage() {
     const [animal, setAnimal] = useState(null);
@@ -21,6 +22,7 @@ function SettingPage() {
     const [showModal, setShowModal] = useState(false);
     const [showNicknameModal, setShowNicknameModal] = useState(false);
     const [showMessageModal, setShowMessageModal] = useState(false);
+    const [showUserDeleteModal, setShowUserDeleteModal] = useState(false);
 
     const navigate = useNavigate();
 
@@ -29,6 +31,7 @@ function SettingPage() {
             {showModal && <SettingModal setShowModal={setShowModal} setAnimal={setAnimal} />}
             {showNicknameModal && <SettingNicknameModal nickname={nickname} setShowNicknameModal={setShowNicknameModal} setNickname={setNickname}/>}
             {showMessageModal && <SettingMessageModal setShowMessageModal={setShowMessageModal} setStatus={setStatus} status={status}/>}
+            {showUserDeleteModal && <SettingUserDeleteModal setShowUserDeleteModal={setShowUserDeleteModal} />}
             <div className={styles.header}>
                 <ArrowBackIosNewRoundedIcon color="primary" sx={{ fontSize: '1.5rem' }} onClick={()=>{navigate(-1)}}/>
                 <div className={styles.title}>
@@ -61,11 +64,11 @@ function SettingPage() {
                 </div>
             </div>
             <div className={styles.settingContent}>
-                <div className={styles.settingItem}>
-                    <span className={styles.settingText}>비밀번호 수정</span>
+                <div className={styles.settingItem} onClick={()=>{navigate('/PwReset')}}>
+                    <span className={styles.settingText} >비밀번호 수정</span>
                     <span className={styles.settingArrow}>›</span>
                 </div>
-                <div className={styles.settingItem}>
+                <div className={styles.settingItem} onClick={()=>{setShowUserDeleteModal(true)}}>
                     <span className={`${styles.settingText} ${styles.dangerText}`}>회원 탈퇴</span>
                     <span className={styles.settingArrow}>›</span>
                 </div>
