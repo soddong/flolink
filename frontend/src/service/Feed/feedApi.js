@@ -2,6 +2,7 @@ import { axiosCommonInstance } from '../../apis/axiosInstance';
 
 // 피드 추가
 export const addFeed = async (roomId, images, content) => {
+    console.log(roomId)
     const { data } = await axiosCommonInstance.post('/feeds', 
         {
         roomId: roomId,

@@ -56,11 +56,13 @@ const FeedListPage = () => {
 
   if (feeds.length === 0) {
     return (
-      <div className='min-h-screen bg-custom-gradient'>
+      // <div className='min-h-screen bg-custom-gradient'>
+      <div className='w-full min-h-screen bg-custom-gradient flex flex-col items-center justify-center'>
         <img src={logo} alt="Logo" className="mx-auto h-20" />
         <div className="p-4 overflow-auto">
           <FeedList feeds={feeds} />
         </div>
+        <NavBar />
       </div>
     );
   } else {
