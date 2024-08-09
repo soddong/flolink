@@ -9,10 +9,12 @@ import ModalforChannelSelect from "../../components/channel_select/ModalforChann
 import { getMyUserRooms, getMyInfoinChannelSelect } from "../../service/userroom/userroomApi";
 import { useNavigate } from "react-router-dom";
 
+import { logout } from '../../service/user/userApi';
+
 function ChannelSelectPage() {
   const navigate = useNavigate();
   const [family, setFamily] = useState([]);
-
+  const [usernickname, setUserNickname] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -21,6 +23,7 @@ function ChannelSelectPage() {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  
   useEffect(() => {
     setFamily([]);
     getMyUserRooms()
@@ -39,6 +42,14 @@ function ChannelSelectPage() {
       .catch((e) => {
         console.log(e);
       });
+      getMyInfoinChannelSelect()
+      .then(({data}) => {
+        console.log(data)
+        setUserNickname(data.nickname);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
 
   useEffect(() => {
@@ -48,6 +59,16 @@ function ChannelSelectPage() {
       dropdownRef.current.style.maxHeight = "0px";
     }
   }, [isDropdownOpen]);
+
+  const handleLogout = () => {
+    try {
+        logout();
+        navigate('/');
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
 
   const handleAddNewChannel = () => {
     setIsModalOpen(true);
@@ -80,23 +101,23 @@ function ChannelSelectPage() {
               alt="User Avatar"
               className="w-12 h-12 rounded-full"
             />
-            <span className="ml-2.5 text-black font-semibold">OOO님</span>
+            <span className="ml-2.5 text-black font-semibold">{usernickname}님</span>
             <div
               ref={dropdownRef}
               className={`${styles.dropdown} absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 overflow-hidden transition-all duration-300 ease-in-out`}
             >
               <ul className="py-1">
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => navigate("/myroom")}>
                   마이 룸 이동
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => navigate("/PwReset")}>
                   비밀번호 변경
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={handleLogout}>
                   로그아웃
-                </li>
-                <li className="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
-                  회원탈퇴
                 </li>
               </ul>
             </div>
