@@ -1,12 +1,14 @@
 import style from '../../../css/main/main_modals.module.css'
 import React, { useState, useEffect } from 'react'
-import { kickRoomMember } from '../../../service/userroom/userroomApi'
+import { kickRoomMember, updateRoomDetail } from '../../../service/userroom/userroomApi'
 import userRoomStore from '../../../store/userRoomStore'
 
 function RoomInfoModal ({roomDetail, myRole}) {
   const [members, setMembers] = useState([])
   const [isUpdate, setIsUpdate] = useState(false)
   const roomId = userRoomStore((state) => state.roomId)
+  const [inputName, setInputName] = useState(roomDetail?.roomSummarizeResponse?.roomName)
+  const [inputPassword, setInputPassword] = useState(roomDetail?.roomSummarizeResponse?.roomParticipatePassword)
 
   useEffect (() => {
     setMembers(roomDetail?.memberInfoResponses)
@@ -17,6 +19,16 @@ function RoomInfoModal ({roomDetail, myRole}) {
     kickRoomMember(roomId, data)
   }
 
+  function changeRoomDetail (event) {
+    event.preventDefault();
+    updateRoomDetail(roomId, {
+      roomId,
+      roomName: inputName,
+      roomParticipatePassword: inputPassword
+    })
+    setIsUpdate(!isUpdate)
+  }
+
   return (
     <div className={`absolute w-2/3 p-4 ${style.mainModal}`}>
       {myRole === "admin" && (
@@ -25,18 +37,44 @@ function RoomInfoModal ({roomDetail, myRole}) {
       )}
       <h1 className='text-2xl font-bold'>가족방 정보</h1>
       <hr className='w-full border-black m-2'/>
-      <p className='flex justify-between w-5/6'>
-        <span className='text-lg font-bold w-20'>이름</span> 
-        <span className='w-36 truncate'>{roomDetail?.roomSummarizeResponse?.roomName}</span>
-      </p>
-      <p className='flex justify-between w-5/6'>
-        <span className='text-lg font-bold w-20'>비밀번호</span> 
-        <span className='w-36'>{roomDetail?.roomSummarizeResponse?.roomParticipatePassword}</span>
-      </p>
-      <p className='flex justify-between w-5/6'>
-      <span className='text-lg font-bold w-20'>방 번호</span> 
-      <span className='w-36'>{roomId}</span>
-      </p>
+      {isUpdate ? 
+      (
+        <form action="w-full" onSubmit={changeRoomDetail}>
+          <p className='flex justify-between'>
+            <span className='text-lg font-bold w-20'>이름</span>
+            <input type="text" className='w-32 border-0 ring-1 ring-inset ring-gray-300' 
+            placeholder={roomDetail?.roomSummarizeResponse?.roomName}
+            onChange={((e) => setInputName(e.target.value))}
+            value={inputName} />
+          </p>
+          <p className='flex justify-between'>
+            <span className='text-lg font-bold w-20'>비밀번호</span> 
+            <input type="text" className='w-32 border-0 ring-1 ring-inset ring-gray-300'
+            placeholder={roomDetail?.roomSummarizeResponse?.roomParticipatePassword}
+            onChange={((e) => setInputPassword(e.target.value))}
+            value={inputPassword}
+            />
+          </p>
+          <input type="submit" value="수정" />
+        </form>
+      ) : (
+        <React.Fragment>
+          <p className='flex justify-between w-5/6'>
+          <span className='text-lg font-bold w-20'>이름</span>
+          <span className='w-36 truncate'>{inputName}</span>
+          </p>
+          <p className='flex justify-between w-5/6'>
+            <span className='text-lg font-bold w-20'>비밀번호</span> 
+            <span className='w-36'>{inputPassword}</span>
+          </p>
+          <p className='flex justify-between w-5/6'>
+            <span className='text-lg font-bold w-20'>방 번호</span> 
+            <span className='w-36'>{roomId}</span>
+          </p>
+        </React.Fragment>
+      )
+    }
+      
       <hr className='w-full border-black m-2'/>
       <h2 className='text-lg font-bold'>가족 멤버 정보</h2>
       <ul className='w-11/12'>
@@ -55,7 +93,7 @@ function RoomInfoModal ({roomDetail, myRole}) {
             </li>
           </React.Fragment>
         )) : (
-          <p>hello</p>
+          <p>loading..</p>
         )}
       </ul>
     </div>

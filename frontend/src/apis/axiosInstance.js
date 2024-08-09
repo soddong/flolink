@@ -2,7 +2,7 @@ import axios from 'axios';
 // import setAuthorization from './setAuthorization';
 // import refresh from './refresh';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_PREFIX;
 
 const axiosRequestConfig = {
   baseURL: BASE_URL,

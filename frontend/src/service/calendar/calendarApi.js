@@ -1,21 +1,21 @@
 import { axiosCommonInstance } from '../../apis/axiosInstance';
 
-export const fetchReadSchedule = async () => {
-  const { data } = await axiosCommonInstance.get('/calendar/list');
+export const fetchReadSchedule = async (dateCalendarRequest) => {
+  const { data } = await axiosCommonInstance.post('/calendar/list', dateCalendarRequest);
   return data;
 }
 
-export const fetchCreateSchedule = async () => {
-  const { data } = await axiosCommonInstance.post('/calendar/add');
+export const fetchCreateSchedule = async (calendarCreateRequest) => {
+  const { data } = await axiosCommonInstance.post('/calendar/add', calendarCreateRequest);
   return data;
 }
 
-export const fetchUpdateSchedule = async () => {
-  const { data } = await axiosCommonInstance.patch('/calendar/update');
+export const fetchUpdateSchedule = async (calendarUpdateRequest) => {
+  const { data } = await axiosCommonInstance.patch('/calendar/update', calendarUpdateRequest);
   return data;
 }
 
-export const fetchDeleteSchedule = async () => {
-  const { data } = await axiosCommonInstance.delete('/calendar/remove');
+export const fetchDeleteSchedule = async (calendarDeleteRequest) => {
+  const { data } = await axiosCommonInstance.delete('/calendar/remove', calendarDeleteRequest);
   return data;
 }

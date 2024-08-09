@@ -29,8 +29,8 @@ function ProfilePhoto({ name, photo, status, targetUserRoomId, manager }) {
 
   useEffect(() => {
     setUsername(name)
-  },[])
-
+  },[name])
+  
   return (
     <div>
       <div onClick={showMemberModal}>
