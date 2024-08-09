@@ -3,6 +3,7 @@ package com.flolink.backend.domain.calendar.entity;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.calendar.dto.request.CalendarRequest;
@@ -35,6 +36,7 @@ import lombok.Setter;
 @Table(name = "calendar")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE calendar SET use_yn = false WHERE calendar_id = ?")
 @SQLRestriction("use_yn = true")
 public class Calendar {
 
