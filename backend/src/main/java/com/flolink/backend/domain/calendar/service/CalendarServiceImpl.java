@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.flolink.backend.domain.calendar.dto.request.CalendarRequest;
 import com.flolink.backend.domain.calendar.dto.request.DateCalendarRequest;
@@ -36,6 +37,7 @@ public class CalendarServiceImpl implements CalendarService {
 	private final RoomRepository roomRepository;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<CalendarResponse> getList(DateCalendarRequest dateCalendarRequest, Integer roomId,
 		CustomUserDetails customUserDetails) {
 		if (dateCalendarRequest.getRoomId() != roomId) {
@@ -51,6 +53,7 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
+	@Transactional
 	public void addCalendar(CalendarRequest calendarRequest) {
 		Room room = roomRepository.findById(calendarRequest.getRoomId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_MATCH_ROOMID));
@@ -59,6 +62,7 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
+	@Transactional
 	public void removeCalendar(DeleteCalendarRequest deleteCalendarRequest, Integer userId) {
 
 		//TODO 나중에 exist로 변경
@@ -69,10 +73,11 @@ public class CalendarServiceImpl implements CalendarService {
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
 		// 사용여부 변경
-		calendar.setUseYn(false);
+		calendarRepository.delete(calendar);
 	}
 
 	@Override
+	@Transactional
 	public void modifyCalendar(UpdateCalendarRequest updateCalendarRequest, Integer userId) {
 
 		//TODO 나중에 exist로 변경
