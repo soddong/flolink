@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +36,7 @@ public class CalendarController {
 	private final CalendarService calendarService;
 
 	@Operation(summary = "일정 반환", description = "선택한 년도, 월에 따른 일정을 반환한다.")
-	@GetMapping("/list")
+	@PostMapping("/list")
 	public ResponseEntity<?> getCalendarList(@RequestBody DateCalendarRequest dateCalendarRequest,
 		Authentication authentication) {
 		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
