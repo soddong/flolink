@@ -29,7 +29,8 @@ const FeedForm = ({feed, roomId}) => {
       textareaRef.current.placeholder = "당신의 하루는 어떠셨나요?\n이야기를 작성해주세요";
     }
   }, []);
-
+//이미지추가함수
+//이러면 기존 이미지 + 새로올린 이미지 중복업로드 되지 않나?
   const handleImageChange = (e) => {
     console.log(e.target.files);
     console.log(e);

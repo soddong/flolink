@@ -20,7 +20,7 @@ export const addFeed = async (roomId, images, content) => {
 };
 
 // 피드 전체 조회
-export const feedList = async (roomId, lastFeedDate, size = 20) => {
+export const fetchFeedList = async (roomId, lastFeedDate, size) => {
     const { data } = await axiosCommonInstance.get(`/feeds?roomId=${roomId}&lastFeedDate=${lastFeedDate}&size=${size}`)
     return data;
 }
