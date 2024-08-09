@@ -97,11 +97,7 @@ public class UserServiceImpl implements UserService {
 	// 아이디 중복 확인
 	@Override
 	public boolean isExistLoginId(String loginId) {
-		boolean isExistId = userRepository.existsByLoginId(loginId);
-		if (!isExistId) {
-			throw new DuplicateException(ResponseCode.DUPLICATE_LOGIN_ID);
-		}
-		return true;
+		return userRepository.existsByLoginId(loginId);
 	}
 
 	/**
