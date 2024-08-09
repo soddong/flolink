@@ -1,9 +1,12 @@
 import Calendar from 'react-calendar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import "../../css/calendar/Calendar.css";
 import moment from "moment"
 import ScheduleList from './ScheduleList';
 import CreateScheduleModal from './CreateScheduleModal';
+import { fetchReadSchedule } from '../../service/calendar/calendarApi';
+import userRoomStore from '../../store/userRoomStore';
+import { m } from 'framer-motion';
 
 const schedules = [
   {
@@ -40,6 +43,24 @@ function CalendarList () {
   const [dateValue, onDateValue] = useState(new Date())
   const [todaySchedule, setTodaySchedule] = useState([])
   const [createModal, setCreateModal] = useState(false)
+  const roomId = userRoomStore((state) => state.roomId);
+  const [month, setMonth] = useState(moment(dateValue).month() + 1)
+  const [year, setYear] = useState(moment(dateValue).year())
+
+  useEffect (() => {
+    console.log(month, year)
+    fetchReadSchedule({roomId, year, month})
+    .then(({data}) => 
+    console.log(data))
+    .catch((e) => {
+      console.log(e)
+    })
+  }, [month, year])
+
+  const handleActiveStartDateChange = ({ activeStartDate }) => {
+    setMonth(moment(activeStartDate).month() + 1)
+    setYear(moment(activeStartDate).year())
+  };
   
   const tileClassName=({ date })=>{
     if (date.getDay() === 0) {
@@ -82,6 +103,7 @@ function CalendarList () {
       tileClassName={tileClassName}
       tileContent={tileContent}
       onClickDay={findSchedule}
+      onActiveStartDateChange={handleActiveStartDateChange}
       />
       <div className="w-full absolute bottom-0 bg-white rounded-t-2xl p-4" style={{'height': '40vh'}}>
         <hr className="w-10 absolute top-2 left-1/2 translate-x-3/4 border-slate-600 border-2 rounded"
