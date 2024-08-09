@@ -29,6 +29,10 @@ function RoomInfoModal ({roomDetail, myRole}) {
     setIsUpdate(!isUpdate)
   }
 
+  members.map((member) => {
+    console.log(member)
+  })
+
   return (
     <div className={`absolute w-2/3 p-4 ${style.mainModal}`}>
       {myRole === "admin" && (
@@ -88,7 +92,7 @@ function RoomInfoModal ({roomDetail, myRole}) {
               (<button className='absolute right-0 w-10 h-6 bg-gray-400 text-white'
               onClick={() => exitMember(member.targetUserRoomId)}>강퇴</button>)
                : 
-              (<span className='absolute right-0 text-gray'>{member?.emotion}</span>)
+              (<span className='absolute right-0 text-gray'>{member?.profile}</span>)
               }
             </li>
           </React.Fragment>

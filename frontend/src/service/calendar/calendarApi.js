@@ -15,7 +15,10 @@ export const fetchUpdateSchedule = async (calendarUpdateRequest) => {
   return data;
 }
 
-export const fetchDeleteSchedule = async (calendarDeleteRequest) => {
-  const { data } = await axiosCommonInstance.delete('/calendar/remove', calendarDeleteRequest);
+export const fetchDeleteSchedule = async (calendarId, roomId) => {
+  const { data } = await axiosCommonInstance.delete('/calendar/remove', {data: {
+    calendarId,
+    roomId
+  }});
   return data;
 }

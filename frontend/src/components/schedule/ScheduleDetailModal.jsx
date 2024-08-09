@@ -1,10 +1,12 @@
 import style from "../../css/main/main_modals.module.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateCalendar from "./CreateCalendar";
 import WarningModal from "../main/modal/WarningModal";
 import TagSelect from "./TagSelect";
+import scheduleStore from "../../store/scheduleStore";
 
 function ScheduleDetailModal ({ setModal, schedule }) {
+  const tags = scheduleStore((state) => state.tags);
   const [modalstate, setModalstate] = useState('read')
   const [inputTitleValue, setInputTitleValue] = useState(schedule.title);
   const [inputContentValue, setInputContentValue] = useState(schedule.content);
@@ -14,6 +16,7 @@ function ScheduleDetailModal ({ setModal, schedule }) {
   const [icon, setIcon] = useState(schedule.icon)
   const [color, setColor] = useState(schedule.color)
   const [warning, setWarning] = useState(false)
+  const [tagDetail, setTagDetail] = useState(null)
 
   function handleModalState () {
     if (modalstate === 'read') {
@@ -22,6 +25,11 @@ function ScheduleDetailModal ({ setModal, schedule }) {
       setModalstate('read')
     }
   }
+
+  useEffect(() => {
+    console.log(schedule)
+    setTagDetail(tags.find(tag => tag.value === schedule.tag))
+  }, [schedule])
 
   function handleInputTitleChange (event) {
     setInputTitleValue(event.target.value)
@@ -93,9 +101,9 @@ function ScheduleDetailModal ({ setModal, schedule }) {
           <p className="text-lg font-bold">{inputTitleValue}</p>
           <p className="flex items-center text-base mt-4 text-gray-600">
             <span className="material-symbols-outlined mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': color}}>
-              {icon}
+              {tag}
             </span>
-            {tag}
+            {tagDetail && tagDetail.name}
           </p>
           <p className="flex items-center text-base mt-4 text-gray-600">
             <span className="material-symbols-outlined mr-2" style={{'fontVariationSettings': '"FILL" 1', 'color': '#767676'}}>
