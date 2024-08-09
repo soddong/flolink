@@ -23,6 +23,7 @@ import LoginRedirectPage from './pages/login/LoginRedirectPage';
 import FeedEditPage from './pages/feed/FeedEditPage';
 import MainLayout from './pages/main/MainLayout';
 import YourRoomPage from './pages/my_room/yourRoomPage';
+import NewFeedListPage from './pages/feed/NewFeedListPage';
 
 const router = createBrowserRouter([  
   {
@@ -42,7 +43,21 @@ const router = createBrowserRouter([
   },
   {
     path: "/main",
-    element : <MainLayout />
+    element: <MainLayout />,
+    children: [
+      { path: "", element: <MainPage /> },
+      { path: "myroom", element: <MyRoomPage /> },
+      { path: "schedule", element: <SchedulePage /> },
+      { 
+        path: "feed", 
+        children: [
+          { path: "", element: <NewFeedListPage /> },
+          { path: "edit", element: <FeedEditPage /> },
+          { path: "create", element: <FeedCreatePage /> },
+        ]
+      },
+      { path: "garden", element: <FamilyGardenPage /> },
+    ]
   },
   {
     path : "/FindAccount",
@@ -63,10 +78,6 @@ const router = createBrowserRouter([
   {
     path : "/signup",
     element : <SignupPage />
-  },
-  {
-    path : "/feedlist",
-    element : <FeedListPage />
   },
   {
     path : "/feedcreate",
