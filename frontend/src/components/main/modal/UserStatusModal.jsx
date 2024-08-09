@@ -2,6 +2,7 @@ import style from "../../../css/main/main_modals.module.css"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { yourMyroom } from "../../../service/myroom/myroomApi";
 
 function UserStatusModal({ name, photo, status, targetUserRoomId, manager, username, handleUsername }) {
   const [isModify, setIsModify] = useState(false)
@@ -18,6 +19,17 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, usern
       window.alert('10자까지 입력 가능합니다.')
     }
   }
+
+  const handleMyRoomClick = async () => {
+    try {
+        await yourMyroom(targetUserRoomId);
+      } catch (error) {
+        console.log(error);
+      }finally {
+      navigate('/yourroom', { state: { userRoomId: targetUserRoomId } });
+
+    }
+  };
 
   function submitUsername(event) {
     event.preventDefault()
@@ -58,14 +70,12 @@ function UserStatusModal({ name, photo, status, targetUserRoomId, manager, usern
       <p className="my-2 text-lg text-zinc-500">{status}</p>
       <hr className="w-56 border-zinc-400" />
       <div className='flex items-center justify-around w-52 my-1'>
-        <Link to="/myroom">
-          <button className='w-24 h-8 bg-rose-400 rounded-lg text-white'>
-            <p className="m-0 text-sm font-bold flex justify-center items-center">
-              <span className="material-symbols-outlined text-lg" style={{ 'fontVariationSettings': '"FILL" 1' }}>
-                meeting_room
-              </span>마이룸 보기</p>
-          </button>
-        </Link>
+        <button onClick={handleMyRoomClick} className='w-24 h-8 bg-rose-400 rounded-lg text-white'>
+          <p className="m-0 text-sm font-bold flex justify-center items-center">
+            <span className="material-symbols-outlined text-lg" style={{ 'fontVariationSettings': '"FILL" 1' }}>
+              meeting_room
+            </span>마이룸 보기</p>
+        </button>
         <Link to="/feedlist">
           <button className='w-24 h-8 bg-blue-300 rounded-lg text-white flex items-center justify-center'>
             <p className="m-0 text-sm font-bold flex justify-center items-center">

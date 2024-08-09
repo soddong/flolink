@@ -2,18 +2,20 @@ import styles from '../../css/my_room/myRoom.module.css';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import room from '../../assets/myroom/bg_myroom.png';
 import useItemStore from '../../store/itemStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useYourMyroom } from '../../hook/myroom/myroomHook';
 import { useEffect } from 'react';
 import { useItems } from '../../hook/itemstore/itemstoreHook';
 
-function YourRoomPage({userRoomId}) {
+function YourRoomPage() {
     const navigate = useNavigate();
     const { items, images, selectedItems, setUserInventory, setItems, generateImagesFromNames } = useItemStore();
     const { mutate: fetchMyroom, isLoading, isError, data } = useYourMyroom();
     const { data: itemsData, isLoading: itemsDataLoading, error: itemsDataError } = useItems();
-  
+   const location = useLocation();
+   const {userRoomId} = location.state || {}
     useEffect(() => {
+        console.log({userRoomId})
       if (userRoomId) {
         fetchMyroom(userRoomId);
       }
