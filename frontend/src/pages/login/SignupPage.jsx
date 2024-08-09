@@ -24,8 +24,8 @@ function SignupPage() {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [successToken, setSuccessToken] = useState('');
-  // const isFormValid = password && confirmPassword && passwordSame && username && nickname && !nicknameError && fullName && phoneNumber;
-  const isFormValid = true;
+  const isFormValid = password && confirmPassword && passwordSame && username && nickname && !nicknameError && fullName && phoneNumber;
+  // const isFormValid = true;
 
   useEffect(() => {
     if (isFormValid) {
@@ -36,10 +36,10 @@ function SignupPage() {
   const checkUsernameAvailability = async (e) => {
     e.preventDefault();
     try {
-      const response = checkDuplicateUsername(username);
+      const response = await checkDuplicateUsername(username);
       console.log(response);
       // 응답이 성공적으로 왔을 때
-      if (response.data.exists) {
+      if (response.data) {
         // 중복된 아이디가 있는 경우
         setUsernameMessage('이미 사용 중인 아이디입니다.');
       } else {
