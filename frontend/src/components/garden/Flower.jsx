@@ -2,7 +2,7 @@ import FlowerModal from "./FlowerModal";
 import { useState } from "react";
 import NoFlower from '../../assets/garden/none.png';
 
-function Flower ({id, month, flower}) {
+function Flower ({id, month, flower, flowerdata}) {
   const [flowerModal, setFlowerModal] = useState(false)
 
   function showFlowermodal () {
@@ -27,7 +27,7 @@ function Flower ({id, month, flower}) {
           <>
             <div className="fixed top-0 left-0 w-full h-full bg-zinc-800/50 z-20"
             onClick={showFlowermodal}></div>
-            <FlowerModal month={month} flower={flower} setFlowerModal={setFlowerModal} />
+            <FlowerModal month={month} flower={flower} setFlowerModal={setFlowerModal} flowerdata={flowerdata} />
           </>
         )}
     </>

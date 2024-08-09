@@ -4,41 +4,57 @@ import { useState, useEffect } from 'react';
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import FamilyRank from './FamilyRank';
-import { getHistoryData } from '../../hook/garden/gardenHook.js'
+// import { getHistoryData } from '../../hook/garden/gardenHook.js'
+import { fetchHistorys } from '../../service/garden/gardenApi.js';
+import userRoomStore from '../../store/userRoomStore.js';
 
-const imageData = [1, 2, 3, 4, 5]
-const family = [
-  {id: 1, name: '엄마', rank: 1, point: 250},
-  {id: 2, name: '엄마', rank: 3, point: 250},
-  {id: 3, name: '엄마', rank: 2, point: 250},
-  {id: 4, name: '엄마', rank: 4, point: 250},
-]
-
-function FlowerModal ({ month, flower, setFlowerModal }) {
-  const [plantId, setPlantId] = useState(1)
-  const [historyId, setHistoryId] = useState(5)
-  const { data: historyData, isLoading: historyLoading, error: historyError } = getHistoryData(plantId, historyId);
+function FlowerModal ({ month, flower, setFlowerModal, flowerdata }) {
+  const roomDetail = userRoomStore((state) => state.roomDetail)
+  const [plantId, setPlantId] = useState(roomDetail?.data.plantSummaryResponse?.plantId)
+  const [historyId, setHistoryId] = useState(flowerdata?.plantHistoryId)
+  // const { data: historyData, isLoading: historyLoading, error: historyError } = getHistoryData(plantId, flowerdata?.plantHistoryId);
   const [history, setHistory] = useState(null)
   const [rank, setRank] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (historyData && historyData.data) {
-      setRank(Array.from(historyData.data["plantUserHistoryRespons"]).sort((a, b) => a.rank - b.rank))
-      setHistory(historyData.data["feedImageResponses"].map((image, index) => (
-        <div className='w-full h-full bg-center bg-contain bg-no-repeat flex justify-center items-center'
-          style={{'backgroundImage': `url(${movieFrame})`, 'backgroundSize': '100% 100%'}}
-          key={index}>
-            <img src={image["imageUrl"]} alt="dummy_photo"
-            style={{'height': '72%', 'width': '93%'}} />
-        </div>
-      )))
-
-      console.log(history, rank)
-    } else {
-      console.log(historyError)
+    if (plantId && historyId) {
+      fetchHistorys(plantId, historyId)
+      .then(({data}) => {
+        console.log(data)
+        setRank(Array.from(data?.plantUserHistoryRespons).sort((a, b) => a.monthlyRank - b.monthlyRank))
+        setHistory(data.feedImageResponses.map((image, index) => (
+          <div className='w-full h-full bg-center bg-contain bg-no-repeat flex justify-center items-center'
+            style={{'backgroundImage': `url(${movieFrame})`, 'backgroundSize': '100% 100%'}}
+            key={index}>
+              <img src={image["imageUrl"]} alt="dummy_photo"
+              style={{'height': '72%', 'width': '93%'}} />
+          </div>
+        )))
+      })
+      .catch((e) => {
+        console.log(e)
+      })
     }
-  }, [historyData, historyLoading, historyError])
+  }, [plantId])
+  
+  // useEffect(() => {
+  //   if (historyData && historyData.data) {
+  //     setRank(Array.from(historyData.data["plantUserHistoryRespons"]).sort((a, b) => a.rank - b.rank))
+  //     setHistory(historyData.data["feedImageResponses"].map((image, index) => (
+  //       <div className='w-full h-full bg-center bg-contain bg-no-repeat flex justify-center items-center'
+  //         style={{'backgroundImage': `url(${movieFrame})`, 'backgroundSize': '100% 100%'}}
+  //         key={index}>
+  //           <img src={image["imageUrl"]} alt="dummy_photo"
+  //           style={{'height': '72%', 'width': '93%'}} />
+  //       </div>
+  //     )))
+
+  //     console.log(history, rank)
+  //   } else {
+  //     console.log(historyError)
+  //   }
+  // }, [historyData, historyLoading, historyError])
 
   function handleChange(index) {
     setCurrentIndex(index);
@@ -54,7 +70,7 @@ function FlowerModal ({ month, flower, setFlowerModal }) {
         onClick={closeModal}>
           cancel
       </span>
-      <p className='font-bold text-lg text-rose-400'>꿀벌 가족🍯: {month}의 기록</p>
+      <p className='font-bold text-lg text-rose-400'>{roomDetail?.data.roomSummarizeResponse?.roomName}: {month}의 기록</p>
       <div className='w-full h-2/3 m-2'>
         <Carousel
           showArrows={true}

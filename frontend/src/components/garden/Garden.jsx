@@ -44,16 +44,17 @@ const levelImages = {
 
 function Garden ({year, flowers, nextYear, postYear}) {
   const [updatedMonths, setUpdatedMonths] = useState(months);
+  console.log(flowers)
   useEffect(() => {
     const newMonths = months.map(month => {
       const flowerForMonth = flowers.find(flower => moment(flower["dateMonth"]).format("MM") === month.name);
       if (flowerForMonth) {
         const level = flowerForMonth["level"];
         return level === 4
-          ? { ...month, image: month.image }
-          : { ...month, image: levelImages[level] || month.image };
+          ? { ...month, name: moment(month.name, 'MM').format('M월'), image: month.image, flower: flowerForMonth }
+          : { ...month, name: moment(month.name, 'MM').format('M월'), image: levelImages[level] || month.image, flower: flowerForMonth };
       } else {
-        return { ...month, image: NoFlower };
+        return { ...month, name: moment(month.name, 'MM').format('M월'), image: NoFlower };
       }
     });
     setUpdatedMonths(newMonths);
@@ -72,7 +73,7 @@ function Garden ({year, flowers, nextYear, postYear}) {
       style={{'backgroundColor': '#EBD4BF', 'boxShadow': '0px 10px 0px 0px #D2AB86'}}>
         {updatedMonths.map(month => {
           return (
-          <Flower key={month.id} id={month.id} month={month.name} flower={month.image}/>)
+          <Flower key={month.id} id={month.id} month={month.name} flower={month.image} flowerdata={month?.flower}/>)
         })}
       </div>
       {year > 2022 && (
