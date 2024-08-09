@@ -7,15 +7,15 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flolink.backend.domain.myroom.entity.MyRoom;
+import com.flolink.backend.domain.user.entity.User;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
+import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.auth.dto.response.OAuth.CustomOAuth2UserResponse;
 import com.flolink.backend.global.auth.dto.response.OAuth.GoogleResponse;
 import com.flolink.backend.global.auth.dto.response.OAuth.KakaoResponse;
 import com.flolink.backend.global.auth.dto.response.OAuth.OAuth2Response;
 import com.flolink.backend.global.auth.dto.response.OAuth.UserDTO;
-import com.flolink.backend.domain.myroom.entity.MyRoom;
-import com.flolink.backend.domain.user.entity.User;
-import com.flolink.backend.domain.user.entity.enumtype.RoleType;
-import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
 
@@ -53,8 +53,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 		} else {
 			return null;
 		}
-
-		String loginId = oAuth2Response.getProvider() + "-" + oAuth2Response.getProviderId();
+		String loginId =
+			oAuth2Response.getProvider() + "-" + oAuth2Response.getProviderId() + "-" + oAuth2Response.getName();
 
 		if (!userRepository.existsByLoginId(loginId)) {
 
@@ -69,6 +69,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 				.userName(oAuth2Response.getName())
 				.nickname(oAuth2Response.getName())
 				.role(roleType)
+				.useYn(true)
 				.build();
 
 			userRepository.save(user);

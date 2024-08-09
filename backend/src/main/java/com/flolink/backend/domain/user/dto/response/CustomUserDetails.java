@@ -32,6 +32,10 @@ public class CustomUserDetails implements UserDetails {
 		return user.getUserName();
 	}
 
+	public boolean getUseYn() {
+		return user.isUseYn();
+	}
+
 	public String getLonginId() {
 		return user.getLoginId();
 	}
