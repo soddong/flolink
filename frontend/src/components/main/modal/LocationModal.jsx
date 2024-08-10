@@ -15,12 +15,12 @@ useEffect(() => {
     });
 
     const startIcon = new window.kakao.maps.MarkerImage(
-      '/src/assets/location/start-maker.png',
+      '/location/start-maker.png',
       new window.kakao.maps.Size(30, 35)
     );
 
     const currentIcon = new window.kakao.maps.MarkerImage(
-      `/src/assets/profile/${walkerProfilePicture}.png`,
+      `/profile/${walkerProfilePicture}.png`,
       new window.kakao.maps.Size(32, 32)
     );
 
