@@ -39,6 +39,12 @@ public class PlantServiceImpl implements PlantService {
 		return plantRepository.save(Plant.create(room));
 	}
 
+	@Override
+	public Plant findById(Integer plantId) {
+		return plantRepository.findById(plantId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
+	}
+
 	/**
 	 * 사용자 활동에 따른 경험치 업데이트
 	 * @param userRoom userRoom 정보

@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PlantUserServiceImpl {
+public class PlantUserServiceImpl implements PlantUserService {
 
 	private final FeedService feedService;
 
@@ -50,8 +50,6 @@ public class PlantUserServiceImpl {
 	}
 
 	private List<FeedImageResponse> loadFeedImages(Integer roomId, String dateMonth) {
-		System.out.println(DateTimeUtil.atStartOfDay(dateMonth));
-		System.out.println(DateTimeUtil.atEndOfDay(dateMonth));
 		return feedService.getImages(roomId,
 			DateTimeUtil.atStartOfDay(dateMonth),
 			DateTimeUtil.atEndOfDay(dateMonth)
@@ -78,4 +76,5 @@ public class PlantUserServiceImpl {
 			})
 			.toList();
 	}
+
 }

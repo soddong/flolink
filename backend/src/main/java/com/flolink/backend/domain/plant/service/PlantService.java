@@ -14,4 +14,5 @@ public interface PlantService {
 
 	PlantSummaryResponse getPlantInfo(Integer roomId);
 
+	Plant findById(Integer plantId);
 }
