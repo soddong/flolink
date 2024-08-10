@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Notification from "../../components/main/notification/Notification";
 import UserStatusList from "../../components/main/user_status/UserStatusList";
 import PetStatusList from "../../components/main/tamagochi/PetStatusList";
@@ -9,10 +10,8 @@ import Pet3 from "../../assets/tamagochi/flower3.png";
 import Pet4 from "../../assets/tamagochi/flower4.png";
 import AlarmModal from "../../components/main/modal/AlarmModal";
 import BackgroundPhoto from "../../assets/main/background_photo.png";
-import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../../components/common/side_bar/SideBar";
 import userRoomStore from "../../store/userRoomStore";
-
 import usePlantHook from '../../hook/plant/plantHook'; 
 import LocationModal from '../../components/main/modal/LocationModal';
 import PlantWalkButton from '../../components/main/plantwalk/PlantWalkButton';
@@ -25,6 +24,7 @@ function MainPage() {
   const [memberList, setMemberList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(true); // New loading state
 
   const Message = "오늘은 어떤 일이 있었나요?";
   const { roomId, userRoomId, roomDetail, setUserRoomId, setRoomDetail, myInfo } = userRoomStore(state => ({
@@ -35,8 +35,9 @@ function MainPage() {
     setUserRoomId: state.setUserRoomId,
     setRoomDetail: state.setRoomDetail
   }));
+  
   const [petstatus, setPetstatus] = useState(null);
-
+  
   const {
     handleStartWalk,
     handleViewCurrentLocation,
@@ -48,6 +49,17 @@ function MainPage() {
 
   useEffect(() => {
     if (roomDetail) {
+      const fetchData = async () => {
+        await setUserRoomId(roomId); // Fetch and set userRoomId
+        await setRoomDetail(roomId); // Fetch and set roomDetail
+        setLoading(false); // Loading complete
+      };
+      fetchData();
+    }
+  }, [roomId, setUserRoomId, setRoomDetail]);
+
+  useEffect(() => {
+    if (!loading && roomDetail) { // Ensure loading is complete
       setStatus(prevStatus => ({
         ...prevStatus,
         plantId: roomDetail?.plantSummaryResponse?.plantId ?? 0,
@@ -56,47 +68,25 @@ function MainPage() {
         walker: roomDetail.plantSummaryResponse?.userUserRoomIdOfWalker ?? 0
       }));
       handlePetStatus(roomDetail.plantSummaryResponse?.nowLevel);
+      setMemberList(roomDetail?.memberInfoResponses);
     }
-
-    setMemberList(roomDetail?.memberInfoResponses);
-  }, [roomDetail]);
-  
-  useEffect(() => {
-    setRoomDetail(roomId)
-    console.log(roomDetail)
-  }, []);
-
-  useEffect(() => {
-    const updateLevel = async () => {
-      try {
-        setStatus((prevStatus) => ({
-        ...prevStatus, 
-        level: roomDetail.plantSummaryResponse?.nowLevel,
-        exp: roomDetail.plantSummaryResponse?.nowExp
-        }));
-        handlePetStatus(roomDetail.plantSummaryResponse?.nowLevel)
-      } catch(error) {
-        console.log(error)
-      }
-    } 
-    updateLevel()
-  }, [roomDetail])
+  }, [roomDetail, loading]);
 
   function handlePetStatus (data) {
     if (data) {
       if (data === 1) {
-        setPetstatus(Pet1)
+        setPetstatus(Pet1);
       } else if (data === 2) {
-        setPetstatus(Pet2)
+        setPetstatus(Pet2);
       } else if (data === 3) {
-        setPetstatus(Pet3)
+        setPetstatus(Pet3);
       } else {
-        setPetstatus(Pet4)
+        setPetstatus(Pet4);
       }
     }
   }
 
-  function getButtonStatus () {
+  function getButtonStatus() {
     if (status.walker === 0) {
       return 1;
     } else if (status.walker === userRoomId) {
@@ -108,7 +98,11 @@ function MainPage() {
 
   const walker = memberList.find(member => member.targetUserRoomId === status.walker);
   const walkerNickname = walker?.targetNickname || '알수없음';
-  const walkerProfilePicture = walker?.profilePicture || 'COW'; 
+  const walkerProfilePicture = walker?.profilePicture || 'COW';
+
+  if (loading) {
+    return <div>Loading...</div>; // You can replace this with a loading spinner
+  }
 
   return (
     <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
