@@ -57,8 +57,8 @@ public class Plant {
 	@Column(name = "today_exp", nullable = false)
 	private Integer todayExp;
 
-	@Column(name = "is_walking", nullable = false)
-	private Boolean isWalking;
+	@Column(name = "walker", nullable = false)
+	private Integer walker;
 
 	@Column(name = "create_at", nullable = false)
 	private LocalDateTime createAt;
@@ -76,7 +76,7 @@ public class Plant {
 			.plantStatus(PlantStatus.IN_PROGRESS)
 			.todayExp(0)
 			.totalExp(0)
-			.isWalking(false)
+			.walker(null)
 			.createAt(LocalDateTime.now())
 			.useYn(true)
 			.build();
@@ -102,4 +102,9 @@ public class Plant {
 		this.todayExp += exp;
 		this.updateAt = LocalDateTime.now();
 	}
+
+	public void updateWalk(Integer userRoomId) {
+		this.walker = userRoomId;
+	}
+
 }

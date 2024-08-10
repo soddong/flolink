@@ -32,12 +32,19 @@ public enum ResponseCode {
 	FEED_UPLOAD_FAILED(500, "Feed upload failed", "FEED_UPLOAD_FAILED"),
 	COMMENT_NOT_FOUND(404, "Comment not found", "COMMENT_NOT_FOUND"),
 	FEED_COMMENT_BAD_REQUEST(400, "Feed comment bad request", "FEEDCOMMENT_BAD_REQUEST"),
+
 	// Plant
 	PLANT_NOT_FOUND(404, "Plant not found", "NOT_FOUND_ERROR"),
 	DAILY_LIMIT_EXCEEDED(400, "Daily limit exceed", "BAD_REQUEST_ERROR"),
 	USER_EXP_NOT_FOUND(404, "User exp not found", "NOT_FOUND_ERROR"),
 	PLANT_ALREADY_COMPLETED(400, "Plant already completed", "BAD_REQUEST_ERROR"),
 	PLANT_HISTORY_NOT_FOUND(404, "Plant history not found", "NOT_FOUND_ERROR"),
+
+	// Plant Walk
+	PLANT_WALK_NOT_FOUND(404, "Plant walk not found", "NOT_FOUND_ERROR"),
+	PLANT_IS_WALKING_BY_OTHER(400, "Plant is walking by other member", "PLANT_IS_WALKING_ERROR"),
+	PLANT_NOT_WALKING(400, "Plant is not walking", "PLANT_NOT_WALKING_ERROR"),
+	ABNORMAL_MOVEMENT(400, "Walking is not normal", "ABNORMAL_MOVEMENT_ERROR"),
 
 	//Auth
 	TIME_OUT_EXCEPTION(401, "Auth Time Out", "TIME_OUT_ERROR"),
@@ -71,8 +78,8 @@ public enum ResponseCode {
 	PAYMENT_NOT_FOUND(404, "Payment not found", "NOT_FOUND_ERROR"),
 
 	// MyRoom & Item
-	INVALID_ITEM_TYPE(400, "Invalid item type", "BAD_REQUEST_ERROR"),
-	ITEM_NOT_IN_INVENTORY(400, "Item not in inventory", "BAD_REQUEST_ERROR"),
+	INVALID_ITEM_TYPE(400, "Invalid item type", "INVALID_ITEM_TYPE_ERROR"),
+	ITEM_NOT_IN_INVENTORY(400, "Item not in inventory", "ITEM_NOT_IN_INVENTORY_ERROR"),
 	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
 	MY_ROOM_NOT_FOUND(404, "MY ROOM not found", "NOT_FOUND_ERROR"),
 	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR"),

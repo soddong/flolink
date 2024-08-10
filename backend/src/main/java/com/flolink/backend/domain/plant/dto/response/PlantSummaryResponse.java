@@ -20,6 +20,7 @@ public class PlantSummaryResponse {
 	private Integer plantId;
 	private Integer nowLevel;
 	private Integer nowExp;
+	private Integer userUserRoomIdOfWalker;
 
 	public static PlantSummaryResponse fromEntity(Plant plant) {
 		return PlantSummaryResponse.builder()
@@ -28,6 +29,7 @@ public class PlantSummaryResponse {
 				, plant.getRoom().getUserRoomList().size()))
 			.nowExp(ExpUtil.calculateDisplayNowExp(plant.getTotalExp()
 				, plant.getRoom().getUserRoomList().size()))
+			.userUserRoomIdOfWalker(plant.getWalker())
 			.build();
 	}
 }
