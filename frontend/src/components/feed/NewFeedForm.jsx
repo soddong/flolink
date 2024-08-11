@@ -30,7 +30,7 @@ const NewFeedForm = ({ feed }) => {
     // 실행 시 feed값이 있으면 수정 페이지임, 값을 지정해놓기
     useEffect (() => {
         console.log(feed)
-        if (!feed) {
+        if (feed) {
             setContent(feed.content);
             setImages(feed.images);
             setIsEdit(true)
