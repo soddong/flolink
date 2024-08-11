@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo/logo.png'
 import '../../css/feed/feedStyles.module.css'
@@ -15,22 +15,16 @@ const NewFeedListPage = () => {
         new Date().getTime() + 9 * 60 * 60 * 1000
     ).toISOString()
 
-    // const initFetchFeedList = useCallback(() => {
-    //     fetchFeedList(roomId, lastFeedDate, 20).then(({data: fechedFeedList}) => {
-    //         setFeedList(fechedFeedList)
-    //     })
-    // }, [setFeedList])
-
-    // useEffect(() => {
-    //     initFetchFeedList()       
-    // }, [initFetchFeedList]);
+    const refreshFeedList = useCallback(() => {
+        fetchFeedList(roomId, lastFeedDate, 20).then(({ data }) => {
+            console.log(data);
+            setFeedList(data);
+        });
+    }, [roomId, lastFeedDate]);
 
     useEffect(() => {
-        fetchFeedList(roomId, lastFeedDate, 20).then(({ data }) => {
-            console.log(data)
-            setFeedList(data);
-        })
-    }, [])
+        refreshFeedList();
+    }, [refreshFeedList])
 
     const navigate = useNavigate();
 
@@ -68,7 +62,7 @@ const NewFeedListPage = () => {
                 </header>
                 <div className="flex flex-col h-4/5 pt-0 pr-5 pl-5 pb-9">
                     <div className="flex-1 overflow-auto hide-scrollbar">
-                        <NewFeedList feeds={feedList} setFeeds={setFeedList}/>
+                        <NewFeedList feeds={feedList} setFeeds={setFeedList} refreshFeedList={refreshFeedList}/>
                     </div>
                 </div>
                 <button

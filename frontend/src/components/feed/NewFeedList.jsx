@@ -2,15 +2,16 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import userRoomStore from '../../store/userRoomStore';
+import { feedDelete } from '../../service/Feed/feedApi';
 
-const NewFeedList = ({feeds, setFeeds}) => {
+const NewFeedList = ({feeds, setFeeds, refreshFeedList}) => {
 
     const navigate = useNavigate();
 
     const myUserRoomId = userRoomStore((state) => state.userRoomId);
     const currentUser = userRoomStore((state) => state.myInfo)
 
-    const [showAllComments, setShowAllComments] = useState(false);
+    const [showAllComments, setShowAllComments] = useState({});
     const [newComments, setNewComments] = useState({});
 
     // 댓글 입력 처리 함수
@@ -65,7 +66,7 @@ const NewFeedList = ({feeds, setFeeds}) => {
         })
     }
 
-    //피드 수정 페이지 이동 로직
+    //피드 수정 페이지 이동 로직, ****이미지 어케 처리할지 해결해야함*****
     const handleEditFeed = (feedId) => {
         const feed = feeds.filter(feed => feed.feedId === feedId);
         navigate('/main/feed/create', { state: { feed } })
@@ -73,9 +74,18 @@ const NewFeedList = ({feeds, setFeeds}) => {
 
     //피드 삭제 로직
     const handleDeleteFeed = (feedId) => {
-        const feed = feeds.filter(feed => feed.feedId === feedId);
-        //피드 삭제할 것!!
+        feedDelete(feedId).then(() => {
+            refreshFeedList();
+        })
     }
+
+    //댓글 펼치기 로직
+    const toggleComments = (feedId) => {
+        setShowAllComments(prev => ({
+            ...prev,
+            [feedId]: !prev[feedId]
+        }));
+    };
 
     return (
         <div className="mt-4">
@@ -103,31 +113,33 @@ const NewFeedList = ({feeds, setFeeds}) => {
                     }
                     <div className="mt-4">
                         <p>{feed.content}</p>
-                        <p><strong>작성자:</strong> {feed.author}</p>
-                        <p><strong>날짜:</strong> {feed.date}</p>
                     </div>
-                    <div className="mt-4 flex justify-between text-gray-600 text-sm">
-                        <span>댓글 {feed.comments.length}</span>
-                    </div>
-
-                    {
-                        feed.authorUserRoomId === myUserRoomId.data && (
-                            <div className="mt-4 flex justify-end space-x-2">
-                                <button className="bg-transparent text-blue-500 font-semibold py-2 px-4 border border-yellow-500 rounded"
+                    <div className="mt-4 flex justify-between items-center">
+                        <div>
+                            <p><strong>작성자:</strong> {feed.author}</p>
+                            <p><strong>날짜:</strong> {feed.date}</p>
+                        </div>
+                        {feed.authorUserRoomId === myUserRoomId.data && (
+                            <div className="flex space-x-2">
+                                <button className="bg-transparent text-blue-500 font-semibold py-1 px-2 border border-yellow-500 rounded"
                                 onClick={() => handleEditFeed(feed.feedId)}>
                                     ✏️
                                 </button>
-                                <button className="bg-transparent text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded"
+                                <button className="bg-transparent text-blue-700 font-semibold py-1 px-2 border border-blue-500 rounded"
                                 onClick={() => handleDeleteFeed(feed.feedId)}>
                                     🗑️
                                 </button>
                             </div>
-                        )
-                    }
+                        )}
+                    </div>
+
+                    <div className="mt-4 flex justify-between text-gray-600 text-sm">
+                        <span>댓글 {feed.comments.length}</span>
+                    </div>
 
                     <div className="mt-4">
                         {
-                            feed.comments.slice(0, showAllComments ? feed.comments.length : 2).map((comment, index) => (
+                            feed.comments.slice(0, showAllComments[feed.feedId] ? feed.comments.length : 2).map((comment, index) => (
                                 <div key={index} className="text-gray-700 mb-2 flex justify-between items-center">
                                     <div>
                                         <strong>{comment.author}:</strong> {comment.content}
@@ -155,9 +167,9 @@ const NewFeedList = ({feeds, setFeeds}) => {
                             feed.comments.length > 2 && (
                                 <button
                                     className="text-blue-500"
-                                    onClick={() => setShowAllComments(!showAllComments)}
+                                    onClick={() => toggleComments(feed.feedId)}
                                 >
-                                    {showAllComments ? '댓글 숨기기' : '댓글 더보기'}
+                                    {showAllComments[feed.feedId] ? '댓글 숨기기' : '댓글 더보기'}
                                 </button>
                             )
                         }
