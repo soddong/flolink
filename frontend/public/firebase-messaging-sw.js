@@ -1,4 +1,3 @@
-
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
 // Firebase 구성 객체를 사용해 Firebase를 초기화합니다.
@@ -16,7 +15,6 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 messaging.onBackgroundMessage(messaging, (payload) => {
     console.log('Received background message ', payload);
-
     const { title, body } = payload.notification;
     const options = {
         body: body,

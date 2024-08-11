@@ -1,6 +1,5 @@
 
 import { Link } from 'react-router-dom';
-import PushNotificationSubscriber from './PushNotificationSubscriber';
 
 function TemporaryStartPage() {
     return (
@@ -22,7 +21,6 @@ function TemporaryStartPage() {
             <Link to="/payment"><button>Payment Page</button></Link>
             <Link to="/setting"><button>Setting Page</button></Link>
             <Link to="/location"><button>Location Page</button></Link>
-            <PushNotificationSubscriber />
         </div>
     )
 }

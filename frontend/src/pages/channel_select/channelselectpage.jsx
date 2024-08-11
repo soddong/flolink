@@ -10,6 +10,7 @@ import { getMyUserRooms, getMyInfoinChannelSelect } from "../../service/userroom
 import { useNavigate } from "react-router-dom";
 
 import { logout } from '../../service/user/userApi';
+import { requestPermissionAndGetToken, sendTokenToServer } from "../../service/notification/firebase";
 
 function ChannelSelectPage() {
   const navigate = useNavigate();
@@ -87,7 +88,12 @@ function ChannelSelectPage() {
   const handleJoinFamily = () => {
     setChannelStatus("추가");
   };
-
+  const handleNotificationAllow = async()=>{
+    const token = await requestPermissionAndGetToken();
+    if(token){
+      sendTokenToServer(token);
+    }
+  }
   return (
     <div className={`${styles.startforselect} bg-custom-gradient`}>
       <div className={styles.headerforselect}>
@@ -138,6 +144,7 @@ function ChannelSelectPage() {
             ) : null}
           </div>
         ))}
+        <div onClick={handleNotificationAllow}>알림 허용하기</div>
       </div>
       <ModalforChannelSelect
         isOpen={isModalOpen}
