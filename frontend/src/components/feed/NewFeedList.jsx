@@ -72,7 +72,7 @@ const NewFeedList = ({feeds, setFeeds, refreshFeedList}) => {
         navigate('/main/feed/create', { state: { feed } })
     }
 
-    //피드 삭제 로직
+    //피드 삭제 로직 ****method not allow issue***
     const handleDeleteFeed = (feedId) => {
         feedDelete(feedId).then(() => {
             refreshFeedList();
@@ -85,6 +85,7 @@ const NewFeedList = ({feeds, setFeeds, refreshFeedList}) => {
             ...prev,
             [feedId]: !prev[feedId]
         }));
+        console.log(feeds)
     };
 
     return (
