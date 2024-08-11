@@ -67,15 +67,13 @@ public enum ResponseCode {
 	//Calendar
 	CALENDAR_NOT_FOUND(401, "Calendar not found", "CALENDAR_NOT_FOUND"),
 
-
-
-
 	// Purchase & Payment
 	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "ITEM_ALREADY_PURCHASE_ERROR"),
 	INSUFFICIENT_FUNDS(400, "Insufficient funds", "ITEM_INSUFFICIENT_FUNDS_ERROR"),
 	PAYMENT_BANK_FAILED(400, "Bank error", "PAYMENT_ERROR"),
 	PAYMENT_AMOUNT_MISMATCH(400, "Amount mismatch", "PAYMENT_ERROR"),
 	PAYMENT_NOT_FOUND(404, "Payment not found", "NOT_FOUND_ERROR"),
+	PAYMENT_ALREADY_PAID(400, "Payment already paid", "PAYMENT_ALREADY_PAID_ERROR"),
 
 	// MyRoom & Item
 	INVALID_ITEM_TYPE(400, "Invalid item type", "INVALID_ITEM_TYPE_ERROR"),
@@ -83,7 +81,6 @@ public enum ResponseCode {
 	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
 	MY_ROOM_NOT_FOUND(404, "MY ROOM not found", "NOT_FOUND_ERROR"),
 	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR"),
-	;
 
 	private final int status;
 	private final String message;
