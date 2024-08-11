@@ -31,8 +31,8 @@ const NewFeedForm = ({ feed }) => {
     useEffect (() => {
         console.log(feed)
         if (feed) {
-            setContent(feed.content);
-            setImages(feed.images);
+            setContent(feed[0].content);
+            setImages(feed[0].images);
             setIsEdit(true)
         }
     }, [])
