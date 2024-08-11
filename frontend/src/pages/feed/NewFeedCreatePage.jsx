@@ -1,8 +1,9 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo/logo.png';
 import NewFeedForm from '../../components/feed/NewFeedForm';
 
-const NewFeedCreatePage = () => {
+const NewFeedCreatePage = ({ feed }) => {
     const navigate = useNavigate();
 
     return (
@@ -18,7 +19,7 @@ const NewFeedCreatePage = () => {
             </header>
             <h1 className="text-center text-sm font-bold mb-5">Write your own diary</h1>
             <div className="w-full max-w-2xl h-3/5"> 
-                <NewFeedForm />
+                <NewFeedForm feed={feed}/>
             </div>
             
         </div>

@@ -19,8 +19,10 @@ const NewFeedList = ({feeds, setFeeds}) => {
     // 댓글 추가 로직
     const handleAddComment = (e, feedId) => {
         e.preventDefault();
-        
+        console.log('myUserRoomId : ')
         console.log(myUserRoomId)
+        console.log('currentUser : ')
+        console.log(currentUser)
 
         setFeeds(prevFeeds => prevFeeds.map(feed => 
             feed.feedId === feedId ? {
@@ -105,7 +107,7 @@ const NewFeedList = ({feeds, setFeeds}) => {
                         <p><strong>날짜:</strong> {feed.date}</p>
                     </div>
                     <div className="mt-4 flex justify-between text-gray-600 text-sm">
-                        {/* <span>댓글 {feed.comments.length}</span> */}
+                        <span>댓글 {feed.comments.length}</span>
                     </div>
 
                     {
