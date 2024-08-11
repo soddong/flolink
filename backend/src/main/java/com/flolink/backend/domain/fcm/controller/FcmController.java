@@ -13,7 +13,9 @@ import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/fcm")
@@ -22,9 +24,11 @@ public class FcmController {
 
 	@PostMapping("/register")
 	public ResponseEntity<?> registerFcm(Authentication authentication, @RequestBody String token) {
+		log.info("===클라이언트로부터 FCM 수신 START===");
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 		Integer userId = userDetails.getUserId();
 		fcmService.saveToken(userId, token);
+		log.info("===클라이언트로부터 FCM 수신 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 }
