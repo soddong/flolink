@@ -20,10 +20,10 @@ const NewFeedForm = ({ feed }) => {
         .then(()=>navigate('/main/feed'));
     }
 
-    //피드 수정 함수
+    //피드 수정 함수, ******images를 인자로 받던데, 이거 기존 image도 받아서 수정가능한건지, 어케할건지*******
     const handleEdit = (e) => {
         e.preventDefault();
-        feedPatch(feed.feedId, roomId, images, content)
+        feedPatch(feed[0].feedId, roomId, images, content)
         .then(() => navigate('/main/feed'))
     }
 
@@ -32,7 +32,7 @@ const NewFeedForm = ({ feed }) => {
         console.log(feed)
         if (feed) {
             setContent(feed[0].content);
-            setImages(feed[0].images);
+            // setImages(feed[0].images); 
             setIsEdit(true)
         }
     }, [])
