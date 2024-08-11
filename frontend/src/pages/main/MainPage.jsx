@@ -53,7 +53,7 @@ function MainPage() {
     handleCloseLocationModal,
     startLocation,
     currentLocation
-  } = usePlantHook(status, setStatus, userRoomId.data, setSuccessMessage, setShowMessage, setErrorMessage, setShowError, setShowLocationModal);
+  } = usePlantHook(status, setStatus, userRoomId?.data, setSuccessMessage, setShowMessage, setErrorMessage, setShowError, setShowLocationModal);
 
   useEffect(() => {
     setUserRoomId(roomId)
@@ -103,7 +103,7 @@ function MainPage() {
   function getButtonStatus() {
     if (status.walker === 0) {
       return 1;
-    } else if (status.walker === userRoomId.data) {
+    } else if (status.walker === userRoomId?.data) {
       return 2;
     } else {
       return 3;
