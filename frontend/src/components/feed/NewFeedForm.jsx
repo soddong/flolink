@@ -60,15 +60,6 @@ const NewFeedForm = ({ feed }) => {
                         multiple
                         onChange={handleImageChange}
                     />
-                    {/* {images.length > 0 && (
-                        <Carousel className="mt-2 w-full" showThumbs={false}>
-                            {images.map((image, index) => (
-                                <div key={index}>
-                                    <img src={URL.createObjectURL(image)} alt={`Uploaded ${index + 1}`} />
-                                </div>
-                            ))}
-                        </Carousel>
-                    )} */}
                 </label>
             </div>
             
