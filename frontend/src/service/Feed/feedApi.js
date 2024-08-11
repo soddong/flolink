@@ -14,8 +14,7 @@ export const addFeed = async (roomId, images, content) => {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    });
-
+    })
     return data;
 };
 

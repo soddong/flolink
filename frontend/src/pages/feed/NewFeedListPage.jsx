@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo/logo.png'
 import '../../css/feed/feedStyles.module.css'
 import userRoomStore from '../../store/userRoomStore'
-import mainStore from '../../store/mainStore'
 import NewFeedList from '../../components/feed/NewFeedList'
 import { fetchFeedList } from '../../service/Feed/feedApi'
 
 const NewFeedListPage = () => {
+    const [feedList, setFeedList] = useState([])
     const roomId = userRoomStore((state) => state.roomId)
     const roomDetail = userRoomStore((state) => state.roomDetail)
     //현재 날짜 이따 고치기
@@ -14,36 +15,31 @@ const NewFeedListPage = () => {
         new Date().getTime() + 9 * 60 * 60 * 1000
     ).toISOString()
 
-    const currentPage = mainStore((state) => state.currentPage);
-    const setCurrentPage = mainStore((state) => state.setCurrentPage);
-    
-    const [feeds, setFeeds] = useState([])
+    // const initFetchFeedList = useCallback(() => {
+    //     fetchFeedList(roomId, lastFeedDate, 20).then(({data: fechedFeedList}) => {
+    //         setFeedList(fechedFeedList)
+    //     })
+    // }, [setFeedList])
 
-    useEffect (() => {
-        try {
-            fetchFeedList(roomId, lastFeedDate, 20).then(({ data }) => {
-                const updatedfeeds = data; 
+    // useEffect(() => {
+    //     initFetchFeedList()       
+    // }, [initFetchFeedList]);
 
-                updatedfeeds?.forEach((feed) => {
-                    const matchingMember = roomDetail.data.memberInfoResponses.find(
-                        (member) => member.targetUserRoomId === feed.authorUserRoomId
-                    );
-            
-                   
-                    if (matchingMember) {
-                        feed.author = matchingMember.targetNickname;
-                    }
-                });
-            
-                setFeeds(updatedfeeds); 
-            });
-        } catch(error) {
-            console.log(error)
-        }
+    useEffect(() => {
+        fetchFeedList(roomId, lastFeedDate, 20).then(({ data }) => {
+            console.log(data)
+            setFeedList(data);
+        })
     }, [])
+
+    const navigate = useNavigate();
+
+    const handleCreateFeed = () => {
+        navigate('/main/feed/create');
+    }
     
     //피드가 없을 때,
-    if (feeds.length === 0) {
+    if (feedList.length === 0) {
         return (
             <div className="w-full min-h-screen bg-custom-gradient flex flex-col items-center justify-center">
                 <img src={logo} className="mx-auto h-20" />
@@ -54,7 +50,7 @@ const NewFeedListPage = () => {
                         <button 
                             type="button" 
                             className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                            onClick={() => setCurrentPage('feedcreate')}
+                             onClick={ handleCreateFeed }
                         >
                             작성하기
                         </button>
@@ -72,12 +68,12 @@ const NewFeedListPage = () => {
                 </header>
                 <div className="flex flex-col h-4/5 pt-0 pr-5 pl-5 pb-9">
                     <div className="flex-1 overflow-auto hide-scrollbar">
-                        <NewFeedList feeds={feeds} setFeeds={setFeeds}/>
+                        <NewFeedList feeds={feedList} setFeeds={setFeedList}/>
                     </div>
                 </div>
                 <button
                     className="bg-white border border-black text-black rounded-full w-12 h-12 flex items-center justify-center text-2xl absolute"
-                    onClick={() => setCurrentPage('feedcreate')}
+                    onClick={ handleCreateFeed }
                     style={{ bottom: "6rem", right: "3rem", opacity: 0.3 }}
                 >
                     +
