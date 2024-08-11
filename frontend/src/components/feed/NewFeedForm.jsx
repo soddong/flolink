@@ -1,5 +1,3 @@
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useState, useEffect, useRef } from 'react';
 import userRoomStore from '../../store/userRoomStore';
 import { addFeed, feedPatch } from '../../service/Feed/feedApi';
@@ -30,7 +28,7 @@ const NewFeedForm = ({ feed }) => {
     }
 
     // 실행 시 feed값이 있으면 수정 페이지임, 값을 지정해놓기
-    useEffect = (() => {
+    useEffect (() => {
         if (!feed) {
             setContent(feed.content);
             setImages(feed.images);
