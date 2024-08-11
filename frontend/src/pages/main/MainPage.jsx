@@ -18,18 +18,19 @@ import PlantWalkButton from '../../components/main/plantwalk/PlantWalkButton';
 
 function MainPage() {
   const [status, setStatus] = useState({ plantId: 0, level: 0, exp: 0, walker: 0 });
+
   const [successMessage, setSuccessMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
-  const [loading, setLoading] = useState(true); // New loading state
 
   const Message = "오늘은 어떤 일이 있었나요?";
+
   const { roomId, userRoomId, roomDetail, setUserRoomId, setRoomDetail, myInfo } = userRoomStore(state => ({
     roomId: state.roomId,
-    userRoomId: state.userRoomId?.data,
+    userRoomId: state.userRoomId,
     roomDetail: state.roomDetail?.data,
     myInfo: state.myInfo,
     setUserRoomId: state.setUserRoomId,
@@ -38,6 +39,13 @@ function MainPage() {
   
   const [petstatus, setPetstatus] = useState(null);
   
+  const updateLevel = (newLevel) => {
+    setStatus((prevStatus) => ({
+      ...prevStatus,
+      level: newLevel
+    }));
+  };
+
   const {
     handleStartWalk,
     handleViewCurrentLocation,
@@ -45,21 +53,27 @@ function MainPage() {
     handleCloseLocationModal,
     startLocation,
     currentLocation
-  } = usePlantHook(status, setStatus, userRoomId, setSuccessMessage, setShowMessage, setErrorMessage, setShowError, setShowLocationModal);
+  } = usePlantHook(status, setStatus, userRoomId.data, setSuccessMessage, setShowMessage, setErrorMessage, setShowError, setShowLocationModal);
 
   useEffect(() => {
-    if (roomDetail) {
-      const fetchData = async () => {
-        await setUserRoomId(roomId); // Fetch and set userRoomId
-        await setRoomDetail(roomId); // Fetch and set roomDetail
-        setLoading(false); // Loading complete
-      };
-      fetchData();
+    setUserRoomId(roomId)
+    setRoomDetail(roomId)
+    updateLevel(roomDetail.plantSummaryResponse?.nowLevel)
+    if (status) {
+      if (status.level === 1) {
+        setPetstatus(Pet1)
+      } else if (status.level === 2) {
+        setPetstatus(Pet2)
+      } else if (status.level === 3) {
+        setPetstatus(Pet3)
+      } else {
+        setPetstatus(Pet4)
+      }
     }
-  }, [roomId, setUserRoomId, setRoomDetail]);
+  }, []);
 
   useEffect(() => {
-    if (!loading && roomDetail) { // Ensure loading is complete
+    if (roomDetail) { 
       setStatus(prevStatus => ({
         ...prevStatus,
         plantId: roomDetail?.plantSummaryResponse?.plantId ?? 0,
@@ -70,7 +84,7 @@ function MainPage() {
       handlePetStatus(roomDetail.plantSummaryResponse?.nowLevel);
       setMemberList(roomDetail?.memberInfoResponses);
     }
-  }, [roomDetail, loading]);
+  }, [roomDetail]);
 
   function handlePetStatus (data) {
     if (data) {
@@ -89,7 +103,7 @@ function MainPage() {
   function getButtonStatus() {
     if (status.walker === 0) {
       return 1;
-    } else if (status.walker === userRoomId) {
+    } else if (status.walker === userRoomId.data) {
       return 2;
     } else {
       return 3;
@@ -99,10 +113,6 @@ function MainPage() {
   const walker = memberList.find(member => member.targetUserRoomId === status.walker);
   const walkerNickname = walker?.targetNickname || '알수없음';
   const walkerProfilePicture = walker?.profilePicture || 'COW';
-
-  if (loading) {
-    return <div>Loading...</div>; // You can replace this with a loading spinner
-  }
 
   return (
     <div className="w-full h-full box-border bg-gradient-to-b from-blue-300 to-sky-50 relative flex justify-center">
