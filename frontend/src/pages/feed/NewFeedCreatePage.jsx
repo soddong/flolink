@@ -1,10 +1,13 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo/logo.png';
 import NewFeedForm from '../../components/feed/NewFeedForm';
 
-const NewFeedCreatePage = ({ feed }) => {
+const NewFeedCreatePage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    const feed = location.state?.feed;
 
     return (
         <div className="w-full min-h-screen flex flex-col items-center bg-custom-gradient p-4">

@@ -39,7 +39,6 @@ const NewFeedForm = ({ feed }) => {
     }, [])
 
     //이미지 추가 함수
-    //이미지 리스트를 수정하는거 추가
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
         setImages((prevImages) => [...prevImages, ...files]);
