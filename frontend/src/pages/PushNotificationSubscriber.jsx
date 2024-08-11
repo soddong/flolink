@@ -9,23 +9,7 @@ const PushNotificationSubscriber = () => {
     setToken: state.setToken,
     getToken: state.getToken,
   }));
-  useEffect(() => {
-    // 사용자 권한 요청 및 FCM 토큰 받기
-    const fetchToken = async () => {
-      try {
-        const tmp_token = await requestPermissionAndGetToken();
-        if (tmp_token&&token) {
-          setTokenFound(true);
-          setPermission("granted");
-          setToken(tmp_token);
-        }
-      } catch (error) {
-        console.error("Permission or token retrieval failed:", error);
-        setPermission("denied");
-      }
-    };
-    fetchToken();
-  }, []);
+ 
   const handleGetPushTokenEvent = async () => {
     try {
       const tmp_token = await requestPermissionAndGetToken();

@@ -6,16 +6,16 @@ import { sendTokenToServer } from '../../service/notification/firebase';
 function KakaoLoginRedirectPage() {
   const queryParams = new URLSearchParams(window.location.search);
   const accessToken = queryParams.get('accessToken');
-  const { getToken } = tokenStore(state => ({
-    getToken: state.getToken,
+  const { token } = tokenStore(state => ({
+    token: state.token,
   }));
   const fetchData = async () => {
     if (accessToken) {
       // AccessToken 저장
       localStorage.setItem('ACCESS_TOKEN', accessToken);
       axiosCommonInstance.defaults.headers.common['Authorization'] = accessToken;
-      if(getToken){
-        sendTokenToServer(getToken);
+      if(token){
+        sendTokenToServer(token);
       }
     }
   }
