@@ -5,7 +5,6 @@ import userRoomStore from '../../store/userRoomStore';
 const NewFeedList = ({feeds, setFeeds}) => {
 
     const myUserRoomId = userRoomStore((state) => state.userRoomId);
-
     const currentUser = userRoomStore((state) => state.myInfo)
 
     const [showAllComments, setShowAllComments] = useState(false);
@@ -20,14 +19,14 @@ const NewFeedList = ({feeds, setFeeds}) => {
     const handleAddComment = (e, feedId) => {
         e.preventDefault();
         console.log('myUserRoomId : ')
-        console.log(myUserRoomId)
+        console.log(myUserRoomId.data)
         console.log('currentUser : ')
-        console.log(currentUser)
+        console.log(currentUser.data)
 
         setFeeds(prevFeeds => prevFeeds.map(feed => 
             feed.feedId === feedId ? {
                 ...feed,
-                comments : [...feed.comments, { author: currentUser, content: newComments[feedId] || '' }]
+                comments : [...feed.comments, { author: currentUser.data.nickname , content: newComments[feedId] || '' }]
             } : feed
         ));
 
@@ -109,7 +108,7 @@ const NewFeedList = ({feeds, setFeeds}) => {
                     </div>
 
                     {
-                        feed.authorUserRoomId === myUserRoomId && (
+                        feed.authorUserRoomId === myUserRoomId.data && (
                             <div className="mt-4 flex justify-end space-x-2">
                                 <button className="bg-transparent text-blue-500 font-semibold py-2 px-4 border border-yellow-500 rounded"
                                 onClick={() => handleEditFeed(feed.feedId)}>
@@ -130,7 +129,7 @@ const NewFeedList = ({feeds, setFeeds}) => {
                                     <div>
                                         <strong>{comment.author}:</strong> {comment.content}
                                     </div>
-                                    {comment.userRoomId === myUserRoomId && (
+                                    {comment.userRoomId === myUserRoomId.data && (
                                     <div className="flex space-x-2">
                                         <button
                                             className="text-blue-500 hover:underline"
