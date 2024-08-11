@@ -1,9 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo/logo.png';
 import NewFeedForm from '../../components/feed/NewFeedForm';
 
 const NewFeedCreatePage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    const feed = location.state?.feed;
 
     return (
         <div className="w-full min-h-screen flex flex-col items-center bg-custom-gradient p-4">
@@ -18,7 +22,7 @@ const NewFeedCreatePage = () => {
             </header>
             <h1 className="text-center text-sm font-bold mb-5">Write your own diary</h1>
             <div className="w-full max-w-2xl h-3/5"> 
-                <NewFeedForm />
+                <NewFeedForm feed={feed}/>
             </div>
             
         </div>

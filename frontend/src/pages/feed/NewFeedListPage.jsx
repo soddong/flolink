@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo/logo.png'
 import '../../css/feed/feedStyles.module.css'
