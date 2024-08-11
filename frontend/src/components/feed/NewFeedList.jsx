@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import userRoomStore from '../../store/userRoomStore';
 
 const NewFeedList = ({feeds, setFeeds}) => {
+
+    const navigate = useNavigate();
 
     const myUserRoomId = userRoomStore((state) => state.userRoomId);
     const currentUser = userRoomStore((state) => state.myInfo)
