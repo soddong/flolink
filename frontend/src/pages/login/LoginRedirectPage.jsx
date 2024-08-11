@@ -12,7 +12,7 @@ function KakaoLoginRedirectPage() {
       // AccessToken 저장
       localStorage.setItem('ACCESS_TOKEN', accessToken);
       axiosCommonInstance.defaults.headers.common['Authorization'] = accessToken;
-      const token = requestPermissionAndGetToken();
+      const token = await requestPermissionAndGetToken();
       if(token){  
         sendTokenToServer(token);
       }
