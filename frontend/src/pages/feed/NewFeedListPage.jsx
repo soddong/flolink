@@ -10,17 +10,17 @@ const NewFeedListPage = () => {
     const [feedList, setFeedList] = useState([])
     const roomId = userRoomStore((state) => state.roomId)
     const roomDetail = userRoomStore((state) => state.roomDetail)
-    //현재 날짜 이따 고치기
-    const lastFeedDate = new Date(
-        new Date().getTime() + 9 * 60 * 60 * 1000
-    ).toISOString()
 
     const refreshFeedList = useCallback(() => {
+        const lastFeedDate = new Date(
+            new Date().getTime() + 9 * 60 * 60 * 1000
+        ).toISOString()
+
         fetchFeedList(roomId, lastFeedDate, 20).then(({ data }) => {
             console.log(data);
             setFeedList(data);
         });
-    }, [roomId, lastFeedDate]);
+    }, [roomId]);
 
     useEffect(() => {
         refreshFeedList();
