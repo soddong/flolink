@@ -24,6 +24,7 @@ import FeedEditPage from './pages/feed/FeedEditPage';
 import MainLayout from './pages/main/MainLayout';
 import YourRoomPage from './pages/my_room/yourRoomPage';
 import NewFeedListPage from './pages/feed/NewFeedListPage';
+import NewFeedCreatePage from './pages/feed/NewFeedCreatePage';
 
 const router = createBrowserRouter([  
   {
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: <NewFeedListPage /> },
           { path: "edit", element: <FeedEditPage /> },
-          { path: "create", element: <FeedCreatePage /> },
+          { path: "create", element: <NewFeedCreatePage /> },
         ]
       },
       { path: "garden", element: <FamilyGardenPage /> },
