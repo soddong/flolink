@@ -160,162 +160,164 @@ function ItemStorePage() {
                     <span>상점</span>
                 </div>
             </div>
-            <div className={styles.mycardcontainer}>
-                <div className={styles.mycard}>
-                    <div className={styles.mycardhead}>
-                        <span>이름</span>
-                    </div>
-                    <div className={styles.mycardpoint}>
-                        <div className={styles.mycardpointhead}>
-                            <span>내 포인트</span>
-                            <span onClick={()=>{navigate('/payment')}}>충전하기</span>
+            <div className="w-full h-full bg-custom-gradient">
+                <div className={styles.mycardcontainer}>
+                    <div className={styles.mycard}>
+                        <div className={styles.mycardhead}>
+                            <span>이름</span>
                         </div>
-                        <div className={styles.mypoint}>
-                            <span>281 point</span>
+                        <div className={styles.mycardpoint}>
+                            <div className={styles.mycardpointhead}>
+                                <span>내 포인트</span>
+                                <span className={`${styles.chargeButton}`} onClick={()=>{navigate('/payment')}}>충전하기</span>
+                            </div>
+                            <div className={styles.mypoint}>
+                                <span>281 point</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className={styles.settinglist}>
-                <div className={styles.tabs}>
-                    <button 
-                        className={`${styles.tab} ${activeTab === 'itemlist' ? styles.active : ''}`}
-                        onClick={() => setActiveTab('itemlist')}
-                    >
-                        아이템
-                    </button>
-                    <button 
-                        className={`${styles.tab} ${activeTab === 'purchaseHistories' ? styles.active : ''}`}
-                        onClick={() => setActiveTab('purchaseHistories')}
-                    >
-                        구매내역
-                    </button>
-                </div>
-                <div className={styles.tabContent}>
-                {activeTab === 'itemlist' && (
-                    <ul className={styles.list}>
-                        {items.map((item, index) => (
-                            <li key={index} className={styles.itemListItem}>
-                                <div 
-                                    className={styles.itemInfo}
-                                    onClick={() => toggleItem(item.name)}
-                                >
-                                    <img 
-                                        src={images[item.name][0]} 
-                                        alt={item.name} 
-                                        className={styles.itemImage}
-                                    />
-                                    <span className={styles.itemName}>{item.name}</span>
-                                </div>
-                                <div className={`${styles.itemVariants} ${expandedItem === item.name ? styles.expanded : ''}`}>
-                                    {item.variants.map((variant, variantIndex) => (
-                                        <div 
-                                            key={variantIndex} 
-                                            
-                                            className={`${styles.variantItem} ${isItemPurchased(item.name, variantIndex) ? styles.soldout : ''}`}
-                                            
-                                            onClick={(e) => {
-                                                if (!isItemPurchased(item.name, variantIndex)) {
-                                                    e.stopPropagation();
-                                                    openModal(variant, images[item.name][variantIndex]);
-                                                }
-                                            }}
-                                          >
-                                            <div className={styles.iteminfos}>
-                                                <img 
-                                                    src={images[item.name][variantIndex]} 
-                                                    alt={`${item.name} variant ${variantIndex + 1}`} 
-                                                    className={styles.variantImage}
-                                                />
-                                                <span className={styles.variantNumber}>{item.name} {variantIndex + 1}</span>
-                                            </div>
-                                            <div>
-                                                <span className={styles.variantNumber}>
-                                                    {item.prices[variantIndex]}pt
-                                                </span>
-                                            </div>
-                                            {isItemPurchased(item.name, variantIndex) && (
-                                                <img 
-                                                    src={soldoutImage} 
-                                                    alt="Sold Out" 
-                                                    className={styles.soldoutImage}
-                                                />
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </li>
-                        ))}                         
-                    </ul>
-                )}
-                    
-                    {activeTab === 'purchaseHistories' && (
+                <div className={styles.settinglist}>
+                    <div className={styles.tabs}>
+                        <button 
+                            className={`${styles.tab} ${activeTab === 'itemlist' ? styles.active : ''}`}
+                            onClick={() => setActiveTab('itemlist')}
+                        >
+                            아이템
+                        </button>
+                        <button 
+                            className={`${styles.tab} ${activeTab === 'purchaseHistories' ? styles.active : ''}`}
+                            onClick={() => setActiveTab('purchaseHistories')}
+                        >
+                            구매내역
+                        </button>
+                    </div>
+                    <div className={styles.tabContent}>
+                    {activeTab === 'itemlist' && (
                         <ul className={styles.list}>
-                            {
-                                histories.map((history, index) => {
-                                    
-                                    let baseName;
-                                    let variantIndex;
-                                    let basePoint;
-                                    let imgSource;
-
-                                    if (history.isPurchase) {
-                                        baseName = history.itemName.replace(/[0-9]/g, '');
-                                        variantIndex = parseInt(history.itemName.replace(/\D/g, '')) - 1; 
-                                    }
-                                    else {
-                                        basePoint = history.orderName
-                                        if (basePoint == '1000') {
-                                            imgSource = 0
-                                        }
-                                        else if (basePoint == '3000') {
-                                            imgSource = 1
-                                        }
-                                        else if (basePoint == '5000') {
-                                            imgSource = 2
-                                        }
-                                        else {
-                                            imgSource = 3
-                                        }
-                                    }
-                                    
-                                    return (
-                                        <li key={index} className={styles.historyListItem}>
-                                            { history.isPurchase ? 
-                                                (
-                                                    <div className={styles.purchasedItem}>
-                                                        <img src={images[baseName][variantIndex]}/>
-                                                        <div className={styles.purchaseInfo}>
-                                                            <div className={styles.purchaseinfoforname}>
-                                                                <span>{ history.itemName }</span>
-                                                                <span>{ history.itemAmount }</span>
-                                                            </div>
-                                                            <div className={ styles.purchaseDate }>
-                                                                <span>{ history.transactionAt }</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            : (
-                                                <div className={styles.purchasedItem}>
-                                                    <img src={coins[imgSource]}/>
-                                                    
-                                                    <div className={styles.purchaseInfo}>
-                                                        <div className={styles.purchaseinfoforname}>
-                                                            <span>{ basePoint }pt</span>
-                                                            <span>{ history.amount }</span>
-                                                        </div>
-                                                        <div className={ styles.purchaseDate }>
-                                                            <span>{ history.paymentAt }</span>
-                                                        </div>
-                                                    </div>
+                            {items.map((item, index) => (
+                                <li key={index} className={styles.itemListItem}>
+                                    <div 
+                                        className={styles.itemInfo}
+                                        onClick={() => toggleItem(item.name)}
+                                    >
+                                        <img 
+                                            src={images[item.name][0]} 
+                                            alt={item.name} 
+                                            className={styles.itemImage}
+                                        />
+                                        <span className={styles.itemName}>{item.name}</span>
+                                    </div>
+                                    <div className={`${styles.itemVariants} ${expandedItem === item.name ? styles.expanded : ''}`}>
+                                        {item.variants.map((variant, variantIndex) => (
+                                            <div 
+                                                key={variantIndex} 
+                                                
+                                                className={`${styles.variantItem} ${isItemPurchased(item.name, variantIndex) ? styles.soldout : ''}`}
+                                                
+                                                onClick={(e) => {
+                                                    if (!isItemPurchased(item.name, variantIndex)) {
+                                                        e.stopPropagation();
+                                                        openModal(variant, images[item.name][variantIndex]);
+                                                    }
+                                                }}
+                                            >
+                                                <div className={styles.iteminfos}>
+                                                    <img 
+                                                        src={images[item.name][variantIndex]} 
+                                                        alt={`${item.name} variant ${variantIndex + 1}`} 
+                                                        className={styles.variantImage}
+                                                    />
+                                                    <span className={styles.variantNumber}>{item.name} {variantIndex + 1}</span>
                                                 </div>
-                                            )}
-                                        </li>
-                                )})
-                            }
+                                                <div>
+                                                    <span className={styles.variantNumber}>
+                                                        {item.prices[variantIndex]}pt
+                                                    </span>
+                                                </div>
+                                                {isItemPurchased(item.name, variantIndex) && (
+                                                    <img 
+                                                        src={soldoutImage} 
+                                                        alt="Sold Out" 
+                                                        className={styles.soldoutImage}
+                                                    />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </li>
+                            ))}                         
                         </ul>
                     )}
+                        
+                        {activeTab === 'purchaseHistories' && (
+                            <ul className={styles.list}>
+                                {
+                                    histories.map((history, index) => {
+                                        
+                                        let baseName;
+                                        let variantIndex;
+                                        let basePoint;
+                                        let imgSource;
+
+                                        if (history.isPurchase) {
+                                            baseName = history.itemName.replace(/[0-9]/g, '');
+                                            variantIndex = parseInt(history.itemName.replace(/\D/g, '')) - 1; 
+                                        }
+                                        else {
+                                            basePoint = history.orderName
+                                            if (basePoint == '1000') {
+                                                imgSource = 0
+                                            }
+                                            else if (basePoint == '3000') {
+                                                imgSource = 1
+                                            }
+                                            else if (basePoint == '5000') {
+                                                imgSource = 2
+                                            }
+                                            else {
+                                                imgSource = 3
+                                            }
+                                        }
+                                        
+                                        return (
+                                            <li key={index} className={styles.historyListItem}>
+                                                { history.isPurchase ? 
+                                                    (
+                                                        <div className={styles.purchasedItem}>
+                                                            <img src={images[baseName][variantIndex]}/>
+                                                            <div className={styles.purchaseInfo}>
+                                                                <div className={styles.purchaseinfoforname}>
+                                                                    <span>{ history.itemName }</span>
+                                                                    <span>{ history.itemAmount }</span>
+                                                                </div>
+                                                                <div className={ styles.purchaseDate }>
+                                                                    <span>{ history.transactionAt }</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                : (
+                                                    <div className={styles.purchasedItem}>
+                                                        <img src={coins[imgSource]}/>
+                                                        
+                                                        <div className={styles.purchaseInfo}>
+                                                            <div className={styles.purchaseinfoforname}>
+                                                                <span>{ basePoint }pt</span>
+                                                                <span>{ history.amount }</span>
+                                                            </div>
+                                                            <div className={ styles.purchaseDate }>
+                                                                <span>{ history.paymentAt }</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </li>
+                                    )})
+                                }
+                            </ul>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
