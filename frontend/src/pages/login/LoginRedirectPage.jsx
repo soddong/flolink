@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosCommonInstance } from '../../apis/axiosInstance';
-import tokenStore from '../../store/tokenStore';
-import { requestPermissionAndGetToken, sendTokenToServer } from '../../service/notification/firebase';
 function KakaoLoginRedirectPage() {
   const queryParams = new URLSearchParams(window.location.search);
   const accessToken = queryParams.get('accessToken');
@@ -12,10 +10,6 @@ function KakaoLoginRedirectPage() {
       // AccessToken 저장
       localStorage.setItem('ACCESS_TOKEN', accessToken);
       axiosCommonInstance.defaults.headers.common['Authorization'] = accessToken;
-      const token = await requestPermissionAndGetToken();
-      if(token){  
-        sendTokenToServer(token);
-      }
     }
   }
   const navigate = useNavigate();
