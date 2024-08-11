@@ -71,21 +71,23 @@ const NewFeedForm = ({ feed }) => {
                     )} */}
                 </label>
             </div>
-
+            
             {images.length > 0 && (
                 <div className="mb-4 overflow-x-auto whitespace-nowrap">
                     <div className="flex space-x-2">
                         {images.map((image, index) => (
-                            <div key={index} className="relative inline-block">
-                                <img
-                                    src={URL.createObjectURL(image)}
-                                    alt={`Uploaded ${index + 1}`}
-                                    className="w-15 h-15 object-cover rounded-md"
-                                />
+                            <div key={index} className="relative inline-block w-24 h-24">
+                                <div className="w-full h-full aspect-square overflow-hidden rounded-md">
+                                    <img
+                                        src={URL.createObjectURL(image)}
+                                        alt={`Uploaded ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                                 <button
                                     type="button"
                                     onClick={() => removeImage(index)}
-                                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                                 >
                                     X
                                 </button>
