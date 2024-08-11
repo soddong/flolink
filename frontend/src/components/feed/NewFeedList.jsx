@@ -35,7 +35,6 @@ const NewFeedList = ({feeds, setFeeds}) => {
         setNewComments(prev => ({...prev, [feedId]: ''}));
     }
 
-
     //댓글 수정 로직
     const handleEditComment = (feedId, commentIndex) => {
         const feedIndex = feeds.findIndex(feed => feed.feedId === feedId);
@@ -67,8 +66,7 @@ const NewFeedList = ({feeds, setFeeds}) => {
     //피드 수정 페이지 이동 로직
     const handleEditFeed = (feedId) => {
         const feed = feeds.filter(feed => feed.feedId === feedId);
-        //현재 수정할 피드를 data에 세팅해서 보낼 것!!
-        // setCurrentPage('feededit');
+        navigate('/main/feed/create', { state: { feed } })
     }
 
     //피드 삭제 로직
