@@ -39,10 +39,15 @@ public class FcmServiceImpl implements FcmService {
 	public void saveToken(final Integer userId, final String token) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
-		Fcm fcm = Fcm.builder()
-			.fcmToken(token)
-			.user(user)
-			.build();
+		Fcm fcm = fcmRepository.findByUser(user);
+		if (fcm == null) {
+			fcm = Fcm.builder()
+				.fcmToken(token)
+				.user(user)
+				.build();
+		}
+		fcm.setFcmToken(token);
+
 		fcmRepository.save(fcm);
 	}
 }
