@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { axiosCommonInstance } from '../../apis/axiosInstance';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAEE25E246QCHn-D7zPsHCaii1Fj-j8Vko",
@@ -23,7 +24,6 @@ export const requestPermissionAndGetToken = async () => {
             if (token) {
                 console.log('FCM Token:', token);
                 // 토큰을 백엔드로 전송
-                await sendTokenToServer(token);
                 return token;
             } else {
                 alert(
@@ -42,18 +42,9 @@ export const requestPermissionAndGetToken = async () => {
 };
 
 // 토큰을 백엔드로 전송하는 함수
-const sendTokenToServer = async (token) => {
+export const sendTokenToServer = async (token) => {
     try {
-        // const response = await fetch('https://your-backend-server.com/api/token', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify({ token }),
-        // });
-        // if (!response.ok) {
-        //   throw new Error('Failed to send token to server');
-        // }
+        axiosCommonInstance.post(`/fcm/register`,token);
         console.log('Token sent to server successfully');
     } catch (err) {
         console.error('Failed to send token to server:', err);
