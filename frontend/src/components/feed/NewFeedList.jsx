@@ -6,18 +6,33 @@ const NewFeedList = ({feeds, setFeeds}) => {
 
     const myUserRoomId = userRoomStore((state) => state.userRoomId);
 
-    const [showAllComments, setShowAllComments] = useState(false);
-    const [newComment, setNewComment] = useState('');
+    const currentUser = userRoomStore((state) => state.myInfo)
 
-    //댓글 추가 로직
-    const handleAddComment = (feedId, commentContent) => {
+    const [showAllComments, setShowAllComments] = useState(false);
+    const [newComments, setNewComments] = useState({});
+
+    // 댓글 입력 처리 함수
+    const handleCommentChange = (feedId, value) => {
+        setNewComments(prev => ({...prev, [feedId]: value}));
+    };
+
+    // 댓글 추가 로직
+    const handleAddComment = (e, feedId) => {
+        e.preventDefault();
+        
+        console.log(myUserRoomId)
+
         setFeeds(prevFeeds => prevFeeds.map(feed => 
             feed.feedId === feedId ? {
                 ...feed,
-                comments : [...feed.comments, { author: currentUser, content: commentContent }]
+                comments : [...feed.comments, { author: currentUser, content: newComments[feedId] || '' }]
             } : feed
-        ))
+        ));
+
+        // 댓글 추가 후 해당 피드의 입력 필드 초기화
+        setNewComments(prev => ({...prev, [feedId]: ''}));
     }
+
 
     //댓글 수정 로직
     const handleEditComment = (feedId, commentIndex) => {
@@ -109,7 +124,7 @@ const NewFeedList = ({feeds, setFeeds}) => {
                     }
 
                     <div className="mt-4">
-                        {/* {
+                        {
                             feed.comments.slice(0, showAllComments ? feed.comments.length : 2).map((comment, index) => (
                                 <div key={index} className="text-gray-700 mb-2 flex justify-between items-center">
                                     <div>
@@ -133,8 +148,8 @@ const NewFeedList = ({feeds, setFeeds}) => {
                                     )}
                                 </div>
                             ))
-                        } */}
-                        {/* {
+                        }
+                        {
                             feed.comments.length > 2 && (
                                 <button
                                     className="text-blue-500"
@@ -143,14 +158,14 @@ const NewFeedList = ({feeds, setFeeds}) => {
                                     {showAllComments ? '댓글 숨기기' : '댓글 더보기'}
                                 </button>
                             )
-                        } */}
+                        }
                     </div>
 
-                    <form onSubmit={handleAddComment} className="mt-4 flex">
+                    <form onSubmit={(e) => handleAddComment(e, feed.feedId)} className="mt-4 flex">
                         <input
                             type="text"
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
+                            value={newComments[feed.feedId] || ''}
+                            onChange={(e) => handleCommentChange(feed.feedId, e.target.value)}
                             className="flex-1 p-2 border rounded-l-md focus:outline-none"
                             placeholder="댓글을 입력하세요..."
                         />
