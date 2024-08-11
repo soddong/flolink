@@ -38,7 +38,7 @@ const NewFeedList = ({feeds, setFeeds, refreshFeedList}) => {
         setNewComments(prev => ({...prev, [feedId]: ''}));
     }
 
-    //댓글 수정 로직
+    //댓글 수정 로직 ****댓글값에 지금 author(닉네임)이랑 comment밖에 없음. userRoomId 필요****
     const handleEditComment = (feedId, commentIndex) => {
         const feedIndex = feeds.findIndex(feed => feed.feedId === feedId);
         if (feedIndex !== -1) {
@@ -72,7 +72,7 @@ const NewFeedList = ({feeds, setFeeds, refreshFeedList}) => {
         navigate('/main/feed/create', { state: { feed } })
     }
 
-    //피드 삭제 로직 ****method not allow issue***
+    //피드 삭제 로직 ****method not allow issue이씀***
     const handleDeleteFeed = (feedId) => {
         feedDelete(feedId).then(() => {
             refreshFeedList();
@@ -177,12 +177,12 @@ const NewFeedList = ({feeds, setFeeds, refreshFeedList}) => {
                     </div>
 
                     <form onSubmit={(e) => handleAddComment(e, feed.feedId)} className="mt-4 flex">
-                        <input
-                            type="text"
+                        <textarea
                             value={newComments[feed.feedId] || ''}
                             onChange={(e) => handleCommentChange(feed.feedId, e.target.value)}
-                            className="flex-1 p-2 border rounded-l-md focus:outline-none"
+                            className="flex-1 p-2 border rounded-l-md focus:outline-none resize-none overflow-y-auto"
                             placeholder="댓글을 입력하세요..."
+                            rows={1}
                         />
                         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-r-md">
                             등록
