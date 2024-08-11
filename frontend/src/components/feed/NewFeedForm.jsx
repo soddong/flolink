@@ -49,7 +49,7 @@ const NewFeedForm = ({ feed }) => {
     };
 
     return (
-        <form onSubmit={() => {(isEdit) ? handleEdit : handleSubmit }} className="border border-black p-4 rounded-lg shadow-md h-full flex flex-col">
+        <form onSubmit={(e) => (isEdit) ? handleEdit(e) : handleSubmit(e) } className="border border-black p-4 rounded-lg shadow-md h-full flex flex-col">
             <div className="flex items-center mb-4">
                 <label className="cursor-pointer flex items-center">
                     <span className="text-gray-500 text-sm mr-2">+image</span>
