@@ -44,11 +44,14 @@ public class FeedController {
 	@GetMapping("")
 	@Operation(summary = "피드 불러오기", description = "초기 localdatetime값 지정 필요. 20개 단위 조회")
 	public ResponseEntity<?> getFeeds(Authentication authentication, @RequestParam("roomId") final Integer roomId,
-		@RequestParam(name = "lastFeedDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime lastFeedDate,
+		@RequestParam(name = "lastFeedDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastFeedDate,
 		@RequestParam(defaultValue = "20") final Integer size) {
 		log.info("===피드 불러오기 START===");
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 		Integer userId = userDetails.getUserId();
+		if (lastFeedDate == null) {
+			lastFeedDate = LocalDateTime.now();
+		}
 		List<FeedResponse> feedResponseList = feedService.getFeeds(userId, roomId, lastFeedDate, size);
 		log.info("===피드 불러오기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, feedResponseList));
