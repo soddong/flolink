@@ -41,9 +41,8 @@ function ToastModal({onClose, phoneNumber, onSuccess }) {
 
   const validate = () => {
     phoneNumberCheck(phoneNumber, authNum).then((res) => {
-      if(res.code === "SUCCESS"){
-        console.log(res.data.token)
-        onSuccess(res.data.token)
+      if(res?.code === "SUCCESS"){
+        onSuccess(res?.data?.token)
       } else {
         retry();
       }

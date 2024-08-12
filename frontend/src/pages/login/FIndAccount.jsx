@@ -4,7 +4,7 @@ import FindAccountStyle from '../../css/login/FindAccount.module.css';
 import logo from '../../assets/logo/logo.png';
 import { useNavigate } from 'react-router-dom';
 import { axiosCommonInstance } from '../../apis/axiosInstance';
-import { findId, phoneNumberCheck, sendAuthNum } from '../../service/auth/auth';
+import { findId, phoneNumberCheck, sendAuthNum, resetPw } from '../../service/auth/auth';
 
 function FindAccount() {
   const [activeTab, setActiveTab] = useState('findId');
@@ -55,14 +55,14 @@ function FindAccount() {
     }
 
     try {
-      const successTokenRes = await phoneNumberCheck(tel, verificationCode).data;
-      setSuccessToken(successTokenRes.token);
-      
-      if (response.status === 200) {
-        alert('인증성공');
-      } else {
-        alert('인증번호가 틀렸습니다. 다시 시도해주세요.');
-      }
+      phoneNumberCheck(tel, verificationCode).then((res) => {
+        if(res?.code === "SUCCESS"){
+          setSuccessToken(res?.data?.token);
+          alert('인증성공');
+        } else {
+          alert('인증번호가 틀렸습니다. 다시 시도해주세요.');
+        }
+      })
     } catch (error) {
       console.error(error);
       alert('인증번호 확인에 실패했습니다.');
@@ -89,16 +89,21 @@ function FindAccount() {
   
   // 비밀번호 반환?
   const handleFindPw = async () => {
+    console.log(loginId)
+    console.log(username)
+    console.log(tel)
+    console.log(verificationCode)
     try{
-      const secretId = await resetPw(loginId, username, tel, verificationCode);
-      console.log(secretId.data.loginId)
-      if (secretId.status === 200) {
-        alert('임시비밀번호가 발송되었습니다.');
-      } else {
-        alert('일치하는 정보가 없습니다.');
-      }
+      resetPw(loginId, username, tel, verificationCode).then((res) => {
+        console.log(res)
+      });
+      // if (secretId.status === 200) {
+      //   alert('임시비밀번호가 발송되었습니다.');
+      // } else {
+      //   alert('일치하는 정보가 없습니다.');
+      // }
     } catch (e) {
-        alert('처리 중 오류가 발생했습니다.');
+        alert('처리 중 오류가 발생했습니다!.');
     }
   }
 
@@ -167,7 +172,8 @@ function FindAccount() {
             onClick={handleSendCode} >인증번호 전송</Button>
           <TextField label="인증번호 입력" variant="outlined" fullWidth className={FindAccountStyle.input} 
             onChange={(e) => setVerificationCode(e.target.value)} />
-          <Button variant="contained" className={FindAccountStyle.submitButton} onClick={handleFindPw}>비밀번호 찾기</Button>
+          <Button variant="contained" className={FindAccountStyle.submitButton} 
+            onClick={handleFindPw}>비밀번호 찾기</Button>
         </div>
       )}
       {/* 찾은 아이디 표시 모달 */}
