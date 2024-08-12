@@ -39,7 +39,8 @@ function ToastModal({ message, onClose, setSuccessToken, phoneNumber }) {
   const validate = () => {
     const data = phoneNumberCheck(phoneNumber, document.querySelector("#authnum").value);
     if (data.code == "SUCCESS") {
-      setSuccessToken(data.token);
+      console.log("하이루")
+      setSuccessToken(data.data.token);
     } else {
       retry();
     }
