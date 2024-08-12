@@ -6,10 +6,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.flolink.backend.domain.fcm.entity.Fcm;
+import com.flolink.backend.domain.fcm.event.FcmEvent;
+import com.flolink.backend.domain.fcm.repository.FcmRepository;
 import com.flolink.backend.domain.feed.dto.request.FeedCommentRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedCreateRequest;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
@@ -45,7 +49,9 @@ public class FeedServiceImpl implements FeedService {
 	private final FeedCommentRepository feedCommentRepository;
 	private final FeedImageRepository feedImageRepository;
 
+	private final ApplicationEventPublisher eventPublisher;
 	private final S3Util s3Util;
+	private final FcmRepository fcmRepository;
 
 	@Override
 	public List<FeedResponse> getFeeds(final Integer userId, final Integer roomId, final LocalDateTime lastFeedDate,
@@ -163,6 +169,19 @@ public class FeedServiceImpl implements FeedService {
 		}
 		feedCommentRepository.save(FeedComment.of(feed, userRoom, feedCommentRequest.getContent()));
 		plantService.updateExp(userRoom, ActivityPoint.COMMENT);
+
+		Optional<Fcm> fcm = fcmRepository.findByUserUserId(feed.getUserRoom().getUser().getUserId());
+		if (fcm.isPresent()) {
+			FcmEvent fcmEvent = new FcmEvent(
+				this,
+				"작성한 게시글에 댓글이 달렸어요.",
+				feedCommentRequest.getContent(),
+				fcm.get().getFcmToken()
+
+			);
+			eventPublisher.publishEvent(fcmEvent);
+		}
+
 	}
 
 	@Override

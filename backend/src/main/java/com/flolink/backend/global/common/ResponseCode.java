@@ -28,6 +28,9 @@ public enum ResponseCode {
 	ROOM_NOT_FOUND(404, "Room not found", "NOT_FOUND_ERROR"),
 	BLANK_ROOM_UPDATE_REQUEST(404, "Blank room update request", "BLANK_ROOM_UPDATE_REQUEST"),
 
+	//Fcm
+	FCM_TOKEN_NOT_FOUND(404, "FCM_Token Not Found", "FCM_TOKEN_NOTFOUND"),
+
 	// Feed
 	FEED_UPLOAD_FAILED(500, "Feed upload failed", "FEED_UPLOAD_FAILED"),
 	COMMENT_NOT_FOUND(404, "Comment not found", "COMMENT_NOT_FOUND"),
