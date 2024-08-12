@@ -62,13 +62,11 @@ public enum ResponseCode {
 	NOT_MATCH_LOGINID(401, "The LoginId entered does not match the DB.", "NOT_MATCH_TOKEN"),
 	UNAUTHORIZED_USER_ROLE(401, "OAuth login users cannot change their passwords.", "UNAUTHORIZED_USER_ROLE"),
 	NOT_MATCH_ROOMID(401, "The RoomId entered does not match the DB.", "NOT_MATCH_TOKEN"),
-
+	NOT_FOUND_AUTHNUM(401, "The AuthNum does not match the DB.", "NOT_FOUND_AUTHNUM"),
+	NOT_MATCH_AUTHNUM(401, "The AuthNum entered does not match the DB.", "NOT_MATCH_AUTHNUM"),
 
 	//Calendar
 	CALENDAR_NOT_FOUND(401, "Calendar not found", "CALENDAR_NOT_FOUND"),
-
-
-
 
 	// Purchase & Payment
 	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "ITEM_ALREADY_PURCHASE_ERROR"),
