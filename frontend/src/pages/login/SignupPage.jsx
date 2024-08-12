@@ -24,6 +24,7 @@ function SignupPage() {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [successToken, setSuccessToken] = useState('');
+  const [authNum, setAuthNum] = useState('');
   const isFormValid = password && confirmPassword && passwordSame && username && nickname && !nicknameError && fullName && phoneNumber;
   // const isFormValid = true;
 
@@ -182,7 +183,7 @@ function SignupPage() {
             </div>
             <PhoneNumberField
               label="휴대전화번호"
-              placeholder="010-1234-5678"
+              placeholder="'-'를 빼고 입력해주세요"
               setPhoneNumber={setPhoneNumber}
               onChange={handlePhoneNumberChange}
             />
@@ -199,7 +200,7 @@ function SignupPage() {
           <ToastModal
             message="문자로 전달받은\n인증번호 6자리를 입력해주세요."
             onClose={handleCloseModal}
-            setSuccessToken={setSuccessToken}
+            setAuthNum={setAuthNum}
             phoneNumber={phoneNumber}
           />
         )}

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { axiosCommonInstance } from '../../apis/axiosInstance';
 import { phoneNumberCheck } from '../../service/auth/auth';
 
-function ToastModal({ message, onClose, setSuccessToken, phoneNumber }) {
+function ToastModal({ message, onClose, authNum, phoneNumber }) {
   const [timeLeft, setTimeLeft] = useState(180); // 3분 = 180초
   const [requested, setRequested] = useState(false);
   useEffect(() => {
@@ -37,15 +37,15 @@ function ToastModal({ message, onClose, setSuccessToken, phoneNumber }) {
   }
 
   const validate = () => {
-    phoneNumberCheck(phoneNumber, document.querySelector("#authnum").value).then((res) => {
+    phoneNumberCheck(phoneNumber, authNum).then((res) => {
       console.log(res)
     })
-    if (data.code == "SUCCESS") {
-      console.log("하이루")
-      setSuccessToken(data.data.token);
-    } else {
-      retry();
-    }
+    // if (data.code == "SUCCESS") {
+    //   console.log("하이루")
+    //   setSuccessToken(data.data.token);
+    // } else {
+    //   retry();
+    // }
     onClose();
   }
   return (
