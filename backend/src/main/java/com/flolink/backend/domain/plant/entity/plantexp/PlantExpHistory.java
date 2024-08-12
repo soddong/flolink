@@ -1,8 +1,11 @@
-package com.flolink.backend.domain.plant.entity;
+package com.flolink.backend.domain.plant.entity.plantexp;
 
 import static jakarta.persistence.GenerationType.*;
 
 import java.time.LocalDate;
+
+import com.flolink.backend.domain.plant.entity.Plant;
+import com.flolink.backend.domain.plant.entity.enumtype.PlantStatusType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +43,7 @@ public class PlantExpHistory {
 
 	@Column(name = "plant_status", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private PlantStatus plantStatus;
+	private PlantStatusType plantStatusType;
 
 	@Column(name = "date_month", nullable = false)
 	private LocalDate dateMonth;

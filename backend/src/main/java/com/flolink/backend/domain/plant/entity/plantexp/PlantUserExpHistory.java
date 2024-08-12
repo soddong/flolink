@@ -1,4 +1,6 @@
-package com.flolink.backend.domain.plant.entity;
+package com.flolink.backend.domain.plant.entity.plantexp;
+
+import com.flolink.backend.domain.plant.entity.Plant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_exp_history")
-public class UserExpHistory {
+public class PlantUserExpHistory {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

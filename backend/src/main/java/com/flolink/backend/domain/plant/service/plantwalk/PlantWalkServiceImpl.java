@@ -1,22 +1,18 @@
-package com.flolink.backend.domain.plant.service;
+package com.flolink.backend.domain.plant.service.plantwalk;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
+import com.flolink.backend.domain.observer.service.ActivityService;
 import com.flolink.backend.domain.plant.dto.reqeust.PlantLocation;
 import com.flolink.backend.domain.plant.dto.response.PlantWalkResultResponse;
-import com.flolink.backend.domain.plant.entity.ActivityPoint;
+import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.domain.plant.entity.PlantWalk;
+import com.flolink.backend.domain.plant.entity.plantwalk.PlantWalk;
 import com.flolink.backend.domain.plant.repository.PlantWalkRepository;
-import com.flolink.backend.domain.room.entity.UserRoom;
-import com.flolink.backend.domain.room.service.RoomService;
-import com.flolink.backend.domain.user.service.UserService;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -30,10 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PlantWalkServiceImpl implements PlantWalkService {
 
-	private final UserService userService;
-	private final RoomService roomService;
+	private final ActivityService activityService;
+
 	private final PlantWalkRepository plantWalkRepository;
-	private final PlantService plantService;
 
 	@Transactional
 	public PlantWalk savePlantWalk(Plant plant) {
@@ -41,18 +36,17 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 	}
 
 	@Transactional
-	public void startWalk(Integer plantId, PlantLocation plantLocation) {
-		PlantWalk plantWalk = findPlantWalkById(plantId);
+	public void startWalk(Plant plant, PlantLocation plantLocation) {
+		PlantWalk plantWalk = findActivePlantWalk(plant.getPlantId());
 		validateStartWalk(plantWalk, plantLocation);
 
-		Plant plant = plantService.findById(plantId);
 		plant.updateWalk(plantLocation.getUserRoomId());
 
 		plantWalk.startPlantWalk(plantLocation);
 	}
 
 	@Transactional
-	public PlantWalkResultResponse completeWalk(Integer plantId, PlantLocation plantLocation) {
+	public PlantWalkResultResponse completeWalk(Integer userId, Integer plantId, PlantLocation plantLocation) {
 		PlantWalk plantWalk = findActivePlantWalk(plantId);
 		validateCompleteWalk(plantWalk, plantLocation);
 
@@ -64,7 +58,9 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 		endPlantWalk(plantWalk);
 
 		if (meetsDistanceRequirementForPoints(distance) && meetsSpeedRequirementForPoints(speed)) {
-			awardPoints(plantWalk);
+			increaseExpAboutActivity(ActivityPointType.WALK,
+				plantWalk.getPlant().getRoom().getRoomId(),plantWalk.getUserRoomId(), userId
+			);
 		}
 
 		return plantWalkResultResponse;
@@ -76,13 +72,8 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 		return PlantLocation.fromEntity(plantWalk);
 	}
 
-	private PlantWalk findPlantWalkById(Integer plantId) {
-		return plantWalkRepository.findByPlantPlantId(plantId)
-			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_WALK_NOT_FOUND));
-	}
-
 	private PlantWalk findActivePlantWalk(Integer plantId) {
-		return plantWalkRepository.findByPlantPlantIdAndWalkYnTrue(plantId)
+		return plantWalkRepository.findByPlantPlantIdAndUseYnTrue(plantId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_WALK_NOT_FOUND));
 	}
 
@@ -129,14 +120,13 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 		return distance >= 1.0;
 	}
 
-	private void awardPoints(PlantWalk plantWalk) {
-		UserRoom userRoom = roomService.findUserRoomByUserRoomId(plantWalk.getUserRoomId());
-		plantService.updateExp(userRoom, ActivityPoint.WALK);
-	}
-
 	private void endPlantWalk(PlantWalk plantWalk) {
-		Plant plant = plantService.findById(plantWalk.getPlant().getPlantId());
+		Plant plant = plantWalk.getPlant();
 		plant.updateWalk(0);
 		plantWalk.endPlantWalk();
+	}
+
+	private void increaseExpAboutActivity(ActivityPointType type, Integer roomId, Integer userRoomId, Integer userId) {
+		activityService.performActivity(userId, roomId, userRoomId, type);
 	}
 }

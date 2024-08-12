@@ -7,22 +7,22 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.flolink.backend.domain.plant.entity.UserExp;
-import com.flolink.backend.domain.plant.repository.UserExpRepository;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
+import com.flolink.backend.domain.plant.repository.PlantUserExpRepository;
 
 @Component
-public class RankItemReader implements ItemReader<UserExp> {
+public class RankItemReader implements ItemReader<PlantUserExp> {
 
 	@Autowired
-	private UserExpRepository userExpRepository;
+	private PlantUserExpRepository plantUserExpRepository;
 
-	private Iterator<UserExp> userExpIterator;
+	private Iterator<PlantUserExp> userExpIterator;
 
 	@Override
-	public UserExp read() {
+	public PlantUserExp read() {
 		if (userExpIterator == null) {
-			List<UserExp> userExps = userExpRepository.findAllGroupedByPlantOrderByContributeExpAsc();
-			userExpIterator = userExps.iterator();
+			List<PlantUserExp> plantUserExps = plantUserExpRepository.findAllGroupedByPlantOrderByContributeExpAsc();
+			userExpIterator = plantUserExps.iterator();
 		}
 
 		if (userExpIterator != null && userExpIterator.hasNext()) {

@@ -1,4 +1,4 @@
-package com.flolink.backend.domain.plant.service;
+package com.flolink.backend.domain.plant.service.plantexp;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import com.flolink.backend.domain.plant.dto.response.PlantHistoryResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantHistorySummaryResponse;
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.domain.plant.entity.PlantExpHistory;
-import com.flolink.backend.domain.plant.entity.PlantStatus;
-import com.flolink.backend.domain.plant.repository.PlantHistoryRepository;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantExpHistory;
+import com.flolink.backend.domain.plant.entity.enumtype.PlantStatusType;
+import com.flolink.backend.domain.plant.repository.PlantExpHistoryRepository;
 import com.flolink.backend.domain.plant.repository.PlantRepository;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -20,9 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PlantHistoryServiceImpl implements PlantHistoryService {
+public class PlantExpHistoryServiceImpl implements PlantExpHistoryService {
 
-	private final PlantHistoryRepository plantHistoryRepository;
+	private final PlantExpHistoryRepository plantExpHistoryRepository;
 	private final PlantRepository plantRepository;
 
 	/**
@@ -53,7 +53,7 @@ public class PlantHistoryServiceImpl implements PlantHistoryService {
 	}
 
 	private List<PlantExpHistory> loadPlantHistories(Plant plant, Integer year) {
-		return plantHistoryRepository.findByPlantIdAndYear(plant, year);
+		return plantExpHistoryRepository.findByPlantIdAndYear(plant, year);
 	}
 
 	private List<PlantHistoryResponse> mapHistoriesToResponses(List<PlantExpHistory> histories, int memberSize) {
@@ -64,7 +64,7 @@ public class PlantHistoryServiceImpl implements PlantHistoryService {
 
 	private long calculateAchievementCount(List<PlantExpHistory> histories) {
 		return histories.stream()
-			.filter(history -> history.getPlantStatus().equals(PlantStatus.COMPLETED))
+			.filter(history -> history.getPlantStatusType().equals(PlantStatusType.COMPLETED))
 			.count();
 	}
 }

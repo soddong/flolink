@@ -5,17 +5,17 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.flolink.backend.domain.plant.entity.UserExpHistory;
-import com.flolink.backend.domain.plant.repository.UserExpHistoryRepository;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExpHistory;
+import com.flolink.backend.domain.plant.repository.PlantUserExpHistoryRepository;
 
 @Component
-public class RankItemWriter implements ItemWriter<UserExpHistory> {
+public class RankItemWriter implements ItemWriter<PlantUserExpHistory> {
 
 	@Autowired
-	private UserExpHistoryRepository userExpHistoryRepository;
+	private PlantUserExpHistoryRepository plantUserExpHistoryRepository;
 
 	@Override
-	public void write(Chunk<? extends UserExpHistory> items) throws Exception {
-		userExpHistoryRepository.saveAll(items);
+	public void write(Chunk<? extends PlantUserExpHistory> items) throws Exception {
+		plantUserExpHistoryRepository.saveAll(items);
 	}
 }

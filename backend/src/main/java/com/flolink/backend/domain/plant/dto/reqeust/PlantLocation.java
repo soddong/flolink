@@ -1,6 +1,6 @@
 package com.flolink.backend.domain.plant.dto.reqeust;
 
-import com.flolink.backend.domain.plant.entity.PlantWalk;
+import com.flolink.backend.domain.plant.entity.plantwalk.PlantWalk;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
