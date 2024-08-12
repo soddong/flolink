@@ -4,15 +4,21 @@ import { useState, useEffect } from 'react';
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import FamilyRank from './FamilyRank';
-// import { getHistoryData } from '../../hook/garden/gardenHook.js'
 import { fetchHistorys } from '../../service/garden/gardenApi.js';
 import userRoomStore from '../../store/userRoomStore.js';
+import Photo from "../../assets/tamagochi/flower1.png"
+
+const dummy_photos = [
+  {id: 0, imageUrl: Photo},
+  {id: 1, imageUrl: Photo},
+  {id: 2, imageUrl: Photo},
+  {id: 3, imageUrl: Photo},
+]
 
 function FlowerModal ({ month, flower, setFlowerModal, flowerdata }) {
   const roomDetail = userRoomStore((state) => state.roomDetail)
   const [plantId, setPlantId] = useState(roomDetail?.data.plantSummaryResponse?.plantId)
   const [historyId, setHistoryId] = useState(flowerdata?.plantHistoryId)
-  // const { data: historyData, isLoading: historyLoading, error: historyError } = getHistoryData(plantId, flowerdata?.plantHistoryId);
   const [history, setHistory] = useState(null)
   const [rank, setRank] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,7 +29,7 @@ function FlowerModal ({ month, flower, setFlowerModal, flowerdata }) {
       .then(({data}) => {
         console.log(data)
         setRank(Array.from(data?.plantUserHistoryRespons).sort((a, b) => a.monthlyRank - b.monthlyRank))
-        setHistory(data.feedImageResponses.map((image, index) => (
+        setHistory(dummy_photos.map((image, index) => (
           <div className='w-full h-full bg-center bg-contain bg-no-repeat flex justify-center items-center'
             style={{'backgroundImage': `url(${movieFrame})`, 'backgroundSize': '100% 100%'}}
             key={index}>
@@ -36,25 +42,8 @@ function FlowerModal ({ month, flower, setFlowerModal, flowerdata }) {
         console.log(e)
       })
     }
-  }, [plantId])
+  }, [plantId, historyId])
   
-  // useEffect(() => {
-  //   if (historyData && historyData.data) {
-  //     setRank(Array.from(historyData.data["plantUserHistoryRespons"]).sort((a, b) => a.rank - b.rank))
-  //     setHistory(historyData.data["feedImageResponses"].map((image, index) => (
-  //       <div className='w-full h-full bg-center bg-contain bg-no-repeat flex justify-center items-center'
-  //         style={{'backgroundImage': `url(${movieFrame})`, 'backgroundSize': '100% 100%'}}
-  //         key={index}>
-  //           <img src={image["imageUrl"]} alt="dummy_photo"
-  //           style={{'height': '72%', 'width': '93%'}} />
-  //       </div>
-  //     )))
-
-  //     console.log(history, rank)
-  //   } else {
-  //     console.log(historyError)
-  //   }
-  // }, [historyData, historyLoading, historyError])
 
   function handleChange(index) {
     setCurrentIndex(index);
