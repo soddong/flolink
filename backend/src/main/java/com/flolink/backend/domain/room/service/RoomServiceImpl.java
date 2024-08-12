@@ -262,12 +262,16 @@ public class RoomServiceImpl implements RoomService {
 				notiRepository.save(noti);
 
 				if (curUserRoom.getUser().getFcm() != null) {
-					FcmEvent fcmEvent = new FcmEvent(this
-						, "공지가 변경되었어요.",
-						"지금 바로 확인해보세요!",
-						curUserRoom.getUser().getFcm().getFcmToken()
-					);
-					eventPublisher.publishEvent(fcmEvent);
+					try {
+						FcmEvent fcmEvent = new FcmEvent(this
+							, "공지가 변경되었어요.",
+							"지금 바로 확인해보세요!",
+							curUserRoom.getUser().getFcm().getFcmToken()
+						);
+						eventPublisher.publishEvent(fcmEvent);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
