@@ -28,6 +28,9 @@ public enum ResponseCode {
 	ROOM_NOT_FOUND(404, "Room not found", "NOT_FOUND_ERROR"),
 	BLANK_ROOM_UPDATE_REQUEST(404, "Blank room update request", "BLANK_ROOM_UPDATE_REQUEST"),
 
+	//Fcm
+	FCM_TOKEN_NOT_FOUND(404, "FCM_Token Not Found", "FCM_TOKEN_NOTFOUND"),
+
 	// Feed
 	FEED_UPLOAD_FAILED(500, "Feed upload failed", "FEED_UPLOAD_FAILED"),
 	COMMENT_NOT_FOUND(404, "Comment not found", "COMMENT_NOT_FOUND"),
@@ -62,7 +65,8 @@ public enum ResponseCode {
 	NOT_MATCH_LOGINID(401, "The LoginId entered does not match the DB.", "NOT_MATCH_TOKEN"),
 	UNAUTHORIZED_USER_ROLE(401, "OAuth login users cannot change their passwords.", "UNAUTHORIZED_USER_ROLE"),
 	NOT_MATCH_ROOMID(401, "The RoomId entered does not match the DB.", "NOT_MATCH_TOKEN"),
-
+	NOT_FOUND_AUTHNUM(401, "The AuthNum does not match the DB.", "NOT_FOUND_AUTHNUM"),
+	NOT_MATCH_AUTHNUM(401, "The AuthNum entered does not match the DB.", "NOT_MATCH_AUTHNUM"),
 
 	//Calendar
 	CALENDAR_NOT_FOUND(401, "Calendar not found", "CALENDAR_NOT_FOUND"),

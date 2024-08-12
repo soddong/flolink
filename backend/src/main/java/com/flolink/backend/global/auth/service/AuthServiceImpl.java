@@ -3,9 +3,6 @@ package com.flolink.backend.global.auth.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.flolink.backend.domain.user.entity.User;
-import com.flolink.backend.domain.user.repository.UserRepository;
-import com.flolink.backend.global.auth.dto.request.ResetPassword;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +14,10 @@ import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 
+import com.flolink.backend.domain.user.entity.User;
+import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.auth.dto.request.CheckAuthRequest;
+import com.flolink.backend.global.auth.dto.request.ResetPassword;
 import com.flolink.backend.global.auth.dto.response.SuccessTokenResponse;
 import com.flolink.backend.global.auth.entity.Auth;
 import com.flolink.backend.global.auth.entity.SuccessToken;
@@ -40,7 +40,6 @@ public class AuthServiceImpl implements AuthService {
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
 	@Value("${nurigo.api.key}")
 	private String apiKey;
 
@@ -62,7 +61,6 @@ public class AuthServiceImpl implements AuthService {
 			apiKey, apiSecret, domain);
 
 		String randomAuthNum = RandomStringUtils.randomNumeric(6);
-
 
 		Message message = new Message();
 		message.setFrom("01042121037");
@@ -98,14 +96,16 @@ public class AuthServiceImpl implements AuthService {
 	@Transactional
 	public SuccessTokenResponse checkAuthenticationNumber(CheckAuthRequest checkAuthRequest) {
 		Auth auth = authRepository.findByTel(checkAuthRequest.getTel())
-			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_AUTHNUM));
 
 		try { // 현재시간(now) 이 유효기간을 지났다면 TimeOutException, 인증번호 불일치라면 NotFoundException
 			LocalDateTime now = LocalDateTime.now();
 			if (now.isAfter(auth.getExpiredAt())) {
 				throw new TimeOutException(ResponseCode.TIME_OUT_EXCEPTION);
 			} else if (!auth.getAuthNum().equals(checkAuthRequest.getAuthNum())) {
-				throw new NotFoundException(ResponseCode.NOT_FOUND_ERROR);
+				System.out.println(auth.getAuthNum());
+				System.out.println(checkAuthRequest.getAuthNum());
+				throw new NotFoundException(ResponseCode.NOT_MATCH_AUTHNUM);
 			}
 		} finally {
 			authRepository.deleteByTel(checkAuthRequest.getTel());
@@ -128,10 +128,10 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public void sendTempPassword(ResetPassword resetPassword) {
 		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(
-				apiKey, apiSecret, domain);
+			apiKey, apiSecret, domain);
 
 		Auth auth = authRepository.findByTel(resetPassword.getTel())
-				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 
 		try { // 현재시간(now) 이 유효기간을 지났다면 TimeOutException, 인증번호 불일치라면 NotFoundException
 			LocalDateTime now = LocalDateTime.now();
@@ -146,7 +146,7 @@ public class AuthServiceImpl implements AuthService {
 
 		// 입력받은 아이디를 통해 유저객체 찾아오기
 		User user = userRepository.findByLoginId(resetPassword.getLoginId())
-				.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
 		// 문자+숫자 혼용된 8자리 임시 비밀번호
 		String randomPassword = RandomStringUtils.randomAlphanumeric(8);
 

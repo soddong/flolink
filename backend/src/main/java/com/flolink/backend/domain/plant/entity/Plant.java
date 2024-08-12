@@ -4,11 +4,10 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.plant.entity.enumtype.PlantStatusType;
 import com.flolink.backend.domain.room.entity.Room;
-import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.global.common.GlobalConstant;
 
 import jakarta.persistence.Column;
@@ -38,8 +37,7 @@ import lombok.ToString;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "plant")
 @SQLDelete(sql = "UPDATE plant SET use_yn = false WHERE plant_id = ?")
-@Where(clause = "use_yn = true")
-@ToString
+@SQLRestriction("use_yn = true")
 public class Plant {
 
 	@Id
