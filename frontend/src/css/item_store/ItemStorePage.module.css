@@ -1,0 +1,297 @@
+.settingpage {
+    width : 100%;
+    height : 100%;
+}
+
+.header {
+    width: 100%;
+    height: 7%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    align-items: center;
+    padding: 5%;
+    box-sizing: border-box;
+}
+
+.title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.mycardcontainer {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mycard {
+    width: 90%;
+    height: 90%;
+    border-radius: 10%;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 5%;
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+}
+.mycardhead {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5%;
+}
+
+.chargeButton {
+    background-color: #ff758c; /* 배경색을 설정 */
+    color: white; /* 텍스트 색상 */
+    padding: 8px 16px; /* 내부 여백을 설정 */
+    border: none; /* 테두리를 없앰 */
+    border-radius: 5px; /* 모서리를 둥글게 */
+    cursor: pointer; /* 커서를 포인터로 변경 */
+    font-size: 14px; /* 글자 크기 */
+    transition: background-color 0.3s ease; /* 배경색이 부드럽게 변하도록 설정 */
+    position: absolute; /* 충전하기 위치 조정 */
+    bottom: 0; /* 하단에 위치 */
+    right: 0; /* 우측에 위치 */
+}
+
+.chargeButton:hover {
+    background-color: #ff5a6f; /* 마우스 오버 시 배경색 변경 */
+}
+
+.mycardpointhead {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.charge {
+    position: absolute; 
+    right: 0; 
+    bottom: 0;
+}
+
+.nameSection {
+    font-size: 120%;
+    font-weight: bold;
+    margin-bottom: 5%;
+}
+
+.pointSection {
+    background-color: #e8f5e9;
+    border-radius: 5%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.pointHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5%;
+}
+
+.mypoint {
+    font-size: 150%;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.settinglist {
+    width: 100%;
+    height: 80%;
+    /* background-color: #f0f0f0; */
+    padding: 5%;
+    box-sizing: border-box;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    border-bottom: 2px solid #007bff;
+    color: #007bff;
+}
+
+.tabContent {
+    background-color: white;
+    border-radius: 10px;
+    padding: 5%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    overflow-y: auto;
+    height : 80%;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    width : 100%;
+    height : 100%;
+}
+
+.list li:last-child {
+    border-bottom: none;
+}
+
+.list li:hover {
+    background-color: #f8f8f8;
+}
+
+.itemListItem {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+    width : 100%;
+}
+
+.itemInfo {
+    display: flex;
+    align-items: center;
+    padding: 5%;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+.itemImage {
+    width: 15%;
+    height: 15%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.itemName {
+    font-weight: bold;
+}
+
+.itemVariants {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: #fff;
+}
+
+.itemVariants.expanded {
+    max-height: 500px; /* 적절한 높이로 조정 */
+    transition: max-height 0.5s ease-in;
+}
+
+.variantItem {
+    display: flex;
+    align-items: center;
+    padding: 5%;
+    border-top: 1px solid #eee;
+    position : relative;
+    display : flex;
+    justify-content: space-between;
+}
+
+.variantImage {
+    width: 12%;
+    height: 12%;
+    object-fit: cover;
+    margin-right: 4%;
+}
+
+.variantNumber {
+    font-size: 14px;
+    color: #666;
+}
+
+.historyListItem {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+    width : 100%;
+    height : 20%;
+}
+
+.purchasedItem {
+    padding : 3%;
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+    width : 100%;
+    height : 100%;
+}
+
+.purchasedItem img {
+    width : 15%;
+    object-fit: cover;
+    margin-right : 3%;
+}
+
+.purchaseInfo {
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+    height : 100%;
+    width : 80%;
+}
+
+.purchaseinfoforname {
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.purchaseDate {
+    right : 0;
+}
+
+.iteminfos {
+    width : 50%;
+    display : flex;
+    flex-direction: row;
+}
+
+.soldout {
+    pointer-events: none;
+}
+
+.soldoutImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    object-fit: contain;
+    pointer-events: none;
+}

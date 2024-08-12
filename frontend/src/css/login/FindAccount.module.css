@@ -1,0 +1,72 @@
+.container {
+  max-width: 100%; /* 최대 너비를 화면 너비로 제한 */
+  margin: 0 auto;
+  min-height: 100vh; /* 최소 높이를 100vh로 설정 */
+  background-color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 20px;
+  width: 100px;
+  height: auto;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom-color 0.3s;
+}
+
+.activeTab {
+  border-bottom-color: #ff758c;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 390px; /* 최대 너비를 390px로 제한 */
+}
+
+.input {
+  margin-bottom: 10px;
+}
+
+.button {
+  align-self: flex-end;
+  color: #ff758c;
+  border-color: #ff758c;
+}
+
+.submitButton {
+  background: linear-gradient(to right, #ff758c, #ff7eb3);
+  color: #fff;
+  width: 100%;
+}
