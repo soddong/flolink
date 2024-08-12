@@ -10,7 +10,8 @@ public class FcmEvent extends ApplicationEvent {
 	private final String message;
 	private final String fcmToken;
 
-	public FcmEvent(Object source, String title, String message, String fcmToken) {
+	public FcmEvent(Object source, final String title, final String message,
+		final String fcmToken) {
 		super(source);
 		this.title = title;
 		this.message = message;

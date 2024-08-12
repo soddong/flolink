@@ -7,6 +7,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.feed.entity.Feed;
+import com.flolink.backend.domain.noti.entity.Noti;
 import com.flolink.backend.domain.user.entity.User;
 
 import jakarta.persistence.Column;
@@ -49,6 +50,9 @@ public class UserRoom {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "room_id", nullable = false)
 	private Room room;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
+	private List<Noti> notiList;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
 	private List<Nickname> nickNameList;

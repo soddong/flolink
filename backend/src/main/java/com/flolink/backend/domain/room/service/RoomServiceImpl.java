@@ -11,13 +11,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flolink.backend.domain.observer.service.ActivityService;
-import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
-
-import com.flolink.backend.domain.fcm.entity.Fcm;
 import com.flolink.backend.domain.fcm.event.FcmEvent;
 import com.flolink.backend.domain.fcm.repository.FcmRepository;
+import com.flolink.backend.domain.noti.entity.Noti;
+import com.flolink.backend.domain.noti.repository.NotiRepository;
+import com.flolink.backend.domain.observer.service.ActivityService;
 import com.flolink.backend.domain.plant.entity.Plant;
+import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
 import com.flolink.backend.domain.plant.repository.PlantUserExpRepository;
 import com.flolink.backend.domain.plant.service.PlantService;
@@ -54,7 +54,7 @@ public class RoomServiceImpl implements RoomService {
 	private final PlantUserExpRepository plantUserExpRepository;
 	private final UserRoomRepository userRoomRepository;
 	private final NicknameRepository nicknameRepository;
-
+	private final NotiRepository notiRepository;
 	private final FcmRepository fcmRepository;
 
 	private final ApplicationEventPublisher eventPublisher;
@@ -251,22 +251,24 @@ public class RoomServiceImpl implements RoomService {
 			room.setNotice(roomUpdateRequest.getNotice());
 		}
 		roomRepository.save(room);
+		List<UserRoom> userRoomList = room.getUserRoomList();
 		if (isNotiChanged) {
-			List<Integer> users = room.getUserRoomList()
-				.stream()
-				.map((userRoom1 -> userRoom1.getUser().getUserId()))
-				.toList();
-			List<Fcm> fcms = fcmRepository.findAllByUserIds(users);
-			for (Fcm fcm : fcms) {
-				FcmEvent fcmEvent = new FcmEvent(
-					this,
-					"공지가 변경되었어요.",
-					"지금 바로 확인해보세요!",
-					fcm.getFcmToken()
+			for (UserRoom curUserRoom : userRoomList) {
+				Noti noti = Noti.builder()
+					.userRoom(curUserRoom)
+					.message("공지가 변경되었어요.")
+					.createAt(LocalDateTime.now())
+					.build();
+				notiRepository.save(noti);
 
-				);
-
-				eventPublisher.publishEvent(fcmEvent);
+				if (curUserRoom.getUser().getFcm() != null) {
+					FcmEvent fcmEvent = new FcmEvent(this
+						, "공지가 변경되었어요.",
+						"지금 바로 확인해보세요!",
+						curUserRoom.getUser().getFcm().getFcmToken()
+					);
+					eventPublisher.publishEvent(fcmEvent);
+				}
 			}
 		}
 
