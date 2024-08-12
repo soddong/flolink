@@ -1,5 +1,8 @@
 package com.flolink.backend.domain.room.entity;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,6 +26,8 @@ import lombok.Setter;
 @Table(name = "nickname")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE nickname SET use_yn = false WHERE nickname_id = ?")
+@SQLRestriction("use_yn = true")
 public class Nickname {
 
 	@Id

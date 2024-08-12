@@ -2,7 +2,7 @@ package com.flolink.backend.domain.plant.entity;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_exp")
 @SQLDelete(sql = "UPDATE user_exp SET use_yn = false WHERE exp_id = ?")
-@Where(clause = "use_yn = true")
+@SQLRestriction("use_yn = true")
 public class UserExp {
 
 	@Id
