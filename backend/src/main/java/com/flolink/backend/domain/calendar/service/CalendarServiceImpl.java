@@ -74,11 +74,9 @@ public class CalendarServiceImpl implements CalendarService {
 		List<Fcm> fcms = fcmRepository.findAllByUserIds(users);
 		SimpleDateFormat formatter = new SimpleDateFormat(" (MM.dd)");
 		for (Fcm fcm : fcms) {
-			FcmEvent fcmEvent = FcmEvent.builder()
-				.title("가족 일정이 공유되었어요.")
-				.message(calendarRequest.getTitle() + formatter.format(calendarRequest.getDate()))
-				.fcmToken(fcm.getFcmToken())
-				.build();
+			FcmEvent fcmEvent = new FcmEvent(this, "가족 일정이 공유되었어요.",
+				calendarRequest.getTitle() + formatter.format(calendarRequest.getDate())
+				, fcm.getFcmToken());
 			eventPublisher.publishEvent(fcmEvent);
 		}
 	}
@@ -120,12 +118,11 @@ public class CalendarServiceImpl implements CalendarService {
 		List<Fcm> fcms = fcmRepository.findAllByUserIds(users);
 		SimpleDateFormat formatter = new SimpleDateFormat(" (MM.dd)");
 		for (Fcm fcm : fcms) {
-			FcmEvent fcmEvent = FcmEvent.builder()
-				.title("가족 일정이 수정되었어요.")
-				.message(updateCalendarRequest.getTitle() + formatter.format(updateCalendarRequest.getDate()))
-				.fcmToken(fcm.getFcmToken())
-				.build();
+			FcmEvent fcmEvent = new FcmEvent(this, "가족 일정이 수정되었어요.",
+				updateCalendarRequest.getTitle() + formatter.format(updateCalendarRequest.getDate())
+				, fcm.getFcmToken());
 			eventPublisher.publishEvent(fcmEvent);
+			
 		}
 	}
 }
