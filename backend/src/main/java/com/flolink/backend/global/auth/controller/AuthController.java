@@ -1,11 +1,13 @@
 package com.flolink.backend.global.auth.controller;
 
-import com.flolink.backend.global.auth.dto.request.ResetPassword;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.flolink.backend.global.auth.dto.request.CheckAuthRequest;
+import com.flolink.backend.global.auth.dto.request.ResetPassword;
 import com.flolink.backend.global.auth.dto.request.SendAuthRequest;
 import com.flolink.backend.global.auth.dto.response.SuccessTokenResponse;
 import com.flolink.backend.global.auth.service.AuthService;
@@ -45,8 +47,8 @@ public class AuthController {
 	}
 
 	@Operation(summary = "임시비밀번호 문자 발송 및 재설정", description = "비밀번호 찾기 진행 시 휴대폰인증을 완료하면 문자로 임시 비밀번호 발급")
-	@PatchMapping("/reset/pw")
-	public ResponseEntity<?> resetPassword(@RequestBody ResetPassword resetPassword){
+	@PostMapping("/reset/pw")
+	public ResponseEntity<?> resetPassword(@RequestBody ResetPassword resetPassword) {
 		log.info("===임시 비밀번호 발송 START===");
 		authService.sendTempPassword(resetPassword);
 		log.info("===임시 비밀번호 발송 END===");

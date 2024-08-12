@@ -95,6 +95,10 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	@Transactional
 	public SuccessTokenResponse checkAuthenticationNumber(CheckAuthRequest checkAuthRequest) {
+		if (successTokenRepository.existsByTel(checkAuthRequest.getTel())) {
+			successTokenRepository.deleteByTel(checkAuthRequest.getTel());
+		}
+
 		Auth auth = authRepository.findByTel(checkAuthRequest.getTel())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_AUTHNUM));
 
@@ -126,6 +130,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
+	@Transactional
 	public void sendTempPassword(ResetPassword resetPassword) {
 		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(
 			apiKey, apiSecret, domain);
