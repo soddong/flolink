@@ -258,11 +258,14 @@ public class RoomServiceImpl implements RoomService {
 				.toList();
 			List<Fcm> fcms = fcmRepository.findAllByUserIds(users);
 			for (Fcm fcm : fcms) {
-				FcmEvent fcmEvent = FcmEvent.builder()
-					.title("공지가 변경되었어요.")
-					.message("지금 바로 확인해보세요!")
-					.fcmToken(fcm.getFcmToken())
-					.build();
+				FcmEvent fcmEvent = new FcmEvent(
+					this,
+					"공지가 변경되었어요.",
+					"지금 바로 확인해보세요!",
+					fcm.getFcmToken()
+
+				);
+
 				eventPublisher.publishEvent(fcmEvent);
 			}
 		}
