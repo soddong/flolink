@@ -188,13 +188,18 @@ public class FeedServiceImpl implements FeedService {
 		notiRepository.save(noti);
 
 		if (fcm.isPresent()) {
-			FcmEvent fcmEvent = new FcmEvent(
-				this,
-				"작성한 게시글에 댓글이 달렸어요.",
-				feedCommentRequest.getContent(),
-				fcm.get().getFcmToken()
-			);
-			eventPublisher.publishEvent(fcmEvent);
+			try {
+				FcmEvent fcmEvent = new FcmEvent(
+					this,
+					"작성한 게시글에 댓글이 달렸어요.",
+					feedCommentRequest.getContent(),
+					fcm.get().getFcmToken()
+				);
+				eventPublisher.publishEvent(fcmEvent);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 		}
 
 	}
