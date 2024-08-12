@@ -1,6 +1,7 @@
 package com.flolink.backend.domain.calendar.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,9 +16,10 @@ import com.flolink.backend.domain.calendar.dto.request.UpdateCalendarRequest;
 import com.flolink.backend.domain.calendar.dto.response.CalendarResponse;
 import com.flolink.backend.domain.calendar.entity.Calendar;
 import com.flolink.backend.domain.calendar.repository.CalendarRepository;
-import com.flolink.backend.domain.fcm.entity.Fcm;
 import com.flolink.backend.domain.fcm.event.FcmEvent;
 import com.flolink.backend.domain.fcm.repository.FcmRepository;
+import com.flolink.backend.domain.noti.entity.Noti;
+import com.flolink.backend.domain.noti.repository.NotiRepository;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.repository.RoomRepository;
@@ -43,6 +45,7 @@ public class CalendarServiceImpl implements CalendarService {
 	private final FcmRepository fcmRepository;
 
 	private final ApplicationEventPublisher eventPublisher;
+	private final NotiRepository notiRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -67,17 +70,23 @@ public class CalendarServiceImpl implements CalendarService {
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_MATCH_ROOMID));
 
 		calendarRepository.save(Calendar.of(calendarRequest, room));
-		List<Integer> users = room.getUserRoomList()
-			.stream()
-			.map((userRoom -> userRoom.getUser().getUserId()))
-			.toList();
-		List<Fcm> fcms = fcmRepository.findAllByUserIds(users);
+
+		List<UserRoom> userRooms = room.getUserRoomList();
 		SimpleDateFormat formatter = new SimpleDateFormat(" (MM.dd)");
-		for (Fcm fcm : fcms) {
-			FcmEvent fcmEvent = new FcmEvent(this, "가족 일정이 공유되었어요.",
-				calendarRequest.getTitle() + formatter.format(calendarRequest.getDate())
-				, fcm.getFcmToken());
-			eventPublisher.publishEvent(fcmEvent);
+		for (UserRoom curUserRoom : userRooms) {
+			Noti noti = Noti.builder()
+				.userRoom(curUserRoom)
+				.message("가족 일정이 공유되었어요. " + calendarRequest.getTitle())
+				.createAt(LocalDateTime.now())
+				.build();
+			notiRepository.save(noti);
+			if (curUserRoom.getUser().getFcm() != null) {
+				FcmEvent fcmEvent = new FcmEvent(this
+					, "가족 일정이 공유되었어요.",
+					calendarRequest.getTitle() + formatter.format(calendarRequest.getDate())
+					, curUserRoom.getUser().getFcm().getFcmToken());
+				eventPublisher.publishEvent(fcmEvent);
+			}
 		}
 	}
 
@@ -110,19 +119,23 @@ public class CalendarServiceImpl implements CalendarService {
 		calendar.setDate(updateCalendarRequest.getDate());
 		calendar.setContent(updateCalendarRequest.getContent());
 		calendar.setTag(updateCalendarRequest.getTag());
-
-		List<Integer> users = userRoom.getUser().getUserRoomList()
-			.stream()
-			.map((userRoom1 -> userRoom1.getUser().getUserId()))
-			.toList();
-		List<Fcm> fcms = fcmRepository.findAllByUserIds(users);
+		List<UserRoom> userRooms = userRoom.getRoom().getUserRoomList();
 		SimpleDateFormat formatter = new SimpleDateFormat(" (MM.dd)");
-		for (Fcm fcm : fcms) {
-			FcmEvent fcmEvent = new FcmEvent(this, "가족 일정이 수정되었어요.",
-				updateCalendarRequest.getTitle() + formatter.format(updateCalendarRequest.getDate())
-				, fcm.getFcmToken());
-			eventPublisher.publishEvent(fcmEvent);
-			
+		for (UserRoom curUserRoom : userRooms) {
+			Noti noti = Noti.builder()
+				.userRoom(curUserRoom)
+				.message("가족 일정이 수정되었어요. " + updateCalendarRequest.getTitle())
+				.createAt(LocalDateTime.now())
+				.build();
+			notiRepository.save(noti);
+
+			if (curUserRoom.getUser().getFcm() != null) {
+				FcmEvent fcmEvent = new FcmEvent(this
+					, "가족 일정이 공유되었어요.",
+					updateCalendarRequest.getTitle() + formatter.format(updateCalendarRequest.getDate())
+					, curUserRoom.getUser().getFcm().getFcmToken());
+				eventPublisher.publishEvent(fcmEvent);
+			}
 		}
 	}
 }

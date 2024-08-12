@@ -25,6 +25,8 @@ import com.flolink.backend.domain.feed.entity.FeedImage;
 import com.flolink.backend.domain.feed.repository.FeedCommentRepository;
 import com.flolink.backend.domain.feed.repository.FeedImageRepository;
 import com.flolink.backend.domain.feed.repository.FeedRepository;
+import com.flolink.backend.domain.noti.entity.Noti;
+import com.flolink.backend.domain.noti.repository.NotiRepository;
 import com.flolink.backend.domain.observer.service.ActivityService;
 import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
 import com.flolink.backend.domain.room.entity.UserRoom;
@@ -49,6 +51,7 @@ public class FeedServiceImpl implements FeedService {
 	private final FeedRepository feedRepository;
 	private final FeedCommentRepository feedCommentRepository;
 	private final FeedImageRepository feedImageRepository;
+	private final NotiRepository notiRepository;
 
 	private final ApplicationEventPublisher eventPublisher;
 	private final S3Util s3Util;
@@ -91,7 +94,8 @@ public class FeedServiceImpl implements FeedService {
 			}
 		}
 
-		increaseExpAboutActivity(ActivityPointType.FEED, userRoom.getRoom().getRoomId(), userRoom.getUserRoomId(), userId);
+		increaseExpAboutActivity(ActivityPointType.FEED, userRoom.getRoom().getRoomId(), userRoom.getUserRoomId(),
+			userId);
 
 		return FeedResponse.fromEntity(userRoom, feed);
 	}
@@ -172,16 +176,23 @@ public class FeedServiceImpl implements FeedService {
 		}
 		feedCommentRepository.save(FeedComment.of(feed, userRoom, feedCommentRequest.getContent()));
 
-		increaseExpAboutActivity(ActivityPointType.COMMENT, userRoom.getRoom().getRoomId(), userRoom.getUserRoomId(), userId);
+		increaseExpAboutActivity(ActivityPointType.COMMENT, userRoom.getRoom().getRoomId(), userRoom.getUserRoomId(),
+			userId);
 
 		Optional<Fcm> fcm = fcmRepository.findByUserUserId(feed.getUserRoom().getUser().getUserId());
+		Noti noti = Noti.builder()
+			.userRoom(feed.getUserRoom())
+			.message("작성한 게시글에 댓글이 달렸어요.")
+			.createAt(LocalDateTime.now())
+			.build();
+		notiRepository.save(noti);
+
 		if (fcm.isPresent()) {
 			FcmEvent fcmEvent = new FcmEvent(
 				this,
 				"작성한 게시글에 댓글이 달렸어요.",
 				feedCommentRequest.getContent(),
 				fcm.get().getFcmToken()
-
 			);
 			eventPublisher.publishEvent(fcmEvent);
 		}

@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import com.flolink.backend.domain.fcm.entity.Fcm;
 import com.flolink.backend.domain.myroom.entity.MyRoom;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.user.dto.request.JoinUserRequest;
@@ -87,6 +88,9 @@ public class User {
 	private EmotionType emotion = EmotionType.HAPPY;
 	@Column(name = "status_message")
 	private String statusMessage;
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Fcm fcm;
 
 	public static User toEntity(String loginId, String password, MyRoom myRoom, JoinUserRequest joinUserRequest,
 		RoleType role) {
