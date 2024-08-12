@@ -4,7 +4,8 @@ import Header from '../../assets/garden/panel_head.png'
 import Garden from '../../components/garden/Garden';
 import YearStatus from '../../components/garden/YearStatus';
 import { useState, useEffect } from 'react';
-import { getYearData } from '../../hook/garden/gardenHook.js'
+import { fetchYears } from '../../service/garden/gardenApi.js';
+import userRoomStore from '../../store/userRoomStore.js';
 
 const years = [
   {
@@ -67,18 +68,27 @@ const years = [
 
 function FamilyGardenPage () {
   const [statusYear, setStatusYear] = useState(2024)
-  const [plantId, setPlantId] = useState(1)
-  const { data: yearData, isLoading: yearLoading, error: yearError } = getYearData(plantId, statusYear);
+  const roomDetail = userRoomStore((state) => state.roomDetail)
+  const [plantId, setPlantId] = useState(null)
   const [itemData, setItemData] = useState(null);
 
   useEffect (() => {
-    if (yearData && yearData.data) {
-      console.log(yearData.data)
-      setItemData(yearData.data)
-    } else {
-      console.log(yearError, yearLoading)
+    console.log(roomDetail)
+    setPlantId(roomDetail?.data.plantSummaryResponse?.plantId)
+  },[])
+
+  useEffect (() => {
+    if (plantId) {
+      fetchYears(plantId, statusYear)
+      .then(({data}) => {
+        console.log(data)
+        setItemData(data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
     }
-  },[yearData, yearError, yearLoading])
+  }, [plantId, statusYear])
 
   function nextYear () {
     setStatusYear(statusYear + 1)

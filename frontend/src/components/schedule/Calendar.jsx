@@ -8,35 +8,35 @@ import { fetchReadSchedule } from '../../service/calendar/calendarApi';
 import userRoomStore from '../../store/userRoomStore';
 import { m } from 'framer-motion';
 
-const schedules = [
-  {
-    id: 1, 
-    icon: 'cake', 
-    color:'#E37C91', 
-    title: '엄마 생신', 
-    date: '2024-07-08',
-    content: '엄마 생신이니까 저녁 먹으러 집에 와!',
-    tag: '생일'
-  },
-  {
-    id: 2, 
-    icon: 'bed', 
-    color:'#85ABEA', 
-    title: '둘째 방학', 
-    date: '2024-07-17',
-    content: '야호 종강이다!',
-    tag: '휴식'
-  },
-  {
-    id: 3, 
-    icon: 'bed', 
-    color:'#85ABEA', 
-    title: '둘째 방학', 
-    date: '2024-06-17',
-    content: '이건 가짜 데이터',
-    tag: '휴식'
-  }
-];
+// const schedules = [
+//   {
+//     id: 1, 
+//     icon: 'cake', 
+//     color:'#E37C91', 
+//     title: '엄마 생신', 
+//     date: '2024-07-08',
+//     content: '엄마 생신이니까 저녁 먹으러 집에 와!',
+//     tag: '생일'
+//   },
+//   {
+//     id: 2, 
+//     icon: 'bed', 
+//     color:'#85ABEA', 
+//     title: '둘째 방학', 
+//     date: '2024-07-17',
+//     content: '야호 종강이다!',
+//     tag: '휴식'
+//   },
+//   {
+//     id: 3, 
+//     icon: 'bed', 
+//     color:'#85ABEA', 
+//     title: '둘째 방학', 
+//     date: '2024-06-17',
+//     content: '이건 가짜 데이터',
+//     tag: '휴식'
+//   }
+// ];
 
 
 function CalendarList () {
@@ -46,12 +46,13 @@ function CalendarList () {
   const roomId = userRoomStore((state) => state.roomId);
   const [month, setMonth] = useState(moment(dateValue).month() + 1)
   const [year, setYear] = useState(moment(dateValue).year())
+  const [schedules, setSchedules] = useState([])
 
   useEffect (() => {
     console.log(month, year)
     fetchReadSchedule({roomId, year, month})
     .then(({data}) => 
-    console.log(data))
+    setSchedules(data))
     .catch((e) => {
       console.log(e)
     })

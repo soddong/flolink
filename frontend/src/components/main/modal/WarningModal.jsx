@@ -1,11 +1,16 @@
 import style from "../../../css/main/main_modals.module.css"
+import userRoomStore from "../../../store/userRoomStore"
+import { fetchDeleteSchedule } from "../../../service/calendar/calendarApi";
 
 function WarningModal (props) {
+  const roomId = userRoomStore((state) => state.roomId);
   function deleteSuccess () {
     window.alert('일정이 삭제되었습니다.')
     props.showWarning()
     props.setModal()
+    fetchDeleteSchedule(props.schedule.calendarId, roomId)
   }
+
   return (
     <div className={`${style.warningModal}`}>
       <p className="text-sm m-2">해당 일정을 정말 삭제하시겠습니까?</p>

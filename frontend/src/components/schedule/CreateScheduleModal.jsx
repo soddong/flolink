@@ -3,8 +3,11 @@ import CreateCalendar from "./CreateCalendar"
 import { useState } from "react";
 import moment from "moment"
 import TagSelect from "./TagSelect";
+import userRoomStore from "../../store/userRoomStore";
+import { fetchCreateSchedule } from "../../service/calendar/calendarApi";
 
 function CreateScheduleModal (props) {
+  const roomId = userRoomStore((state) => state.roomId);
   const [inputTitleValue, setInputTitleValue] = useState(props.title);
   const [inputContentValue, setInputContentValue] = useState(props.content);
   const [inputCalendar, setInputCalendar] = useState(false)
@@ -41,11 +44,12 @@ function CreateScheduleModal (props) {
     setColor(data)
   }
 
-  function submitSuccess (event) {
-    window.alert('일정이 수정되었습니다.')
-    event.preventDefault()
-    setModalstate('read')
-  }
+  // function submitSuccess (event) {
+  //   window.alert('일정이 수정되었습니다.')
+  //   event.preventDefault()
+  //   setModalstate('read')
+    
+  // }
 
   function showInputCalendar () {
     setInputCalendar(!inputCalendar)
@@ -58,6 +62,19 @@ function CreateScheduleModal (props) {
     window.alert('저장되었습니다.')
     event.preventDefault()
     props.showCreateModal()
+    fetchCreateSchedule({
+      roomId,
+      title: inputTitleValue,
+      tag: icon,
+      date,
+      content: inputContentValue
+    })
+    .then(({data}) => {
+      console.log(data)
+    })
+    .catch((e) => {
+      console.log(e)
+    })
   }
   return (
     <div className={`w-72 h-80 backdrop-blur-sm ${style.mainModal}`}>
