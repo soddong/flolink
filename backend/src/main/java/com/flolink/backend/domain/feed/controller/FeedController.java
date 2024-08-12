@@ -69,7 +69,7 @@ public class FeedController {
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, feedResponse));
 	}
 
-	@PatchMapping("/{feedId}")
+	@PostMapping("/{feedId}")
 	@Operation(summary = "피드 수정하기")
 	public ResponseEntity<?> updateFeed(Authentication authentication, @PathVariable final Integer feedId,
 		@ModelAttribute final FeedUpdateRequest feedUpdateRequest) {
