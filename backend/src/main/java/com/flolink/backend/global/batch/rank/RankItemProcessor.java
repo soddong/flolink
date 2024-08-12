@@ -9,33 +9,33 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.domain.plant.entity.UserExp;
-import com.flolink.backend.domain.plant.entity.UserExpHistory;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExpHistory;
 
 @Component
-public class RankItemProcessor implements ItemProcessor<UserExp, UserExpHistory> {
+public class RankItemProcessor implements ItemProcessor<PlantUserExp, PlantUserExpHistory> {
 
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
 	private Map<Plant, Integer> plantRanks = new HashMap<>();
 
 	@Override
-	public UserExpHistory process(UserExp userExp) throws Exception {
-		Plant plant = userExp.getPlant();
+	public PlantUserExpHistory process(PlantUserExp plantUserExp) throws Exception {
+		Plant plant = plantUserExp.getPlant();
 		int monthly_rank = plantRanks.getOrDefault(plant, 1);
 
-		UserExpHistory userExpHistory = UserExpHistory.builder()
-			.plant(userExp.getPlant())
+		PlantUserExpHistory plantUserExpHistory = PlantUserExpHistory.builder()
+			.plant(plantUserExp.getPlant())
 			.dateMonth(LocalDate.now().minusMonths(1).format(formatter))
 			.monthlyRank(monthly_rank)
-			.userId(userExp.getUserId())
-			.contributeExp(userExp.getContributeExp())
+			.userId(plantUserExp.getUserId())
+			.contributeExp(plantUserExp.getContributeExp())
 			.build();
 
-		userExp.setContributeExp(0);
+		plantUserExp.setContributeExp(0);
 
 		plantRanks.put(plant, monthly_rank + 1);
 
-		return userExpHistory;
+		return plantUserExpHistory;
 	}
 }
 

@@ -6,7 +6,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.flolink.backend.domain.plant.entity.enumtype.PlantStatusType;
 import com.flolink.backend.domain.room.entity.Room;
+import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.global.common.GlobalConstant;
 
 import jakarta.persistence.Column;
@@ -26,6 +28,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -36,6 +39,7 @@ import lombok.Setter;
 @Table(name = "plant")
 @SQLDelete(sql = "UPDATE plant SET use_yn = false WHERE plant_id = ?")
 @Where(clause = "use_yn = true")
+@ToString
 public class Plant {
 
 	@Id
@@ -49,7 +53,7 @@ public class Plant {
 
 	@Column(name = "plant_status", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private PlantStatus plantStatus;
+	private PlantStatusType plantStatusType;
 
 	@Column(name = "exp", nullable = false)
 	private Integer totalExp;
@@ -73,10 +77,10 @@ public class Plant {
 	public static Plant create(Room room) {
 		return Plant.builder()
 			.room(room)
-			.plantStatus(PlantStatus.IN_PROGRESS)
+			.plantStatusType(PlantStatusType.IN_PROGRESS)
 			.todayExp(0)
 			.totalExp(0)
-			.walker(null)
+			.walker(0)
 			.createAt(LocalDateTime.now())
 			.useYn(true)
 			.build();
@@ -89,7 +93,7 @@ public class Plant {
 	public void increaseExp(int exp, int n) {
 		// 성장 완료
 		if (totalExp + exp >= GlobalConstant.TOTAL_EXP_MAX * n) {
-			this.plantStatus = PlantStatus.COMPLETED;
+			this.plantStatusType = PlantStatusType.COMPLETED;
 			return;
 		}
 

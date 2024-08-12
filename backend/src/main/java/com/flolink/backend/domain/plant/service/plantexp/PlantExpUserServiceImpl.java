@@ -1,4 +1,4 @@
-package com.flolink.backend.domain.plant.service;
+package com.flolink.backend.domain.plant.service.plantexp;
 
 import java.util.List;
 
@@ -8,9 +8,11 @@ import com.flolink.backend.domain.feed.dto.response.FeedImageResponse;
 import com.flolink.backend.domain.feed.service.FeedService;
 import com.flolink.backend.domain.plant.dto.response.PlantHistoryDetailResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantUserHistoryResponse;
-import com.flolink.backend.domain.plant.entity.PlantExpHistory;
-import com.flolink.backend.domain.plant.repository.PlantHistoryRepository;
-import com.flolink.backend.domain.plant.repository.UserExpHistoryRepository;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantExpHistory;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
+import com.flolink.backend.domain.plant.repository.PlantExpHistoryRepository;
+import com.flolink.backend.domain.plant.repository.PlantUserExpHistoryRepository;
+import com.flolink.backend.domain.plant.repository.PlantUserExpRepository;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
@@ -24,12 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PlantUserServiceImpl implements PlantUserService {
+public class PlantExpUserServiceImpl implements PlantExpUserService {
 
 	private final FeedService feedService;
 
-	private final UserExpHistoryRepository userExpHistoryRepository;
-	private final PlantHistoryRepository plantHistoryRepository;
+	private final PlantUserExpHistoryRepository plantUserExpHistoryRepository;
+	private final PlantUserExpRepository plantUserExpRepository;
+	private final PlantExpHistoryRepository plantExpHistoryRepository;
 	private final UserRepository userRepository;
 
 	/**
@@ -49,6 +52,12 @@ public class PlantUserServiceImpl implements PlantUserService {
 		return PlantHistoryDetailResponse.fromEntity(feedImageResponses, userExpHistories);
 	}
 
+	@Override
+	public PlantUserExp findPlantUserExp(Integer userId, Integer plantId) {
+		return plantUserExpRepository.findByUserIdAndPlantPlantId(userId, plantId)
+			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_EXP_NOT_FOUND));
+	}
+
 	private List<FeedImageResponse> loadFeedImages(Integer roomId, String dateMonth) {
 		return feedService.getImages(roomId,
 			DateTimeUtil.atStartOfDay(dateMonth),
@@ -63,12 +72,12 @@ public class PlantUserServiceImpl implements PlantUserService {
 	}
 
 	private PlantExpHistory loadPlantExpHistory(Integer historyId) {
-		return plantHistoryRepository.findById(historyId)
+		return plantExpHistoryRepository.findById(historyId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_HISTORY_NOT_FOUND));
 	}
 
 	private List<PlantUserHistoryResponse> loadUserExpHistories(Integer plantId, String dateMonth) {
-		return userExpHistoryRepository.findByPlantIdAndDateMonth(plantId, dateMonth)
+		return plantUserExpHistoryRepository.findByPlantIdAndDateMonth(plantId, dateMonth)
 			.stream()
 			.map(userExpHistory -> {
 				String nickname = loadUserNickname(userExpHistory.getUserId());

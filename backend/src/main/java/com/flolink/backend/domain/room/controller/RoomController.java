@@ -55,7 +55,7 @@ public class RoomController {
 	@PostMapping("")
 	@Operation(summary = "새로운 방 생성하기")
 	public ResponseEntity<?> createRoom(Authentication authentication,
-		@RequestBody final RoomCreateRequest roomCreateRequest) {
+		@RequestBody RoomCreateRequest roomCreateRequest) {
 		log.info("===새로운 방 생성 START===");
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 		Integer userId = userDetails.getUserId();
@@ -108,6 +108,7 @@ public class RoomController {
 	@Operation(summary = "가족 방 정보 (구성원, 식물) 불러오기", description = "가족방의 구성원들의 정보와 식물 정보를 반환.")
 	public ResponseEntity<?> getRoomMemberInfos(Authentication authentication, @PathVariable final Integer roomId) {
 		log.info("===가족 방 정보 (구성원, 식물) 불러오기 START===");
+
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 		Integer userId = userDetails.getUserId();
 		roomService.enterRoom(userId, roomId);

@@ -1,9 +1,9 @@
-package com.flolink.backend.domain.plant.entity;
+package com.flolink.backend.domain.plant.entity.enumtype;
 
 import lombok.Getter;
 
 @Getter
-public enum ActivityPoint {
+public enum ActivityPointType {
 	ATTENDANCE(10),
 	WALK(50),
 	FEED(30),
@@ -11,7 +11,7 @@ public enum ActivityPoint {
 
 	private final int point;
 
-	ActivityPoint(int point) {
+	ActivityPointType(int point) {
 		this.point = point;
 	}
 }

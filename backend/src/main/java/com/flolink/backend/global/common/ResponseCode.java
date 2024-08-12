@@ -80,7 +80,8 @@ public enum ResponseCode {
 	ITEM_NOT_IN_INVENTORY(400, "Item not in inventory", "ITEM_NOT_IN_INVENTORY_ERROR"),
 	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
 	MY_ROOM_NOT_FOUND(404, "MY ROOM not found", "NOT_FOUND_ERROR"),
-	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR"),
+	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR")
+	;
 
 	private final int status;
 	private final String message;

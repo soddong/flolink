@@ -1,8 +1,10 @@
-package com.flolink.backend.domain.plant.entity;
+package com.flolink.backend.domain.plant.entity.plantexp;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import com.flolink.backend.domain.plant.entity.Plant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +31,7 @@ import lombok.Setter;
 @Table(name = "user_exp")
 @SQLDelete(sql = "UPDATE user_exp SET use_yn = false WHERE exp_id = ?")
 @Where(clause = "use_yn = true")
-public class UserExp {
+public class PlantUserExp {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,8 +52,8 @@ public class UserExp {
 	@Column(name = "use_yn", nullable = false)
 	private Boolean useYn;
 
-	public static UserExp of(Integer userId, Plant plant) {
-		return UserExp.builder()
+	public static PlantUserExp of(Integer userId, Plant plant) {
+		return PlantUserExp.builder()
 			.plant(plant)
 			.userId(userId)
 			.contributeExp(0)

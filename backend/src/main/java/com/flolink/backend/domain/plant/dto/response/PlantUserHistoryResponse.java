@@ -1,6 +1,7 @@
 package com.flolink.backend.domain.plant.dto.response;
 
-import com.flolink.backend.domain.plant.entity.UserExpHistory;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExpHistory;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class PlantUserHistoryResponse {
 	private String nickname;
 	private Integer contributeExp;
 
-	public static PlantUserHistoryResponse fromEntity(UserExpHistory userExpHistory, String nickname) {
+	public static PlantUserHistoryResponse fromEntity(PlantUserExpHistory userExpHistory, String nickname) {
 		return PlantUserHistoryResponse.builder()
 			.monthlyRank(userExpHistory.getMonthlyRank())
 			.nickname(nickname)

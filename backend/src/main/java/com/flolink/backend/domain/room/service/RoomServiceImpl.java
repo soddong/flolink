@@ -10,11 +10,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flolink.backend.domain.plant.entity.ActivityPoint;
+import com.flolink.backend.domain.observer.service.ActivityService;
+import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.domain.plant.entity.UserExp;
-import com.flolink.backend.domain.plant.repository.PlantRepository;
-import com.flolink.backend.domain.plant.repository.UserExpRepository;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
+import com.flolink.backend.domain.plant.repository.PlantUserExpRepository;
 import com.flolink.backend.domain.plant.service.PlantService;
 import com.flolink.backend.domain.room.dto.request.NicknameUpdateRequest;
 import com.flolink.backend.domain.room.dto.request.RoomCreateRequest;
@@ -40,14 +40,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
+	private final ActivityService activityService;
+
 	private final PlantService plantService;
 
 	private final RoomRepository roomRepository;
 	private final UserRepository userRepository;
-	private final UserExpRepository userExpRepository;
+	private final PlantUserExpRepository plantUserExpRepository;
 	private final UserRoomRepository userRoomRepository;
 	private final NicknameRepository nicknameRepository;
-	private final PlantRepository plantRepository;
 
 	@Override
 	public List<RoomSummarizeResponse> getAllRooms(final Integer userId) {
@@ -73,8 +74,7 @@ public class RoomServiceImpl implements RoomService {
 		UserRoom userRoom = userRoomRepository.save(UserRoom.of(user, room));
 		userRoom.setRole("admin");
 
-		Plant createdPlant = plantService.createPlant(userRoom, room);
-		userExpRepository.save(UserExp.of(userRoom.getUser().getUserId(), createdPlant));
+		plantService.createPlant(userRoom, room);
 
 		return RoomSummarizeResponse.fromEntity(room);
 	}
@@ -95,11 +95,10 @@ public class RoomServiceImpl implements RoomService {
 			throw new UnAuthorizedException(ResponseCode.WRONG_PARTICIPATION_PASSWORD);
 		}
 		UserRoom userRoom = userRoomRepository.save(UserRoom.of(user, room));
-		Plant plant = plantRepository.findByRoomRoomId(room.getRoomId())
-			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_NOT_FOUND));
+		Plant plant = plantService.findByRoomId(room.getRoomId());
 
-		if (!userExpRepository.existsByPlantIdAndUserId(userId, plant.getPlantId())) {
-			userExpRepository.save(UserExp.of(userRoom.getUser().getUserId(), plant));
+		if (!plantUserExpRepository.existsByPlantIdAndUserId(userId, plant.getPlantId())) {
+			plantUserExpRepository.save(PlantUserExp.of(userRoom.getUser().getUserId(), plant));
 		}
 
 		return RoomSummarizeResponse.fromEntity(room);
@@ -183,9 +182,8 @@ public class RoomServiceImpl implements RoomService {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomId);
 		UserRoom userRoom = findUserRoomByUserAndRoom(user, room);
-
 		if (isFirstAttendanceOfToday(userRoom.getLastLoginTime())) {
-			plantService.updateExp(userRoom, ActivityPoint.ATTENDANCE);
+			increaseExpAboutActivity(ActivityPointType.ATTENDANCE, room.getRoomId(), userRoom.getUserRoomId(), userId);
 		}
 
 		userRoom.updateLoginTime();
@@ -284,5 +282,9 @@ public class RoomServiceImpl implements RoomService {
 		LocalDate today = LocalDate.now();
 		LocalDate plantUpdateDate = lastLoginTime.toLocalDate();
 		return plantUpdateDate.isBefore(today);
+	}
+
+	private void increaseExpAboutActivity(ActivityPointType type, Integer roomId, Integer userRoomId, Integer userId) {
+		activityService.performActivity(userId, roomId, userRoomId, type);
 	}
 }
