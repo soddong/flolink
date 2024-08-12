@@ -3,9 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { axiosCommonInstance } from '../../apis/axiosInstance';
 import { phoneNumberCheck } from '../../service/auth/auth';
 
-function ToastModal({ message, onClose, authNum, phoneNumber }) {
+
+function ToastModal({onClose, phoneNumber, onSuccess }) {
   const [timeLeft, setTimeLeft] = useState(180); // 3분 = 180초
   const [requested, setRequested] = useState(false);
+  const [authNum, setAuthNum] = useState('');
+
   useEffect(() => {
     if (!requested) {
       axiosCommonInstance.post("/auth/authentication", {
@@ -38,15 +41,14 @@ function ToastModal({ message, onClose, authNum, phoneNumber }) {
 
   const validate = () => {
     phoneNumberCheck(phoneNumber, authNum).then((res) => {
-      console.log(res)
+      if(res.code === "SUCCESS"){
+        console.log(res.data.token)
+        onSuccess(res.data.token)
+      } else {
+        retry();
+      }
     })
-    // if (data.code == "SUCCESS") {
-    //   console.log("하이루")
-    //   setSuccessToken(data.data.token);
-    // } else {
-    //   retry();
-    // }
-    onClose();
+      onClose();
   }
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
@@ -60,6 +62,8 @@ function ToastModal({ message, onClose, authNum, phoneNumber }) {
             type="text"
             id='authnum'
             placeholder="인증번호"
+            value={authNum}
+            onChange={(e) => setAuthNum(e.target.value)} // 인증번호 상태 업데이트
             className="w-full p-2 border rounded focus:outline-none focus:border-pink-500"
           />
           <div className="flex justify-between items-center text-sm text-gray-600">

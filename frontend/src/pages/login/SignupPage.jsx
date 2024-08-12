@@ -23,8 +23,7 @@ function SignupPage() {
   const [usernameMessage, setUsernameMessage] = useState('');
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [successToken, setSuccessToken] = useState('');
-  const [authNum, setAuthNum] = useState('');
+  const [successToken, setSuccessToken] = useState(null);
   const isFormValid = password && confirmPassword && passwordSame && username && nickname && !nicknameError && fullName && phoneNumber;
   // const isFormValid = true;
 
@@ -113,6 +112,11 @@ function SignupPage() {
 
   const navigate = useNavigate();
 
+  const handleSuccess = (token) => {
+    setSuccessToken(token); // 성공적으로 받은 토큰을 상태로 저장
+    // 필요한 경우 추가적인 작업을 수행
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white p-5">
       <div className="w-full max-w-md">
@@ -200,8 +204,8 @@ function SignupPage() {
           <ToastModal
             message="문자로 전달받은\n인증번호 6자리를 입력해주세요."
             onClose={handleCloseModal}
-            setAuthNum={setAuthNum}
             phoneNumber={phoneNumber}
+            onSuccess={handleSuccess} // 성공 시 호출될 핸들러
           />
         )}
       </div>
