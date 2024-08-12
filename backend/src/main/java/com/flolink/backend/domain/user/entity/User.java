@@ -88,8 +88,7 @@ public class User {
 	private EmotionType emotion = EmotionType.HAPPY;
 	@Column(name = "status_message")
 	private String statusMessage;
-
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
 	private Fcm fcm;
 
 	public static User toEntity(String loginId, String password, MyRoom myRoom, JoinUserRequest joinUserRequest,
