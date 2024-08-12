@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.store.entity.Item;
 import com.flolink.backend.domain.store.entity.ItemType;
@@ -36,7 +36,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE my_room SET use_yn = false WHERE my_room_id = ?")
-@Where(clause = "use_yn = true")
+@SQLRestriction("use_yn = true")
 public class MyRoom {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,7 +3,7 @@ package com.flolink.backend.domain.plant.entity;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.plant.dto.reqeust.PlantLocation;
 
@@ -30,7 +30,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE plant SET use_yn = false WHERE plant_id = ?")
-@Where(clause = "use_yn = true")
+@SQLRestriction("use_yn = true")
 @ToString
 public class PlantWalk {
 

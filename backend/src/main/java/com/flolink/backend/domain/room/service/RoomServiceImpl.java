@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flolink.backend.domain.fcm.entity.Fcm;
+import com.flolink.backend.domain.fcm.event.FcmEvent;
+import com.flolink.backend.domain.fcm.repository.FcmRepository;
 import com.flolink.backend.domain.plant.entity.ActivityPoint;
 import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.plant.entity.UserExp;
@@ -48,6 +52,9 @@ public class RoomServiceImpl implements RoomService {
 	private final UserRoomRepository userRoomRepository;
 	private final NicknameRepository nicknameRepository;
 	private final PlantRepository plantRepository;
+	private final FcmRepository fcmRepository;
+
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Override
 	public List<RoomSummarizeResponse> getAllRooms(final Integer userId) {
@@ -238,10 +245,31 @@ public class RoomServiceImpl implements RoomService {
 			}
 			room.setRoomName(roomUpdateRequest.getRoomName());
 		}
+		boolean isNotiChanged = false;
 		if (roomUpdateRequest.getNotice() != null) {
+			isNotiChanged = true;
 			room.setNotice(roomUpdateRequest.getNotice());
 		}
 		roomRepository.save(room);
+		if (isNotiChanged) {
+			List<Integer> users = room.getUserRoomList()
+				.stream()
+				.map((userRoom1 -> userRoom1.getUser().getUserId()))
+				.toList();
+			List<Fcm> fcms = fcmRepository.findAllByUserIds(users);
+			for (Fcm fcm : fcms) {
+				FcmEvent fcmEvent = new FcmEvent(
+					this,
+					"공지가 변경되었어요.",
+					"지금 바로 확인해보세요!",
+					fcm.getFcmToken()
+
+				);
+
+				eventPublisher.publishEvent(fcmEvent);
+			}
+		}
+
 		return RoomSummarizeResponse.fromEntity(room);
 	}
 
