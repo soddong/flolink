@@ -25,8 +25,8 @@ import com.flolink.backend.domain.feed.entity.FeedImage;
 import com.flolink.backend.domain.feed.repository.FeedCommentRepository;
 import com.flolink.backend.domain.feed.repository.FeedImageRepository;
 import com.flolink.backend.domain.feed.repository.FeedRepository;
-import com.flolink.backend.domain.plant.entity.ActivityPoint;
-import com.flolink.backend.domain.plant.service.PlantService;
+import com.flolink.backend.domain.observer.service.ActivityService;
+import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.service.RoomService;
 import com.flolink.backend.global.common.ResponseCode;
@@ -42,7 +42,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService {
 
-	private final PlantService plantService;
+	private final ActivityService activityService;
+
 	private final RoomService roomService;
 
 	private final FeedRepository feedRepository;
@@ -89,7 +90,9 @@ public class FeedServiceImpl implements FeedService {
 				throw new NotFoundException(ResponseCode.FEED_UPLOAD_FAILED);
 			}
 		}
-		plantService.updateExp(userRoom, ActivityPoint.FEED);
+
+		increaseExpAboutActivity(ActivityPointType.FEED, userRoom.getRoom().getRoomId(), userRoom.getUserRoomId(), userId);
+
 		return FeedResponse.fromEntity(userRoom, feed);
 	}
 
@@ -168,7 +171,8 @@ public class FeedServiceImpl implements FeedService {
 			throw new UnAuthorizedException(ResponseCode.NOT_AUTHORIZED);
 		}
 		feedCommentRepository.save(FeedComment.of(feed, userRoom, feedCommentRequest.getContent()));
-		plantService.updateExp(userRoom, ActivityPoint.COMMENT);
+
+		increaseExpAboutActivity(ActivityPointType.COMMENT, userRoom.getRoom().getRoomId(), userRoom.getUserRoomId(), userId);
 
 		Optional<Fcm> fcm = fcmRepository.findByUserUserId(feed.getUserRoom().getUser().getUserId());
 		if (fcm.isPresent()) {
@@ -233,6 +237,10 @@ public class FeedServiceImpl implements FeedService {
 	private FeedComment findFeedCommentByCommentId(final Integer commentId) {
 		return feedCommentRepository.findById(commentId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.COMMENT_NOT_FOUND));
+	}
+
+	private void increaseExpAboutActivity(ActivityPointType type, Integer roomId, Integer userRoomId, Integer userId) {
+		activityService.performActivity(userId, roomId, userRoomId, type);
 	}
 
 }

@@ -6,8 +6,8 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.domain.plant.entity.PlantExpHistory;
-import com.flolink.backend.domain.plant.entity.PlantStatus;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantExpHistory;
+import com.flolink.backend.domain.plant.entity.enumtype.PlantStatusType;
 
 @Component
 public class PlantItemProcessor implements ItemProcessor<Plant, PlantExpHistory> {
@@ -17,14 +17,14 @@ public class PlantItemProcessor implements ItemProcessor<Plant, PlantExpHistory>
 
 		PlantExpHistory plantExpHistory = PlantExpHistory.builder()
 			.plant(plant)
-			.plantStatus(plant.getPlantStatus())
+			.plantStatusType(plant.getPlantStatusType())
 			.totalExp(plant.getTotalExp())
 			.dateMonth(LocalDate.now().minusMonths(1))
 			.build();
 
 		plant.setTotalExp(0);
 		plant.setTodayExp(0);
-		plant.setPlantStatus(PlantStatus.IN_PROGRESS);
+		plant.setPlantStatusType(PlantStatusType.IN_PROGRESS);
 
 		return plantExpHistory;
 	}

@@ -1,5 +1,7 @@
 package com.flolink.backend.domain.payment.service;
 
+import static com.flolink.backend.domain.payment.entity.PaymentState.*;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +60,11 @@ public class PaymentServiceImpl implements PaymentService {
 	public void completePayment(final Integer userId, final PortOnePayment portOne) {
 		PaymentHistory paymentHistory = paymentRepository.findByOrderId(portOne.getOrderId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PAYMENT_NOT_FOUND));
+
+		if (paymentHistory.getState() == PAID) {
+			throw new BadRequestException(ResponseCode.PAYMENT_ALREADY_PAID);
+		}
+
 		userService.purchasePoint(userId, paymentHistory.getPaymentItem().getPrice());
 		paymentHistory.completePayment(portOne);
 	}
@@ -65,7 +72,7 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	@Transactional
 	public List<PaymentHistoryResponse> getPaymentHistory(Integer userId) {
-		List<PaymentHistory> paymentHistories = paymentRepository.findByStateAndUserUserId(PaymentState.PAID, userId);
+		List<PaymentHistory> paymentHistories = paymentRepository.findByStateAndUserUserId(PAID, userId);
 		return paymentHistories.stream()
 			.map(PaymentHistoryResponse::fromEntity)
 			.toList();

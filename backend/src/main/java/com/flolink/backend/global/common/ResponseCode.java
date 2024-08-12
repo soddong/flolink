@@ -77,13 +77,14 @@ public enum ResponseCode {
 	PAYMENT_BANK_FAILED(400, "Bank error", "PAYMENT_ERROR"),
 	PAYMENT_AMOUNT_MISMATCH(400, "Amount mismatch", "PAYMENT_ERROR"),
 	PAYMENT_NOT_FOUND(404, "Payment not found", "NOT_FOUND_ERROR"),
+	PAYMENT_ALREADY_PAID(400, "Payment already paid", "PAYMENT_ALREADY_PAID_ERROR"),
 
 	// MyRoom & Item
 	INVALID_ITEM_TYPE(400, "Invalid item type", "INVALID_ITEM_TYPE_ERROR"),
 	ITEM_NOT_IN_INVENTORY(400, "Item not in inventory", "ITEM_NOT_IN_INVENTORY_ERROR"),
 	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
 	MY_ROOM_NOT_FOUND(404, "MY ROOM not found", "NOT_FOUND_ERROR"),
-	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR"),
+	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR")
 	;
 
 	private final int status;

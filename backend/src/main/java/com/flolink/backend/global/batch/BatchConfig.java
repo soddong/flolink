@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.domain.plant.entity.PlantExpHistory;
-import com.flolink.backend.domain.plant.entity.UserExp;
-import com.flolink.backend.domain.plant.entity.UserExpHistory;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantExpHistory;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExpHistory;
 import com.flolink.backend.global.batch.plant.PlantItemProcessor;
 import com.flolink.backend.global.batch.plant.PlantItemReader;
 import com.flolink.backend.global.batch.plant.PlantItemWriter;
@@ -73,7 +73,7 @@ public class BatchConfig {
 	@Bean
 	public Step rankStep() {
 		return new StepBuilder("rankStep", jobRepository)
-			.<UserExp, UserExpHistory>chunk(10, transactionManager)
+			.<PlantUserExp, PlantUserExpHistory>chunk(10, transactionManager)
 			.reader(rankItemReader)
 			.processor(rankItemProcessor)
 			.writer(rankItemWriter)

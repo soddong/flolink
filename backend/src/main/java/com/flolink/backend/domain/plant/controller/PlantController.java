@@ -3,7 +3,6 @@ package com.flolink.backend.domain.plant.controller;
 import static com.flolink.backend.global.common.ResponseCode.*;
 
 import java.time.Year;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,9 +18,10 @@ import com.flolink.backend.domain.plant.dto.reqeust.PlantLocation;
 import com.flolink.backend.domain.plant.dto.response.PlantHistoryDetailResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantHistorySummaryResponse;
 import com.flolink.backend.domain.plant.dto.response.PlantWalkResultResponse;
-import com.flolink.backend.domain.plant.service.PlantHistoryService;
-import com.flolink.backend.domain.plant.service.PlantUserServiceImpl;
-import com.flolink.backend.domain.plant.service.PlantWalkService;
+import com.flolink.backend.domain.plant.service.PlantService;
+import com.flolink.backend.domain.plant.service.plantexp.PlantExpHistoryService;
+import com.flolink.backend.domain.plant.service.plantexp.PlantExpUserServiceImpl;
+import com.flolink.backend.domain.plant.service.plantwalk.PlantWalkService;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
@@ -38,9 +38,9 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "Plant API", description = "기억정원과 관련된 API")
 public class PlantController {
 
-	private final PlantHistoryService plantHistoryService;
-	private final PlantUserServiceImpl userExpService;
-	private final PlantWalkService plantWalkService;
+	private final PlantService plantService;
+	private final PlantExpHistoryService plantExpHistoryService;
+	private final PlantExpUserServiceImpl userExpService;
 
 	@GetMapping("/{plantId}/historys")
 	@Operation(summary = "기억정원 추억 리스트 불러오기", description = "연 단위 조회 (조회하고 싶은 연도 입력필요)")
@@ -48,7 +48,7 @@ public class PlantController {
 		@RequestParam(name = "year", required = false) final Integer year) {
 		log.info("===기억정원 추억 리스트 불러오기 START===");
 		int currentYear = (year != null) ? year : Year.now().getValue();
-		PlantHistorySummaryResponse plantHistorys = plantHistoryService.getPlantHistorys(plantId, currentYear);
+		PlantHistorySummaryResponse plantHistorys = plantExpHistoryService.getPlantHistorys(plantId, currentYear);
 		log.info("===기억정원 추억 리스트 불러오기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, plantHistorys));
 	}
@@ -71,7 +71,7 @@ public class PlantController {
 	public ResponseEntity<CommonResponse> startPlantWalk(@PathVariable final Integer plantId,
 		@RequestBody final PlantLocation plantLocation) {
 		log.info("===산책 시작하기 START===");
-		plantWalkService.startWalk(plantId, plantLocation);
+		plantService.startWalk(plantId, plantLocation);
 		log.info("===산책 시작하기 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, null));
 	}
@@ -79,9 +79,10 @@ public class PlantController {
 	@PostMapping("/{plantId}/walk-end")
 	@Operation(summary = "산책 끝", description = "산책 종료 후 위치를 저장")
 	public ResponseEntity<CommonResponse> endPlantWalk(@PathVariable("plantId") final Integer plantId,
-		@RequestBody final PlantLocation plantLocation) {
+		@RequestBody final PlantLocation plantLocation, Authentication authentication) {
 		log.info("===산책 끝내기 START===");
-		PlantWalkResultResponse plantWalkResponse = plantWalkService.completeWalk(plantId, plantLocation);
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		PlantWalkResultResponse plantWalkResponse = plantService.completeWalk(userDetails.getUserId(), plantId, plantLocation);
 		log.info("===산책 끝내기 END===");
 		return ResponseEntity.ok(CommonResponse.of(COMMON_SUCCESS, plantWalkResponse));
 	}
@@ -90,7 +91,7 @@ public class PlantController {
 	@Operation(summary = "현재 위치 조회", description = "현재 산책 중인 위치를 조회합니다.")
 	public ResponseEntity<CommonResponse> getCurrentLocation(@PathVariable("plantId") Integer plantId) {
 		log.info("===현재 위치 조회 START===");
-		PlantLocation currentLocation = plantWalkService.getStartWalkLocation(plantId);
+		PlantLocation currentLocation = plantService.getStartWalkLocation(plantId);
 		log.info("===현재 위치 조회 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, currentLocation));
 	}
