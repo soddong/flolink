@@ -26,6 +26,6 @@ public class NotiServiceImpl implements NotiService {
 		if (!userRoom.getUser().getUserId().equals(userId)) {
 			throw new UnAuthorizedException(ResponseCode.USER_ROOM_NOT_FOUND);
 		}
-		return userRoom.getNotiList().stream().map(NotiResponse::fromEntity).toList();
+		return notiRepository.findByUserRoomId(userRoomId).stream().map(NotiResponse::fromEntity).toList();
 	}
 }
