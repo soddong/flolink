@@ -192,7 +192,7 @@ function SignupPage() {
               onChange={handlePhoneNumberChange}
             />
           </div>
-          {successToken === "" && (
+          {successToken === null && (
             <Button text="전송" variant="solid" onClick={handleSendCode} disabled={!isFormValid} />
           )}{
             successToken !== "" && (
