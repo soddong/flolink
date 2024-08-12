@@ -23,7 +23,7 @@ function SignupPage() {
   const [usernameMessage, setUsernameMessage] = useState('');
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [successToken, setSuccessToken] = useState(null);
+  const [successToken, setSuccessToken] = useState('');
   const isFormValid = password && confirmPassword && passwordSame && username && nickname && !nicknameError && fullName && phoneNumber;
   // const isFormValid = true;
 
@@ -192,7 +192,7 @@ function SignupPage() {
               onChange={handlePhoneNumberChange}
             />
           </div>
-          {successToken === null && (
+          {successToken === "" && (
             <Button text="전송" variant="solid" onClick={handleSendCode} disabled={!isFormValid} />
           )}{
             successToken !== "" && (
