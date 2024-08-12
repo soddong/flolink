@@ -4,10 +4,10 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.flolink.backend.domain.plant.entity.PlantWalk;
+import com.flolink.backend.domain.plant.entity.plantwalk.PlantWalk;
 
 public interface PlantWalkRepository extends JpaRepository<PlantWalk, Integer> {
-	Optional<PlantWalk> findByPlantPlantIdAndWalkYnTrue(Integer plantId);
+	Optional<PlantWalk> findByPlantPlantIdAndUseYnTrue(Integer plantId);
 
 	Optional<PlantWalk> findByPlantPlantId(Integer plantId);
 

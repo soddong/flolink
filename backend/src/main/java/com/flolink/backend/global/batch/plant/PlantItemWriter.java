@@ -5,19 +5,19 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.flolink.backend.domain.plant.entity.PlantExpHistory;
-import com.flolink.backend.domain.plant.repository.PlantHistoryRepository;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantExpHistory;
+import com.flolink.backend.domain.plant.repository.PlantExpHistoryRepository;
 
 @Component
 public class PlantItemWriter implements ItemWriter<PlantExpHistory> {
 
 	@Autowired
-	private PlantHistoryRepository plantHistoryRepository;
+	private PlantExpHistoryRepository plantExpHistoryRepository;
 
 	@Override
 	public void write(Chunk<? extends PlantExpHistory> items) {
 		for (PlantExpHistory history : items) {
-			plantHistoryRepository.save(history);
+			plantExpHistoryRepository.save(history);
 		}
 	}
 }

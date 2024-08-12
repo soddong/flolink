@@ -2,7 +2,7 @@ package com.flolink.backend.domain.plant.dto.response;
 
 import java.time.LocalDate;
 
-import com.flolink.backend.domain.plant.entity.PlantExpHistory;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantExpHistory;
 import com.flolink.backend.global.util.ExpUtil;
 
 import lombok.AllArgsConstructor;

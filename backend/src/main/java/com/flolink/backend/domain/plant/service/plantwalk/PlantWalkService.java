@@ -1,19 +1,17 @@
-package com.flolink.backend.domain.plant.service;
-
-import java.util.Map;
+package com.flolink.backend.domain.plant.service.plantwalk;
 
 import com.flolink.backend.domain.plant.dto.reqeust.PlantLocation;
 import com.flolink.backend.domain.plant.dto.response.PlantWalkResultResponse;
 import com.flolink.backend.domain.plant.entity.Plant;
-import com.flolink.backend.domain.plant.entity.PlantWalk;
+import com.flolink.backend.domain.plant.entity.plantwalk.PlantWalk;
 
 public interface PlantWalkService {
 
 	PlantWalk savePlantWalk(Plant plant);
 
-	void startWalk(Integer plantId, PlantLocation plantLocation);
+	void startWalk(Plant plant, PlantLocation plantLocation);
 
-	PlantWalkResultResponse completeWalk(Integer plantId, PlantLocation plantLocation);
+	PlantWalkResultResponse completeWalk(Integer userId, Integer plantId, PlantLocation plantLocation);
 
 	PlantLocation getStartWalkLocation(Integer plantId);
 }

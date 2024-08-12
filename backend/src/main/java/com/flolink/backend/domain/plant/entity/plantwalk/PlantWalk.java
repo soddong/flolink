@@ -1,4 +1,4 @@
-package com.flolink.backend.domain.plant.entity;
+package com.flolink.backend.domain.plant.entity.plantwalk;
 
 import java.time.LocalDateTime;
 
@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.plant.dto.reqeust.PlantLocation;
+import com.flolink.backend.domain.plant.entity.Plant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,7 +65,8 @@ public class PlantWalk {
 	public static PlantWalk createPlantWalk(Plant plant) {
 		return PlantWalk.builder()
 			.plant(plant)
-			.walkYn(true)
+			.walkYn(false)
+			.useYn(true)
 			.build();
 	}
 
