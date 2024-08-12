@@ -39,7 +39,7 @@ function SignupPage() {
       const response = await checkDuplicateUsername(username);
       console.log(response);
       // 응답이 성공적으로 왔을 때
-      if (response.data) {
+      if (response?.data) {
         // 중복된 아이디가 있는 경우
         setUsernameMessage('이미 사용 중인 아이디입니다.');
       } else {
@@ -66,19 +66,19 @@ function SignupPage() {
   };
 
   const handlePasswordChange = (e) => {
-    const value = e.target.value;
+    const value = e?.target?.value;
     setPassword(value);
     setPasswordSame(value === confirmPassword);
   };
 
   const handleConfirmPasswordChange = (e) => {
-    const value = e.target.value;
+    const value = e?.target?.value;
     setConfirmPassword(value);
     setPasswordSame(value === password);
   };
 
   const handleNicknameChange = (e) => {
-    const value = e.target.value;
+    const value = e?.target?.value;
     setNickname(value);
 
     if (value.length > 8) {
@@ -107,7 +107,7 @@ function SignupPage() {
   };
 
   const handlePhoneNumberChange = (e) => {
-    setPhoneNumber(e.target.value);
+    setPhoneNumber(e?.target?.value);
   };
 
   const navigate = useNavigate();

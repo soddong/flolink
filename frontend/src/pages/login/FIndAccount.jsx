@@ -27,12 +27,6 @@ function FindAccount() {
     }
   }, [countdown]);
 
-  // useEffect(() => {
-  //   // 테스트 : 아이디 찾았을 경우
-  //   setMaskedId('app**');
-  //   setOpenModal(true);
-  // }, []);
-
   // 인증번호 전송
   const handleSendCode = async () => {
     try {
@@ -75,9 +69,9 @@ function FindAccount() {
   const handleFindId = async () => {
     try{
       const secretId = await findId(username, tel, successToken);
-      console.log(secretId.data.loginId)
-      if (secretId.status === 200) {
-        setMaskedId(secretId.data.loginId);
+      console.log(secretId?.data?.loginId)
+      if (secretId?.status === 200) {
+        setMaskedId(secretId?.data?.loginId);
         setOpenModal(true);
       } else {
         alert('일치하는 정보가 없습니다.');
@@ -89,19 +83,8 @@ function FindAccount() {
   
   // 비밀번호 반환?
   const handleFindPw = async () => {
-    console.log(loginId)
-    console.log(username)
-    console.log(tel)
-    console.log(verificationCode)
     try{
-      resetPw(loginId, username, tel, verificationCode).then((res) => {
-        console.log(res)
-      });
-      // if (secretId.status === 200) {
-      //   alert('임시비밀번호가 발송되었습니다.');
-      // } else {
-      //   alert('일치하는 정보가 없습니다.');
-      // }
+      resetPw(loginId, username, tel, verificationCode)
     } catch (e) {
         alert('처리 중 오류가 발생했습니다!.');
     }
