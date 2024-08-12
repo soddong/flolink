@@ -172,11 +172,13 @@ public class FeedServiceImpl implements FeedService {
 
 		Optional<Fcm> fcm = fcmRepository.findByUserUserId(feed.getUserRoom().getUser().getUserId());
 		if (fcm.isPresent()) {
-			FcmEvent fcmEvent = FcmEvent.builder()
-				.title("작성한 게시글에 댓글이 달렸어요.")
-				.message(feedCommentRequest.getContent())
-				.fcmToken(fcm.get().getFcmToken())
-				.build();
+			FcmEvent fcmEvent = new FcmEvent(
+				this,
+				"작성한 게시글에 댓글이 달렸어요.",
+				feedCommentRequest.getContent(),
+				fcm.get().getFcmToken()
+
+			);
 			eventPublisher.publishEvent(fcmEvent);
 		}
 
