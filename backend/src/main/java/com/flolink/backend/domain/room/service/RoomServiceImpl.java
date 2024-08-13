@@ -251,29 +251,28 @@ public class RoomServiceImpl implements RoomService {
 			room.setNotice(roomUpdateRequest.getNotice());
 		}
 		roomRepository.save(room);
-		List<UserRoom> userRoomList = room.getUserRoomList();
+		List<UserRoom> userRooms = room.getUserRoomList();
 		if (isNotiChanged) {
-			for (UserRoom curUserRoom : userRoomList) {
-				Noti noti = Noti.builder()
-					.userRoom(curUserRoom)
-					.message("공지가 변경되었어요.")
-					.createAt(LocalDateTime.now())
-					.build();
-				notiRepository.save(noti);
+			userRooms.stream()
+				.filter((curUserRoom -> !curUserRoom.getUser().getUserId().equals(userId)))
+				.forEach((curUserRoom) -> {
+					Noti noti = Noti.builder()
+						.userRoom(curUserRoom)
+						.message("공지가 변경되었어요.")
+						.createAt(LocalDateTime.now())
+						.build();
+					notiRepository.save(noti);
 
-				if (curUserRoom.getUser().getFcm() != null) {
-					try {
-						FcmEvent fcmEvent = new FcmEvent(this
-							, "공지가 변경되었어요.",
-							"지금 바로 확인해보세요!",
-							curUserRoom.getUser().getFcm().getFcmToken()
-						);
-						eventPublisher.publishEvent(fcmEvent);
-					} catch (Exception e) {
-						e.printStackTrace();
+					if (curUserRoom.getUser().getFcm() != null) {
+						try {
+							FcmEvent fcmEvent = new FcmEvent(this, "공지가 변경되었어요.", "지금 바로 확인해보세요!",
+								curUserRoom.getUser().getFcm().getFcmToken());
+							eventPublisher.publishEvent(fcmEvent);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
-				}
-			}
+				});
 		}
 
 		return RoomSummarizeResponse.fromEntity(room);

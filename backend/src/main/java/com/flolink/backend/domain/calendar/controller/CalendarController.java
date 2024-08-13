@@ -49,9 +49,12 @@ public class CalendarController {
 
 	@Operation(summary = "일정 추가", description = "원하는 날짜에 일정을 추가한다.")
 	@PostMapping("/add")
-	public ResponseEntity<?> createCalendar(@RequestBody CalendarRequest calendarRequest) {
+	public ResponseEntity<?> createCalendar(Authentication authentication,
+		@RequestBody CalendarRequest calendarRequest) {
 		log.info("===캘린더 일정 추가 START===");
-		calendarService.addCalendar(calendarRequest);
+		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+		Integer userId = customUserDetails.getUserId();
+		calendarService.addCalendar(userId, calendarRequest);
 		log.info("===캘린더 일정 추가 START===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
