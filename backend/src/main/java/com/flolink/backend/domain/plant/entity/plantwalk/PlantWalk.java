@@ -59,10 +59,10 @@ public class PlantWalk {
 	private Double startLng;
 
 	@Column(name = "walk_yn", nullable = false)
-	private Boolean walkYn = false;
+	private Boolean walkYn;
 
 	@Column(name = "use_yn", nullable = false)
-	private Boolean useYn = true;
+	private Boolean useYn;
 
 	public static PlantWalk createPlantWalk(Plant plant) {
 		return PlantWalk.builder()
