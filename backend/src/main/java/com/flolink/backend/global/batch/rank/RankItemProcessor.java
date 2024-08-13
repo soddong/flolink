@@ -12,7 +12,10 @@ import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExpHistory;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class RankItemProcessor implements ItemProcessor<PlantUserExp, PlantUserExpHistory> {
 
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
@@ -20,6 +23,7 @@ public class RankItemProcessor implements ItemProcessor<PlantUserExp, PlantUserE
 
 	@Override
 	public PlantUserExpHistory process(PlantUserExp plantUserExp) throws Exception {
+		log.info("============== Plant User History Processor START =============");
 		Plant plant = plantUserExp.getPlant();
 		int monthly_rank = plantRanks.getOrDefault(plant, 1);
 
@@ -35,6 +39,7 @@ public class RankItemProcessor implements ItemProcessor<PlantUserExp, PlantUserE
 
 		plantRanks.put(plant, monthly_rank + 1);
 
+		log.info("============== Plant User History Processor END =============");
 		return plantUserExpHistory;
 	}
 }

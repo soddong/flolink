@@ -28,6 +28,7 @@ public class TimeBasedBatchScheduler {
 
 	// 매월 1일 자정에 실행
 	@Scheduled(cron = "0 0 0 1 * ?")
+	// @Scheduled(cron = "1 * * * * ?")
 	public void runMonthlyPlantUserJob() throws Exception {
 		jobLauncher.run(plantExpJob, new JobParametersBuilder()
 			.addDate("runDate", new Date())

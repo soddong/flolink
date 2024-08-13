@@ -56,9 +56,8 @@ public class PlantController {
 	@GetMapping("/{plantId}/historys/{historyId}")
 	@Operation(summary = "기억정원 추억 불러오기", description = "특정달의 추억 조회")
 	public ResponseEntity<?> getPlantHistoryDetail(@PathVariable("plantId") final Integer plantId,
-		@PathVariable("historyId") final Integer historyId, Authentication authentication) {
+		@PathVariable("historyId") final Integer historyId) {
 		log.info("===기억정원 추억 불러오기 START===");
-		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
 		PlantHistoryDetailResponse historyDetailResponse = userExpService.getUserExpHistoryDetail(
 			plantId, historyId
 		);
