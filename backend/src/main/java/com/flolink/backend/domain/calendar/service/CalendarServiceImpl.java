@@ -52,7 +52,7 @@ public class CalendarServiceImpl implements CalendarService {
 	public List<CalendarResponse> getList(DateCalendarRequest dateCalendarRequest, Integer roomId,
 		CustomUserDetails customUserDetails) {
 		if (dateCalendarRequest.getRoomId() != roomId) {
-			throw new UnAuthorizedException(ResponseCode.NOT_MATCH_ROOMID);
+			throw new NotFoundException(ResponseCode.NOT_MATCH_ROOMID);
 		}
 
 		List<Calendar> list = calendarRepository.findByYearAndMonthAndRoomId(dateCalendarRequest.getYear(),
@@ -99,12 +99,15 @@ public class CalendarServiceImpl implements CalendarService {
 	@Transactional
 	public void removeCalendar(DeleteCalendarRequest deleteCalendarRequest, Integer userId) {
 
-		//TODO 나중에 exist로 변경
-		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, deleteCalendarRequest.getRoomId());
+		// 해당 Room 에 속해있는 User 인지 확인
+		boolean existsUserRoom = userRoomRepository.existsByUserIdAndRoomId(userId, deleteCalendarRequest.getRoomId());
+		if (!existsUserRoom) {
+			throw new UnAuthorizedException(ResponseCode.USER_NOT_IN_GROUP);
+		}
 
 		// 해당 캘린더 가져와서
 		Calendar calendar = calendarRepository.findById(deleteCalendarRequest.getCalendarId())
-			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_ERROR));
+			.orElseThrow(() -> new NotFoundException(ResponseCode.CALENDAR_NOT_FOUND));
 
 		// 사용여부 변경
 		calendarRepository.delete(calendar);
@@ -114,8 +117,9 @@ public class CalendarServiceImpl implements CalendarService {
 	@Transactional
 	public void modifyCalendar(UpdateCalendarRequest updateCalendarRequest, Integer userId) {
 
-		//TODO 나중에 exist로 변경
+
 		UserRoom userRoom = roomService.findUserRoomByUserIdAndRoomId(userId, updateCalendarRequest.getRoomId());
+
 		// 해당 캘린더 가져와서
 		Calendar calendar = calendarRepository.findById(updateCalendarRequest.getCalendarId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.CALENDAR_NOT_FOUND));
