@@ -46,8 +46,8 @@ import lombok.Setter;
 @SQLRestriction("use_yn = true")
 public class User {
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	List<UserRoom> userRoomList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<UserRoom> userRoomList;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", length = 36)

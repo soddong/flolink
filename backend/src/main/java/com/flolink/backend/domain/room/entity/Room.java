@@ -6,8 +6,11 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import com.flolink.backend.domain.calendar.entity.Calendar;
+import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.room.dto.request.RoomUpdateRequest;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +18,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,28 +38,26 @@ import lombok.Setter;
 @SQLRestriction("use_yn = true")
 public class Room {
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<UserRoom> userRoomList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "calendar", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Calendar> calendars;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "room_id")
 	private Integer roomId;
-
 	@Column(name = "room_name", nullable = false, length = 100)
 	private String roomName;
-
 	@Column(name = "create_at", nullable = false)
 	private LocalDateTime createAt;
-
 	@Column(name = "use_yn", nullable = false)
 	private Boolean useYn;
-
 	@Column(name = "room_participate_password", nullable = false)
 	private String roomParticipatePassword;
-
 	@Column(name = "notice", length = 255)
 	private String notice;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
-	List<UserRoom> userRoomList;
+	@OneToOne(mappedBy = "plant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Plant plant;
 
 	@Override
 	public boolean equals(final Object obj) {
