@@ -60,7 +60,7 @@ public class PlantController {
 		log.info("===기억정원 추억 불러오기 START===");
 		CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
 		PlantHistoryDetailResponse historyDetailResponse = userExpService.getUserExpHistoryDetail(
-			customUserDetails.getUserId(), historyId
+			plantId, historyId
 		);
 		log.info("===기억정원 추억 불러오기 END===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS, historyDetailResponse));

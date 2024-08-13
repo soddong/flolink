@@ -54,9 +54,9 @@ public class BatchConfig {
 	@Bean
 	public Job combinedJob() {
 		return new JobBuilder("combinedJob", jobRepository)
-			.incrementer(new RunIdIncrementer()) // RunIdIncrementer 추가
-			.start(plantStep())
-			.next(rankStep())
+			.incrementer(new RunIdIncrementer())
+			.start(rankStep())
+			.next(plantStep())
 			.build();
 	}
 
