@@ -59,17 +59,18 @@ public enum ResponseCode {
 	PASSWORD_INCONSISTENCY(401, "Password inconsistency", "PASSWORD_INCONSISTENCY"),
 	USER_INCONSISTENCY(401, "User inconsistency", "USER_INCONSISTENCY"),
 	NOT_FOUND_SUCCESSTOKEN(404, "Not Found Success Token", "NOT_FOUND_ERROR"),
-	NOT_MATCH_TOKEN(401, "The token entered does not match the DB.", "NOT_MATCH_TOKEN"),
-	NOT_MATCH_TEL(401, "The Telephone Number entered does not match the DB.", "NOT_MATCH_TOKEN"),
-	NOT_MATCH_NAME(401, "The Username entered does not match the DB.", "NOT_MATCH_TOKEN"),
-	NOT_MATCH_LOGINID(401, "The LoginId entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	NOT_MATCH_TOKEN(404, "The token entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	NOT_MATCH_TEL(404, "The Telephone Number entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	NOT_MATCH_NAME(404, "The Username entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	NOT_MATCH_LOGINID(404, "The LoginId entered does not match the DB.", "NOT_MATCH_TOKEN"),
 	UNAUTHORIZED_USER_ROLE(401, "OAuth login users cannot change their passwords.", "UNAUTHORIZED_USER_ROLE"),
-	NOT_MATCH_ROOMID(401, "The RoomId entered does not match the DB.", "NOT_MATCH_TOKEN"),
-	NOT_FOUND_AUTHNUM(401, "The AuthNum does not match the DB.", "NOT_FOUND_AUTHNUM"),
-	NOT_MATCH_AUTHNUM(401, "The AuthNum entered does not match the DB.", "NOT_MATCH_AUTHNUM"),
+	NOT_MATCH_ROOMID(404, "The RoomId entered does not match the DB.", "NOT_MATCH_TOKEN"),
+	NOT_FOUND_AUTHNUM(404, "The AuthNum does not match the DB.", "NOT_FOUND_AUTHNUM"),
+	NOT_MATCH_AUTHNUM(404, "The AuthNum entered does not match the DB.", "NOT_MATCH_AUTHNUM"),
 
 	//Calendar
-	CALENDAR_NOT_FOUND(401, "Calendar not found", "CALENDAR_NOT_FOUND"),
+	CALENDAR_NOT_FOUND(404, "Calendar not found", "CALENDAR_NOT_FOUND"),
+	USER_NOT_IN_GROUP(404, "User_not_in_the_group", "USER_NOT_IN_GROUP"),
 
 	// Purchase & Payment
 	ITEM_ALREADY_PURCHASE(400, "Item already purchased", "ITEM_ALREADY_PURCHASE_ERROR"),
