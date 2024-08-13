@@ -17,5 +17,5 @@ public interface UserRoomRepository extends JpaRepository<UserRoom, Integer> {
 
 	Optional<UserRoom> findByUserUserIdAndRoomRoomId(Integer userId, Integer roomId);
 
-	boolean existsByUserIdAndRoomId(Integer userId, Integer roomId);
+	boolean existsByUserUserIdAndRoomRoomId(Integer userId, Integer roomId);
 }
