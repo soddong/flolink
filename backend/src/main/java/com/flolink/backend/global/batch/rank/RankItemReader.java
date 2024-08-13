@@ -1,34 +1,48 @@
 package com.flolink.backend.global.batch.rank;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
 import com.flolink.backend.domain.plant.repository.PlantUserExpRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class RankItemReader implements ItemReader<PlantUserExp> {
 
 	@Autowired
 	private PlantUserExpRepository plantUserExpRepository;
 
-	private Iterator<PlantUserExp> userExpIterator;
+	private List<PlantUserExp> userExpList;
+	private int nextUserExpIndex;
 
 	@Override
 	public PlantUserExp read() {
-		if (userExpIterator == null) {
-			List<PlantUserExp> plantUserExps = plantUserExpRepository.findAllGroupedByPlantOrderByContributeExpAsc();
-			userExpIterator = plantUserExps.iterator();
+		log.info("============== Plant User History Read START =============");
+		if (userExpList == null) {
+			userExpList = plantUserExpRepository.findAllGroupedByPlantOrderByContributeExpAsc();
+			nextUserExpIndex = 0;
 		}
 
-		if (userExpIterator != null && userExpIterator.hasNext()) {
-			return userExpIterator.next();
-		} else {
-			return null;
+		PlantUserExp nextPlantUserExp = null;
+
+		if (nextUserExpIndex < userExpList.size()) {
+			nextPlantUserExp = userExpList.get(nextUserExpIndex);
+			nextUserExpIndex++;
 		}
+
+		// if (nextPlantUserExp != null && nextPlantUserExp.getPlant().getTotalExp() == 0) {
+		// 	log.info("============== Plant User History Read (return null) END =============");
+		// 	return null;
+		// }
+
+		log.info("============== Plant User History Read END =============");
+		return nextPlantUserExp;
 	}
 }
