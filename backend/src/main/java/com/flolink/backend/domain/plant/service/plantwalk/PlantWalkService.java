@@ -14,4 +14,6 @@ public interface PlantWalkService {
 	PlantWalkResultResponse completeWalk(Integer userId, Integer plantId, PlantLocation plantLocation);
 
 	PlantLocation getStartWalkLocation(Integer plantId);
+
+	void endPlantWalk(PlantWalk plantWalk);
 }

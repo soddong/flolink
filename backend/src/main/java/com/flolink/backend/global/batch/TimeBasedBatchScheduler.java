@@ -12,30 +12,42 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BatchScheduler {
+public class TimeBasedBatchScheduler {
 
-	private static final Logger log = LoggerFactory.getLogger(BatchScheduler.class);
 	@Autowired
 	private JobLauncher jobLauncher;
 
 	@Autowired
-	private Job combinedJob;
+	private Job plantExpJob;
 
 	@Autowired
 	private Job calendarJob;
 
+	@Autowired
+	private Job plantwalkJob;
+
 	// 매월 1일 자정에 실행
 	@Scheduled(cron = "0 0 0 1 * ?")
 	public void runMonthlyPlantUserJob() throws Exception {
-		jobLauncher.run(combinedJob, new JobParametersBuilder()
+		jobLauncher.run(plantExpJob, new JobParametersBuilder()
 			.addDate("runDate", new Date())
 			.toJobParameters());
 	}
 
 	// 매일 오전 8시에 실행
 	@Scheduled(cron = "0 0 8 * * ?")
+	// @Scheduled(cron = "1 * * * * ?")
 	public void runDailyCalendarJob() throws Exception {
 		jobLauncher.run(calendarJob, new JobParametersBuilder()
+			.addDate("runDate", new Date())
+			.toJobParameters());
+	}
+
+	// 매일 오전 3시에 실행
+	@Scheduled(cron = "0 0 3 * * ?")
+	// @Scheduled(cron = "1 * * * * ?")
+	public void runDailyPlantWalkAutoEndJob() throws Exception {
+		jobLauncher.run(plantwalkJob, new JobParametersBuilder()
 			.addDate("runDate", new Date())
 			.toJobParameters());
 	}

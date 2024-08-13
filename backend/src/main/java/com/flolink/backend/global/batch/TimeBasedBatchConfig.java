@@ -10,6 +10,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.flolink.backend.domain.calendar.entity.Calendar;
@@ -17,19 +18,23 @@ import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantExpHistory;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExpHistory;
+import com.flolink.backend.domain.plant.entity.plantwalk.PlantWalk;
 import com.flolink.backend.global.batch.calendar.CalendarItemProcessor;
 import com.flolink.backend.global.batch.calendar.CalendarItemReader;
 import com.flolink.backend.global.batch.calendar.CalenderItemWriter;
 import com.flolink.backend.global.batch.plant.PlantItemProcessor;
 import com.flolink.backend.global.batch.plant.PlantItemReader;
 import com.flolink.backend.global.batch.plant.PlantItemWriter;
+import com.flolink.backend.global.batch.plantwalk.PlantWalkProcessor;
+import com.flolink.backend.global.batch.plantwalk.PlantWalkReader;
+import com.flolink.backend.global.batch.plantwalk.PlantWalkWriter;
 import com.flolink.backend.global.batch.rank.RankItemProcessor;
 import com.flolink.backend.global.batch.rank.RankItemReader;
 import com.flolink.backend.global.batch.rank.RankItemWriter;
 
 @Configuration
 @EnableBatchProcessing
-public class BatchConfig {
+public class TimeBasedBatchConfig {
 
 	@Autowired
 	private JobRepository jobRepository;
@@ -64,9 +69,18 @@ public class BatchConfig {
 	@Autowired
 	private CalenderItemWriter calenderItemWriter;
 
+	@Autowired
+	private PlantWalkReader plantWalkReader;
+
+	@Autowired
+	private PlantWalkProcessor plantWalkProcessor;
+
+	@Autowired
+	private PlantWalkWriter plantWalkWriter;
+
 	@Bean
-	public Job combinedJob() {
-		return new JobBuilder("combinedJob", jobRepository)
+	public Job plantExpJob() {
+		return new JobBuilder("plantExpJob", jobRepository)
 			.incrementer(new RunIdIncrementer())
 			.start(rankStep())
 			.next(plantStep())
@@ -102,7 +116,6 @@ public class BatchConfig {
 			.build();
 	}
 
-
 	@Bean
 	public Step calendarStep() {
 		return new StepBuilder("calendarStep", jobRepository)
@@ -112,4 +125,23 @@ public class BatchConfig {
 			.writer(calenderItemWriter)
 			.build();
 	}
+
+	@Bean
+	public Job plantwalkJob() {
+		return new JobBuilder("plantwalkJob", jobRepository)
+			.incrementer(new RunIdIncrementer())
+			.start(plantwalkStep())
+			.build();
+	}
+
+	@Bean
+	public Step plantwalkStep() {
+		return new StepBuilder("plantwalkStep", jobRepository)
+			.<PlantWalk, PlantWalk>chunk(10, transactionManager)
+			.reader(plantWalkReader)
+			.processor(plantWalkProcessor)
+			.writer(plantWalkWriter)
+			.build();
+	}
+
 }

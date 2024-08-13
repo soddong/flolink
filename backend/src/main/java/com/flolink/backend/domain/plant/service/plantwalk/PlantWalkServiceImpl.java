@@ -3,7 +3,9 @@ package com.flolink.backend.domain.plant.service.plantwalk;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
+import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.observer.service.ActivityService;
@@ -67,9 +69,22 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 	}
 
 	@Transactional
+	public void endWalk(Integer plantwalkId) {
+		Optional<PlantWalk> plantWalk = plantWalkRepository.findById(plantwalkId);
+		plantWalk.ifPresent(this::endPlantWalk);
+	}
+
+	@Transactional
 	public PlantLocation getStartWalkLocation(Integer plantId) {
 		PlantWalk plantWalk = findActivePlantWalk(plantId);
 		return PlantLocation.fromEntity(plantWalk);
+	}
+
+	@Transactional
+	public void endPlantWalk(PlantWalk plantWalk) {
+		Plant plant = plantWalk.getPlant();
+		plant.updateWalk(0);
+		plantWalk.endPlantWalk();
 	}
 
 	private PlantWalk findActivePlantWalk(Integer plantId) {
@@ -118,12 +133,6 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 
 	private boolean meetsDistanceRequirementForPoints(double distance) {
 		return distance >= 1.0;
-	}
-
-	private void endPlantWalk(PlantWalk plantWalk) {
-		Plant plant = plantWalk.getPlant();
-		plant.updateWalk(0);
-		plantWalk.endPlantWalk();
 	}
 
 	private void increaseExpAboutActivity(ActivityPointType type, Integer roomId, Integer userRoomId, Integer userId) {
