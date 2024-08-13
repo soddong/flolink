@@ -1,15 +1,19 @@
 package com.flolink.backend.domain.plant.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.plant.entity.enumtype.PlantStatusType;
+import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
+import com.flolink.backend.domain.plant.entity.plantwalk.PlantWalk;
 import com.flolink.backend.domain.room.entity.Room;
 import com.flolink.backend.global.common.GlobalConstant;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,6 +23,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -27,7 +32,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
@@ -48,6 +52,12 @@ public class Plant {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "room_id", nullable = false)
 	private Room room;
+
+	@OneToOne(mappedBy = "plant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private PlantWalk plantWalk;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "plant", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PlantUserExp> plantUserExps;
 
 	@Column(name = "plant_status", nullable = false)
 	@Enumerated(EnumType.STRING)

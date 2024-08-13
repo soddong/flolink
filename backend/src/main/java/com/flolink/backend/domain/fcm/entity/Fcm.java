@@ -2,7 +2,6 @@ package com.flolink.backend.domain.fcm.entity;
 
 import com.flolink.backend.domain.user.entity.User;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,7 +32,7 @@ public class Fcm {
 	@Column(name = "fcm_id")
 	private Long fcmId;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
