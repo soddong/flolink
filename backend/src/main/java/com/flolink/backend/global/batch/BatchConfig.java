@@ -12,10 +12,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.flolink.backend.domain.calendar.entity.Calendar;
 import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantExpHistory;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExp;
 import com.flolink.backend.domain.plant.entity.plantexp.PlantUserExpHistory;
+import com.flolink.backend.global.batch.calendar.CalendarItemProcessor;
+import com.flolink.backend.global.batch.calendar.CalendarItemReader;
+import com.flolink.backend.global.batch.calendar.CalenderItemWriter;
 import com.flolink.backend.global.batch.plant.PlantItemProcessor;
 import com.flolink.backend.global.batch.plant.PlantItemReader;
 import com.flolink.backend.global.batch.plant.PlantItemWriter;
@@ -51,6 +55,15 @@ public class BatchConfig {
 	@Autowired
 	private RankItemWriter rankItemWriter;
 
+	@Autowired
+	private CalendarItemReader calendarItemReader;
+
+	@Autowired
+	private CalendarItemProcessor calendarItemProcessor;
+
+	@Autowired
+	private CalenderItemWriter calenderItemWriter;
+
 	@Bean
 	public Job combinedJob() {
 		return new JobBuilder("combinedJob", jobRepository)
@@ -77,6 +90,26 @@ public class BatchConfig {
 			.reader(rankItemReader)
 			.processor(rankItemProcessor)
 			.writer(rankItemWriter)
+			.build();
+	}
+
+	/* Daily */
+	@Bean
+	public Job calendarJob() {
+		return new JobBuilder("calendarJob", jobRepository)
+			.incrementer(new RunIdIncrementer())
+			.start(calendarStep())
+			.build();
+	}
+
+
+	@Bean
+	public Step calendarStep() {
+		return new StepBuilder("calendarStep", jobRepository)
+			.<Calendar, Calendar>chunk(10, transactionManager)
+			.reader(calendarItemReader)
+			.processor(calendarItemProcessor)
+			.writer(calenderItemWriter)
 			.build();
 	}
 }
