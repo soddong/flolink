@@ -94,6 +94,7 @@ public class JwtUtil {
 		cookie.setMaxAge(24 * 60 * 60);
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
+		cookie.setPath("/");
 
 		return cookie;
 	}
