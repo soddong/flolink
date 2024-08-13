@@ -52,42 +52,56 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", length = 36)
 	private Integer userId;
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "my_room_id")
 	private MyRoom myRoom;
+
 	@Column(name = "login_id", nullable = false, length = 100)
 	private String loginId;
+
 	@Column(name = "password", length = 64)
 	private String password;
+
 	@Column(name = "user_name", nullable = false, length = 256)
 	private String userName;
+
 	@Column(name = "nickname", nullable = false, length = 100)
 	private String nickname;
+
 	@Column(name = "tel", length = 20)
 	private String tel;
+
 	@Builder.Default
 	@Column(name = "point", nullable = false, length = 21)
 	private BigDecimal point = BigDecimal.ZERO;
+
 	@Builder.Default
 	@Column(name = "create_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt = LocalDateTime.now();
+
 	@Builder.Default
 	@Column(name = "use_yn", nullable = false)
 	private boolean useYn = true;
+
 	@Builder.Default
 	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private RoleType role = RoleType.LOCAL;
+
 	@Builder.Default
 	@Column(name = "profile", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ProfileType profile = ProfileType.COW;
+
 	@Builder.Default
 	@Column(name = "emotion", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private EmotionType emotion = EmotionType.HAPPY;
+
 	@Column(name = "status_message")
 	private String statusMessage;
+	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
 	private Fcm fcm;
 
