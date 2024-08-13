@@ -38,6 +38,10 @@ public class CustomOAuth2UserResponse implements OAuth2User {
 		return userDTO.isUseYn();
 	}
 
+	public String getLoginId() {
+		return userDTO.getLoginId();
+	}
+
 	public RoleType getRoleType() {
 		return userDTO.getRole();
 	}

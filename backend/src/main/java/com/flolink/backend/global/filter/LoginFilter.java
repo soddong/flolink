@@ -38,6 +38,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final long accessTokenValidityInSeconds = 1000 * 60 * 10L; //10분
 	private final long refreshTokenValidityInSeconds = 1000 * 60 * 60 * 24L; //24시간
+	private LoginUserRequest creds = null;
 
 	@Value("${spring.login.target-uri}")
 	private String targetUrl;
@@ -48,7 +49,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 		UsernamePasswordAuthenticationToken token;
 		try {
-			LoginUserRequest creds = new ObjectMapper().readValue(request.getInputStream(), LoginUserRequest.class);
+			creds = new ObjectMapper().readValue(request.getInputStream(), LoginUserRequest.class);
 			token = new UsernamePasswordAuthenticationToken(creds.getLoginId(), creds.getPassword());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -70,12 +71,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 			return;
 		}
 
+		if (!customUserDetails.getLonginId().equals(creds.getLoginId())) {
+			unsuccessfulAuthentication(request, response, new DisabledException("User account is disabled"));
+			return;
+		}
+
 		int userId = customUserDetails.getUserId();
 		RoleType roleType = customUserDetails.getRoleType();
+		String loginId = customUserDetails.getLonginId();
+
 		log.info("===로그인 성공===");
 		//토큰 생성
-		String access = jwtUtil.createJwt("access", userId, roleType, accessTokenValidityInSeconds, now);
-		String refresh = jwtUtil.createJwt("refresh", userId, roleType, refreshTokenValidityInSeconds, now);
+		String access = jwtUtil.createJwt("access", userId, loginId, roleType, accessTokenValidityInSeconds, now);
+		String refresh = jwtUtil.createJwt("refresh", userId, loginId, roleType, refreshTokenValidityInSeconds, now);
 
 		//Refresh 토큰 저장
 		Refresh refreshEntity = Refresh.builder()

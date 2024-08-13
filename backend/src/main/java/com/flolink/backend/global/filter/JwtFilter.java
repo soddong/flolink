@@ -8,9 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.flolink.backend.global.auth.service.ReissueService;
 import com.flolink.backend.domain.user.dto.response.CustomUserDetails;
 import com.flolink.backend.domain.user.entity.User;
+import com.flolink.backend.domain.user.repository.UserRepository;
+import com.flolink.backend.global.auth.service.ReissueService;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.util.JwtUtil;
 
@@ -23,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
+	private final UserRepository userRepository;
 
 	private final JwtUtil jwtUtil;
 	private final ReissueService reissueService;
@@ -68,6 +71,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
 			//response status code
 			response.setStatus(ResponseCode.EXPIRED_TOKEN.getStatus());
+			return;
+		}
+
+		String tokenLoginId = jwtUtil.getLoginId(accessToken);
+		String requestLoginId = userRepository.findLoginIdByUserId(jwtUtil.getUserId(accessToken));
+
+		if (tokenLoginId == null || !tokenLoginId.equals(requestLoginId)) {
+			PrintWriter writer = response.getWriter();
+			writer.print("loginId does not match");
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
 
