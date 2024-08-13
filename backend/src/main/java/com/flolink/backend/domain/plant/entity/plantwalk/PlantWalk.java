@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,8 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE plant SET use_yn = false WHERE plant_id = ?")
+@Table(name = "plant_walk")
+@SQLDelete(sql = "UPDATE plant_walk SET use_yn = false WHERE plant_walk_id = ?")
 @SQLRestriction("use_yn = true")
 @ToString
 public class PlantWalk {

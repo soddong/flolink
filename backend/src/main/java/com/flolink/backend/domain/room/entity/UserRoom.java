@@ -10,6 +10,7 @@ import com.flolink.backend.domain.feed.entity.Feed;
 import com.flolink.backend.domain.noti.entity.Noti;
 import com.flolink.backend.domain.user.entity.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -51,13 +52,13 @@ public class UserRoom {
 	@JoinColumn(name = "room_id", nullable = false)
 	private Room room;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Noti> notiList;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Nickname> nickNameList;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Feed> feedList;
 
 	@Column(name = "create_at", nullable = false)

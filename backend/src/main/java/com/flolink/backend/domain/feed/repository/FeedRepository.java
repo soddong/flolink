@@ -13,7 +13,7 @@ import com.flolink.backend.domain.feed.entity.Feed;
 @Repository
 public interface FeedRepository extends JpaRepository<Feed, Integer> {
 
-	@Query("select f from Feed f where f.createAt <= :lastFeedDate and f.userRoom.room.roomId = :roomId order by f.createAt desc limit :size")
+	@Query("select f from Feed f where f.createAt < :lastFeedDate and f.userRoom.room.roomId = :roomId order by f.createAt desc limit :size")
 	List<Feed> findByDateLessThanOrderByCreateAtDesc(@Param("lastFeedDate") LocalDateTime lastFeedDate,
 		@Param("roomId") Integer roomId,
 		@Param("size") Integer size);
