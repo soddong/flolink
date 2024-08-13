@@ -100,7 +100,7 @@ public class CalendarServiceImpl implements CalendarService {
 	public void removeCalendar(DeleteCalendarRequest deleteCalendarRequest, Integer userId) {
 
 		// 해당 Room 에 속해있는 User 인지 확인
-		boolean existsUserRoom = userRoomRepository.existsByUserIdAndRoomId(userId, deleteCalendarRequest.getRoomId());
+		boolean existsUserRoom = userRoomRepository.existsByUserUserIdAndRoomRoomId(userId, deleteCalendarRequest.getRoomId());
 		if (!existsUserRoom) {
 			throw new UnAuthorizedException(ResponseCode.USER_NOT_IN_GROUP);
 		}
