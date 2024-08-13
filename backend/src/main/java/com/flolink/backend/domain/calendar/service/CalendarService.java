@@ -13,7 +13,7 @@ public interface CalendarService {
 	List<CalendarResponse> getList(DateCalendarRequest dateCalendarRequest, Integer roomId,
 		CustomUserDetails customUserDetails);
 
-	void addCalendar(CalendarRequest calendarRequest);
+	void addCalendar(Integer userId, CalendarRequest calendarRequest);
 
 	void removeCalendar(DeleteCalendarRequest deleteCalendarRequest, Integer userId);
 

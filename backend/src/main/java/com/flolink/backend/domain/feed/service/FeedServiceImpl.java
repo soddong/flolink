@@ -31,6 +31,7 @@ import com.flolink.backend.domain.observer.service.ActivityService;
 import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
 import com.flolink.backend.domain.room.entity.UserRoom;
 import com.flolink.backend.domain.room.service.RoomService;
+import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -179,7 +180,13 @@ public class FeedServiceImpl implements FeedService {
 		increaseExpAboutActivity(ActivityPointType.COMMENT, userRoom.getRoom().getRoomId(), userRoom.getUserRoomId(),
 			userId);
 
-		Optional<Fcm> fcm = fcmRepository.findByUserUserId(feed.getUserRoom().getUser().getUserId());
+		User feedCreator = feed.getUserRoom().getUser();
+
+		if (feedCreator.getUserId().equals(userId)) {
+			return;
+		}
+		Optional<Fcm> fcm = fcmRepository.findByUserUserId(feedCreator.getUserId());
+
 		Noti noti = Noti.builder()
 			.userRoom(feed.getUserRoom())
 			.message("작성한 게시글에 댓글이 달렸어요.")

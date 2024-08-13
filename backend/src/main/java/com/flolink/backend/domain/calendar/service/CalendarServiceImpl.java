@@ -58,14 +58,12 @@ public class CalendarServiceImpl implements CalendarService {
 		List<Calendar> list = calendarRepository.findByYearAndMonthAndRoomId(dateCalendarRequest.getYear(),
 			dateCalendarRequest.getMonth(), roomId);
 
-		return list.stream()
-			.map(Calendar::toEntity)
-			.collect(Collectors.toList());
+		return list.stream().map(Calendar::toEntity).collect(Collectors.toList());
 	}
 
 	@Override
 	@Transactional
-	public void addCalendar(CalendarRequest calendarRequest) {
+	public void addCalendar(Integer userId, CalendarRequest calendarRequest) {
 		Room room = roomRepository.findById(calendarRequest.getRoomId())
 			.orElseThrow(() -> new NotFoundException(ResponseCode.NOT_MATCH_ROOMID));
 
@@ -73,26 +71,28 @@ public class CalendarServiceImpl implements CalendarService {
 
 		List<UserRoom> userRooms = room.getUserRoomList();
 		SimpleDateFormat formatter = new SimpleDateFormat(" (MM.dd)");
-		for (UserRoom curUserRoom : userRooms) {
-			Noti noti = Noti.builder()
-				.userRoom(curUserRoom)
-				.message("가족 일정이 공유되었어요. " + calendarRequest.getTitle())
-				.createAt(LocalDateTime.now())
-				.build();
-			notiRepository.save(noti);
-			if (curUserRoom.getUser().getFcm() != null) {
-				try {
-					FcmEvent fcmEvent = new FcmEvent(this
-						, "가족 일정이 공유되었어요.",
-						calendarRequest.getTitle() + formatter.format(calendarRequest.getDate())
-						, curUserRoom.getUser().getFcm().getFcmToken());
-					eventPublisher.publishEvent(fcmEvent);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		userRooms.stream()
+			.filter((curUserRoom -> !curUserRoom.getUser().getUserId().equals(userId)))
+			.forEach((curUserRoom) -> {
+				Noti noti = Noti.builder()
+					.userRoom(curUserRoom)
+					.message("가족 일정이 공유되었어요. " + calendarRequest.getTitle())
+					.createAt(LocalDateTime.now())
+					.build();
+				notiRepository.save(noti);
+				if (curUserRoom.getUser().getFcm() != null) {
+					try {
+						FcmEvent fcmEvent = new FcmEvent(this, "가족 일정이 공유되었어요.",
+							calendarRequest.getTitle() + formatter.format(calendarRequest.getDate()),
+							curUserRoom.getUser().getFcm().getFcmToken());
+						eventPublisher.publishEvent(fcmEvent);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-			}
-		}
+				}
+			});
+
 	}
 
 	@Override
@@ -126,26 +126,27 @@ public class CalendarServiceImpl implements CalendarService {
 		calendar.setTag(updateCalendarRequest.getTag());
 		List<UserRoom> userRooms = userRoom.getRoom().getUserRoomList();
 		SimpleDateFormat formatter = new SimpleDateFormat(" (MM.dd)");
-		for (UserRoom curUserRoom : userRooms) {
-			Noti noti = Noti.builder()
-				.userRoom(curUserRoom)
-				.message("가족 일정이 수정되었어요. " + updateCalendarRequest.getTitle())
-				.createAt(LocalDateTime.now())
-				.build();
-			notiRepository.save(noti);
+		userRooms.stream()
+			.filter((curUserRoom -> !curUserRoom.getUser().getUserId().equals(userId)))
+			.forEach((curUserRoom) -> {
+				Noti noti = Noti.builder()
+					.userRoom(curUserRoom)
+					.message("가족 일정이 수정되었어요. " + updateCalendarRequest.getTitle())
+					.createAt(LocalDateTime.now())
+					.build();
+				notiRepository.save(noti);
+				if (curUserRoom.getUser().getFcm() != null) {
+					try {
+						FcmEvent fcmEvent = new FcmEvent(this, "가족 일정이 수정되었어요.",
+							updateCalendarRequest.getTitle() + formatter.format(updateCalendarRequest.getDate()),
+							curUserRoom.getUser().getFcm().getFcmToken());
+						eventPublisher.publishEvent(fcmEvent);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-			if (curUserRoom.getUser().getFcm() != null) {
-				try {
-					FcmEvent fcmEvent = new FcmEvent(this
-						, "가족 일정이 수정되었어요.",
-						updateCalendarRequest.getTitle() + formatter.format(updateCalendarRequest.getDate())
-						, curUserRoom.getUser().getFcm().getFcmToken());
-					eventPublisher.publishEvent(fcmEvent);
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
+			});
 
-			}
-		}
 	}
 }
