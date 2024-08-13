@@ -284,7 +284,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * 포인트 구매
+	 * 포인트 적립 (추가)
 	 * @param userId 유저 ID
 	 */
 	@Override

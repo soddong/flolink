@@ -3,6 +3,7 @@ package com.flolink.backend.domain.payment.service;
 import static com.flolink.backend.domain.payment.entity.PaymentState.*;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class PaymentServiceImpl implements PaymentService {
 			throw new BadRequestException(ResponseCode.PAYMENT_ALREADY_PAID);
 		}
 
-		userService.purchasePoint(userId, paymentHistory.getPaymentItem().getPrice());
+		userService.purchasePoint(userId, new BigDecimal(paymentHistory.getPaymentItem().getPoints()));
 		paymentHistory.completePayment(portOne);
 	}
 
