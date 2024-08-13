@@ -109,7 +109,7 @@ public class FeedServiceImpl implements FeedService {
 		Feed feed = findFeedById(feedId);
 
 		if (!feed.getUserRoom().getUserRoomId().equals(userRoom.getUserRoomId())) {
-			throw new NotFoundException(ResponseCode.NOT_AUTHORIZED);
+			throw new NotFoundException(ResponseCode.USER_ROOM_NOT_FOUND);
 		}
 
 		List<FeedImage> images = feed.getFeedImageList();
