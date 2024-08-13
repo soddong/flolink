@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLRestriction;
 import com.flolink.backend.domain.feed.dto.request.FeedUpdateRequest;
 import com.flolink.backend.domain.room.entity.UserRoom;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -55,10 +56,10 @@ public class Feed {
 	@Column(name = "use_yn")
 	private Boolean useYn;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FeedComment> feedCommentList;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FeedImage> feedImageList;
 
 	public void updateContent(final FeedUpdateRequest feedUpdateRequest) {
