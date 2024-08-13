@@ -53,14 +53,15 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
 		int userId = customUserDetails.getUserId();
 		RoleType role = customUserDetails.getRoleType();
+		String loginId = customUserDetails.getLoginId();
 
 		//현재 시간
 		LocalDateTime date = LocalDateTime.now();
 		Date now = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(date);
 
 		//토큰 생성
-		String access = jwtUtil.createJwt("access", userId, role, accessTokenValidityInSeconds, now);
-		String refresh = jwtUtil.createJwt("refresh", userId, role, refreshTokenValidityInSeconds, now);
+		String access = jwtUtil.createJwt("access", userId, loginId, role, accessTokenValidityInSeconds, now);
+		String refresh = jwtUtil.createJwt("refresh", userId, loginId, role, refreshTokenValidityInSeconds, now);
 
 		//Refresh 토큰 저장
 		Refresh refreshEntity = Refresh.builder()

@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.auth.handler.CustomSuccessHandler;
 import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.global.auth.service.ReissueService;
@@ -39,6 +40,7 @@ public class SecurityConfig {
 	private final ReissueService reissueService;
 	private final DefaultOAuth2UserService customOAuth2UserService;
 	private final CustomSuccessHandler customSuccessHandler;
+	private final UserRepository userRepository;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -109,11 +111,12 @@ public class SecurityConfig {
 
 		//jwt 검증 필터
 		http
-			.addFilterBefore(new JwtFilter(jwtUtil, reissueService), LoginFilter.class);
+			.addFilterBefore(new JwtFilter(userRepository, jwtUtil, reissueService), LoginFilter.class);
 
 		http
 			.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository),
 				UsernamePasswordAuthenticationFilter.class);
+
 		// 로그아웃 필터
 		http
 			// 로그아웃 설정

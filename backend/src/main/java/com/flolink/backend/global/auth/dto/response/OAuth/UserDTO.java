@@ -23,6 +23,7 @@ public class UserDTO {
 	private ProfileType profile;
 	private EmotionType emotion;
 	private boolean useYn;
+	private String loginId;
 
 	public static UserDTO from(User user) {
 		return UserDTO.builder()
@@ -35,6 +36,7 @@ public class UserDTO {
 			.profile(user.getProfile())
 			.emotion(user.getEmotion())
 			.useYn(user.isUseYn())
+			.loginId(user.getLoginId())
 			.build();
 	}
 
