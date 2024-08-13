@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import com.flolink.backend.global.auth.handler.CustomSuccessHandler;
 import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.global.auth.service.ReissueService;
+import com.flolink.backend.global.filter.CustomLogoutFilter;
 import com.flolink.backend.global.filter.JwtFilter;
 import com.flolink.backend.global.filter.LoginFilter;
 import com.flolink.backend.global.util.JwtUtil;
@@ -110,6 +111,9 @@ public class SecurityConfig {
 		http
 			.addFilterBefore(new JwtFilter(jwtUtil, reissueService), LoginFilter.class);
 
+		http
+			.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository),
+				UsernamePasswordAuthenticationFilter.class);
 		// 로그아웃 필터
 		http
 			// 로그아웃 설정
