@@ -7,9 +7,9 @@ import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import com.flolink.backend.global.auth.entity.Refresh;
 import com.flolink.backend.global.auth.repository.RefreshRepository;
-import com.flolink.backend.domain.user.entity.enumtype.RoleType;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
@@ -82,10 +82,11 @@ public class ReissueServiceImpl implements ReissueService {
 
 		int userId = jwtUtil.getUserId(refresh);
 		RoleType role = jwtUtil.getRoleType(refresh);
+		String loginId = jwtUtil.getLoginId(refresh);
 
 		//make new JWT
-		String newAccess = jwtUtil.createJwt("access", userId, role, accessTokenValidityInSeconds, now);
-		String newRefresh = jwtUtil.createJwt("refresh", userId, role, refreshTokenValidityInSeconds, now);
+		String newAccess = jwtUtil.createJwt("access", userId, loginId, role, accessTokenValidityInSeconds, now);
+		String newRefresh = jwtUtil.createJwt("refresh", userId, loginId, role, refreshTokenValidityInSeconds, now);
 
 		//Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
 		Refresh refreshToken = Refresh.builder()
