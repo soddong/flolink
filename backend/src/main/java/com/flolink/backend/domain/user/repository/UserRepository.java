@@ -9,6 +9,8 @@ import com.flolink.backend.domain.user.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+	Optional<User> findByUserIdAndUseYnTrue(Integer userId);
+
 	boolean existsByLoginId(String loginId);
 
 	Optional<User> findByLoginId(String loginId);
@@ -21,6 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	@Query("SELECT u.loginId from User u where u.userId=:userId and u.useYn=true ")
 	String findLoginIdByUserId(int userId);
+
 }
 
 

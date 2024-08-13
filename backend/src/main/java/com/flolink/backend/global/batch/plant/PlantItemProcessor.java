@@ -17,7 +17,7 @@ public class PlantItemProcessor implements ItemProcessor<Plant, PlantExpHistory>
 
 	@Override
 	public PlantExpHistory process(Plant plant) {
-		log.info("============== Plant History Process START =============");
+		log.info("============== Plant History Writer START =============");
 		PlantExpHistory plantExpHistory = PlantExpHistory.builder()
 			.plant(plant)
 			.plantStatusType(plant.getPlantStatusType())
@@ -31,11 +31,11 @@ public class PlantItemProcessor implements ItemProcessor<Plant, PlantExpHistory>
 		plant.setPlantStatusType(PlantStatusType.IN_PROGRESS);
 
 		if (exp == 0) {
-			log.info("============== Plant History Process (return null) END =============");
+			log.info("============== Plant History Writer (return null) END =============");
 			return null;
 		}
 
-		log.info("============== Plant History Process END =============");
+		log.info("============== Plant History Writer END =============");
 		return plantExpHistory;
 	}
 }

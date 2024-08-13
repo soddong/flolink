@@ -26,6 +26,7 @@ public class BatchScheduler {
 
 	// 매월 1일 자정에 실행
 	@Scheduled(cron = "0 0 0 1 * ?")
+	// @Scheduled(cron = "1 * * * * ?")
 	public void runMonthlyPlantUserJob() throws Exception {
 		jobLauncher.run(combinedJob, new JobParametersBuilder()
 			.addDate("runDate", new Date())
@@ -33,8 +34,8 @@ public class BatchScheduler {
 	}
 
 	// 매일 오전 8시에 실행
-	// @Scheduled(cron = "0 0 8 * * ?")
-	@Scheduled(cron = "1 * * * * ?")
+	@Scheduled(cron = "0 0 8 * * ?")
+	// @Scheduled(cron = "1 * * * * ?")
 	public void runDailyCalendarJob() throws Exception {
 		jobLauncher.run(calendarJob, new JobParametersBuilder()
 			.addDate("runDate", new Date())

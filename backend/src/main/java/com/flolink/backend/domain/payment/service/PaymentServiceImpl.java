@@ -3,19 +3,16 @@ package com.flolink.backend.domain.payment.service;
 import static com.flolink.backend.domain.payment.entity.PaymentState.*;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.payment.dto.PortOnePayment;
-import com.flolink.backend.domain.payment.dto.request.PaymentCreateRequest;
 import com.flolink.backend.domain.payment.dto.response.PaymentHistoryResponse;
 import com.flolink.backend.domain.payment.dto.response.PaymentPrepareResponse;
 import com.flolink.backend.domain.payment.entity.PaymentHistory;
 import com.flolink.backend.domain.payment.entity.PaymentItem;
-import com.flolink.backend.domain.payment.entity.PaymentState;
 import com.flolink.backend.domain.payment.repository.PaymentItemRepository;
 import com.flolink.backend.domain.payment.repository.PaymentRepository;
 import com.flolink.backend.domain.user.entity.User;
@@ -66,7 +63,7 @@ public class PaymentServiceImpl implements PaymentService {
 			throw new BadRequestException(ResponseCode.PAYMENT_ALREADY_PAID);
 		}
 
-		userService.purchasePoint(userId, new BigDecimal(paymentHistory.getPaymentItem().getPoints()));
+		userService.addPoint(userId, new BigDecimal(paymentHistory.getPaymentItem().getPoints()));
 		paymentHistory.completePayment(portOne);
 	}
 

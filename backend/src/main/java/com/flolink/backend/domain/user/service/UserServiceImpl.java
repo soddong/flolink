@@ -4,6 +4,9 @@ import static com.flolink.backend.domain.user.entity.enumtype.RoleType.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import javax.swing.plaf.OptionPaneUI;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import com.flolink.backend.domain.user.dto.response.UserInfoResponse;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.domain.user.util.LoginIdEditor;
+import com.flolink.backend.global.auth.dto.response.OAuth.UserDTO;
 import com.flolink.backend.global.auth.entity.SuccessToken;
 import com.flolink.backend.global.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.global.common.ResponseCode;
@@ -98,6 +102,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean isExistLoginId(String loginId) {
 		return userRepository.existsByLoginId(loginId);
+	}
+
+	public UserDTO findUserByUserId(Integer userId) {
+		System.out.println(userId);
+		Optional<User> user = userRepository.findByUserIdAndUseYnTrue(userId);
+		return user.map(UserDTO::from).orElse(null);
 	}
 
 	/**
@@ -289,7 +299,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	@Transactional
-	public void purchasePoint(Integer userId, BigDecimal point) {
+	public void addPoint(Integer userId, BigDecimal point) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
 		user.addPoint(point);
