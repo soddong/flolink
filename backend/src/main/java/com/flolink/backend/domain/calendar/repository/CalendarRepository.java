@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.calendar.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,6 @@ public interface CalendarRepository extends JpaRepository<Calendar, Integer> {
 	List<Calendar> findByYearAndMonthAndRoomId(@Param("year") Integer year, @Param("month") Integer month,
 		@Param("roomId") Integer roomId);
 
+	@Query("SELECT c FROM Calendar c WHERE c.date = :date AND c.useYn = true")
+	List<Calendar> findCalendarsByDateAndUseYn(LocalDate date);
 }
