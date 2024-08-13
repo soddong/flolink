@@ -24,6 +24,7 @@ public class RoomMemberInfoResponse {
 	private EmotionType emotion;
 	private Integer targetUserRoomId;
 	private String targetNickname;
+	private String statusMessage;
 
 	public static RoomMemberInfoResponse fromNicknameEntity(Nickname nickName) {
 		return RoomMemberInfoResponse.builder()
@@ -40,6 +41,7 @@ public class RoomMemberInfoResponse {
 			.emotion(userRoom.getUser().getEmotion())
 			.targetUserRoomId(userRoom.getUserRoomId())
 			.targetNickname(userRoom.getUser().getNickname())
+			.statusMessage(userRoom.getUser().getStatusMessage())
 			.build();
 	}
 }
