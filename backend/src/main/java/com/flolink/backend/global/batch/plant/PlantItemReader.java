@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
 import com.flolink.backend.domain.plant.entity.Plant;
 import com.flolink.backend.domain.plant.repository.PlantRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class PlantItemReader implements ItemReader<Plant> {
 
 	@Autowired
@@ -20,6 +23,7 @@ public class PlantItemReader implements ItemReader<Plant> {
 
 	@Override
 	public Plant read() {
+		log.info("============== Plant History Read START =============");
 		if (plants == null) {
 			plants = plantRepository.findAll();
 			nextPlantIndex = 0;
@@ -32,6 +36,12 @@ public class PlantItemReader implements ItemReader<Plant> {
 			nextPlantIndex++;
 		}
 
+		// if (nextPlant != null && nextPlant.getTotalExp() == 0) {
+		// 	log.info("============== Plant History Read (return null) END =============");
+		// 	return null;
+		// }
+
+		log.info("============== Plant History Read END =============");
 		return nextPlant;
 	}
 }
