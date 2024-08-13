@@ -23,7 +23,7 @@ public enum ResponseCode {
 	USER_ROOM_NOT_FOUND(404, "UserRoom not found", "NOT_FOUND_ERROR"),
 	BLANK_ROOM_NAME(400, "Blank room name", "BAD_REQUEST_ERROR"),
 	USER_ROLE_NOT_FOUND(404, "User role not found", "NOT_FOUND_ERROR"),
-	WRONG_PARTICIPATION_PASSWORD(401, "Wrong participation password", "NOT_AUTHORIZED"),
+	WRONG_PARTICIPATION_PASSWORD(400, "Wrong participation password", "NOT_AUTHORIZED"),
 	NOT_AUTHORIZED(401, "Not authorized", "NOT_AUTHORIZED"),
 	ROOM_NOT_FOUND(404, "Room not found", "NOT_FOUND_ERROR"),
 	BLANK_ROOM_UPDATE_REQUEST(404, "Blank room update request", "BLANK_ROOM_UPDATE_REQUEST"),
@@ -84,8 +84,7 @@ public enum ResponseCode {
 	ITEM_NOT_IN_INVENTORY(400, "Item not in inventory", "ITEM_NOT_IN_INVENTORY_ERROR"),
 	ITEM_NOT_FOUND(404, "Item not found", "NOT_FOUND_ERROR"),
 	MY_ROOM_NOT_FOUND(404, "MY ROOM not found", "NOT_FOUND_ERROR"),
-	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR")
-	;
+	INVENTORY_NOT_FOUND(404, "Inventory not found", "NOT_FOUND_ERROR");
 
 	private final int status;
 	private final String message;
