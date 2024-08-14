@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import com.flolink.backend.domain.observer.service.ActivityService;
 import com.flolink.backend.domain.plant.dto.reqeust.PlantLocation;
 import com.flolink.backend.domain.plant.dto.response.PlantWalkResultResponse;
-import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
 import com.flolink.backend.domain.plant.entity.Plant;
+import com.flolink.backend.domain.plant.entity.enumtype.ActivityPointType;
 import com.flolink.backend.domain.plant.entity.plantwalk.PlantWalk;
 import com.flolink.backend.domain.plant.repository.PlantWalkRepository;
 import com.flolink.backend.global.common.ResponseCode;
@@ -52,7 +52,8 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 		PlantWalk plantWalk = findActivePlantWalk(plantId);
 		validateCompleteWalk(plantWalk, plantLocation);
 
-		double distance = calculateDistance(plantWalk.getStartLat(), plantWalk.getStartLng(), plantLocation.getLat(), plantLocation.getLng());
+		double distance = calculateDistance(plantWalk.getStartLat(), plantWalk.getStartLng(), plantLocation.getLat(),
+			plantLocation.getLng());
 		double speed = calculateSpeed(plantWalk.getStartAt(), LocalDateTime.now(), distance);
 
 		PlantWalkResultResponse plantWalkResultResponse = PlantWalkResultResponse.of(distance, speed);
@@ -61,7 +62,7 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 
 		if (meetsDistanceRequirementForPoints(distance) && meetsSpeedRequirementForPoints(speed)) {
 			increaseExpAboutActivity(ActivityPointType.WALK,
-				plantWalk.getPlant().getRoom().getRoomId(),plantWalk.getUserRoomId(), userId
+				plantWalk.getPlant().getRoom().getRoomId(), plantWalk.getUserRoomId(), userId
 			);
 		}
 
@@ -114,7 +115,7 @@ public class PlantWalkServiceImpl implements PlantWalkService {
 		endLat = Math.toRadians(endLat);
 		endLng = Math.toRadians(endLng);
 
-		double earthRadius = 6371; // Kilometers
+		double earthRadius = 6371; // 지구 반지름
 		return earthRadius * Math.acos(
 			Math.sin(startLat) * Math.sin(endLat) +
 				Math.cos(startLat) * Math.cos(endLat) * Math.cos(startLng - endLng)
