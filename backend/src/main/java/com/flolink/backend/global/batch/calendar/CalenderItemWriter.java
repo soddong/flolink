@@ -23,18 +23,7 @@ public class CalenderItemWriter implements ItemWriter<Calendar> {
 
 	@Override
 	public void write(Chunk<? extends Calendar> calendars) {
-		log.info("============== Calendar read START ================");
-		for (Calendar calendar : calendars) {
-			log.info(calendar.getTitle());
-			for (UserRoom userRoom : calendar.getRoom().getUserRoomList()) {
-				Noti noti = Noti.builder()
-					.userRoom(userRoom)
-					.message("오전 일정 알림")
-					.createAt(LocalDateTime.now())
-					.build();
-				notiRepository.save(noti);	
-			}
-		}
-		log.info("============== Calendar read START ================");
+		log.info("============== Calendar write START ================");
+		log.info("============== Calendar write START ================");
 	}
 }
