@@ -28,7 +28,7 @@ public class TimeBasedBatchScheduler {
 
 	// 매월 1일 자정에 실행
 	// @Scheduled(cron = "0 0/5 * * * ?")
-	@Scheduled(cron = "0 0 1 * * ?")
+	// @Scheduled(cron = "0 0 0 1 * ?")
 	public void runMonthlyPlantUserJob() throws Exception {
 		jobLauncher.run(plantExpJob, new JobParametersBuilder()
 			.addDate("runDate", new Date())
@@ -36,7 +36,7 @@ public class TimeBasedBatchScheduler {
 	}
 
 	// 매일 오전 8시에 실행
-	@Scheduled(cron = "0 27 * * * ?")
+	// @Scheduled(cron = "0 0 0 1 * ?")
 	// @Scheduled(cron = "1 * * * * ?")
 	public void runDailyCalendarJob() throws Exception {
 		jobLauncher.run(calendarJob, new JobParametersBuilder()
@@ -45,7 +45,7 @@ public class TimeBasedBatchScheduler {
 	}
 
 	// 매일 오전 3시에 실행
-	@Scheduled(cron = "0 0 3 * * ?")
+	// @Scheduled(cron = "0 0 0 1 * ?")
 	// @Scheduled(cron = "1 * * * * ?")
 	public void runDailyPlantWalkAutoEndJob() throws Exception {
 		jobLauncher.run(plantwalkJob, new JobParametersBuilder()
