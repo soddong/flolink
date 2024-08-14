@@ -36,7 +36,7 @@ public class TimeBasedBatchScheduler {
 	}
 
 	// 매일 오전 8시에 실행
-	@Scheduled(cron = "0 0 8 * * ?")
+	@Scheduled(cron = "0 0 11 * * ?")
 	// @Scheduled(cron = "1 * * * * ?")
 	public void runDailyCalendarJob() throws Exception {
 		jobLauncher.run(calendarJob, new JobParametersBuilder()
