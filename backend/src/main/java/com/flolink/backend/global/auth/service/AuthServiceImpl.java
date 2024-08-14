@@ -22,6 +22,7 @@ import com.flolink.backend.global.auth.dto.response.SuccessTokenResponse;
 import com.flolink.backend.global.auth.entity.Auth;
 import com.flolink.backend.global.auth.entity.SuccessToken;
 import com.flolink.backend.global.auth.repository.AuthRepository;
+import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.global.auth.repository.SuccessTokenRepository;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.NotFoundException;
@@ -39,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
 	private final SuccessTokenRepository successTokenRepository;
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final RefreshRepository refreshRepository;
 
 	@Value("${nurigo.api.key}")
 	private String apiKey;
@@ -170,6 +172,13 @@ public class AuthServiceImpl implements AuthService {
 		} catch (Exception exception) {
 			System.out.println(exception.getMessage());
 		}
+
+	}
+
+	@Override
+	public void logout(String refresh) {
+
+		refreshRepository.deleteByRefreshToken(refresh);
 
 	}
 }

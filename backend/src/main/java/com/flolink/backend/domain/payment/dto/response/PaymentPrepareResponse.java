@@ -21,7 +21,7 @@ public class PaymentPrepareResponse {
 	public static PaymentPrepareResponse fromEntity(PaymentHistory paymentHistory) {
 		return PaymentPrepareResponse.builder()
 			.orderId(paymentHistory.getOrderId())
-			.orderName(paymentHistory.getPaymentItem().getPoints())
+			.orderName(paymentHistory.getPaymentItem().getPoints() + " 포인트")
 			.amount(paymentHistory.getPaymentItem().getPrice())
 			.state(paymentHistory.getState())
 			.build();

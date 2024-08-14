@@ -10,5 +10,7 @@ public interface AuthService {
 
 	SuccessTokenResponse checkAuthenticationNumber(CheckAuthRequest checkAuthRequest);
 
-    void sendTempPassword(ResetPassword resetPassword);
+	void sendTempPassword(ResetPassword resetPassword);
+
+	void logout(String token);
 }
