@@ -7,6 +7,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.flolink.backend.domain.feed.entity.Feed;
+import com.flolink.backend.domain.feed.entity.FeedComment;
 import com.flolink.backend.domain.noti.entity.Noti;
 import com.flolink.backend.domain.user.entity.User;
 
@@ -62,6 +63,7 @@ public class UserRoom {
 	private List<Feed> feedList;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FeedComment> feedCommentList;
 
 	@Column(name = "create_at", nullable = false)
 	private LocalDateTime createAt;
