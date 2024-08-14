@@ -2,6 +2,7 @@ package com.flolink.backend.domain.plant.service.plantexp;
 
 import java.util.List;
 
+import com.flolink.backend.domain.user.dto.response.UserProfileResponse;
 import org.springframework.stereotype.Service;
 
 import com.flolink.backend.domain.feed.dto.response.FeedImageResponse;
@@ -76,12 +77,18 @@ public class PlantExpUserServiceImpl implements PlantExpUserService {
 			.orElseThrow(() -> new NotFoundException(ResponseCode.PLANT_HISTORY_NOT_FOUND));
 	}
 
+	private UserProfileResponse loadUserProfile(Integer userId) {
+		return userRepository.findUserProfileByUserId(userId)
+				.orElseThrow(() -> new NotFoundException(ResponseCode.USER_NOT_FOUND));
+	}
+
 	private List<PlantUserHistoryResponse> loadUserExpHistories(Integer plantId, String dateMonth) {
 		return plantUserExpHistoryRepository.findByPlantIdAndDateMonth(plantId, dateMonth)
 			.stream()
 			.map(userExpHistory -> {
 				String nickname = loadUserNickname(userExpHistory.getUserId());
-				return PlantUserHistoryResponse.fromEntity(userExpHistory, nickname);
+				UserProfileResponse userProfileResponse = loadUserProfile(userExpHistory.getUserId());
+				return PlantUserHistoryResponse.fromEntity(userExpHistory, nickname, userProfileResponse);
 			})
 			.toList();
 	}
