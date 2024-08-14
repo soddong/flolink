@@ -35,7 +35,7 @@ public class RankItemWriter implements ItemWriter<PlantUserExpHistory> {
 
 		for (PlantUserExpHistory history : histories) {
 			UserDTO userDTO = userService.findUserByUserId(history.getUserId());
-			if (history.getContributeExp() != 0) {
+			if (userDTO != null && history.getContributeExp() != 0) {
 				System.out.println(userDTO.getUserId() + ", " + history.getContributeExp());
 				userService.addPoint(userDTO.getUserId(), new BigDecimal(history.getContributeExp()));
 			}
