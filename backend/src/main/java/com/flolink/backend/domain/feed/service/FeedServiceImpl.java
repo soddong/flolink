@@ -1,5 +1,6 @@
 package com.flolink.backend.domain.feed.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -36,6 +37,7 @@ import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
+import com.flolink.backend.global.util.ImgResizeUtil;
 import com.flolink.backend.global.util.RandomUtil;
 import com.flolink.backend.global.util.S3Util;
 
@@ -80,7 +82,9 @@ public class FeedServiceImpl implements FeedService {
 			String uuid = RandomUtil.generateRandomUUID();
 			String keyName = "image_" + uuid + ".jpg";
 			try {
-				s3Util.uploadImg(keyName, multipartFile.getInputStream(), multipartFile.getSize());
+				ByteArrayInputStream inputStream = ImgResizeUtil.resize(multipartFile);
+
+				s3Util.uploadImg(keyName, inputStream, inputStream.available());
 				FeedImage feedImage = FeedImage.builder()
 					.imageOrder(imgOrder++)
 					.feed(feed)
@@ -131,7 +135,9 @@ public class FeedServiceImpl implements FeedService {
 				String uuid = RandomUtil.generateRandomUUID();
 				String keyName = "image_" + uuid + ".jpg";
 				try {
-					s3Util.uploadImg(keyName, multipartFile.getInputStream(), multipartFile.getSize());
+					ByteArrayInputStream inputStream = ImgResizeUtil.resize(multipartFile);
+
+					s3Util.uploadImg(keyName, inputStream, inputStream.available());
 					FeedImage feedImage = FeedImage.builder()
 						.imageOrder(imgOrder++)
 						.feed(feed)
