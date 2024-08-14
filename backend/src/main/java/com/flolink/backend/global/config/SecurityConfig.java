@@ -20,7 +20,6 @@ import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.auth.handler.CustomSuccessHandler;
 import com.flolink.backend.global.auth.repository.RefreshRepository;
 import com.flolink.backend.global.auth.service.ReissueService;
-import com.flolink.backend.global.filter.CustomLogoutFilter;
 import com.flolink.backend.global.filter.JwtFilter;
 import com.flolink.backend.global.filter.LoginFilter;
 import com.flolink.backend.global.util.JwtUtil;
@@ -102,10 +101,6 @@ public class SecurityConfig {
 		//jwt 검증 필터
 		http
 			.addFilterBefore(new JwtFilter(userRepository, jwtUtil, reissueService), LoginFilter.class);
-
-		http
-			.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository),
-				UsernamePasswordAuthenticationFilter.class);
 
 		// 로그인 필터
 		http
