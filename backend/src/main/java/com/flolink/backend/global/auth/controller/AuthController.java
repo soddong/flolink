@@ -16,6 +16,9 @@ import com.flolink.backend.global.common.ResponseCode;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,6 +55,36 @@ public class AuthController {
 		log.info("===임시 비밀번호 발송 START===");
 		authService.sendTempPassword(resetPassword);
 		log.info("===임시 비밀번호 발송 END===");
+		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
+	}
+
+	@Operation(summary = "로그아웃", description = "로그아웃 진행")
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+		String refresh = null;
+		Cookie[] cookies = request.getCookies();
+
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("refresh")) {
+					refresh = cookie.getValue();
+					break;
+				}
+			}
+			log.info("===로그아웃 Start===");
+
+			if (refresh != null) {
+				authService.logout(refresh);
+			}
+		}
+
+		//Refresh 토큰 Cookie 값 0
+		Cookie cookie = new Cookie("refresh", null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+
+		response.addCookie(cookie);
+		log.info("===로그아웃 End===");
 		return ResponseEntity.ok(CommonResponse.of(ResponseCode.COMMON_SUCCESS));
 	}
 }
