@@ -13,7 +13,6 @@ import com.flolink.backend.global.auth.dto.response.SuccessTokenResponse;
 import com.flolink.backend.global.auth.service.AuthService;
 import com.flolink.backend.global.common.CommonResponse;
 import com.flolink.backend.global.common.ResponseCode;
-import com.flolink.backend.global.common.exception.TimeOutException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,17 +65,15 @@ public class AuthController {
 		Cookie[] cookies = request.getCookies();
 
 		if (cookies != null) {
-			throw new TimeOutException(ResponseCode.NOT_FOUND_ERROR);
-		}
-
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("refresh")) {
-				refresh = cookie.getValue();
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("refresh")) {
+					refresh = cookie.getValue();
+					break;
+				}
 			}
+			log.info("===로그아웃 Start===");
+			authService.logout(refresh);
 		}
-		log.info("===로그아웃 Start===");
-		
-		authService.logout(refresh);
 
 		//Refresh 토큰 Cookie 값 0
 		Cookie cookie = new Cookie("refresh", null);
