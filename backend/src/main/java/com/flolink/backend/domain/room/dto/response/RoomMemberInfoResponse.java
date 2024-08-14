@@ -25,6 +25,7 @@ public class RoomMemberInfoResponse {
 	private Integer targetUserRoomId;
 	private String targetNickname;
 	private String statusMessage;
+	private String role;
 
 	public static RoomMemberInfoResponse fromNicknameEntity(Nickname nickName) {
 		return RoomMemberInfoResponse.builder()
@@ -42,6 +43,7 @@ public class RoomMemberInfoResponse {
 			.targetUserRoomId(userRoom.getUserRoomId())
 			.targetNickname(userRoom.getUser().getNickname())
 			.statusMessage(userRoom.getUser().getStatusMessage())
+			.role(userRoom.getRole())
 			.build();
 	}
 }
