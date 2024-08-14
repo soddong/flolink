@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 import com.flolink.backend.domain.calendar.entity.Calendar;
 import com.flolink.backend.domain.calendar.repository.CalendarRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class CalendarItemReader implements ItemReader<Calendar> {
 
 	@Autowired
@@ -21,6 +24,7 @@ public class CalendarItemReader implements ItemReader<Calendar> {
 
 	@Override
 	public Calendar read() {
+		log.info("============== Calendar read START ================");
 
 		if (calendars == null) {
 			calendars = calendarRepository.findCalendarsByDateAndUseYn(LocalDate.now());
@@ -33,7 +37,8 @@ public class CalendarItemReader implements ItemReader<Calendar> {
 			nextCalendar = calendars.get(nextCalendarIndex);
 			nextCalendarIndex++;
 		}
-
+		
+		log.info("============== Calendar read START ================");
 		return nextCalendar;
 	}
 }

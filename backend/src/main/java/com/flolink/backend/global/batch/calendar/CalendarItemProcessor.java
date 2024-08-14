@@ -11,7 +11,10 @@ import com.flolink.backend.domain.calendar.entity.Calendar;
 import com.flolink.backend.domain.fcm.event.FcmEvent;
 import com.flolink.backend.domain.room.entity.UserRoom;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class CalendarItemProcessor implements ItemProcessor<Calendar, Calendar> {
 
 	@Autowired
@@ -19,8 +22,10 @@ public class CalendarItemProcessor implements ItemProcessor<Calendar, Calendar> 
 
 	@Override
 	public Calendar process(Calendar calendar) {
+		log.info("============== Calendar process START ================");
 		List<UserRoom> userRooms = calendar.getRoom().getUserRoomList();
 		for (UserRoom userRoom : userRooms) {
+			System.out.println(userRoom.getUser().getFcm());
 			if (userRoom.getUser().getFcm() != null) {
 				try {
 					FcmEvent fcmEvent = new FcmEvent(this, "오늘의 가족일정이 있어요.",
@@ -32,6 +37,7 @@ public class CalendarItemProcessor implements ItemProcessor<Calendar, Calendar> 
 				}
 			}
 		}
+		log.info("============== Calendar process END ================");
 		return calendar;
 	}
 }

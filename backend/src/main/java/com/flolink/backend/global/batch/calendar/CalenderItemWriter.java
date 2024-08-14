@@ -12,7 +12,10 @@ import com.flolink.backend.domain.noti.entity.Noti;
 import com.flolink.backend.domain.noti.repository.NotiRepository;
 import com.flolink.backend.domain.room.entity.UserRoom;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class CalenderItemWriter implements ItemWriter<Calendar> {
 
 	@Autowired
@@ -20,7 +23,9 @@ public class CalenderItemWriter implements ItemWriter<Calendar> {
 
 	@Override
 	public void write(Chunk<? extends Calendar> calendars) {
+		log.info("============== Calendar read START ================");
 		for (Calendar calendar : calendars) {
+			log.info(calendar.getTitle());
 			for (UserRoom userRoom : calendar.getRoom().getUserRoomList()) {
 				Noti noti = Noti.builder()
 					.userRoom(userRoom)
@@ -30,6 +35,6 @@ public class CalenderItemWriter implements ItemWriter<Calendar> {
 				notiRepository.save(noti);	
 			}
 		}
-
+		log.info("============== Calendar read START ================");
 	}
 }
