@@ -61,6 +61,8 @@ public class UserRoom {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Feed> feedList;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+
 	@Column(name = "create_at", nullable = false)
 	private LocalDateTime createAt;
 
