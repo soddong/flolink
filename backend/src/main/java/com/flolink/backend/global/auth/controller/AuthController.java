@@ -72,7 +72,10 @@ public class AuthController {
 				}
 			}
 			log.info("===로그아웃 Start===");
-			authService.logout(refresh);
+
+			if (refresh != null) {
+				authService.logout(refresh);
+			}
 		}
 
 		//Refresh 토큰 Cookie 값 0
