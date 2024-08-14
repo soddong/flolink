@@ -17,7 +17,7 @@ public interface UserRoomRepository extends JpaRepository<UserRoom, Integer> {
 
 	Optional<UserRoom> findUserRoomByUserRoomId(Integer userRoomId);
 
-	@Query("SELECT UserRoom u from UserRoom where u.user.userId=:userId and u.room.roomId=:roomId ")
+	@Query("SELECT u from UserRoom u where u.user.userId=:userId and u.room.roomId=:roomId ")
 	Optional<UserRoom> findByUserUserIdAndRoomRoomId(@Param("userId") Integer userId, @Param("roomId") Integer roomId);
 
 	boolean existsByUserUserIdAndRoomRoomId(Integer userId, Integer roomId);
