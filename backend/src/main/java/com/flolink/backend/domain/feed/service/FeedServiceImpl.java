@@ -80,11 +80,16 @@ public class FeedServiceImpl implements FeedService {
 		for (MultipartFile multipartFile : Optional.ofNullable(feedCreateRequest.getImages())
 			.orElse(Collections.emptyList())) {
 			String uuid = RandomUtil.generateRandomUUID();
-			String keyName = "image_" + uuid + ".jpg";
+			String keyName = "image_" + uuid;
 			try {
 				ByteArrayInputStream inputStream = ImgResizeUtil.resize(multipartFile);
-
-				s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType());
+				int lastDotIdx = multipartFile.getOriginalFilename().lastIndexOf(".");
+				String postfix = "";
+				if (lastDotIdx > 0 && lastDotIdx < multipartFile.getOriginalFilename().length() - 1) {
+					postfix = multipartFile.getOriginalFilename().substring(lastDotIdx + 1);
+				}
+				s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType(),
+					postfix);
 				FeedImage feedImage = FeedImage.builder()
 					.imageOrder(imgOrder++)
 					.feed(feed)
@@ -133,11 +138,16 @@ public class FeedServiceImpl implements FeedService {
 			}
 			if (!isIn) {
 				String uuid = RandomUtil.generateRandomUUID();
-				String keyName = "image_" + uuid + ".jpg";
+				String keyName = "image_" + uuid;
 				try {
 					ByteArrayInputStream inputStream = ImgResizeUtil.resize(multipartFile);
-
-					s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType());
+					int lastDotIdx = multipartFile.getOriginalFilename().lastIndexOf(".");
+					String postfix = "";
+					if (lastDotIdx > 0 && lastDotIdx < multipartFile.getOriginalFilename().length() - 1) {
+						postfix = multipartFile.getOriginalFilename().substring(lastDotIdx + 1);
+					}
+					s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType(),
+						postfix);
 					FeedImage feedImage = FeedImage.builder()
 						.imageOrder(imgOrder++)
 						.feed(feed)

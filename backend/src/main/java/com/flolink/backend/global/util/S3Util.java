@@ -20,10 +20,11 @@ public class S3Util {
 	@Value("${aws.s3.bucket}")
 	private String bucketName;
 
-	public void uploadImg(String keyName, InputStream inputStream, long contentLength, String contentType) {
+	public void uploadImg(String keyName, InputStream inputStream, long contentLength, String contentType,
+		String postfix) {
 		PutObjectRequest putObjectRequest = PutObjectRequest.builder()
 			.bucket(bucketName)
-			.key(keyName)
+			.key(keyName + postfix)
 			.contentType(contentType)
 			.build();
 		s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, contentLength));
