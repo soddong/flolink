@@ -3,6 +3,7 @@ package com.flolink.backend.global.auth.service;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,10 @@ public class ReissueServiceImpl implements ReissueService {
 
 	private final JwtUtil jwtUtil;
 	private final RefreshRepository refreshRepository;
-	private final long accessTokenValidityInSeconds = 1000 * 60 * 10L;
-	private final long refreshTokenValidityInSeconds = 1000 * 60 * 60 * 24L;
+	@Value("${spring.jwt.expiration.refresh-token}")
+	private Long REFRESH_TOKEN_EXPIRATION;
+	@Value("${spring.jwt.expiration.access-token}")
+	private Long ACCESS_TOKEN_EXPIRATION;
 
 	@Override
 	public void reissue(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
@@ -85,13 +88,13 @@ public class ReissueServiceImpl implements ReissueService {
 		String loginId = jwtUtil.getLoginId(refresh);
 
 		//make new JWT
-		String newAccess = jwtUtil.createJwt("access", userId, loginId, role, accessTokenValidityInSeconds, now);
-		String newRefresh = jwtUtil.createJwt("refresh", userId, loginId, role, refreshTokenValidityInSeconds, now);
+		String newAccess = jwtUtil.createJwt("access", userId, loginId, role, ACCESS_TOKEN_EXPIRATION, now);
+		String newRefresh = jwtUtil.createJwt("refresh", userId, loginId, role, REFRESH_TOKEN_EXPIRATION, now);
 
 		//Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
 		Refresh refreshToken = Refresh.builder()
 			.refreshToken(newRefresh)
-			.expiredAt(date.plusSeconds(refreshTokenValidityInSeconds))
+			.expiredAt(date.plusSeconds(REFRESH_TOKEN_EXPIRATION))
 			.build();
 		refreshRepository.deleteByRefreshToken(refresh);
 		refreshRepository.save(refreshToken);
