@@ -36,6 +36,7 @@ import com.flolink.backend.domain.room.repository.UserRoomRepository;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.global.common.ResponseCode;
+import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
 import com.flolink.backend.global.common.exception.UnAuthorizedException;
 
@@ -61,8 +62,7 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	public List<RoomSummarizeResponse> getAllRooms(final Integer userId) {
-		User user = findUserById(userId);
-		return user.getUserRoomList()
+		return userRoomRepository.findAllByUserUserId(userId)
 			.stream()
 			.map((UserRoom) -> RoomSummarizeResponse.fromEntity(UserRoom.getRoom()))
 			.toList();
@@ -77,6 +77,9 @@ public class RoomServiceImpl implements RoomService {
 	@Transactional
 	public RoomSummarizeResponse createRoom(final Integer userId, final RoomCreateRequest roomCreateRequest) {
 		User user = findUserById(userId);
+		if (user.getUserRoomList().size() >= 4) {
+			throw new BadRequestException(ResponseCode.USER_ROOM_OVER_MAX_LIMIT);
+		}
 
 		Room room = roomRepository.save(roomCreateRequest.toEntity());
 
@@ -94,7 +97,9 @@ public class RoomServiceImpl implements RoomService {
 		final RoomParticipateRequest roomParticipateRequest) {
 		User user = findUserById(userId);
 		Room room = findRoomById(roomParticipateRequest.getRoomId());
-
+		if (user.getUserRoomList().size() >= 4) {
+			throw new BadRequestException(ResponseCode.USER_ROOM_OVER_MAX_LIMIT);
+		}
 		for (UserRoom userRoom : user.getUserRoomList()) {
 			if (Objects.equals(userRoom.getRoom(), room)) { //이미 가입 된 경우 200 주되 data는 비움
 				return null;

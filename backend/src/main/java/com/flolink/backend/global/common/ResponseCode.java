@@ -17,6 +17,7 @@ public enum ResponseCode {
 	UNREGISTERED_USER(401, "Unregistered User", "UNREGISTERED_USER"),
 	BLANK_NICKNAME(404, "Cannot make the nickname due to a blank space.", "BLANK_NICKNAME"),
 	UNAUTHORIZED_USER(401, "Unauthorized_User", "UNAUTHORIZED_USER"),
+	USER_ROOM_OVER_MAX_LIMIT(400, "Already Have max userRoom count", "BAD_REQUEST"),
 
 	// Room
 	ROOM_ALREADY_ENTERED(200, "Room already entered", "SUCCESS"),
