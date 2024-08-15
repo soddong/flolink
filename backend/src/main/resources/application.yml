@@ -1,7 +1,4 @@
 spring:
-  threads:
-    virtual:
-      enabled: true
   jwt:
     expiration:
       access-token: 21600000
