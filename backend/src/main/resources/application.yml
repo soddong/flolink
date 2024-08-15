@@ -1,4 +1,7 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
   jwt:
     expiration:
       access-token: 21600000
@@ -13,7 +16,7 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: MySQLDialect
         show_sql: false
         format_sql: true
     defer-datasource-initialization: true
