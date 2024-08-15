@@ -63,8 +63,13 @@ public class PaymentServiceImpl implements PaymentService {
 			throw new BadRequestException(ResponseCode.PAYMENT_ALREADY_PAID);
 		}
 
-		userService.addPoint(userId, new BigDecimal(paymentHistory.getPaymentItem().getPoints()));
-		paymentHistory.completePayment(portOne);
+		if (portOne.getCode() == null) {
+			userService.addPoint(userId, new BigDecimal(paymentHistory.getPaymentItem().getPoints()));
+			paymentHistory.completePayment(portOne);
+			return;
+		}
+
+		paymentHistory.failPayment();
 	}
 
 	@Override

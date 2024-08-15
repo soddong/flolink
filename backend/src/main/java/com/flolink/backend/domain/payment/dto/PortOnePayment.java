@@ -10,4 +10,5 @@ import lombok.Setter;
 public class PortOnePayment {
 	private String paymentKey;
 	private String orderId;
+	private String code;
 }
