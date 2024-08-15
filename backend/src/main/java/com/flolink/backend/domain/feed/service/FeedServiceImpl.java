@@ -86,10 +86,10 @@ public class FeedServiceImpl implements FeedService {
 				int lastDotIdx = multipartFile.getOriginalFilename().lastIndexOf(".");
 				String postfix = "";
 				if (lastDotIdx > 0 && lastDotIdx < multipartFile.getOriginalFilename().length() - 1) {
-					postfix = multipartFile.getOriginalFilename().substring(lastDotIdx + 1);
+					postfix = multipartFile.getOriginalFilename().substring(lastDotIdx);
 				}
-				s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType(),
-					postfix);
+				keyName += postfix;
+				s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType());
 				FeedImage feedImage = FeedImage.builder()
 					.imageOrder(imgOrder++)
 					.feed(feed)
@@ -144,10 +144,10 @@ public class FeedServiceImpl implements FeedService {
 					int lastDotIdx = multipartFile.getOriginalFilename().lastIndexOf(".");
 					String postfix = "";
 					if (lastDotIdx > 0 && lastDotIdx < multipartFile.getOriginalFilename().length() - 1) {
-						postfix = multipartFile.getOriginalFilename().substring(lastDotIdx + 1);
+						postfix = multipartFile.getOriginalFilename().substring(lastDotIdx);
 					}
-					s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType(),
-						postfix);
+					keyName += postfix;
+					s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType());
 					FeedImage feedImage = FeedImage.builder()
 						.imageOrder(imgOrder++)
 						.feed(feed)
