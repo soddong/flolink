@@ -36,8 +36,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final JwtUtil jwtUtil;
 	private final RefreshRepository refreshRepository;
 	private final AuthenticationManager authenticationManager;
-	private final long accessTokenValidityInSeconds = 1000 * 60 * 10L; //10분
-	private final long refreshTokenValidityInSeconds = 1000 * 60 * 60 * 24L; //24시간
+	@Value("${spring.jwt.expiration.refresh-token}")
+	private Long REFRESH_TOKEN_EXPIRATION;
+	@Value("${spring.jwt.expiration.access-token}")
+	private Long ACCESS_TOKEN_EXPIRATION;
 	private LoginUserRequest creds = null;
 
 	@Value("${spring.login.target-uri}")
@@ -82,13 +84,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 		log.info("===로그인 성공===");
 		//토큰 생성
-		String access = jwtUtil.createJwt("access", userId, loginId, roleType, accessTokenValidityInSeconds, now);
-		String refresh = jwtUtil.createJwt("refresh", userId, loginId, roleType, refreshTokenValidityInSeconds, now);
+		String access = jwtUtil.createJwt("access", userId, loginId, roleType, ACCESS_TOKEN_EXPIRATION, now);
+		String refresh = jwtUtil.createJwt("refresh", userId, loginId, roleType, REFRESH_TOKEN_EXPIRATION, now);
 
 		//Refresh 토큰 저장
 		Refresh refreshEntity = Refresh.builder()
 			.refreshToken(refresh)
-			.expiredAt(date.plusSeconds(refreshTokenValidityInSeconds))
+			.expiredAt(date.plusSeconds(REFRESH_TOKEN_EXPIRATION))
 			.build();
 
 		refreshRepository.save(refreshEntity);
