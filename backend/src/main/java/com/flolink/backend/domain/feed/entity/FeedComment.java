@@ -47,7 +47,7 @@ public class FeedComment {
 	@JoinColumn(name = "user_room_id")
 	private UserRoom userRoom;
 
-	@Column(name = "content")
+	@Column(name = "content", length = 65567)
 	private String content;
 
 	@Column(name = "create_at")
