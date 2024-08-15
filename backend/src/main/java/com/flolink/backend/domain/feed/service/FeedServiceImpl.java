@@ -84,11 +84,8 @@ public class FeedServiceImpl implements FeedService {
 			try {
 				ByteArrayInputStream inputStream = ImgResizeUtil.resize(multipartFile);
 				int lastDotIdx = multipartFile.getOriginalFilename().lastIndexOf(".");
-				String postfix = "";
-				if (lastDotIdx > 0 && lastDotIdx < multipartFile.getOriginalFilename().length() - 1) {
-					postfix = multipartFile.getOriginalFilename().substring(lastDotIdx);
-				}
-				keyName += postfix;
+				String postfix = multipartFile.getOriginalFilename().substring(lastDotIdx);
+				keyName = keyName + postfix;
 				s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType());
 				FeedImage feedImage = FeedImage.builder()
 					.imageOrder(imgOrder++)
@@ -146,7 +143,7 @@ public class FeedServiceImpl implements FeedService {
 					if (lastDotIdx > 0 && lastDotIdx < multipartFile.getOriginalFilename().length() - 1) {
 						postfix = multipartFile.getOriginalFilename().substring(lastDotIdx);
 					}
-					keyName += postfix;
+					keyName = keyName + postfix;
 					s3Util.uploadImg(keyName, inputStream, inputStream.available(), multipartFile.getContentType());
 					FeedImage feedImage = FeedImage.builder()
 						.imageOrder(imgOrder++)
