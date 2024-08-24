@@ -1,10 +1,10 @@
+# [Wiki 바로가기](https://github.com/soddong/flolink/wiki)
+
 # 서비스 소개
-![캡처](/uploads/359f436d180295658483ff9a5c103e98/캡처.PNG)
-Flolink는 가족 간의 소통을 위한 플랫폼으로, 피드를 통해 일상과 추억을 공유할 수 있습니다. 
-
-반려식물과 기억정원으로 소중한 추억을 함께 공유하고, 가족 일정 관리 캘린더로 일정을 효율적으로 관리합니다. 마이룸을 통해 나만의 개성을 표현하며, 오늘의 감정을 프로필 이미지로 표현하여 감정 상태를 쉽게 공유할 수 있습니다.
-
-이를 통해 가족 간의 유대감을 강화하고, 더 깊이 연결될 수 있는 기회를 제공합니다.
+![캡처](./exec/pages/logo.png)   
+Flolink는 가족 간의 소통을 위한 플랫폼으로, 가족구성원들과 일상, 추억을 공유할 수 있습니다.   
+피드와 반려식물과 기억정원으로 소중한 추억을 함께 공유하고, 가족 일정 관리 캘린더로 일정을 효율적으로 관리합니다. 마이룸을 통해 나만의 개성을 표현하며, 오늘의 감정을 프로필 이미지로 표현하여 감정 상태를 쉽게 공유할 수 있습니다.
+이를 통해 가족 간의 유대감을 강화하고, 더 깊이 연결될 수 있는 기회를 제공합니다.  
 
 # 주요 기능
 | <center>기능</center> | <center>내용</center> |
@@ -23,12 +23,12 @@ Flolink는 가족 간의 소통을 위한 플랫폼으로, 피드를 통해 일�
 # 서비스 화면
 | <center>상태메시지, 기분 공유</center> | <center>반려식물 성장</center> | <center>산책</center> |
 |:--------:|:--------:|:--------:|
-|<img src="/uploads/d8611c7938a189f071758994ae834bc3/상태메시지__기분_공유.gif" height="600"/> |<img src="/uploads/6213d3b5cdbb21033a52956866a8bef5/반려식물_성장.gif" height="600"/> |<img src="/uploads/02c556ea4f4b3a90981ebafe1f558be1/산책.gif" height="600"/> |
+|<img src="./exec/pages/상태메시지, 기분 공유.gif" height="600"/> |<img src="./exec/pages/반려식물 성장.gif" height="600"/> |<img src="./exec/pages/산책.gif" height="600"/> |
 
 | <center>피드</center> | <center>캘린더</center> | <center>기억정원</center> |
 |:--------:|:--------:|:--------:|
-|<img src="/uploads/1eda62fe54fd9c1cfaed34a84b97055e/피드.gif" height="600"/> | <img src="/uploads/470e22a155b08154dda3f8afc7c4280e/캘린더.gif" height="600"/> | <img src="/uploads/869e04118047b68c29d89d5bebfa8a6c/기억정원.gif" height="600"/> |
+|<img src="./exec/pages/피드.gif" height="600"/> | <img src="./exec/pages/캘린더.gif" height="600"/> | <img src="./exec/pages/기억정원.gif" height="600"/> |
 
 | <center>상점</center> | <center>마이룸</center> |
 |:--------:|:--------:|
-| <img src="/uploads/d01021374819ff87e1c961649fd1bd14/상점.gif" height="600"/> | <img src="/uploads/369bb80b1a3e39307fad47b27985910f/마이룸.gif" height="600"/> |
+| <img src="./exec/pages/상점.gif" height="600"/> | <img src="./exec/pages/마이룸.gif" height="600"/> |
