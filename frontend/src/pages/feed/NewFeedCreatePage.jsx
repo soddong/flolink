@@ -1,0 +1,31 @@
+import { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom';
+import logo from '../../assets/logo/logo.png';
+import NewFeedForm from '../../components/feed/NewFeedForm';
+
+const NewFeedCreatePage = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    
+    const feed = location.state?.feed;
+
+    return (
+        <div className="w-full min-h-screen flex flex-col items-center bg-custom-gradient p-4">
+            <header className="mb-4 flex justify-center items-center relative w-full max-w-2xl">
+                <button 
+                    className="absolute left-4 text-xl text-black"
+                    onClick={() => navigate(-1)}
+                >
+                    &lt;
+                </button>
+                <img src={logo} alt="Logo" className="h-20 mx-auto" />
+            </header>
+            <h1 className="text-center text-sm font-bold mb-5">오늘의 기록을 남겨 주세요📝</h1>
+            <div className="w-full max-w-2xl h-3/5"> 
+                <NewFeedForm feed={feed}/>
+            </div>
+        </div>
+    )
+}
+
+export default NewFeedCreatePage;
