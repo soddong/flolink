@@ -46,6 +46,7 @@ dependencies {
     implementation 'net.coobird:thumbnailator:0.4.14'
     implementation 'net.nurigo:sdk:4.2.7'
     implementation 'org.springframework.boot:spring-boot-starter-batch'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.35.0'
 }
 
 tasks.named('test') {

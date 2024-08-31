@@ -4,7 +4,7 @@ spring:
       access-token: 21600000
       refresh-token: 86400000
   datasource:
-    url: jdbc:mysql://localhost:3306/flolint?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/flolink?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     username: ssafy
     password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -20,6 +20,14 @@ spring:
   sql:
     init:
       mode: always
+  data:
+    redis:
+      url: localhost
+      port: 6380
+      connect-timeout: 3000
+      timeout: 3000
+      repositories:
+        enabled: false
   config:
     import:
       - classpath:/application-private.yml
