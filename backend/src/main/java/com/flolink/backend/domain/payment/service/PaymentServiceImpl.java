@@ -6,7 +6,14 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import org.redisson.api.RLock;
+import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import com.flolink.backend.domain.payment.dto.PortOnePayment;
 import com.flolink.backend.domain.payment.dto.response.PaymentHistoryResponse;
@@ -18,11 +25,13 @@ import com.flolink.backend.domain.payment.repository.PaymentRepository;
 import com.flolink.backend.domain.user.entity.User;
 import com.flolink.backend.domain.user.repository.UserRepository;
 import com.flolink.backend.domain.user.service.UserService;
+import com.flolink.backend.global.aop.DistributedLock;
 import com.flolink.backend.global.common.ResponseCode;
 import com.flolink.backend.global.common.exception.BadRequestException;
 import com.flolink.backend.global.common.exception.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 public class PaymentServiceImpl implements PaymentService {
 
 	private final UserService userService;
-
 	private final PaymentItemRepository paymentItemRepository;
 	private final PaymentRepository paymentRepository;
 	private final UserRepository userRepository;
@@ -56,8 +64,12 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	@Transactional
 	public void completePayment(final Integer userId, final PortOnePayment portOne) {
-		PaymentHistory paymentHistory = paymentRepository.findByOrderId(portOne.getOrderId())
-			.orElseThrow(() -> new NotFoundException(ResponseCode.PAYMENT_NOT_FOUND));
+
+		PaymentHistory paymentHistory = paymentRepository.findTopByOrderId(portOne.getOrderId())
+			.orElseThrow(() -> {
+				log.error("Payment not found for orderId: {}", portOne.getOrderId());
+				return new NotFoundException(ResponseCode.PAYMENT_NOT_FOUND);
+			});
 
 		if (paymentHistory.getState() == PAID) {
 			throw new BadRequestException(ResponseCode.PAYMENT_ALREADY_PAID);
@@ -66,10 +78,9 @@ public class PaymentServiceImpl implements PaymentService {
 		if (portOne.getCode() == null) {
 			userService.addPoint(userId, new BigDecimal(paymentHistory.getPaymentItem().getPoints()));
 			paymentHistory.completePayment(portOne);
-			return;
+		} else {
+			paymentHistory.failPayment();
 		}
-
-		paymentHistory.failPayment();
 	}
 
 	@Override
@@ -80,5 +91,4 @@ public class PaymentServiceImpl implements PaymentService {
 			.map(PaymentHistoryResponse::fromEntity)
 			.toList();
 	}
-
 }
