@@ -1,4 +1,4 @@
-# [Wiki 바로가기](https://github.com/soddong/flolink/wiki)
+# [개발기록 바로가기](https://github.com/soddong/flolink/wiki)
 
 # 서비스 소개
 <img src="./exec/pages/logo.png" height="270"/>
