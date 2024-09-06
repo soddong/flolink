@@ -1,0 +1,42 @@
+.mainModal {
+  background-color: #ffffffDF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  z-index: 21;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 0px 10px 0px #00000034;
+  animation: fade-in 0.5s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.warningModal {
+  width: 300px;
+  height: 100px;
+  padding: 10px;
+  background-color: #ffffffDF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  position: fixed;
+  z-index: 30;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 0px 10px 0px #00000034;
+  animation: fade-in 0.5s;
+}
