@@ -10,7 +10,15 @@ Flolink는 가족 간의 소통을 위한 플랫폼으로, 가족구성원들과
 # 아키텍처
 ![image2](https://github.com/user-attachments/assets/d2b9652e-594a-44b6-829c-c1f8d21a1a82)
 
-# 주요 기능
+# 기능 소개
+
+### 핵심 기능
+1. 가족이 함께 공유하는 **가족방**
+2. 나만의 개성을 표현한느 **마이룸**
+3. 가족방에서 함께 키우는 **반려식물**
+4. 추억을 공유하는 **기억정원**
+
+### 세부 기능
 | <center>기능</center> | <center>내용</center> |
 |:--------:|:--------:|
 | 피드 | 가족방에서 이미지 위주의 피드를 작성하고 댓글을 작성 할 수 있습니다.  |
@@ -25,14 +33,17 @@ Flolink는 가족 간의 소통을 위한 플랫폼으로, 가족구성원들과
 | 푸시 알림 | 내가 작성한 피드에 댓글이 달렸을 때, 일정이 공유되었을 때, 일정 당일 오전 8시, 공지가 등록되었을때, 에 푸시 알림을 받을 수 있습니다. |
 
 # 서비스 화면
+### 메인 화면 (가족방)
 | <center>상태메시지, 기분 공유</center> | <center>반려식물 성장</center> | <center>산책</center> |
 |:--------:|:--------:|:--------:|
 |<img src="./exec/pages/상태메시지, 기분 공유.gif" height="600"/> |<img src="./exec/pages/반려식물 성장.gif" height="600"/> |<img src="./exec/pages/산책.gif" height="600"/> |
 
+### 다양한 활동 화면 (가족방)
 | <center>피드</center> | <center>캘린더</center> | <center>기억정원</center> |
 |:--------:|:--------:|:--------:|
 |<img src="./exec/pages/피드.gif" height="600"/> | <img src="./exec/pages/캘린더.gif" height="600"/> | <img src="./exec/pages/기억정원.gif" height="600"/> |
 
+### 개인공간 화면
 | <center>상점</center> | <center>마이룸</center> |
 |:--------:|:--------:|
 | <img src="./exec/pages/상점.gif" height="600"/> | <img src="./exec/pages/마이룸.gif" height="600"/> |
